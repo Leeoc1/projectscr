@@ -1,11 +1,12 @@
 import React from "react";
 import Header from "../pubcomponent/Header";
+import ImageSlide from "../components/homepagecomponents/ImageSlide";
 
 const HomePage = () => {
   return (
     <div>
       <Header />
-      <h2>HomePage</h2>
+      <ImageSlide />
     </div>
   );
 };

@@ -1,30 +1,20 @@
 import React from "react";
+import "../pubcomponentcss/Header.css";
 
 const Header = () => {
   return (
     <div>
-      <h2>Header</h2>
-
-
       <div className="header">
         <div className="header_content">
           <div className="contents">
             <div className="logo">
-              <a href="/">
-                <img src="" alt="The CINEMA" />
-              </a>
+              <img src="/images/logo.png" alt="The CINEMA" />
             </div>
 
             <ul className="memberinfo">
-              <li>
-                로그인 #로그인 완료시 로그아웃으로 변경 
-              </li>
-              <li>
-                회원가입
-              </li>
-              <li>
-                고객센터
-              </li>
+              <li>로그인</li>
+              <li>회원가입</li>
+              <li>고객센터</li>
             </ul>
           </div>
         </div>

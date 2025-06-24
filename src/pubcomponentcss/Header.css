@@ -1,13 +1,13 @@
-.header {
+.h-header {
     height: 185px;
 }
 
-.header .contents {
+.h-header .h-contents {
     width: 980px;
     margin: 0 auto;
 }
 
-.header_content {
+.h-headerh-content {
     width: 980px;
     height: 110px;
     margin: 0 auto;
@@ -15,63 +15,68 @@
     background-color: #ffffff;
 }
 
-.header_content .contents {
+.h-header-content .h-contents {
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     padding: 35px 20px 20px 20px;
 }
 
-.logo {
+.h-logo {
     width: 80px;
 }
 
-.logo img {
+.h-logo .h-img {
     object-fit: contain;
     width: inherit;
 }
 
-.memberinfo {
+.h-memberinfo {
     display: flex;
     align-items: flex-end;
     margin: 0;
 }
 
-.memberinfo li {
+.h-memberinfo > li {
     vertical-align: bottom;
     padding: 0 10px;
     font-size: 14px;
 }
 
-.memberinfo li:last-child {
+.h-memberinfo > li:hover {
+  cursor: pointer;
+}
+
+.h-memberinfo > li:last-child {
     border-right: none;
 }
 
-.nav {
+.h-nav {
     height: 75px;
     text-align: center;
     background-color: #ffffff;
     border-bottom: solid 2px #000000;
 }
 
-.nav .contents {
+.h-nav .h-contents {
     display: flex;
     justify-content: center;
     height: inherit;
 }
 
-.menu {
+.h-menu {
     display: flex;
     margin: 0;
 }
 
-.menu li {
+.h-menu > li {
     font-size: 20px;
     padding: 20px 50px;
 }
 
-.menu li:hover {
+.h-menu > li:hover {
     border-bottom: solid 3px #cc3c3c;
+    cursor: pointer;
 }
 
 li {

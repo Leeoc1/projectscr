@@ -1,83 +1,84 @@
-.header {
-  height: 185px;
+.h-header {
+    height: 185px;
 }
 
-.header .contents {
-  width: 980px;
-  margin: 0 auto;
+.h-header .h-contents {
+    width: 980px;
+    margin: 0 auto;
 }
 
-.header_content {
-  width: 980px;
-  height: 110px;
-  margin: 0 auto;
-  border-bottom: solid 1px rgb(0, 0, 0);
-  background-color: #ffffff;
+.h-headerh-content {
+    width: 980px;
+    height: 110px;
+    margin: 0 auto;
+    border-bottom: solid 1px rgb(0, 0, 0);
+    background-color: #ffffff;
 }
 
-.header_content .contents {
-  box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
-  padding: 35px 20px 20px 20px;
+.h-header-content .h-contents {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    padding: 35px 20px 20px 20px;
 }
 
-.logo {
-  width: 80px;
+.h-logo {
+    width: 80px;
 }
 
-.logo img {
-  object-fit: contain;
-  width: inherit;
+.h-logo .h-img {
+    object-fit: contain;
+    width: inherit;
 }
 
-.memberinfo {
-  display: flex;
-  align-items: flex-end;
-  margin: 0;
+.h-memberinfo {
+    display: flex;
+    align-items: flex-end;
+    margin: 0;
 }
 
-.memberinfo li {
-  vertical-align: bottom;
-  padding: 0 10px;
-  font-size: 14px;
+.h-memberinfo > li {
+    vertical-align: bottom;
+    padding: 0 10px;
+    font-size: 14px;
 }
 
-.memberinfo li:last-child {
-  border-right: none;
+.h-memberinfo > li:hover {
+  cursor: pointer;
 }
 
-.nav {
-  height: 75px;
-  text-align: center;
-  background-color: #ffffff;
-  border-bottom: solid 2px #000000;
+.h-memberinfo > li:last-child {
+    border-right: none;
 }
 
-.nav .contents {
-  display: flex;
-  justify-content: center;
-  height: inherit;
+.h-nav {
+    height: 75px;
+    text-align: center;
+    background-color: #ffffff;
+    border-bottom: solid 2px #000000;
 }
 
-.menu {
-  display: flex;
-  margin: 0;
+.h-nav .h-contents {
+    display: flex;
+    justify-content: center;
+    height: inherit;
 }
 
-.menu li {
-  font-size: 20px;
-  padding: 20px 50px;
+.h-menu {
+    display: flex;
+    margin: 0;
 }
 
-.menu li:hover {
-  border-bottom: solid 3px #cc3c3c;
+.h-menu > li {
+    font-size: 20px;
+    padding: 20px 50px;
+}
+
+.h-menu > li:hover {
+    border-bottom: solid 3px #cc3c3c;
+    cursor: pointer;
 }
 
 li {
-  list-style-type: none;
-}
-
-.memberinfo > li:hover {
-  cursor: pointer;
+    list-style-type: none;
 }

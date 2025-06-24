@@ -4,14 +4,14 @@ import "../pubcomponentcss/Header.css";
 const Header = () => {
   return (
     <div>
-      <div className="header">
-        <div className="header_content">
-          <div className="contents">
-            <div className="logo">
-              <img src="/images/logo.png" alt="The CINEMA" />
+      <div className="h-header">
+        <div className="h-header-content">
+          <div className="h-contents">
+            <div className="h-logo">
+              <img className="h-img" src="/images/logo.png" alt="The CINEMA" />
             </div>
 
-            <ul className="memberinfo">
+            <ul className="h-memberinfo">
               <li>로그인</li>
               <li>회원가입</li>
               <li>고객센터</li>
@@ -19,9 +19,9 @@ const Header = () => {
           </div>
         </div>
 
-        <div className="nav">
-          <div className="contents">
-            <ul className="menu">
+        <div className="h-nav">
+          <div className="h-contents">
+            <ul className="h-menu">
               <li>영화</li>
               <li>극장</li>
               <li>예매</li>

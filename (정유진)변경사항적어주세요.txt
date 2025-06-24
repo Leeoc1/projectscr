@@ -12,7 +12,7 @@ pubcomponentcss > Header.css
 
 
 
-2025.06.23
+2025.06.24
 예매 상세 내역 제작 완료
 pubcomponent > ReservationDetail.jsx
 pubcomponentcss > ReservationDetail.css

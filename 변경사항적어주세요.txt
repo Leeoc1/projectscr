@@ -2,3 +2,11 @@
 componentcss > homepagecomponentcss > ImageSlide.css
 component > hompagecomponents > ImageSlide.jsx
 수정! -완-
+
+
+2025 06 24
+componentcss > homepagecomponentcss > MovieChart.css
+component > hompagecomponents > MovieChart.jsx
+component > hompagecomponents > ImageSlide.css
+pages > HomePage.jsx
+pagecss > HomePage.css

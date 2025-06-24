@@ -6,10 +6,8 @@
 
 .mainImageSection {
   position: relative;
-  width: 100%;
-  max-width: 1920px;
+  width: 1920px;
   height: 512px;
-  margin: 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,6 +28,7 @@
   height: 100%;
   object-fit: cover;
   flex-shrink: 0;
+  /* 이미지 슬라이드 좌우에 그림자 추가 */
   /* background: linear-gradient(
     #000 100%,
     rgba(0, 0, 0, 0.25) 100%,

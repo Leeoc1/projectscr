@@ -21,65 +21,54 @@ export default function Header() {
   const goMovie = () => navigate("/movie");
   const goEvent = () => navigate("/event");
   const goReservation = () => navigate("/reservation");
-  const goLogin = () => navigate("/login");
-  const goRegister = () => navigate("/register");
-  const goAdmin = () => navigate("/admin");
 
   return (
-    <header className="header">
-      <div className="header-container">
-        <div className={`header-content ${isScrolled ? "scrolled" : ""}`}>
+    <header className="h-header">
+      <div className="h-header-container">
+        <div className={`h-header-content ${isScrolled ? "h-scrolled" : ""}`}>
           {/* Logo */}
-          <div className="logo-container">
-            <div className={`logo-icon ${isScrolled ? "scrolled" : ""}`}>
+          <div className="h-logo-container">
+            <div className="h-logo-icon">
               🍿
             </div>
-            <div className="logo-text">
-              <div className={`logo-line ${isScrolled ? "scrolled" : ""}`}>
+            <div className="h-logo-text">
+              <div className="h-logo-line">
                 The
               </div>
-              <div className={`logo-line ${isScrolled ? "scrolled" : ""}`}>
+              <div className="h-logo-line">
                 Screen
               </div>
             </div>
           </div>
 
           {/* Navigation - Shows when scrolled */}
-          <nav className={`nav-scrolled ${isScrolled ? "show" : ""}`}>
-            <a className="nav-item" onClick={goMovie}>
+          <nav className={`h-nav-scrolled ${isScrolled ? "h-show" : ""}`}>
+            <a className="h-nav-item" onClick={goMovie}>
               영화
             </a>
-            <a className="nav-item" onClick={goTheater}>
+            <a className="h-nav-item" onClick={goTheater}>
               극장
             </a>
-            <a className="nav-item" onClick={goReservation}>
+            <a className="h-nav-item" onClick={goReservation}>
               예매
             </a>
-            <a className="nav-item" onClick={goEvent}>
+            <a className="h-nav-item" onClick={goEvent}>
               이벤트
             </a>
           </nav>
 
           {/* User Actions */}
-          <div className="user-actions">
-            <button className="admin-btn" onClick={goAdmin}>
-              관리자
-            </button>
-            {!isScrolled && <button className="notice-btn">공지사항</button>}
-            <button className="login-btn" onClick={goLogin}>
-              로그인
-            </button>
-            <button
-              className={`signup-btn ${isScrolled ? "scrolled" : ""}`}
-              onClick={goRegister}
-            >
+          <div className="h-user-actions">
+            <button className="h-notice-btn">공지사항</button>
+            <button className="h-login-btn">로그인</button>
+            <button className="h-signup-btn">
               회원가입
             </button>
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            className="mobile-menu-btn"
+            className="h-mobile-menu-btn"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             ☰
@@ -88,19 +77,19 @@ export default function Header() {
       </div>
 
       {/* Navigation Bar - Shows when not scrolled */}
-      <div className={`nav-bottom ${isScrolled ? "hidden" : ""}`}>
-        <div className="nav-bottom-container">
-          <nav className="nav-bottom-content">
-            <a className="nav-item" onClick={goMovie}>
+      <div className={`h-nav-bottom ${isScrolled ? "h-hidden" : ""}`}>
+        <div className="h-nav-bottom-container">
+          <nav className="h-nav-bottom-content">
+            <a className="h-nav-item" onClick={goMovie}>
               영화
             </a>
-            <a className="nav-item" onClick={goTheater}>
+            <a className="h-nav-item" onClick={goTheater}>
               극장
             </a>
-            <a className="nav-item" onClick={goReservation}>
+            <a className="h-nav-item" onClick={goReservation}>
               예매
             </a>
-            <a className="nav-item" onClick={goEvent}>
+            <a className="h-nav-item" onClick={goEvent}>
               이벤트
             </a>
           </nav>
@@ -108,18 +97,18 @@ export default function Header() {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`mobile-menu ${isMenuOpen ? "show" : ""}`}>
-        <nav className="mobile-nav">
-          <a className="nav-item" onClick={goMovie}>
+      <div className={`h-mobile-menu ${isMenuOpen ? "h-show" : ""}`}>
+        <nav className="h-mobile-nav">
+          <a className="h-nav-item" onClick={goMovie}>
             영화
           </a>
-          <a className="nav-item" onClick={goTheater}>
+          <a className="h-nav-item" onClick={goTheater}>
             극장
           </a>
-          <a className="nav-item" onClick={goReservation}>
+          <a className="h-nav-item" onClick={goReservation}>
             예매
           </a>
-          <a className="nav-item" onClick={goEvent}>
+          <a className="h-nav-item" onClick={goEvent}>
             이벤트
           </a>
         </nav>

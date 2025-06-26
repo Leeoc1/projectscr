@@ -1,12 +1,12 @@
 import React from "react";
-import Movie from "../components/moviepagecomponents/Movies";
 import Header from "../pubcomponent/Header";
+import Movies from "../components/moviepagecomponents/Movies";
 
 const MoviePage = () => {
   return (
     <div>
       <Header />
-      <Movie />
+      <Movies />
     </div>
   );
 };

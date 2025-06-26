@@ -21,6 +21,7 @@ export default function Header() {
   const goMovie = () => navigate("/movie");
   const goEvent = () => navigate("/event");
   const goReservation = () => navigate("/reservation");
+  const goAdmin = () => navigate("/admin");
 
   return (
     <header className="h-header">
@@ -53,6 +54,7 @@ export default function Header() {
 
           {/* User Actions */}
           <div className="h-user-actions">
+            <button onClick={goAdmin}>admin</button>
             <button className="h-notice-btn">공지사항</button>
             <button className="h-login-btn">로그인</button>
             <button className="h-signup-btn">회원가입</button>

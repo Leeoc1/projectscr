@@ -4,6 +4,8 @@ import MoviePage from "./pages/MoviePage";
 import ReservationMoviePage from "./pages/reservation/ReservationMoviePage";
 import TheaterPage from "./pages/TheaterPage";
 import EventPage from "./pages/EventPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
         <Route path="/reservation" element={<ReservationMoviePage />} />
         <Route path="/theater" element={<TheaterPage />} />
         <Route path="/event" element={<EventPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
     </Router>
   );

@@ -21,6 +21,8 @@ export default function Header() {
   const goMovie = () => navigate("/movie");
   const goEvent = () => navigate("/event");
   const goReservation = () => navigate("/reservation");
+  const goLogin = () => navigate("/login");
+  const goRegister = () => navigate("/register");
 
   return (
     <header className="header">
@@ -60,8 +62,13 @@ export default function Header() {
           {/* User Actions */}
           <div className="user-actions">
             {!isScrolled && <button className="notice-btn">공지사항</button>}
-            <button className="login-btn">로그인</button>
-            <button className={`signup-btn ${isScrolled ? "scrolled" : ""}`}>
+            <button className="login-btn" onClick={goLogin}>
+              로그인
+            </button>
+            <button
+              className={`signup-btn ${isScrolled ? "scrolled" : ""}`}
+              onClick={goRegister}
+            >
               회원가입
             </button>
           </div>

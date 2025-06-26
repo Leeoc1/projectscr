@@ -1,55 +1,55 @@
-.theaters-page {
+.rts-page {
   background-color: white;
   color: black;
   min-height: 100vh;
 }
 
-.theaters-content {
+.rts-content {
   padding-top: 4rem;
 }
 
-.theaters-hero {
+.rts-hero {
   background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
   padding: 4rem 0;
   color: black;
 }
 
-.theaters-hero-container {
+.rts-hero-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
   text-align: center;
 }
 
-.theaters-hero-title {
+.rts-hero-title {
   font-size: 3rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
 
-.theaters-hero-subtitle {
+.rts-hero-subtitle {
   font-size: 1.25rem;
   opacity: 0.8;
 }
 
-.theaters-main {
+.rts-main {
   padding: 4rem 0;
 }
 
-.featured-banner {
+.rts-featured-banner {
   position: relative;
   margin-bottom: 3rem;
   border-radius: 12px;
   overflow: hidden;
 }
 
-.banner-image {
+.rts-banner-image {
   width: 100%;
   height: 350px;
   object-fit: cover;
 }
 
-.banner-overlay {
+.rts-banner-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -64,42 +64,42 @@
   text-align: center;
 }
 
-.banner-overlay h2 {
+.rts-banner-overlay h2 {
   font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
 
-.banner-overlay p {
+.rts-banner-overlay p {
   font-size: 1.2rem;
   opacity: 0.9;
 }
 
-.theaters-container {
+.rts-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
 }
 
-.theaters-section {
+.rts-section {
   margin-bottom: 4rem;
 }
 
-.section-title {
+.rts-section-title {
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 2rem;
   color: black;
 }
 
-.region-tabs {
+.rts-region-tabs {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
 }
 
-.region-tab {
+.rts-region-tab {
   padding: 0.75rem 1.5rem;
   border: 2px solid #e5e5e5;
   background-color: white;
@@ -110,25 +110,25 @@
   font-weight: 500;
 }
 
-.region-tab:hover {
+.rts-region-tab:hover {
   border-color: #fbbf24;
   background-color: #fef3c7;
 }
 
-.region-tab.active {
+.rts-region-tab.active {
   background-color: #fbbf24;
   border-color: #fbbf24;
   color: black;
   font-weight: bold;
 }
 
-.theaters-grid {
+.rts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 1.5rem;
 }
 
-.theater-card {
+.rts-card {
   background-color: #f9f9f9;
   border-radius: 0.5rem;
   padding: 1.5rem;
@@ -136,53 +136,53 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.theater-image {
+.rts-image {
   width: 100%;
   border-radius: 6px;
   overflow: hidden;
   margin-bottom: 1rem;
 }
 
-.theater-image img {
+.rts-image img {
   width: 100%;
   height: 200px;
   object-fit: cover;
 }
 
-.theater-card:hover {
+.rts-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-.theater-info {
+.rts-info {
   margin-bottom: 1rem;
 }
 
-.theater-name {
+.rts-name {
   font-size: 1.25rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
   color: black;
 }
 
-.theater-address {
+.rts-address {
   color: #666;
   margin-bottom: 0.25rem;
 }
 
-.theater-phone {
+.rts-phone {
   color: #666;
   margin-bottom: 1rem;
 }
 
-.theater-features {
+.rts-features {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
   margin-bottom: 1rem;
 }
 
-.feature-tag {
+.rts-feature-tag {
   background-color: #fbbf24;
   color: black;
   padding: 0.25rem 0.75rem;
@@ -191,12 +191,12 @@
   font-weight: bold;
 }
 
-.theater-actions {
+.rts-actions {
   display: flex;
   gap: 0.5rem;
 }
 
-.theater-btn {
+.rts-btn {
   flex: 1;
   padding: 0.75rem 1rem;
   border: none;
@@ -206,92 +206,41 @@
   transition: background-color 0.3s ease;
 }
 
-.theater-btn.primary {
+.rts-btn.primary {
   background-color: #fbbf24;
   color: black;
 }
 
-.theater-btn.primary:hover {
+.rts-btn.primary:hover {
   background-color: #f59e0b;
 }
 
-.theater-btn.secondary {
+.rts-btn.secondary {
   background-color: white;
   color: black;
   border: 2px solid #e5e5e5;
 }
 
-.theater-btn.secondary:hover {
+.rts-btn.secondary:hover {
   border-color: #fbbf24;
   background-color: #fef3c7;
 }
 
-.special-theaters {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-}
-
-.special-theater-card {
-  background-color: #f9f9f9;
-  padding: 2rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.special-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #fbbf24;
-  margin-bottom: 1rem;
-}
-
-.special-description {
-  color: #666;
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
-}
-
-.special-features {
-  list-style: none;
-  padding: 0;
-}
-
-.special-features li {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #e5e5e5;
-  color: black;
-}
-
-.special-features li:last-child {
-  border-bottom: none;
-}
-
-.special-features li:before {
-  content: "✓";
-  color: #fbbf24;
-  font-weight: bold;
-  margin-right: 0.5rem;
-}
-
 @media (max-width: 768px) {
-  .theaters-hero-title {
+  .rts-hero-title {
     font-size: 2rem;
   }
 
-  .theaters-hero-subtitle {
+  .rts-hero-subtitle {
     font-size: 1rem;
   }
 
-  .theaters-grid {
+  .rts-grid {
     grid-template-columns: 1fr;
   }
 
-  .theater-actions {
+  .rts-actions {
     flex-direction: column;
   }
 
-  .special-theaters {
-    grid-template-columns: 1fr;
-  }
 }

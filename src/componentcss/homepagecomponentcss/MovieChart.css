@@ -29,22 +29,28 @@
 .mcs-slider-wrapper {
   position: relative;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 0;
 }
 
 .mcs-slider-container {
-  position: relative;
+  width: 980px;
+  max-width: 980px;
   overflow: hidden;
-  width: 1420px;
+  height: 300px;
   margin: 0;
+  flex-shrink: 0;
 }
 
 .mcs-slider {
   display: flex;
-  gap: 1.75rem;
+  flex-wrap: nowrap;
+  gap: 20px;
   transition: transform 0.5s ease;
   cursor: grab;
+  height: 100%;
 }
 
 .mcs-slider:active {
@@ -52,13 +58,16 @@
 }
 
 .mcs-movie-card {
-  flex-shrink: 0;
-  width: 16rem;
+  flex: 0 0 180px;
+  width: 180px;
+  height: 300px;
   background-color: #333333;
   border-radius: 0.75rem;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .mcs-movie-card:hover {
@@ -68,25 +77,30 @@
 
 .mcs-movie-poster {
   width: 100%;
-  height: 20rem;
+  height: 200px;
   object-fit: cover;
 }
 
 .mcs-movie-info {
+  padding: 0.75rem 1rem 0.5rem 1rem;
+  flex: 1;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .mcs-movie-title {
   font-weight: bold;
-  font-size: 1.125rem;
-  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
   color: white;
 }
 
 .mcs-movie-genre {
   color: #9ca3af;
-  font-size: 0.875rem;
-  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
 }
 
 .mcs-movie-meta {
@@ -97,7 +111,7 @@
 .mcs-movie-rating {
   display: flex;
   color: #fbbf24;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
 }
 
 .mcs-movie-rating-text {
@@ -114,10 +128,8 @@
 }
 
 .mcs-slider-nav-arrow {
-  position: static;
-  top: auto;
-  transform: none;
-  margin: 0 1rem;
+  position: relative;
+  margin: 0 1.5rem;
   background-color: #fbbf24;
   color: black;
   padding: 0.75rem;
@@ -139,12 +151,10 @@
   cursor: not-allowed;
 }
 
-.mcs-slider-nav-prev {
-  left: auto;
-}
-
+.mcs-slider-nav-prev,
 .mcs-slider-nav-next {
-  right: auto;
+  left: unset;
+  right: unset;
 }
 
 @media (min-width: 768px) {

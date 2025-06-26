@@ -5,9 +5,11 @@ import "../../componentcss/homepagecomponentcss/MovieChart.css";
 export default function MovieChart() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const sliderRef = useRef(null);
-  const cardWidth = 284; // 256px width + 28px gap
+  const cardWidth = 180; // 카드 1장 width(px)
+  const gap = 20; // 카드 사이 gap(px)
   const visibleCards = 5;
-  const maxIndex = movieData.length - visibleCards;
+  const totalCards = movieData.length;
+  const maxIndex = Math.ceil(totalCards / visibleCards) - 1;
 
   // Touch/drag state
   const [isDragging, setIsDragging] = useState(false);
@@ -16,8 +18,14 @@ export default function MovieChart() {
 
   const updateSlider = () => {
     if (sliderRef.current) {
-      const translateX = -(currentIndex * cardWidth);
-      sliderRef.current.style.transform = `translateX(${translateX}px)`;
+      // 전체 슬라이더 너비 - 보여지는 영역(980px)
+      const totalWidth = totalCards * cardWidth + (totalCards - 1) * gap;
+      const maxTranslateX = Math.max(0, totalWidth - 980);
+      // 이동할 거리: currentIndex * (카드+gap) * visibleCards
+      let translateX = currentIndex * visibleCards * (cardWidth + gap);
+      // 최대 이동 거리 초과하지 않게
+      if (translateX > maxTranslateX) translateX = maxTranslateX;
+      sliderRef.current.style.transform = `translateX(-${translateX}px)`;
     }
   };
 
@@ -105,7 +113,13 @@ export default function MovieChart() {
         </div>
 
         <div className="mcs-slider-wrapper">
-          {/* Movie Slider Container */}
+          <button
+            onClick={prevSlide}
+            disabled={currentIndex === 0}
+            className="mcs-slider-nav-arrow mcs-slider-nav-prev"
+          >
+            ‹
+          </button>
           <div className="mcs-slider-container">
             <div
               ref={sliderRef}

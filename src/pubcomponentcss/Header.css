@@ -1,241 +1,84 @@
-.header {
-  background-color: #2a2a2a;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 50;
-  transition: all 0.3s ease;
+.h-header {
+  height: 185px;
 }
 
-.header-container {
-  max-width: 1200px;
+.h-header .h-contents {
+  width: 980px;
   margin: 0 auto;
-  padding: 0 1rem;
 }
 
-.header-content {
+.h-headerh-content {
+  width: 980px;
+  height: 110px;
+  margin: 0 auto;
+  border-bottom: solid 1px rgb(0, 0, 0);
+  background-color: #ffffff;
+}
+
+.h-header-content .h-contents {
+  box-sizing: border-box;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  transition: all 0.3s ease;
-  height: 4rem;
+  padding: 35px 20px 20px 20px;
 }
 
-.header-content.scrolled {
-  height: 3rem;
+.h-logo {
+  width: 80px;
 }
 
-.logo-container {
+.h-logo .h-img {
+  object-fit: contain;
+  width: inherit;
+}
+
+.h-memberinfo {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: flex-end;
+  margin: 0;
 }
 
-.logo-icon {
-  transition: all 0.3s ease;
-  font-size: 2rem;
+.h-memberinfo > li {
+  vertical-align: bottom;
+  padding: 0 10px;
+  font-size: 14px;
 }
 
-.logo-icon.scrolled {
-  font-size: 1.5rem;
+.h-memberinfo > li:hover {
+  cursor: pointer;
 }
 
-.logo-text {
-  color: white;
-  font-weight: bold;
+.h-memberinfo > li:last-child {
+  border-right: none;
 }
 
-.logo-line {
-  line-height: 1.2;
-  transition: all 0.3s ease;
-  font-size: 1.125rem;
+.h-nav {
+  height: 75px;
+  text-align: center;
+  background-color: #ffffff;
+  border-bottom: solid 2px #000000;
 }
 
-.logo-line.scrolled {
-  font-size: 0.875rem;
-}
-
-.admin-btn {
-  border-color: #10b981;
-  color: #10b981;
-}
-
-.admin-btn:hover {
-  background: #10b981;
-  color: white;
-}
-
-.nav-scrolled {
-  display: none;
-  align-items: center;
-  gap: 2rem;
-}
-
-.nav-scrolled.show {
+.h-nav .h-contents {
   display: flex;
-}
-
-.nav-item {
-  font-weight: 500;
-  font-size: 0.875rem;
-  position: relative;
-  padding: 0.75rem 0;
-  transition: color 0.3s ease;
-  color: white;
-  text-decoration: none;
-}
-
-.nav-item:hover {
-  color: #fbbf24;
-}
-
-.nav-item::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: #fbbf24;
-  transition: width 0.3s ease;
-}
-
-.nav-item:hover::after {
-  width: 100%;
-}
-
-.user-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.notice-btn {
-  color: #d1d5db;
-  font-size: 0.875rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.notice-btn:hover {
-  color: #fbbf24;
-}
-
-.login-btn {
-  color: #d1d5db;
-  font-size: 0.875rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.login-btn:hover {
-  color: #fbbf24;
-}
-
-.signup-btn {
-  color: #ef4444;
-  border: 1px solid #ef4444;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  background: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.signup-btn:hover {
-  background-color: #ef4444;
-  color: white;
-}
-
-.signup-btn.scrolled {
-  padding: 0.25rem 0.75rem;
-}
-
-.mobile-menu-btn {
-  color: white;
-  background: none;
-  border: none;
-  font-size: 1.25rem;
-  cursor: pointer;
-  display: none;
-}
-
-.nav-bottom {
-  background-color: #1a1a1a;
-  border-top: 1px solid #4b5563;
-  transition: all 0.3s ease;
-}
-
-.nav-bottom.hidden {
-  display: none;
-}
-
-.nav-bottom-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.nav-bottom-content {
-  display: none;
-  align-items: center;
   justify-content: center;
-  gap: 3rem;
-  height: 3rem;
+  height: inherit;
 }
 
-.mobile-menu {
-  background-color: #2a2a2a;
-  border-top: 1px solid #4b5563;
-  padding: 1rem 0;
-  display: none;
-}
-
-.mobile-nav {
+.h-menu {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  margin: 0;
 }
 
-.mobile-nav-item {
-  color: white;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  text-decoration: none;
-  transition: color 0.3s ease;
+.h-menu > li {
+  font-size: 20px;
+  padding: 20px 50px;
 }
 
-.mobile-nav-item:hover {
-  color: #fbbf24;
+.h-menu > li:hover {
+  border-bottom: solid 3px #cc3c3c;
+  cursor: pointer;
 }
 
-@media (min-width: 768px) {
-  .nav-bottom-content {
-    display: flex;
-  }
-
-  .nav-scrolled {
-    display: none;
-  }
-
-  .nav-scrolled.show {
-    display: flex;
-  }
-}
-
-@media (max-width: 767px) {
-  .mobile-menu-btn {
-    display: block;
-  }
-
-  .mobile-menu.show {
-    display: block;
-  }
+li {
+  list-style-type: none;
 }

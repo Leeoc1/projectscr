@@ -1,0 +1,31 @@
+2025.06.23
+// pubcomponent 폴더 안에 있는 component들의 css파일 폴더
+pubcomponentcss 폴더 생성
+
+pubcomponentcss 안에 Header.css, ReservationDetail.css 파일 생성
+
+헤더 제작 완료
+- nav hover시 뜨는 색은 임의의 색입니다
+- 스크롤 내릴 시 nav만 따로 뜨게 하는 것은 아직 구현X
+pubcomponent > Header.jsx 
+pubcomponentcss > Header.css
+
+
+
+2025.06.23
+예매 상세 내역 제작 완료
+pubcomponent > ReservationDetail.jsx
+pubcomponentcss > ReservationDetail.css
+!! 이 컴포넌트 예약 완료 페이지(RservationSuccessPage)에도 사용합니다 !!
+
+예매 상세 내역 페이지 제작 완료
+components > reservationinfopagecomponents > Cancel.jsx
+components > reservationinfopagecomponents > CancelInfo.jsx
+componentcss > reservationinfopagecomponentcss > Cancel.css
+componentcss > reservationinfopagecomponentcss > CancelInfo.css
+pages > ReservationInfoPage.jsx
+pagecss > ReservationInfoPage.css
+구체적인 코드는 안 짰습니다
+정직하게 !!!!화면!!!!만 짰습니다 
+
+마이페이지 제작 중

@@ -46,14 +46,8 @@
 
 .nt-notice-title {
   font-weight: 600;
-  font-size: 1.125rem;
-  margin-bottom: 0.5rem;
+  font-size: 1rem;
   color: white;
-}
-
-.nt-notice-date {
-  color: #9ca3af;
-  font-size: 0.875rem;
 }
 
 .nt-faq-item {

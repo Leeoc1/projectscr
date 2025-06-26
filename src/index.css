@@ -5,6 +5,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding-top: var(--header-height); /* CSS 변수 사용 */
+}
+
+body.header-scrolled {
+  padding-top: var(--header-height);
 }
 
 code {

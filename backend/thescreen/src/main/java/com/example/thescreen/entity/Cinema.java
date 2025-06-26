@@ -10,10 +10,8 @@ import lombok.*;
 @Table(name = "Cinema")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class Cinema {
+
+public class  Cinema {
     @Id
     @Column(length = 20)
     private String cinemacd; // 지점 코드 (PK)

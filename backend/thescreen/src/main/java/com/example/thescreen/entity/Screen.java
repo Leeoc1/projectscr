@@ -6,14 +6,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "screen")
 @Getter
-@NoArgsConstructor
+@Setter
 public class Screen {
 
-    @Id
+    @Id      
     @Column(length = 20)
     private String screencd; // 상영관 코드 (PK)
 

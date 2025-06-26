@@ -63,7 +63,7 @@
 
 .hero-nav-arrow {
   position: absolute;
-  top: 50%;
+  top: 94%;
   transform: translateY(-50%);
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
@@ -81,11 +81,11 @@
 }
 
 .hero-nav-prev {
-  left: 1rem;
+  left: 50rem;
 }
 
 .hero-nav-next {
-  right: 1rem;
+  right: 50rem;
 }
 
 .hero-dots {

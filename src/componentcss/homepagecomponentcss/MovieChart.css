@@ -1,57 +1,57 @@
-.mct-boxoffice-section {
+.mcs-section {
   padding: 4rem 0;
   background-color: #1a1a1a;
 }
 
-.mct-boxoffice-container {
+.mcs-container {
   max-width: 980px;
   margin: 0 auto;
   padding: 0 1rem;
 }
 
-.mct-boxoffice-header {
+.mcs-header {
   text-align: center;
   margin-bottom: 3rem;
 }
 
-.mct-boxoffice-title {
+.mcs-title {
   font-size: 1.875rem;
   font-weight: bold;
   color: #fbbf24;
   margin-bottom: 1rem;
 }
 
-.mct-boxoffice-subtitle {
+.mcs-subtitle {
   color: #9ca3af;
   font-size: 1.125rem;
 }
 
-.boxoffice-slider-wrapper {
+.mcs-slider-wrapper {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.boxoffice-slider-container {
+.mcs-slider-container {
   position: relative;
   overflow: hidden;
   width: 1420px;
   margin: 0;
 }
 
-.boxoffice-slider {
+.mcs-slider {
   display: flex;
   gap: 1.75rem;
   transition: transform 0.5s ease;
   cursor: grab;
 }
 
-.mct-boxoffice-slider:active {
+.mcs-slider:active {
   cursor: grabbing;
 }
 
-.mct-movie-card {
+.mcs-movie-card {
   flex-shrink: 0;
   width: 16rem;
   background-color: #333333;
@@ -61,50 +61,50 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.mct-movie-card:hover {
+.mcs-movie-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
-.mct-movie-poster {
+.mcs-movie-poster {
   width: 100%;
   height: 20rem;
   object-fit: cover;
 }
 
-.mct-movie-info {
+.mcs-movie-info {
   padding: 1rem;
 }
 
-.mct-movie-title {
+.mcs-movie-title {
   font-weight: bold;
   font-size: 1.125rem;
   margin-bottom: 0.5rem;
   color: white;
 }
 
-.mct-movie-genre {
+.mcs-movie-genre {
   color: #9ca3af;
   font-size: 0.875rem;
   margin-bottom: 0.75rem;
 }
 
-.mct-movie-meta {
+.mcs-movie-meta {
   display: flex;
   align-items: center;
 }
 
-.mct-movie-rating {
+.mcs-movie-rating {
   display: flex;
   color: #fbbf24;
   font-size: 0.875rem;
 }
 
-.mct-movie-rating-text {
+.mcs-movie-rating-text {
   margin-left: 0.25rem;
 }
 
-.mct-movie-rank {
+.mcs-movie-rank {
   background-color: #dc2626;
   color: white;
   font-size: 0.75rem;
@@ -113,7 +113,7 @@
   margin-left: auto;
 }
 
-.mct-slider-nav-arrow {
+.mcs-slider-nav-arrow {
   position: static;
   top: auto;
   transform: none;
@@ -130,25 +130,25 @@
   transition: all 0.3s ease;
 }
 
-.mct-slider-nav-arrow:hover {
+.mcs-slider-nav-arrow:hover {
   background-color: #f59e0b;
 }
 
-.mct-slider-nav-arrow:disabled {
+.mcs-slider-nav-arrow:mcs-disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.mct-slider-nav-prev {
+.mcs-slider-nav-prev {
   left: auto;
 }
 
-.mct-slider-nav-next {
+.mcs-slider-nav-next {
   right: auto;
 }
 
 @media (min-width: 768px) {
-  .mct-boxoffice-title {
+  .mcs-title {
     font-size: 2.25rem;
   }
 }

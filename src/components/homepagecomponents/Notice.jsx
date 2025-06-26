@@ -1,29 +1,62 @@
-import React from "react";
+import { useState } from "react";
+import { noticesData, faqData } from "../../Data/mockData";
 import "../../componentcss/homepagecomponentcss/Notice.css";
 
-const Notice = () => {
-  const info = [
-    { info: "1. [시스템점검] 2025년 7월 시스템 점검" },
-    {
-      info: "2. [극장] [더 시네마 강남] IMAX관 사운드 업그레이드 뭐시기 뭐 뭐",
-    },
-    { info: "3. [행사/이벤트] 여름맞이 포토존 인증샷" },
-    { info: "4. [극장] 7/1 (화) 리클라이너 좌석 시범 운영 뭐시기" },
-    {
-      info: "5. [시스템점검] CJ포인트 적립 시스템 점검 공지 합니다. 무슨 점검 일까요.",
-    },
-  ];
+export default function Notice() {
+  const [openFAQ, setOpenFAQ] = useState(null);
+
+  const toggleFAQ = (index) => {
+    setOpenFAQ(openFAQ === index ? null : index);
+  };
+
   return (
-    <div className="NoticeWrap">
-      <div className="NoticeSection">
-        <p className="infoNotice">공지사항</p>
-        <div>
-          <p>1. </p>
-          <p></p>
+    <section className="notice-faq-section">
+      <div className="notice-faq-container">
+        <div className="notice-faq-grid">
+          {/* Announcements Section */}
+          <div className="section-column">
+            <h2 className="section-title">공지사항</h2>
+            <div className="section-content">
+              {noticesData.map((notice, index) => (
+                <div
+                  key={index}
+                  className={`notice-item ${index === 0 ? "featured" : ""}`}
+                >
+                  <h3 className="notice-title">{notice.title}</h3>
+                  <p className="notice-date">{notice.date}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* FAQ Section */}
+          <div className="section-column">
+            <h2 className="section-title">자주 묻는 질문</h2>
+            <div className="section-content">
+              {faqData.map((faq, index) => (
+                <div key={index} className="faq-item">
+                  <button
+                    onClick={() => toggleFAQ(index)}
+                    className="faq-button"
+                  >
+                    <span className="faq-question">{faq.question}</span>
+                    <span className="faq-icon">
+                      {openFAQ === index ? "−" : "+"}
+                    </span>
+                  </button>
+                  <div
+                    className={`faq-content ${openFAQ === index ? "open" : ""}`}
+                  >
+                    {openFAQ === index && (
+                      <p className="faq-answer">{faq.answer}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
-};
-
-export default Notice;
+}

@@ -1,0 +1,15 @@
+.NoticeWrap {
+  width: 1920px;
+  height: 350px;
+}
+
+.NoticeSection {
+  width: 980px;
+  height: inherit;
+  margin: 0 auto;
+}
+
+.infoNotice {
+  width: 414px;
+  height: 96px;
+}

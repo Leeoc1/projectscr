@@ -1,0 +1,70 @@
+.eventWrap {
+  box-sizing: border-box;
+  width: 1920px;
+  height: 470px;
+  background-color: #eff0f5;
+}
+
+.eventSection {
+  width: 980px;
+  height: 324px;
+  margin: 0 auto;
+  padding-top: 50px;
+}
+
+.eventSectionTitle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.eventImageSection {
+  width: inherit;
+  height: inherit;
+  display: flex;
+  flex-direction: row;
+  gap: 28px;
+}
+.eventImage {
+  width: 308px;
+  height: 200px;
+  border-radius: 15px;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
+  margin-bottom: 10px;
+}
+
+.eventImageInfo {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.eventImagetitle {
+  width: 300px;
+  font-size: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 10px;
+}
+
+.eventImagedate {
+  width: 305px;
+  text-overflow: ellipsis;
+  padding-left: 10px;
+}
+
+.allClick {
+  width: 120px;
+  height: 40px;
+  border-radius: 35px;
+  -webkit-border-radius: 35px;
+  -moz-border-radius: 35px;
+  -ms-border-radius: 35px;
+  -o-border-radius: 35px;
+  background-color: #ffde08;
+  color: black;
+  border: none;
+}

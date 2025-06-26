@@ -1,0 +1,231 @@
+.header {
+  background-color: #2a2a2a;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 50;
+  transition: all 0.3s ease;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  height: 4rem;
+}
+
+.header-content.scrolled {
+  height: 3rem;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-icon {
+  transition: all 0.3s ease;
+  font-size: 2rem;
+}
+
+.logo-icon.scrolled {
+  font-size: 1.5rem;
+}
+
+.logo-text {
+  color: white;
+  font-weight: bold;
+}
+
+.logo-line {
+  line-height: 1.2;
+  transition: all 0.3s ease;
+  font-size: 1.125rem;
+}
+
+.logo-line.scrolled {
+  font-size: 0.875rem;
+}
+
+.nav-scrolled {
+  display: none;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-scrolled.show {
+  display: flex;
+}
+
+.nav-item {
+  font-weight: 500;
+  font-size: 0.875rem;
+  position: relative;
+  padding: 0.75rem 0;
+  transition: color 0.3s ease;
+  color: white;
+  text-decoration: none;
+}
+
+.nav-item:hover {
+  color: #fbbf24;
+}
+
+.nav-item::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #fbbf24;
+  transition: width 0.3s ease;
+}
+
+.nav-item:hover::after {
+  width: 100%;
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.notice-btn {
+  color: #d1d5db;
+  font-size: 0.875rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.notice-btn:hover {
+  color: #fbbf24;
+}
+
+.login-btn {
+  color: #d1d5db;
+  font-size: 0.875rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.login-btn:hover {
+  color: #fbbf24;
+}
+
+.signup-btn {
+  color: #ef4444;
+  border: 1px solid #ef4444;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  background: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.signup-btn:hover {
+  background-color: #ef4444;
+  color: white;
+}
+
+.signup-btn.scrolled {
+  padding: 0.25rem 0.75rem;
+}
+
+.mobile-menu-btn {
+  color: white;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: none;
+}
+
+.nav-bottom {
+  background-color: #1a1a1a;
+  border-top: 1px solid #4b5563;
+  transition: all 0.3s ease;
+}
+
+.nav-bottom.hidden {
+  display: none;
+}
+
+.nav-bottom-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.nav-bottom-content {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  height: 3rem;
+}
+
+.mobile-menu {
+  background-color: #2a2a2a;
+  border-top: 1px solid #4b5563;
+  padding: 1rem 0;
+  display: none;
+}
+
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mobile-nav-item {
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.mobile-nav-item:hover {
+  color: #fbbf24;
+}
+
+@media (min-width: 768px) {
+  .nav-bottom-content {
+    display: flex;
+  }
+
+  .nav-scrolled {
+    display: none;
+  }
+
+  .nav-scrolled.show {
+    display: flex;
+  }
+}
+
+@media (max-width: 767px) {
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .mobile-menu.show {
+    display: block;
+  }
+}

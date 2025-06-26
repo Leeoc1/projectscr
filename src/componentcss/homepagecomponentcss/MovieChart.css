@@ -1,54 +1,54 @@
-.boxoffice-section {
+.mct-boxoffice-section {
   padding: 4rem 0;
   background-color: #1a1a1a;
 }
 
-.boxoffice-container {
-  max-width: 1200px;
+.mct-boxoffice-container {
+  max-width: 980px;
   margin: 0 auto;
   padding: 0 1rem;
 }
 
-.boxoffice-header {
+.mct-boxoffice-header {
   text-align: center;
   margin-bottom: 3rem;
 }
 
-.boxoffice-title {
+.mct-boxoffice-title {
   font-size: 1.875rem;
   font-weight: bold;
   color: #fbbf24;
   margin-bottom: 1rem;
 }
 
-.boxoffice-subtitle {
+.mct-boxoffice-subtitle {
   color: #9ca3af;
   font-size: 1.125rem;
 }
 
-.boxoffice-slider-wrapper {
+.mct-boxoffice-slider-wrapper {
   position: relative;
 }
 
-.boxoffice-slider-container {
+.mct-boxoffice-slider-container {
   position: relative;
   overflow: hidden;
   width: 1420px;
   margin: 0 auto;
 }
 
-.boxoffice-slider {
+.mct-boxoffice-slider {
   display: flex;
   gap: 1.75rem;
   transition: transform 0.5s ease;
   cursor: grab;
 }
 
-.boxoffice-slider:active {
+.mct-boxoffice-slider:active {
   cursor: grabbing;
 }
 
-.movie-card {
+.mct-movie-card {
   flex-shrink: 0;
   width: 16rem;
   background-color: #333333;
@@ -58,50 +58,50 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.movie-card:hover {
+.mct-movie-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
-.movie-poster {
+.mct-movie-poster {
   width: 100%;
   height: 20rem;
   object-fit: cover;
 }
 
-.movie-info {
+.mct-movie-info {
   padding: 1rem;
 }
 
-.movie-title {
+.mct-movie-title {
   font-weight: bold;
   font-size: 1.125rem;
   margin-bottom: 0.5rem;
   color: white;
 }
 
-.movie-genre {
+.mct-movie-genre {
   color: #9ca3af;
   font-size: 0.875rem;
   margin-bottom: 0.75rem;
 }
 
-.movie-meta {
+.mct-movie-meta {
   display: flex;
   align-items: center;
 }
 
-.movie-rating {
+.mct-movie-rating {
   display: flex;
   color: #fbbf24;
   font-size: 0.875rem;
 }
 
-.movie-rating-text {
+.mct-movie-rating-text {
   margin-left: 0.25rem;
 }
 
-.movie-rank {
+.mct-movie-rank {
   background-color: #dc2626;
   color: white;
   font-size: 0.75rem;
@@ -110,7 +110,7 @@
   margin-left: auto;
 }
 
-.slider-nav-arrow {
+.mct-slider-nav-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -126,25 +126,19 @@
   transition: all 0.3s ease;
 }
 
-.slider-nav-arrow:hover {
+.mct-slider-nav-arrow:hover {
   background-color: #f59e0b;
 }
 
-.slider-nav-arrow:disabled {
+.mct-slider-nav-arrow:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.slider-nav-prev {
+.mct-slider-nav-prev {
   left: -1rem;
 }
 
-.slider-nav-next {
+.mct-slider-nav-next {
   right: -1rem;
-}
-
-@media (min-width: 768px) {
-  .boxoffice-title {
-    font-size: 2.25rem;
-  }
 }

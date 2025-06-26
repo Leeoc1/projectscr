@@ -95,21 +95,21 @@ export default function MovieChart() {
   };
 
   return (
-    <section className="boxoffice-section">
-      <div className="boxoffice-container">
-        <div className="boxoffice-header">
-          <h2 className="boxoffice-title">박스오피스 TOP 10</h2>
-          <p className="boxoffice-subtitle">
+    <section className="mct-boxoffice-section">
+      <div className="mct-boxoffice-container">
+        <div className="mct-boxoffice-header">
+          <h2 className="mct-boxoffice-title">박스오피스 TOP 10</h2>
+          <p className="mct-boxoffice-subtitle">
             현재 가장 인기 있는 영화들을 만나보세요
           </p>
         </div>
 
-        <div className="boxoffice-slider-wrapper">
+        <div className="mct-boxoffice-slider-wrapper">
           {/* Movie Slider Container */}
-          <div className="boxoffice-slider-container">
+          <div className="mct-boxoffice-slider-container">
             <div
               ref={sliderRef}
-              className="boxoffice-slider"
+              className="mct-boxoffice-slider"
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
@@ -119,27 +119,27 @@ export default function MovieChart() {
               onMouseLeave={handleMouseUp}
             >
               {movieData.map((movie, index) => (
-                <div key={index} className="movie-card">
+                <div key={index} className="mct-movie-card">
                   <img
                     src={movie.image}
                     alt={movie.title}
-                    className="movie-poster"
+                    className="mct-movie-poster"
                     onError={(e) => {
                       e.target.src =
                         "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjMzMzMzMzIi8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTUwIiBmaWxsPSIjNjY2NjY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2UgTm90IEZvdW5kPC90ZXh0Pgo8L3N2Zz4=";
                     }}
                   />
-                  <div className="movie-info">
-                    <h3 className="movie-title">{movie.title}</h3>
-                    <p className="movie-genre">{movie.genre}</p>
-                    <div className="movie-meta">
-                      <div className="movie-rating">
+                  <div className="mct-movie-info">
+                    <h3 className="mct-movie-title">{movie.title}</h3>
+                    <p className="mct-movie-genre">{movie.genre}</p>
+                    <div className="mct-movie-meta">
+                      <div className="mct-movie-rating">
                         <span>⭐</span>
-                        <span className="movie-rating-text">
+                        <span className="mct-movie-rating-text">
                           {movie.rating}
                         </span>
                       </div>
-                      <span className="movie-rank">{index + 1}</span>
+                      <span className="mct-movie-rank">{index + 1}</span>
                     </div>
                   </div>
                 </div>
@@ -151,14 +151,14 @@ export default function MovieChart() {
           <button
             onClick={prevSlide}
             disabled={currentIndex === 0}
-            className="slider-nav-arrow slider-nav-prev"
+            className="mct-slider-nav-arrow mct-slider-nav-prev"
           >
             ‹
           </button>
           <button
             onClick={nextSlide}
             disabled={currentIndex === maxIndex}
-            className="slider-nav-arrow slider-nav-next"
+            className="mct-slider-nav-arrow mct-slider-nav-next"
           >
             ›
           </button>

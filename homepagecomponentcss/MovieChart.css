@@ -1,0 +1,144 @@
+.mct-boxoffice-section {
+  padding: 4rem 0;
+  background-color: #1a1a1a;
+}
+
+.mct-boxoffice-container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.mct-boxoffice-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.mct-boxoffice-title {
+  font-size: 1.875rem;
+  font-weight: bold;
+  color: #fbbf24;
+  margin-bottom: 1rem;
+}
+
+.mct-boxoffice-subtitle {
+  color: #9ca3af;
+  font-size: 1.125rem;
+}
+
+.mct-boxoffice-slider-wrapper {
+  position: relative;
+}
+
+.mct-boxoffice-slider-container {
+  position: relative;
+  overflow: hidden;
+  width: 1420px;
+  margin: 0 auto;
+}
+
+.mct-boxoffice-slider {
+  display: flex;
+  gap: 1.75rem;
+  transition: transform 0.5s ease;
+  cursor: grab;
+}
+
+.mct-boxoffice-slider:active {
+  cursor: grabbing;
+}
+
+.mct-movie-card {
+  flex-shrink: 0;
+  width: 16rem;
+  background-color: #333333;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mct-movie-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.mct-movie-poster {
+  width: 100%;
+  height: 20rem;
+  object-fit: cover;
+}
+
+.mct-movie-info {
+  padding: 1rem;
+}
+
+.mct-movie-title {
+  font-weight: bold;
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.mct-movie-genre {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
+}
+
+.mct-movie-meta {
+  display: flex;
+  align-items: center;
+}
+
+.mct-movie-rating {
+  display: flex;
+  color: #fbbf24;
+  font-size: 0.875rem;
+}
+
+.mct-movie-rating-text {
+  margin-left: 0.25rem;
+}
+
+.mct-movie-rank {
+  background-color: #dc2626;
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  margin-left: auto;
+}
+
+.mct-slider-nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #fbbf24;
+  color: black;
+  padding: 0.75rem;
+  border-radius: 50%;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.mct-slider-nav-arrow:hover {
+  background-color: #f59e0b;
+}
+
+.mct-slider-nav-arrow:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mct-slider-nav-prev {
+  left: -1rem;
+}
+
+.mct-slider-nav-next {
+  right: -1rem;
+}

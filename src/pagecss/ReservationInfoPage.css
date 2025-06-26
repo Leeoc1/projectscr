@@ -1,0 +1,19 @@
+.rip-content {
+    width: 980px;
+    margin: 100px auto 0 auto;
+}
+
+.rip-title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.rip-content ul {
+    padding: 0;
+    margin-bottom: 120px;
+}
+
+.rip-content li {
+    margin-bottom: 30px;
+}

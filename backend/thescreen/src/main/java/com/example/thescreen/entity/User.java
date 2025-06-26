@@ -10,21 +10,20 @@ import lombok.Setter;
 @Setter
 public class User {
     @Id
-    @Column(name = "userid", length = 20) // 기본 키: userid
-    private String userId;
+    @Column(length = 20) // 기본 키: userid
+    private String userid;
 
-    @Column(name = "userpw", length = 50) // userpw, 선택 입력
-    private String userPw;
+    @Column(length = 50) // userpw, 선택 입력
+    private String userpw;
 
-    @Column(name = "username", length = 20) // username, 선택 입력
-    private String userName;
+    @Column(length = 20) // username, 선택 입력
+    private String username;
 
-    @Column(name = "email", length = 50) // email, 선택 입력
+    @Column(length = 50) // email, 선택 입력
     private String email;
 
-    @Column(name = "phonenum", length = 20) // 전화번호, 선택 입력
-    private String phoneNum;
+    @Column(length = 20) // 전화번호, 선택 입력
+    private String phone;
 
-    @Column(name = "birthdate") // 생년월일, 선택 입력
-    private String birthDate;
+    private String birth;  // 생년월일, 선택 입력
 }

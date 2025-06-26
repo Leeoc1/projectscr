@@ -75,16 +75,15 @@ export default function SelectMovie() {
             <img src="/api/placeholder/120/180" alt="영화 포스터" />
             <div className="movie-details">
               <h4>{movie.title}</h4>
-              <p>
-                {movie.genre} • {movie.rating}
-              </p>
+              <p>{movie.genre}</p>
+              <p>{movie.rating}</p>
               <p>상영시간: {movie.duration}</p>
             </div>
             <button
-              className="select-btn"
+              className="select-btn reserve-btn"
               onClick={() => handleMovieSelect(movie)}
             >
-              선택
+              예매
             </button>
           </div>
         ))}
@@ -241,14 +240,6 @@ export default function SelectMovie() {
             </div>
           ))}
         </div>
-        <button
-          className="next-btn"
-          onClick={() =>
-            handleSeatSelect(bookingData.selectedSeats, bookingData.guestCount)
-          }
-        >
-          다음 단계
-        </button>
       </div>
     </div>
   );
@@ -308,7 +299,6 @@ export default function SelectMovie() {
           </label>
         </div>
       </div>
-      <button className="payment-btn">결제하기</button>
     </div>
   );
 
@@ -344,14 +334,32 @@ export default function SelectMovie() {
               {currentStep === 4 && renderStep4()}
             </div>
 
-            {currentStep > 1 && (
-              <button
-                className="back-btn"
-                onClick={() => setCurrentStep(currentStep - 1)}
-              >
-                이전 단계
-              </button>
-            )}
+            <div className="booking-btns">
+              {currentStep > 1 && (
+                <button
+                  className="back-btn booking-btn"
+                  onClick={() => setCurrentStep(currentStep - 1)}
+                >
+                  이전 단계
+                </button>
+              )}
+              {currentStep === 3 && (
+                <button
+                  className="next-btn booking-btn"
+                  onClick={() =>
+                    handleSeatSelect(
+                      bookingData.selectedSeats,
+                      bookingData.guestCount
+                    )
+                  }
+                >
+                  다음 단계
+                </button>
+              )}
+              {currentStep === 4 && (
+                <button className="payment-btn booking-btn">결제하기</button>
+              )}
+            </div>
           </div>
         </div>
       </div>

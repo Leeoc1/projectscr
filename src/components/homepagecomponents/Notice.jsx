@@ -2,7 +2,7 @@ import { useState } from "react";
 import { noticesData, faqData } from "../../Data/mockData";
 import "../../componentcss/homepagecomponentcss/Notice.css";
 
-export default function Notice() {
+const Notice = () => {
   const [openFAQ, setOpenFAQ] = useState(null);
 
   const toggleFAQ = (index) => {
@@ -64,4 +64,6 @@ export default function Notice() {
       </div>
     </section>
   );
-}
+};
+
+export default Notice;

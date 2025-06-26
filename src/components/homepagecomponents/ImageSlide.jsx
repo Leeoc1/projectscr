@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "../../componentcss/homepagecomponentcss/ImageSlide.css";
 
-export default function ImageSlide() {
+const ImageSlide = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const totalSlides = 3;
 
@@ -59,4 +59,6 @@ export default function ImageSlide() {
       <div className="isc-background"></div>
     </section>
   );
-}
+};
+
+export default ImageSlide;

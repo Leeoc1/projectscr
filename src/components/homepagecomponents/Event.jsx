@@ -1,7 +1,7 @@
 import { eventsData } from "../../Data/mockData";
 import "../../componentcss/homepagecomponentcss/Event.css";
 
-export default function Event() {
+const Event = () => {
   return (
     <section className="et-events-section">
       <div className="et-events-container">
@@ -40,4 +40,6 @@ export default function Event() {
       </div>
     </section>
   );
-}
+};
+
+export default Event;

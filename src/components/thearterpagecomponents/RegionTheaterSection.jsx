@@ -11,7 +11,7 @@ const regions = [
   "광주",
 ];
 
-export default function RegionRtsSection() {
+const RegionTheaterSection = () => {
   const [selectedRegion, setSelectedRegion] = useState("전체");
   return (
     <section className="rts-section">
@@ -138,4 +138,6 @@ export default function RegionRtsSection() {
       </div>
     </section>
   );
-}
+};
+
+export default RegionTheaterSection;

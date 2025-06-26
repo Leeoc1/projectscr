@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../../componentcss/registerpagecomponentcss/Register.css";
 import { useNavigate } from "react-router-dom";
 
-export default function Register() {
+const Register = () => {
   const navigate = useNavigate(); // useNavigate 훅 사용
   const [formData, setFormData] = useState({
     username: "",
@@ -305,4 +305,6 @@ export default function Register() {
       </div>
     </div>
   );
-}
+};
+
+export default Register;

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { movieData } from "../../Data/mockData";
 import "../../componentcss/homepagecomponentcss/MovieChart.css";
 
-export default function MovieChart() {
+const MovieChart = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const sliderRef = useRef(null);
   const cardWidth = 180; // 카드 1장 width(px)
@@ -180,4 +180,6 @@ export default function MovieChart() {
       </div>
     </section>
   );
-}
+};
+
+export default MovieChart;

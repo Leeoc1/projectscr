@@ -25,13 +25,14 @@ export default function Header() {
   const goLogin = () => navigate("/login");
   const goRegister = () => navigate("/register");
   const goNotice = () => navigate("/notice");
+  const goHome = () => navigate("/");
 
   return (
     <header className="h-header">
       <div className="h-header-container">
         <div className={`h-header-content ${isScrolled ? "h-scrolled" : ""}`}>
           {/* Logo */}
-          <div className="h-logo-container">
+          <div className="h-logo-container" onClick={goHome}>
             <div className="h-logo-icon">🍿</div>
             <div className="h-logo-text">
               <div className="h-logo-line">The</div>

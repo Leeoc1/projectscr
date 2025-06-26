@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function SpecialTheaterSection() {
+const SpecialTheaterSection = () => {
   return (
     <section className="rts-section">
       <h2 className="sts-title">특별관 안내</h2>
@@ -41,4 +41,6 @@ export default function SpecialTheaterSection() {
       </div>
     </section>
   );
-}
+};
+
+export default SpecialTheaterSection;

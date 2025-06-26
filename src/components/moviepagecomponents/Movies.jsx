@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Header from "../../pubcomponent/Header";
 import "../../componentcss/moviepagecomponentcss/Movies.css";
 
-export default function Movies() {
+const Movies = () => {
   const [activeTab, setActiveTab] = useState("current");
   return (
     <div className="mvs-page">
@@ -200,4 +200,6 @@ export default function Movies() {
       </div>
     </div>
   );
-}
+};
+
+export default Movies;

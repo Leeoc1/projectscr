@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../../componentcss/loginpagecomponentcss/Login.css";
 import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+const Login = () => {
   const navigate = useNavigate(); // useNavigate 훅 사용
   const [formData, setFormData] = useState({
     username: "",
@@ -129,4 +129,6 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};
+
+export default Login;

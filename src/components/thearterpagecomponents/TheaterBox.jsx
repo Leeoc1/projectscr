@@ -4,7 +4,7 @@ import "../../componentcss/thearterpagecomponentcss/SpecialTheaterSection.css";
 import RegionTheaterSection from "./RegionTheaterSection";
 import SpecialTheaterSection from "./SpecialTheaterSection";
 
-export default function TheaterBox() {
+const TheaterBox = () => {
   return (
     <div className="rts-page">
       <Header isOtherPage={true} isScrolled={true} />
@@ -18,4 +18,6 @@ export default function TheaterBox() {
       </div>
     </div>
   );
-}
+};
+
+export default TheaterBox;

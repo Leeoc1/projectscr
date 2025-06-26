@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Header from "../../../pubcomponent/Header";
 import "../../../componentcss/reservationcss/moviepagecomponentcss/SelectMovie.css";
 
-export default function SelectMovie() {
+const SelectMovie = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [data, setData] = useState({
     selectedMovie: null,
@@ -365,4 +365,6 @@ export default function SelectMovie() {
       </div>
     </div>
   );
-}
+};
+
+export default SelectMovie;

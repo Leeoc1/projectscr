@@ -1,8 +1,10 @@
 import { useState } from "react";
 import "../pagecss/AdminPage.css";
+import { useNavigate } from "react-router-dom";
 
-export default function AdminPage() {
+const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("sales");
+  const navigate = useNavigate();
 
   const sidebarItems = [
     { id: "sales", label: "매출 현황", icon: "📊" },
@@ -15,6 +17,10 @@ export default function AdminPage() {
     { id: "inquiries", label: "고객 지원", icon: "💬" },
     { id: "events", label: "이벤트 관리", icon: "🎉" },
   ];
+
+  const goHome = () => {
+    navigate('/');
+  }
 
   const renderSalesOverview = () => (
     <div className="adp-content">
@@ -654,7 +660,7 @@ export default function AdminPage() {
     <div className="adp-dashboard">
       {/* Header */}
       <div className="adp-top-bar">
-        <div className="adp-logo">
+        <div className="adp-logo" onClick={goHome}>
           <h1>CineMax 관리자</h1>
         </div>
         <div className="adp-user-info">
@@ -685,4 +691,6 @@ export default function AdminPage() {
       </div>
     </div>
   );
-}
+};
+
+export default AdminPage;

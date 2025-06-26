@@ -23,6 +23,7 @@ export default function Header() {
   const goReservation = () => navigate("/reservation");
   const goLogin = () => navigate("/login");
   const goRegister = () => navigate("/register");
+  const goAdmin = () => navigate("/admin");
 
   return (
     <header className="header">
@@ -61,6 +62,9 @@ export default function Header() {
 
           {/* User Actions */}
           <div className="user-actions">
+            <button className="admin-btn" onClick={goAdmin}>
+              관리자
+            </button>
             {!isScrolled && <button className="notice-btn">공지사항</button>}
             <button className="login-btn" onClick={goLogin}>
               로그인

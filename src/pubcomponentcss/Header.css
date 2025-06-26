@@ -57,6 +57,16 @@
   font-size: 0.875rem;
 }
 
+.admin-btn {
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.admin-btn:hover {
+  background: #10b981;
+  color: white;
+}
+
 .nav-scrolled {
   display: none;
   align-items: center;

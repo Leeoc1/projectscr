@@ -1,209 +1,133 @@
-import React, { useState } from "react";
-import Header from "../../pubcomponent/Header";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../componentcss/moviepagecomponentcss/Movies.css";
+import Header from "../../pubcomponent/Header.jsx";
+import { boxofficeMovies, upcomingMovies } from "../../Data/MoviesData.js";
 
-const Movies = () => {
-  const [activeTab, setActiveTab] = useState("current");
-  
-  // 등급에 따른 클래스 생성 함수
-  const getRatingClass = (ratingText) => {
-    if (ratingText.includes("전체")) return "rating-all";
-    if (ratingText.includes("12세") || ratingText.includes("15세")) return "rating-12";
-    if (ratingText.includes("19세") || ratingText.includes("관람불가")) return "rating-19";
-    return ""; // 기본값
+const ReservationMoviePage = () => {
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("boxoffice");
+
+  useEffect(() => {
+    document.body.classList.add("no-header-padding");
+    return () => {
+      document.body.classList.remove("no-header-padding");
+    };
+  }, []);
+
+  const handleDetailClick = (movie) => {
+    console.log("상세정보:", movie);
+    // 상세정보 페이지로 이동하는 로직
   };
 
+  const handleReserveClick = (movie) => {
+    console.log("예매하기:", movie);
+    navigate("/reservation/place", {
+      state: {
+        selectedMovie: movie,
+      },
+    });
+  };
+
+  const renderBoxofficeMovie = (movie) => (
+    <div key={movie.id} className="movie-card">
+      <div className="movie-poster">
+        <img src={movie.poster} alt={movie.title} />
+        <div className="movie-overlay">
+          <div className="movie-buttons">
+            <button
+              className="movie-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDetailClick(movie);
+              }}
+            >
+              상세정보
+            </button>
+            <button
+              className="movie-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleReserveClick(movie);
+              }}
+            >
+              예매하기
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="movie-info">
+        <h3 className="movie-title">
+          {movie.rank <= 10 && (
+            <span className={`rank-number rank-${movie.rank}`}>
+              {movie.rank}
+            </span>
+          )}
+          {movie.title}
+        </h3>
+        <p className="movie-genre">{movie.genre}</p>
+        <p className="movie-rating">{movie.rating}</p>
+        <p className="movie-duration">{movie.duration}</p>
+      </div>
+    </div>
+  );
+
+  const renderUpcomingMovie = (movie) => (
+    <div key={movie.id} className="movie-card">
+      <div className="movie-poster">
+        <img src={movie.poster} alt={movie.title} />
+        <div className="movie-overlay">
+          <div className="movie-buttons">
+            <button
+              className="movie-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDetailClick(movie);
+              }}
+            >
+              상세정보
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="movie-info">
+        <h3 className="movie-title">{movie.title}</h3>
+        <p className="movie-genre">{movie.genre}</p>
+        <p className="movie-release-date">개봉 예정일: {movie.releaseDate}</p>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="mvs-page">
+    <div className="reservation-page">
       <Header isOtherPage={true} isScrolled={true} />
-      <div className="mvs-content">
-        <div className="mvs-main">
-          <div className="mvs-container">
-            <div className="mvs-tabs">
-              <button
-                className={`mvs-tab-button ${
-                  activeTab === "current" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("current")}
-              >
-                현재 상영작
-              </button>
-              <button
-                className={`mvs-tab-button ${
-                  activeTab === "upcoming" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("upcoming")}
-              >
-                개봉 예정작
-              </button>
-            </div>
+      <div className="reservation-content">
+        <div className="reservation-container">
+          <h1 className="page-title">전체 영화</h1>
 
-            {activeTab === "current" && (
-              <section className="mvs-section">
-                <div className="mvs-grid">
-                  <div className="mvs-card">
-                    <div className="mvs-poster">
-                      <img src="/api/placeholder/200/300" alt="영화 포스터" />
-                    </div>
-                    <div className="mvs-info">
-                      <h3 className="mvs-title">아바타: 물의 길</h3>
-                      <p className="mvs-genre">SF/액션</p>
-                      <p className={`mvs-rating ${getRatingClass("12세 이상 관람가")}`}>12세 이상 관람가</p>
-                      <button className="mvs-book-btn">예매하기</button>
-                    </div>
-                  </div>
+          <div className="movie-tabs">
+            <button
+              className={`movie-tab ${
+                activeTab === "boxoffice" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("boxoffice")}
+            >
+              박스오피스
+            </button>
+            <button
+              className={`movie-tab ${
+                activeTab === "upcoming" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("upcoming")}
+            >
+              상영예정작
+            </button>
+          </div>
 
-                  <div className="mvs-card">
-                    <div className="mvs-poster">
-                      <img src="/api/placeholder/200/300" alt="영화 포스터" />
-                    </div>
-                    <div className="mvs-info">
-                      <h3 className="mvs-title">탑건: 매버릭</h3>
-                      <p className="mvs-genre">액션/드라마</p>
-                      <p className={`mvs-rating ${getRatingClass("12세 이상 관람가")}`}>12세 이상 관람가</p>
-                      <button className="mvs-book-btn">예매하기</button>
-                    </div>
-                  </div>
-
-                  <div className="mvs-card">
-                    <div className="mvs-poster">
-                      <img src="/api/placeholder/200/300" alt="영화 포스터" />
-                    </div>
-                    <div className="mvs-info">
-                      <h3 className="mvs-title">블랙 팬서: 와칸다 포에버</h3>
-                      <p className="mvs-genre">액션/모험</p>
-                      <p className={`mvs-rating ${getRatingClass("12세 이상 관람가")}`}>12세 이상 관람가</p>
-                      <button className="mvs-book-btn">예매하기</button>
-                    </div>
-                  </div>
-
-                  <div className="mvs-card">
-                    <div className="mvs-poster">
-                      <img src="/api/placeholder/200/300" alt="영화 포스터" />
-                    </div>
-                    <div className="mvs-info">
-                      <h3 className="mvs-title">닥터 스트레인지 2</h3>
-                      <p className="mvs-genre">액션/판타지</p>
-                      <p className={`mvs-rating ${getRatingClass("12세 이상 관람가")}`}>12세 이상 관람가</p>
-                      <button className="mvs-book-btn">예매하기</button>
-                    </div>
-                  </div>
-
-                  <div className="mvs-card">
-                    <div className="mvs-poster">
-                      <img src="/api/placeholder/200/300" alt="영화 포스터" />
-                    </div>
-                    <div className="mvs-info">
-                      <h3 className="mvs-title">마블스</h3>
-                      <p className="mvs-genre">액션/모험</p>
-                      <p className={`mvs-rating ${getRatingClass("12세 이상 관람가")}`}>12세 이상 관람가</p>
-                      <button className="mvs-book-btn">예매하기</button>
-                    </div>
-                  </div>
-
-                  <div className="mvs-card">
-                    <div className="mvs-poster">
-                      <img src="/api/placeholder/200/300" alt="영화 포스터" />
-                    </div>
-                    <div className="mvs-info">
-                      <h3 className="mvs-title">인디아나 존스 5</h3>
-                      <p className="mvs-genre">액션/모험</p>
-                      <p className={`mvs-rating ${getRatingClass("12세 이상 관람가")}`}>12세 이상 관람가</p>
-                      <button className="mvs-book-btn">예매하기</button>
-                    </div>
-                  </div>
-
-                  <div className="mvs-card">
-                    <div className="mvs-poster">
-                      <img src="/api/placeholder/200/300" alt="영화 포스터" />
-                    </div>
-                    <div className="mvs-info">
-                      <h3 className="mvs-title">오펜하이머</h3>
-                      <p className="mvs-genre">드라마/스릴러</p>
-                      <p className={`mvs-rating ${getRatingClass("12세 이상 관람가")}`}>12세 이상 관람가</p>
-                      <button className="mvs-book-btn">예매하기</button>
-                    </div>
-                  </div>
-
-                  <div className="mvs-card">
-                    <div className="mvs-poster">
-                      <img src="/api/placeholder/200/300" alt="영화 포스터" />
-                    </div>
-                    <div className="mvs-info">
-                      <h3 className="mvs-title">바비</h3>
-                      <p className="mvs-genre">코미디/판타지</p>
-                      <p className={`mvs-rating ${getRatingClass("전체 관람가")}`}>전체 관람가</p>
-                      <button className="mvs-book-btn">예매하기</button>
-                    </div>
-                  </div>
-
-                  <div className="mvs-card">
-                    <div className="mvs-poster">
-                      <img src="/api/placeholder/200/300" alt="영화 포스터" />
-                    </div>
-                    <div className="mvs-info">
-                      <h3 className="mvs-title">미션 임파서블 7</h3>
-                      <p className="mvs-genre">액션/스파이</p>
-                      <p className={`mvs-rating ${getRatingClass("19세 이상 관람가")}`}>19세 이상 관람가</p>
-                      <button className="mvs-book-btn">예매하기</button>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            )}
-
-            {activeTab === "upcoming" && (
-              <section className="mvs-section">
-                <div className="mvs-grid">
-                  <div className="mvs-card upcoming">
-                    <div className="mvs-poster">
-                      <img src="/api/placeholder/200/300" alt="영화 포스터" />
-                      <div className="mvs-coming-soon-badge">개봉예정</div>
-                    </div>
-                    <div className="mvs-info">
-                      <h3 className="mvs-title">
-                        스파이더맨: 어크로스 더 유니버스
-                      </h3>
-                      <p className="mvs-genre">애니메이션/액션</p>
-                      <p className="mvs-release">개봉일: 2024.03.15</p>
-                      <button className="mvs-book-btn disabled">
-                        예매 오픈 예정
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="mvs-card upcoming">
-                    <div className="mvs-poster">
-                      <img src="/api/placeholder/200/300" alt="영화 포스터" />
-                      <div className="mvs-coming-soon-badge">개봉예정</div>
-                    </div>
-                    <div className="mvs-info">
-                      <h3 className="mvs-title">가디언즈 오브 갤럭시 3</h3>
-                      <p className="mvs-genre">액션/SF</p>
-                      <p className="mvs-release">개봉일: 2024.04.05</p>
-                      <button className="mvs-book-btn disabled">
-                        예매 오픈 예정
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="mvs-card upcoming">
-                    <div className="mvs-poster">
-                      <img src="/api/placeholder/200/300" alt="영화 포스터" />
-                      <div className="mvs-coming-soon-badge">개봉예정</div>
-                    </div>
-                    <div className="mvs-info">
-                      <h3 className="mvs-title">존 윅 4</h3>
-                      <p className="mvs-genre">액션/스릴러</p>
-                      <p className="mvs-release">개봉일: 2024.04.20</p>
-                      <button className="mvs-book-btn disabled">
-                        예매 오픈 예정
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            )}
+          <div className="movies-grid">
+            {activeTab === "boxoffice"
+              ? boxofficeMovies.map(renderBoxofficeMovie)
+              : upcomingMovies.map(renderUpcomingMovie)}
           </div>
         </div>
       </div>
@@ -211,4 +135,4 @@ const Movies = () => {
   );
 };
 
-export default Movies;
+export default ReservationMoviePage;

@@ -116,6 +116,21 @@
   margin-bottom: 0.25rem;
 }
 
+.mvs-rating.rating-all {
+  color: #229c56;
+  font-weight: 600;
+}
+
+.mvs-rating.rating-12 {
+  color: #dd7430; /* 주황색 - 12세 이상 */
+  font-weight: 600;
+}
+
+.mvs-rating.rating-19 {
+  color: #cd1327; /* 보라색 - 19세 이상 */
+  font-weight: 600;
+}
+
 .mvs-book-btn {
   width: 100%;
   background-color: #fbbf24;

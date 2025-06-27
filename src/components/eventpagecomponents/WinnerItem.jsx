@@ -1,13 +1,13 @@
 import React from "react";
-import "../../componentcss/eventpagecomponentcss/Event.css";
+import "../../componentcss/eventpagecomponentcss/WinnerItem.css";
 
 const WinnerItem = ({ winner }) => {
   return (
-    <div className="etp-winner-item">
-      <div className="etp-winner-event">{winner.event}</div>
-      <div className="etp-winner-prize">{winner.prize}</div>
-      <div className="etp-winner-name">{winner.name}</div>
-      <div className="etp-winner-date">{winner.date}</div>
+    <div className="evws-item">
+      <div className="evws-event">{winner.event}</div>
+      <div className="evws-prize">{winner.prize}</div>
+      <div className="evws-name">{winner.name}</div>
+      <div className="evws-date">{winner.date}</div>
     </div>
   );
 };

@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from "react";
-import Header from "../pubcomponent/Header";
-import "../pagecss/EventPage.css";
+import React, { useState, useEffect } from "react";
 import { events, winners } from "../Data/EventPageData";
+import Header from "../pubcomponent/Header";
 import EventFilter from "../components/eventpagecomponents/EventFilter";
 import EventCard from "../components/eventpagecomponents/EventCard";
 import WinnerItem from "../components/eventpagecomponents/WinnerItem";
+import "../pagecss/EventPage.css";
+import "../componentcss/eventpagecomponentcss/EventFilter.css";
 
-const EventPage = () => {
+const Event = () => {
   const [filter, setFilter] = useState("전체");
 
-  // 필터링된 이벤트 목록
   const filteredEvents =
     filter === "전체"
       ? events
       : events.filter((event) => event.category === filter);
 
-  // 상단 패딩 제거
   useEffect(() => {
     document.body.classList.add("no-header-padding");
     return () => {
@@ -24,23 +23,23 @@ const EventPage = () => {
   }, []);
 
   return (
-    <div className="etp-events-page">
+    <div className="evp-page">
       <Header />
-      <div className="etp-events-content">
-        <div className="etp-events-main">
-          <div className="etp-events-container">
-            <section className="etp-events-section">
+      <div className="evp-content">
+        <div className="evp-main">
+          <div className="evp-container">
+            <section className="evp-section">
               <EventFilter filter={filter} setFilter={setFilter} />
-              <div className="etp-events-grid">
+              <div className="evp-grid">
                 {filteredEvents.map((event) => (
                   <EventCard key={event.id} event={event} />
                 ))}
               </div>
             </section>
 
-            <section className="etp-winners-section">
-              <h2 className="etp-section-title">당첨자 발표</h2>
-              <div className="etp-winners-list">
+            <section className="evws-section">
+              <h2 className="evws-title">당첨자 발표</h2>
+              <div className="evws-list">
                 {winners.map((winner) => (
                   <WinnerItem key={winner.id} winner={winner} />
                 ))}
@@ -53,4 +52,4 @@ const EventPage = () => {
   );
 };
 
-export default EventPage;
+export default Event;

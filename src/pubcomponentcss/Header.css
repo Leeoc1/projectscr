@@ -36,6 +36,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  cursor: pointer;
 }
 
 .h-logo-icon {
@@ -70,6 +71,7 @@
   transition: color 0.3s ease;
   color: white;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .h-nav-item:hover {

@@ -32,7 +32,7 @@ const RegionTheaterSection = () => {
       <div className="rts-grid">
         <div className="rts-card">
           <div className="rts-image">
-            <img src="/api/placeholder/300/200" alt="The Screen 강남점" />
+            <img src="/images/cinemascreen1.png" alt="The Screen 강남점" />
           </div>
           <div className="rts-info">
             <h3 className="rts-name">The Screen 강남점</h3>
@@ -51,7 +51,7 @@ const RegionTheaterSection = () => {
         </div>
         <div className="rts-card">
           <div className="rts-image">
-            <img src="/api/placeholder/280/180" alt="The Screen 홍대점" />
+            <img src="/images/cinemascreen2.png" alt="The Screen 홍대점" />
           </div>
           <div className="rts-info">
             <h3 className="rts-name">The Screen 홍대점</h3>
@@ -69,7 +69,7 @@ const RegionTheaterSection = () => {
         </div>
         <div className="rts-card">
           <div className="rts-image">
-            <img src="/api/placeholder/320/200" alt="The Screen 잠실점" />
+            <img src="/images/cinemascreen3.png" alt="The Screen 잠실점" />
           </div>
           <div className="rts-info">
             <h3 className="rts-name">The Screen 잠실점</h3>
@@ -88,7 +88,7 @@ const RegionTheaterSection = () => {
         </div>
         <div className="rts-card">
           <div className="rts-image">
-            <img src="/api/placeholder/310/190" alt="The Screen 신촌점" />
+            <img src="/images/cinemascreen1.png" alt="The Screen 신촌점" />
           </div>
           <div className="rts-info">
             <h3 className="rts-name">The Screen 신촌점</h3>

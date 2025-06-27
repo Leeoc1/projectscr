@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../pagecss/AdminPage.css";
 import { useNavigate } from "react-router-dom";
+import AdminHeader from "../admin/AdminHeader";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("sales");
@@ -19,8 +20,8 @@ const AdminPage = () => {
   ];
 
   const goHome = () => {
-    navigate('/');
-  }
+    navigate("/");
+  };
 
   const renderSalesOverview = () => (
     <div className="adp-content">
@@ -381,7 +382,8 @@ const AdminPage = () => {
               <strong>음향 시스템:</strong> Dolby Atmos
             </p>
             <p>
-              <strong>상태:</strong> <span className="adp-status adp-active">정상</span>
+              <strong>상태:</strong>{" "}
+              <span className="adp-status adp-active">정상</span>
             </p>
           </div>
           <div className="adp-screen-layout">
@@ -659,15 +661,8 @@ const AdminPage = () => {
   return (
     <div className="adp-dashboard">
       {/* Header */}
-      <div className="adp-top-bar">
-        <div className="adp-logo" onClick={goHome}>
-          <h1>CineMax 관리자</h1>
-        </div>
-        <div className="adp-user-info">
-          <span>관리자님 환영합니다</span>
-          <button className="adp-btn-logout">로그아웃</button>
-        </div>
-      </div>
+
+      <AdminHeader />
 
       <div className="adp-layout">
         {/* Sidebar */}
@@ -676,7 +671,9 @@ const AdminPage = () => {
             {sidebarItems.map((item) => (
               <button
                 key={item.id}
-                className={`adp-sidebar-item ${activeTab === item.id ? "adp-active" : ""}`}
+                className={`adp-sidebar-item ${
+                  activeTab === item.id ? "adp-active" : ""
+                }`}
                 onClick={() => setActiveTab(item.id)}
               >
                 <span className="adp-sidebar-icon">{item.icon}</span>

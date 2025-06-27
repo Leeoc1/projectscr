@@ -4,6 +4,15 @@ import "../../componentcss/moviepagecomponentcss/Movies.css";
 
 const Movies = () => {
   const [activeTab, setActiveTab] = useState("current");
+  
+  // 등급에 따른 클래스 생성 함수
+  const getRatingClass = (ratingText) => {
+    if (ratingText.includes("전체")) return "rating-all";
+    if (ratingText.includes("12세") || ratingText.includes("15세")) return "rating-12";
+    if (ratingText.includes("19세") || ratingText.includes("관람불가")) return "rating-19";
+    return ""; // 기본값
+  };
+
   return (
     <div className="mvs-page">
       <Header isOtherPage={true} isScrolled={true} />
@@ -39,7 +48,7 @@ const Movies = () => {
                     <div className="mvs-info">
                       <h3 className="mvs-title">아바타: 물의 길</h3>
                       <p className="mvs-genre">SF/액션</p>
-                      <p className="mvs-rating">12세 이상 관람가</p>
+                      <p className={`mvs-rating ${getRatingClass("12세 이상 관람가")}`}>12세 이상 관람가</p>
                       <button className="mvs-book-btn">예매하기</button>
                     </div>
                   </div>
@@ -51,7 +60,7 @@ const Movies = () => {
                     <div className="mvs-info">
                       <h3 className="mvs-title">탑건: 매버릭</h3>
                       <p className="mvs-genre">액션/드라마</p>
-                      <p className="mvs-rating">12세 이상 관람가</p>
+                      <p className={`mvs-rating ${getRatingClass("12세 이상 관람가")}`}>12세 이상 관람가</p>
                       <button className="mvs-book-btn">예매하기</button>
                     </div>
                   </div>
@@ -63,7 +72,7 @@ const Movies = () => {
                     <div className="mvs-info">
                       <h3 className="mvs-title">블랙 팬서: 와칸다 포에버</h3>
                       <p className="mvs-genre">액션/모험</p>
-                      <p className="mvs-rating">12세 이상 관람가</p>
+                      <p className={`mvs-rating ${getRatingClass("12세 이상 관람가")}`}>12세 이상 관람가</p>
                       <button className="mvs-book-btn">예매하기</button>
                     </div>
                   </div>
@@ -75,7 +84,7 @@ const Movies = () => {
                     <div className="mvs-info">
                       <h3 className="mvs-title">닥터 스트레인지 2</h3>
                       <p className="mvs-genre">액션/판타지</p>
-                      <p className="mvs-rating">12세 이상 관람가</p>
+                      <p className={`mvs-rating ${getRatingClass("12세 이상 관람가")}`}>12세 이상 관람가</p>
                       <button className="mvs-book-btn">예매하기</button>
                     </div>
                   </div>
@@ -87,7 +96,7 @@ const Movies = () => {
                     <div className="mvs-info">
                       <h3 className="mvs-title">마블스</h3>
                       <p className="mvs-genre">액션/모험</p>
-                      <p className="mvs-rating">12세 이상 관람가</p>
+                      <p className={`mvs-rating ${getRatingClass("12세 이상 관람가")}`}>12세 이상 관람가</p>
                       <button className="mvs-book-btn">예매하기</button>
                     </div>
                   </div>
@@ -99,7 +108,7 @@ const Movies = () => {
                     <div className="mvs-info">
                       <h3 className="mvs-title">인디아나 존스 5</h3>
                       <p className="mvs-genre">액션/모험</p>
-                      <p className="mvs-rating">12세 이상 관람가</p>
+                      <p className={`mvs-rating ${getRatingClass("12세 이상 관람가")}`}>12세 이상 관람가</p>
                       <button className="mvs-book-btn">예매하기</button>
                     </div>
                   </div>
@@ -111,7 +120,7 @@ const Movies = () => {
                     <div className="mvs-info">
                       <h3 className="mvs-title">오펜하이머</h3>
                       <p className="mvs-genre">드라마/스릴러</p>
-                      <p className="mvs-rating">12세 이상 관람가</p>
+                      <p className={`mvs-rating ${getRatingClass("12세 이상 관람가")}`}>12세 이상 관람가</p>
                       <button className="mvs-book-btn">예매하기</button>
                     </div>
                   </div>
@@ -123,7 +132,7 @@ const Movies = () => {
                     <div className="mvs-info">
                       <h3 className="mvs-title">바비</h3>
                       <p className="mvs-genre">코미디/판타지</p>
-                      <p className="mvs-rating">전체 관람가</p>
+                      <p className={`mvs-rating ${getRatingClass("전체 관람가")}`}>전체 관람가</p>
                       <button className="mvs-book-btn">예매하기</button>
                     </div>
                   </div>
@@ -135,7 +144,7 @@ const Movies = () => {
                     <div className="mvs-info">
                       <h3 className="mvs-title">미션 임파서블 7</h3>
                       <p className="mvs-genre">액션/스파이</p>
-                      <p className="mvs-rating">12세 이상 관람가</p>
+                      <p className={`mvs-rating ${getRatingClass("19세 이상 관람가")}`}>19세 이상 관람가</p>
                       <button className="mvs-book-btn">예매하기</button>
                     </div>
                   </div>

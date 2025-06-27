@@ -6,111 +6,10 @@
     sans-serif;
 }
 
-/* Top Bar */
-.adp-top-bar {
-  background-color: #1e293b;
-  color: white;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.adp-logo h1 {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #3b82f6;
-}
-
-.adp-user-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.adp-user-info span {
-  color: #cbd5e1;
-  font-size: 0.875rem;
-}
-
-.adp-btn-logout {
-  background-color: #dc2626;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background-color 0.2s;
-}
-
-.adp-btn-logout:hover {
-  background-color: #b91c1c;
-}
-
 /* Layout */
 .adp-layout {
   display: flex;
   min-height: calc(100vh - 80px);
-}
-
-/* Sidebar */
-.adp-sidebar {
-  width: 250px;
-  background-color: #334155;
-  color: white;
-  padding: 1rem 0;
-  position: sticky;
-  top: 80px;
-  height: calc(100vh - 80px);
-  overflow-y: auto;
-}
-
-.adp-sidebar-nav {
-  display: flex;
-  flex-direction: column;
-}
-
-.adp-sidebar-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.875rem 1.5rem;
-  background: none;
-  border: none;
-  color: #cbd5e1;
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.2s;
-  border-left: 3px solid transparent;
-}
-
-.adp-sidebar-item:hover {
-  background-color: #475569;
-  color: white;
-}
-
-.adp-sidebar-item.adp-active {
-  background-color: #3b82f6;
-  color: white;
-  border-left-color: #1d4ed8;
-}
-
-.adp-sidebar-icon {
-  font-size: 1.25rem;
-  width: 24px;
-  display: flex;
-  justify-content: center;
-}
-
-.adp-sidebar-label {
-  font-size: 0.875rem;
-  font-weight: 500;
 }
 
 /* Main Content */
@@ -203,408 +102,6 @@
   background-color: #4b5563;
 }
 
-/* Stats Grid */
-.adp-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.adp-stat-card {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
-}
-
-.adp-stat-card h3 {
-  margin: 0 0 0.5rem 0;
-  font-size: 0.875rem;
-  color: #64748b;
-  font-weight: 500;
-}
-
-.adp-stat-value {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 0.25rem;
-}
-
-.adp-stat-change {
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.adp-stat-change.adp-positive {
-  color: #059669;
-}
-
-.adp-stat-change.adp-negative {
-  color: #dc2626;
-}
-
-/* Charts Section */
-.adp-charts-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.adp-chart-card {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
-}
-
-.adp-chart-card h3 {
-  margin: 0 0 1rem 0;
-  font-size: 1.125rem;
-  color: #1e293b;
-  font-weight: 600;
-}
-
-.adp-chart-placeholder {
-  height: 200px;
-  display: flex;
-  align-items: end;
-  justify-content: center;
-  padding: 1rem;
-}
-
-.adp-chart-bars {
-  display: flex;
-  align-items: end;
-  gap: 0.5rem;
-  height: 100%;
-}
-
-.adp-chart-bar {
-  width: 30px;
-  background: linear-gradient(to top, #3b82f6, #60a5fa);
-  border-radius: 2px 2px 0 0;
-  min-height: 20px;
-}
-
-/* Tables */
-.adp-table-container {
-  background: white;
-  border-radius: 0.5rem;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
-}
-
-.adp-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.adp-table th {
-  background-color: #f8fafc;
-  padding: 0.75rem;
-  text-align: left;
-  font-weight: 600;
-  color: #374151;
-  border-bottom: 1px solid #e2e8f0;
-  font-size: 0.875rem;
-}
-
-.adp-table td {
-  padding: 0.75rem;
-  border-bottom: 1px solid #f1f5f9;
-  color: #374151;
-  font-size: 0.875rem;
-}
-
-.adp-table tr:hover {
-  background-color: #f8fafc;
-}
-
-/* Status Badges */
-.adp-status {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.adp-status.adp-active {
-  background-color: #dcfce7;
-  color: #166534;
-}
-
-.adp-status.adp-inactive {
-  background-color: #fee2e2;
-  color: #991b1b;
-}
-
-.adp-status.adp-pending {
-  background-color: #fef3c7;
-  color: #92400e;
-}
-
-.adp-status.adp-maintenance {
-  background-color: #e0e7ff;
-  color: #3730a3;
-}
-
-/* Theater Grid */
-.adp-theater-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 1.5rem;
-}
-
-.adp-theater-card {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
-}
-
-.adp-theater-card h3 {
-  margin: 0 0 1rem 0;
-  color: #1e293b;
-  font-size: 1.125rem;
-  font-weight: 600;
-}
-
-.adp-theater-info p {
-  margin: 0.5rem 0;
-  color: #64748b;
-  font-size: 0.875rem;
-}
-
-.adp-theater-actions {
-  margin-top: 1rem;
-  display: flex;
-  gap: 0.5rem;
-}
-
-/* Movie Management */
-.adp-movie-management-tabs {
-  background: white;
-  border-radius: 0.5rem;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
-}
-
-.adp-tab-nav {
-  display: flex;
-  background-color: #f8fafc;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.adp-tab-btn {
-  flex: 1;
-  padding: 0.75rem 1rem;
-  background: none;
-  border: none;
-  color: #64748b;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 0.875rem;
-  transition: all 0.2s;
-}
-
-.adp-tab-btn:hover {
-  background-color: #e2e8f0;
-}
-
-.adp-tab-btn.adp-active {
-  background-color: #3b82f6;
-  color: white;
-}
-
-.adp-movie-list {
-  padding: 1.5rem;
-}
-
-.adp-movie-item {
-  display: flex;
-  gap: 1rem;
-  padding: 1rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
-  background-color: #fafafa;
-}
-
-.adp-movie-item img {
-  width: 80px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 0.25rem;
-}
-
-.adp-movie-details {
-  flex: 1;
-}
-
-.adp-movie-details h3 {
-  margin: 0 0 0.5rem 0;
-  color: #1e293b;
-  font-size: 1.125rem;
-}
-
-.adp-movie-details p {
-  margin: 0.25rem 0;
-  color: #64748b;
-  font-size: 0.875rem;
-}
-
-.adp-movie-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: flex-end;
-}
-
-/* Screen Management */
-.adp-screen-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 1.5rem;
-}
-
-.adp-screen-card {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
-}
-
-.adp-screen-info p {
-  margin: 0.5rem 0;
-  color: #64748b;
-  font-size: 0.875rem;
-}
-
-.adp-screen-layout {
-  margin: 1rem 0;
-}
-
-.adp-screen-preview {
-  background-color: #f8fafc;
-  padding: 1rem;
-  border-radius: 0.375rem;
-  border: 1px solid #e2e8f0;
-}
-
-.adp-screen-line {
-  height: 4px;
-  background-color: #374151;
-  border-radius: 2px;
-  margin-bottom: 1rem;
-}
-
-.adp-seats-preview {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  align-items: center;
-}
-
-.adp-seat-row {
-  display: flex;
-  gap: 2px;
-}
-
-.adp-seat-mini {
-  width: 8-chatpx;
-  height: 8px;
-  background-color: #94a3b8;
-  border-radius: 1px;
-}
-
-.adp-screen-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-
-/* Event Grid */
-.adp-event-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 1.5rem;
-}
-
-.adp-event-card {
-  background: white;
-  border-radius: 0.5rem;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
-}
-
-.adp-event-card img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-}
-
-.adp-event-details {
-  padding: 1rem;
-}
-
-.adp-event-details h3 {
-  margin: 0 0 0.5rem 0;
-  color: #1e293b;
-  font-size: 1.125rem;
-}
-
-.adp-event-details p {
-  margin: 0.25rem 0;
-  color: #64748b;
-  font-size: 0.875rem;
-}
-
-.adp-event-actions {
-  padding: 1rem;
-  display: flex;
-  gap: 0.5rem;
-  background-color: #f8fafc;
-}
-
-/* Filters and Search */
-.adp-filter-section {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.adp-filter-section select,
-.adp-filter-section input {
-  padding: 0.5rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-}
-
-.adp-search-bar {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.adp-search-bar input {
-  padding: 0.5rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  min-width: 200px;
-}
-
 .adp-btn-search {
   background-color: #3b82f6;
   color: white;
@@ -619,7 +116,6 @@
   background-color: #2563eb;
 }
 
-/* Additional Button Styles */
 .adp-btn-cancel {
   background-color: #dc2626;
   color: white;
@@ -662,7 +158,7 @@
 }
 
 .adp-btn-schedule {
-  background-color: #0891b2;
+  background: #0891b2;
   color: white;
   border: none;
   padding: 0.375rem 0.75rem;
@@ -713,68 +209,39 @@
   font-size: 0.75rem;
 }
 
-/* Pie Chart */
-.adp-pie-chart {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: conic-gradient(
-    #3b82f6 0deg 90deg,
-    #10b981 90deg 180deg,
-    #f59e0b 180deg 270deg,
-    #ef4444 270deg 360deg
-  );
-  margin: 0 auto;
+/* Status Badges */
+.adp-status {
+  display: inline-block;
+  padding: 0.25rem 0.5rep;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
-/* Reservation Tabs */
-.adp-reservation-tabs {
-  background: white;
-  border-radius: 0.5rem;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
+.adp-status.adp-active {
+  background-color: #dcfce7;
+  color: #166534;
 }
 
-/* Date Filter */
-.adp-date-filter select {
-  padding: 0.5rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
+.adp-status.adp-inactive {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.adp-status.adp-pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.adp-status.adp-maintenance {
+  background-color: #e0e7ff;
+  color: #3730a3;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .adp-layout {
     flex-direction: column;
-  }
-
-  .adp-sidebar {
-    width: 100%;
-    height: auto;
-    position: static;
-  }
-
-  .adp-sidebar-nav {
-    flex-direction: row;
-    overflow-x: auto;
-    padding: 0 1rem;
-  }
-
-  .adp-sidebar-item {
-    min-width: 120px;
-    flex-direction: column;
-    text-align: center;
-    padding: 0.5rem;
-  }
-
-  .adp-stats-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
-
-  .adp-charts-section {
-    grid-template-columns: 1fr;
   }
 
   .adp-header {

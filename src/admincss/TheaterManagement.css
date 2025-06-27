@@ -1,0 +1,33 @@
+/* Theater Grid */
+.thm-theater-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.thm-theater-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+}
+
+.thm-theater-card h3 {
+  margin: 0 0 1rem 0;
+  color: #1e293b;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.thm-theater-info p {
+  margin: 0.5rem 0;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.thm-theater-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}

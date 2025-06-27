@@ -1,0 +1,246 @@
+.reservation-page {
+  background: #f4f6fa;
+  min-height: 100vh;
+}
+
+.reservation-container {
+  max-width: 980px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(0, 0, 0, 0.08);
+  padding: 48px 48px 60px 48px;
+  margin-top: 48px;
+  margin-bottom: 48px;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  text-align: left;
+  margin-bottom: 30px;
+  margin-top: 20px;
+}
+
+.movie-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.movie-tab {
+  background: none;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.movie-tab:hover {
+  color: #6b7280;
+}
+
+.movie-tab.active {
+  color: #333;
+  font-weight: bold;
+}
+
+.movie-tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #333;
+  border-radius: 2px 2px 0 0;
+}
+
+.movie-release-date {
+  color: #888;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 24px;
+  margin-top: 30px;
+}
+
+.movie-card {
+  position: relative;
+  cursor: pointer;
+}
+
+.movie-poster {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+}
+
+.movie-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+}
+
+.movie-poster img:not([src]),
+.movie-poster img[src=""],
+.movie-poster img[src*="undefined"] {
+  display: none;
+}
+
+.movie-poster::before {
+  content: "영화 포스터";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  z-index: 0;
+}
+
+.movie-poster
+  img:not([src]):not([src=""]):not([src*="undefined"])
+  + .movie-poster::before {
+  display: none;
+}
+
+.rank-badge {
+  display: none;
+}
+
+.movie-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+  line-height: 1.3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rank-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 1위 - 골드 */
+.rank-number.rank-1 {
+  background: linear-gradient(135deg, #ffd700, #ffb347);
+}
+
+/* 2위 - 실버 */
+.rank-number.rank-2 {
+  background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+  color: #374151;
+}
+
+/* 3위 - 브론즈 (더 진한 색상) */
+.rank-number.rank-3 {
+  background: linear-gradient(135deg, #a0522d, #8b4513);
+}
+
+/* 4-10위 - 통일된 색상 (더 진한 파란색으로 변경) */
+.rank-number.rank-4,
+.rank-number.rank-5,
+.rank-number.rank-6,
+.rank-number.rank-7,
+.rank-number.rank-8,
+.rank-number.rank-9,
+.rank-number.rank-10 {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.movie-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.movie-card:hover .movie-overlay {
+  opacity: 1;
+}
+
+.movie-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.movie-btn {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  text-align: center;
+}
+
+.movie-btn:hover {
+  background: white;
+  color: #333;
+}
+
+.movie-info {
+  padding: 16px 0;
+}
+
+.movie-genre {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.movie-rating {
+  color: #888;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.movie-duration {
+  color: #888;
+  font-size: 0.85rem;
+}

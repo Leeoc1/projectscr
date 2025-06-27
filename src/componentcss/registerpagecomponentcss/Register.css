@@ -6,7 +6,6 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  margin-top: calc(-1 * var(--header-height));
 }
 
 .rg-signup-container {
@@ -15,15 +14,15 @@
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   width: 100%;
-  max-width: 550px;
+  max-width: 480px;
   padding: 2.5rem;
   max-height: 90vh;
-  /* overflow-y: auto; */
+  overflow-y: auto;
 }
 
 .rg-signup-header {
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .rg-signup-title {
@@ -40,11 +39,11 @@
 }
 
 .rg-signup-form {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .rg-form-group {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .rg-form-group label {
@@ -55,11 +54,11 @@
 }
 
 .rg-form-group input {
-  width: 95%;
+  width: 100%;
   padding: 0.75rem;
   border: 2px solid #e5e7eb;
   border-radius: 0.5rem;
-  font-size: 0.8rem;
+  font-size: 1rem;
   transition: border-color 0.3s ease;
 }
 
@@ -79,7 +78,6 @@
 
 .rg-check-btn,
 .rg-verify-btn {
-  width: 81px;
   background-color: #6b7280;
   color: white;
   border: none;

@@ -152,18 +152,6 @@ const Register = () => {
             </div>
 
             <div className="rg-form-group">
-              <label htmlFor="birthDate">생년월일</label>
-              <input
-                type="date"
-                id="birthDate"
-                name="birthDate"
-                value={formData.birthDate}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            <div className="rg-form-group">
               <label htmlFor="username">아이디</label>
               <div className="rg-input-with-button">
                 <input
@@ -210,6 +198,7 @@ const Register = () => {
             </div>
 
             <div className="rg-form-group">
+              <label htmlFor="confirmPassword">비밀번호 확인</label>
               <input
                 type="password"
                 id="confirmPassword"
@@ -252,7 +241,7 @@ const Register = () => {
                   onClick={handlePhoneVerification}
                   disabled={validationState.phoneVerified}
                 >
-                  {validationState.phoneVerified ? "인증완료" : "인증하기"}
+                  {validationState.phoneVerified ? "인증완료" : "인증번호 발송"}
                 </button>
               </div>
             </div>
@@ -260,6 +249,7 @@ const Register = () => {
             {validationState.verificationSent &&
               !validationState.phoneVerified && (
                 <div className="rg-form-group">
+                  <label htmlFor="verificationCode">인증번호</label>
                   <div className="rg-input-with-button">
                     <input
                       type="text"
@@ -279,6 +269,18 @@ const Register = () => {
                   </div>
                 </div>
               )}
+
+            <div className="rg-form-group">
+              <label htmlFor="birthDate">생년월일</label>
+              <input
+                type="date"
+                id="birthDate"
+                name="birthDate"
+                value={formData.birthDate}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
 
             <button type="submit" className="rg-signup-btn">
               회원가입

@@ -163,13 +163,6 @@ const MovieChart = () => {
 
           {/* Navigation Arrows */}
           <button
-            onClick={prevSlide}
-            disabled={currentIndex === 0}
-            className="mcs-slider-nav-arrow mcs-slider-nav-prev"
-          >
-            ‹
-          </button>
-          <button
             onClick={nextSlide}
             disabled={currentIndex === maxIndex}
             className="mcs-slider-nav-arrow mcs-slider-nav-next"

@@ -116,6 +116,22 @@
   margin-bottom: 0.25rem;
 }
 
+/* 등급별 색상 */
+.mvs-rating.rating-all {
+  color: #229c56; /* 초록색 - 전체 관람가 */
+  font-weight: 600;
+}
+
+.mvs-rating.rating-12 {
+  color: #dd7430; /* 노란색 - 12세, 15세 이상 */
+  font-weight: 600;
+}
+
+.mvs-rating.rating-19 {
+  color: #CD1327; /* 진한 빨간색 - 청불 */
+  font-weight: 600;
+}
+
 .mvs-book-btn {
   width: 100%;
   background-color: #fbbf24;

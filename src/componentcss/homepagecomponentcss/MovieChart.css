@@ -33,7 +33,6 @@
   justify-content: center;
   width: 100%;
   gap: 0;
-  
 }
 
 .mcs-slider-container {
@@ -98,8 +97,11 @@
   font-size: 1rem;
   margin-bottom: 0.25rem;
   color: white;
+  max-width: 148px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
 .mcs-movie-genre {
   color: #9ca3af;
   font-size: 0.85rem;
@@ -119,6 +121,10 @@
 
 .mcs-movie-rating-text {
   margin-left: 0.25rem;
+  max-width: 95px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mcs-movie-rank {

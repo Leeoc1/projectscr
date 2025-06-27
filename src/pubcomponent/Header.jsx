@@ -58,10 +58,18 @@ export default function Header() {
 
           {/* User Actions */}
           <div className="h-user-actions">
-            <button className="h-admin-btn" onClick={goAdmin}>admin</button>
-            <button className="h-notice-btn" onClick={goNotice}>공지사항</button>
-            <button className="h-login-btn" onClick={goLogin}>로그인</button>
-            <button className="h-signup-btn" onClick={goRegister}>회원가입</button>
+            <button className="h-admin-btn" onClick={goAdmin}>
+              admin
+            </button>
+            <button className="h-notice-btn" onClick={goNotice}>
+              공지사항
+            </button>
+            <button className="h-login-btn" onClick={goLogin}>
+              로그인
+            </button>
+            <button className="h-signup-btn" onClick={goRegister}>
+              회원가입
+            </button>
           </div>
 
           {/* Mobile Menu Button */}

@@ -3,75 +3,89 @@ import { useLocation } from "react-router-dom";
 import Header from "../../pubcomponent/Header";
 import "../../pagecss/reservation/ReservationPlacePage.css";
 
-// mock 지역/지점/상영관/시간 데이터
+// mock 지역/지점/상영시간 데이터 (이미지와 동일하게 하드코딩)
 const theaterData = [
   {
     region: "서울",
     branches: [
-      {
-        name: "강남점",
-        screens: [
-          {
-            screenType: "2D",
-            times: ["10:45", "13:00", "15:30"],
-          },
-          {
-            screenType: "4D",
-            times: ["11:00", "14:00"],
-          },
-        ],
-      },
-      {
-        name: "홍대점",
-        screens: [
-          {
-            screenType: "2D",
-            times: ["09:30", "12:00", "18:00"],
-          },
-          {
-            screenType: "IMAX",
-            times: ["16:00", "20:00"],
-          },
-        ],
-      },
+      { name: "가양", times: ["10:00", "13:00", "16:00"] },
+      { name: "강동", times: ["11:00", "14:00"] },
+      { name: "건대입구", times: ["09:30", "12:30", "18:00"] },
+      { name: "김포공항", times: ["10:15", "13:45"] },
+      { name: "노원", times: ["10:00", "13:00"] },
+      { name: "도곡", times: ["11:00", "14:00"] },
+      { name: "독산", times: ["09:30", "12:30"] },
+      { name: "서울대입구", times: ["10:15", "13:45"] },
+      { name: "수락산", times: ["10:00", "13:00"] },
+      { name: "수유", times: ["11:00", "14:00"] },
+      { name: "신대방(구로디지털역)", times: ["09:30", "12:30"] },
+      { name: "신도림", times: ["10:15", "13:45"] },
+      { name: "신림", times: ["10:00", "13:00"] },
+      { name: "에비뉴엘(명동)", times: ["11:00", "14:00"] },
+      { name: "영등포", times: ["09:30", "12:30"] },
     ],
   },
   {
-    region: "경기",
+    region: "경기/인천",
     branches: [
-      {
-        name: "수원점",
-        screens: [
-          {
-            screenType: "2D",
-            times: ["10:00", "13:30"],
-          },
-        ],
-      },
-      {
-        name: "일산점",
-        screens: [
-          {
-            screenType: "4DX",
-            times: ["11:30", "15:00"],
-          },
-        ],
-      },
+      { name: "고양" },
+      { name: "광명" },
+      { name: "구리" },
+      { name: "동수원" },
+      { name: "부천" },
+      { name: "수원" },
+      { name: "안산" },
+      { name: "인천" },
+      { name: "일산" },
+      { name: "파주" },
+      { name: "평택" },
+      { name: "하남" },
     ],
   },
   {
-    region: "인천",
+    region: "충청/대전",
     branches: [
-      {
-        name: "송도점",
-        screens: [
-          {
-            screenType: "2D",
-            times: ["10:15", "13:45"],
-          },
-        ],
-      },
+      { name: "대전" },
+      { name: "천안" },
+      { name: "청주" },
+      { name: "충주" },
     ],
+  },
+  {
+    region: "전라/광주",
+    branches: [
+      { name: "광주" },
+      { name: "목포" },
+      { name: "순천" },
+      { name: "여수" },
+    ],
+  },
+  {
+    region: "경북/대구",
+    branches: [
+      { name: "경산" },
+      { name: "구미" },
+      { name: "대구" },
+      { name: "포항" },
+    ],
+  },
+  {
+    region: "경남/부산/울산",
+    branches: [
+      { name: "김해" },
+      { name: "마산" },
+      { name: "부산" },
+      { name: "울산" },
+      { name: "창원" },
+    ],
+  },
+  {
+    region: "강원",
+    branches: [{ name: "강릉" }, { name: "원주" }, { name: "춘천" }],
+  },
+  {
+    region: "제주",
+    branches: [{ name: "제주" }],
   },
 ];
 
@@ -114,6 +128,18 @@ const ReservationPlacePage = () => {
     new Date(today.getFullYear(), today.getMonth(), today.getDate())
   ); // 오늘이 기본 선택
 
+  // 지역/지점 상태 (초기값: 선택 안함)
+  const [selectedRegion, setSelectedRegion] = useState(null);
+  const [selectedBranch, setSelectedBranch] = useState(null);
+
+  // 선택된 지역의 지점 리스트
+  const branches =
+    theaterData.find((r) => r.region === selectedRegion)?.branches || [];
+
+  // 선택된 지점의 상영시간 리스트
+  const selectedBranchObj = branches.find((b) => b.name === selectedBranch);
+  const times = selectedBranchObj?.times || [];
+
   // offset만큼 이동한 날짜 배열 생성 (8개)
   const baseDate = new Date(today);
   baseDate.setDate(today.getDate() + offset);
@@ -143,18 +169,6 @@ const ReservationPlacePage = () => {
   // 화살표: 오늘 이전으로 이동 불가
   const canGoPrev = offset > 0;
 
-  const [selectedRegion, setSelectedRegion] = useState(theaterData[0].region);
-  const [selectedBranch, setSelectedBranch] = useState(
-    theaterData[0].branches[0].name
-  );
-
-  // 선택된 지역의 지점 리스트
-  const branches =
-    theaterData.find((r) => r.region === selectedRegion)?.branches || [];
-  // 선택된 지점의 상영관 리스트
-  const screens =
-    branches.find((b) => b.name === selectedBranch)?.screens || [];
-
   // 날짜 비교 함수 (연,월,일만 비교)
   function isSameDay(d1, d2) {
     return (
@@ -170,45 +184,27 @@ const ReservationPlacePage = () => {
       <div className="reservation-content">
         <div className="reservation-container">
           {/* 진행바 */}
-          <div className="progress-bar" style={{ margin: "32px 0 40px 0" }}>
+          <div className="progress-bar">
             <div className="progress-steps">
-              {["영화선택", "날짜/극장/시간", "인원/좌석", "결제"].map(
-                (step, idx) => (
-                  <div
-                    key={step}
-                    className={`progress-step${
-                      idx === 1 ? " active" : idx < 1 ? " completed" : ""
-                    }`}
-                  >
-                    <span className="step-number">{idx + 1}</span>
-                    <span className="step-title">{step}</span>
-                  </div>
-                )
-              )}
+              {["날짜/극장", "인원/좌석", "결제"].map((step, idx) => (
+                <div
+                  key={step}
+                  className={`progress-step${idx === 0 ? " active" : ""}`}
+                >
+                  <span className="step-number">{idx + 1}</span>
+                  <span className="step-title">{step}</span>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* 날짜/요일 선택 - 직접 구현 */}
-          <div style={{ width: 980, margin: "0 auto 32px auto" }}>
+          <div className="date-selector-section">
+            {/* 상단 날짜 헤더 */}
+            <div className="date-header">{headerText}</div>
+            {/* 하단 날짜 선택 */}
             <div className="date-selector">
-              <div
-                className="date-header"
-                style={{
-                  color: "#fff",
-                  fontWeight: 400,
-                  fontSize: 22,
-                  minHeight: 38,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {headerText}
-              </div>
-              <div
-                className="date-list"
-                style={{ justifyContent: "space-between", display: "flex" }}
-              >
+              <div className="date-list">
                 <button
                   className="arrow"
                   onClick={() => canGoPrev && setOffset(offset - 1)}
@@ -216,15 +212,7 @@ const ReservationPlacePage = () => {
                 >
                   {"<"}
                 </button>
-                <div
-                  className="dates"
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    gap: 0,
-                    flex: 1,
-                  }}
-                >
+                <div className="dates">
                   {dateArr.map((item, idx) => (
                     <div
                       key={idx}
@@ -277,64 +265,67 @@ const ReservationPlacePage = () => {
             </div>
           </div>
 
-          {/* 지역/지점 선택 */}
-          <div style={{ display: "flex", gap: 32, marginTop: 32 }}>
-            {/* 지역 리스트 */}
-            <div style={{ minWidth: 100 }}>
-              {theaterData.map((region) => (
-                <button
-                  key={region.region}
-                  className={`region-btn${
-                    selectedRegion === region.region ? " active" : ""
-                  }`}
-                  onClick={() => {
-                    setSelectedRegion(region.region);
-                    setSelectedBranch(region.branches[0].name);
-                  }}
-                  style={{ display: "block", marginBottom: 8 }}
-                >
-                  {region.region}
-                </button>
-              ))}
-            </div>
-            {/* 지점 리스트 */}
-            <div style={{ minWidth: 120 }}>
-              {branches.map((branch) => (
-                <button
-                  key={branch.name}
-                  className={`branch-btn${
-                    selectedBranch === branch.name ? " active" : ""
-                  }`}
-                  onClick={() => setSelectedBranch(branch.name)}
-                  style={{ display: "block", marginBottom: 8 }}
-                >
-                  {branch.name}
-                </button>
-              ))}
-            </div>
-            {/* 상영관/시간 정보 */}
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: "bold", marginBottom: 8 }}>
-                {selectedMovie.title} - {selectedBranch} 상영관/시간
+          {/* 극장선택과 상영시간 선택 */}
+          <div className="theater-section">
+            {/* 상단 타이틀들 */}
+            <div className="theater-title section-title">극장선택</div>
+            <div className="time-title section-title">상영시간</div>
+            <div className="theater-selector">
+              {/* 지역 리스트 */}
+              <div className="region-list">
+                {theaterData.map((region) => (
+                  <button
+                    key={region.region}
+                    className={`region-btn${
+                      selectedRegion === region.region ? " active" : ""
+                    }`}
+                    onClick={() => {
+                      setSelectedRegion(region.region);
+                      setSelectedBranch(null);
+                    }}
+                  >
+                    {region.region}
+                    <span className="region-count">
+                      ({region.branches.length})
+                    </span>
+                  </button>
+                ))}
               </div>
-              {screens.length === 0 ? (
-                <div>상영 정보가 없습니다.</div>
-              ) : (
-                screens.map((screen) => (
-                  <div key={screen.screenType} style={{ marginBottom: 16 }}>
-                    <div style={{ fontWeight: 500, marginBottom: 4 }}>
-                      {screen.screenType}
-                    </div>
-                    <div style={{ display: "flex", gap: 8 }}>
-                      {screen.times.map((time) => (
+              {/* 지점 리스트 */}
+              <div className="branch-list">
+                {branches.map((branch) => (
+                  <button
+                    key={branch.name}
+                    className={`branch-btn${
+                      selectedBranch === branch.name ? " active" : ""
+                    }`}
+                    onClick={() => setSelectedBranch(branch.name)}
+                  >
+                    {branch.name}
+                  </button>
+                ))}
+              </div>
+              {/* 상영시간 리스트 */}
+              <div className="time-list-area">
+                <div className="time-list-content">
+                  {!selectedRegion && <div>지역을 먼저 선택하세요.</div>}
+                  {selectedRegion && !selectedBranch && (
+                    <div>지점을 선택하세요.</div>
+                  )}
+                  {selectedRegion && selectedBranch && times.length === 0 && (
+                    <div>상영 정보가 없습니다.</div>
+                  )}
+                  {selectedRegion && selectedBranch && times.length > 0 && (
+                    <div className="time-btns">
+                      {times.map((time) => (
                         <button key={time} className="time-btn">
                           {time}
                         </button>
                       ))}
                     </div>
-                  </div>
-                ))
-              )}
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>

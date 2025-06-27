@@ -1,13 +1,19 @@
 import React from "react";
 import "../../componentcss/moviepagecomponentcss/Movies.css";
+import { useNavigate } from "react-router-dom";
 
 const MovieCard = ({ movie, isBoxOffice }) => {
+  const navigate = useNavigate();
   const getRating = (rating) => {
     if (rating.includes("전체")) return "rating-all";
     if (rating.includes("12") || rating.includes("15")) return "rating-12";
     if (rating.includes("19") || rating.includes("청소년관람불가"))
       return "rating-19";
     return "";
+  };
+
+  const goSelectPlace = () => {
+    navigate("/reservation/place");
   };
 
   return (
@@ -17,7 +23,11 @@ const MovieCard = ({ movie, isBoxOffice }) => {
         <div className="mvs-overlay">
           <div className="mvs-buttons">
             <button className="mvs-btn">상세정보</button>
-            {isBoxOffice && <button className="mvs-btn">예매하기</button>}
+            {isBoxOffice && (
+              <button className="mvs-btn" onClick={goSelectPlace}>
+                예매하기
+              </button>
+            )}
           </div>
         </div>
       </div>

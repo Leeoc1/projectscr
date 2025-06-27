@@ -1,31 +1,166 @@
-/* 날짜/요일 선택 (place 페이지) */
-.date-selector {
-  width: 980px;
-  margin: 0 auto 32px auto;
+.reservation-page {
+  background: #fff;
+  min-height: 100vh;
+}
+
+/* reservation-content 배경색 제거 */
+.reservation-content {
+  background: none;
+}
+
+/* reservation-container 얇은 경계선 추가 */
+.reservation-container {
+  max-width: 980px;
+  margin: 0 auto;
   background: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  padding: 0 0 20px 0;
-  border: 2.5px solid #222;
+  padding: 0;
+  margin-top: 48px;
+  margin-bottom: 48px;
+  box-sizing: border-box;
 }
-.date-header {
+
+/* 섹션 타이틀 스타일 */
+.section-title {
   background: #000;
   color: #fff;
-  font-size: 22px;
+  font-size: 18px;
   text-align: center;
-  padding: 16px 0 12px 0;
-  border-radius: 8px 8px 0 0;
-  font-weight: 400;
-  min-height: 38px;
+  padding: 10px 0 10px 0;
+  font-weight: 500;
+  min-height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0;
+  box-sizing: border-box;
 }
+
+/* 극장선택 컨테이너 */
+.theater-selector {
+  width: 980px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 0;
+  border: 1px solid #ddd;
+  border-top: none;
+  box-sizing: border-box;
+  min-height: 753px;
+  height: 753px;
+  display: flex;
+  border-radius: 0 0 8px 8px;
+  margin-top: 0;
+}
+
+.region-list {
+  min-width: 140px;
+  max-width: 140px;
+  padding: 0;
+  border-radius: 0 0 0 8px;
+  border-right: 1px solid #ddd;
+  height: 100%;
+  background: none;
+}
+
+.branch-list {
+  min-width: 140px;
+  max-width: 140px;
+  padding: 0;
+  border-radius: 0 0 8px 0;
+  height: 100%;
+  background: none;
+  border-right: 1px solid #ddd;
+}
+
+.region-btn {
+  display: block;
+  width: 100%;
+  padding: 8px 20px 8px 16px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 400;
+  color: #222;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.region-btn.active {
+  font-weight: 700;
+  color: #e91e63;
+  background: #ececec;
+}
+
+.branch-btn {
+  display: block;
+  width: 100%;
+  padding: 7px 16px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 400;
+  color: #222;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.branch-btn.active {
+  font-weight: 700;
+  color: #e91e63;
+  background: #ececec;
+}
+
+/* 상영시간 선택 컨테이너 */
+.time-selector {
+  background: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-top: none;
+  box-sizing: border-box;
+  min-height: 120px;
+}
+
+/* 날짜/요일 선택 (place 페이지) */
+.date-header {
+  background: #000;
+  color: #fff;
+  font-size: 18px;
+  text-align: center;
+  padding: 10px 0 10px 0;
+  border-radius: 8px 8px 0 0;
+  font-weight: 500;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  border: 1px solid #ddd;
+  border-bottom: none;
+  width: 980px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.date-selector {
+  width: 980px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 0 0 0 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 16px 20px 16px 20px;
+  border: 1px solid #ddd;
+  border-top: none;
+  box-sizing: border-box;
+}
+
 .date-list {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 12px;
+  margin-top: 0;
+  padding: 0;
 }
 .arrow {
   background: none;
@@ -79,4 +214,147 @@
 .date-label {
   font-size: 13px;
   margin-top: 2px;
+}
+
+/* 진행바 스타일 */
+.progress-bar {
+  width: 100%;
+  max-width: 980px;
+  background: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.progress-steps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  z-index: 2;
+  margin: 0 50px;
+}
+
+.progress-step:first-child {
+  margin-left: 0;
+}
+
+.progress-step:last-child {
+  margin-right: 0;
+}
+
+.step-number {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 22px;
+  transition: all 0.3s ease;
+}
+
+.step-title {
+  font-size: 17px;
+  color: #6b7280;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.3s ease;
+  line-height: 1.2;
+}
+
+.progress-step.active .step-number {
+  background: #e91e63;
+  color: white;
+}
+
+.progress-step.active .step-title {
+  color: #e91e63;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.progress-step.completed .step-number {
+  background: #10b981;
+  color: white;
+}
+
+.progress-step.completed .step-title {
+  color: #10b981;
+  font-weight: 500;
+}
+
+.region-count {
+  color: #aaa;
+  font-size: 13px;
+  margin-left: 2px;
+}
+
+.theater-title {
+  width: 280px;
+  border-radius: 8px 0 0 0;
+  display: inline-block;
+}
+.branch-title {
+  width: 140px;
+  border-radius: 0 8px 0 0;
+}
+.time-title {
+  width: 700px;
+  border-radius: 0 8px 0 0;
+  display: inline-block;
+}
+
+.date-selector-section {
+  width: 980px;
+  margin: 0 auto;
+}
+
+.theater-section {
+  width: 980px;
+  margin: 0 auto 32px auto;
+}
+
+.theater-title,
+.time-title {
+  border-radius: 0 !important;
+}
+
+.time-list-area {
+  flex: 1;
+  min-width: 0;
+  background: #fff;
+  border-radius: 0 0 8px 0;
+  height: 100%;
+  border-left: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+}
+
+.time-title.with-border {
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-radius: 0;
+  margin-bottom: 12px;
+}
+
+.time-list-content {
+  padding: 0 24px;
+}
+
+.time-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
 }

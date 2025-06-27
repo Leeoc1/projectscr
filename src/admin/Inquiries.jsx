@@ -58,6 +58,7 @@ const Inquiries = () => (
             <td>김관리</td>
             <td>
               <button className="adp-btn-view">보기</button>
+              <button className="adp-btn-complete">완료</button>
             </td>
           </tr>
         </tbody>

@@ -249,3 +249,7 @@
     align-items: flex-start;
   }
 }
+
+.thm-theater-actions .adp-btn-delete {
+  margin-left: auto;
+} 

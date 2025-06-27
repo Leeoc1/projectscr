@@ -38,7 +38,7 @@
 .mcs-slider-container {
   width: 980px;
   max-width: 980px;
-  overflow: hidden;
+  overflow: visible;
   height: 300px;
   margin: 0;
   flex-shrink: 0;

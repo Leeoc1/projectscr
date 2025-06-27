@@ -6,7 +6,7 @@ export const events = [
     description:
       "최신 블록버스터 영화 개봉을 기념하여 모든 상영관 티켓을 50% 할인된 가격으로 만나보세요.",
     period: "2024.06.26 ~ 2024.07.26",
-    image: "/api/placeholder/400/300",
+    image: "/images/event1.png",
     badge: "hot",
     isFeatured: true,
   },
@@ -17,7 +17,7 @@ export const events = [
     description:
       "골드 멤버십 가입 고객에게 더 많은 혜택과 특별 서비스를 제공합니다.",
     period: "2024.06.20 ~ 2024.08.31",
-    image: "/api/placeholder/400/300",
+    image: "/images/event2.png",
     badge: "new",
     isFeatured: false,
   },
@@ -28,7 +28,7 @@ export const events = [
     description:
       "IMAX 관에서만 경험할 수 있는 특별한 영화 상영회에 초대합니다.",
     period: "2024.07.01 ~ 2024.07.15",
-    image: "/api/placeholder/400/300",
+    image: "/images/event3.png",
     badge: null,
     isFeatured: false,
   },
@@ -39,7 +39,7 @@ export const events = [
     description:
       "여름을 뜨겁게 달굴 최고의 블록버스터 영화들을 한자리에서 만나보세요.",
     period: "2024.07.10 ~ 2024.08.10",
-    image: "/api/placeholder/450/280",
+    image: "/images/event1.png",
     badge: "hot",
     isFeatured: false,
   },
@@ -50,7 +50,7 @@ export const events = [
     description:
       "온 가족이 함께 즐길 수 있는 가족 영화를 특별 할인가로 만나보세요.",
     period: "매주 토,일",
-    image: "/api/placeholder/380/320",
+    image: "/images/event2.png",
     badge: null,
     isFeatured: false,
   },
@@ -60,7 +60,7 @@ export const events = [
     title: "VIP 프리미엄 라운지 체험",
     description: "럭셔리한 VIP 라운지에서 특별한 영화 관람 경험을 즐겨보세요.",
     period: "2024.07.05 ~ 2024.07.25 (한정)",
-    image: "/api/placeholder/420/300",
+    image: "/images/event3.png",
     badge: "limited",
     isFeatured: false,
   },
@@ -71,7 +71,7 @@ export const events = [
     description:
       "전 세계가 기다린 아바타 속편 개봉을 기념하여 특별한 이벤트를 준비했습니다.",
     period: "2024.06.25 ~ 2024.07.25",
-    image: "/api/placeholder/400/300",
+    image: "/images/event1.png",
     badge: null,
     isFeatured: false,
   },
@@ -82,7 +82,7 @@ export const events = [
     description:
       "가족과 함께 영화를 관람하는 고객을 위한 특별 할인 패키지입니다.",
     period: "2024.06.15 ~ 2024.08.15",
-    image: "/api/placeholder/400/300",
+    image: "/images/event2.png",
     badge: null,
     isFeatured: false,
   },
@@ -93,7 +93,7 @@ export const events = [
     description:
       "4DX 상영관에서 몰입감 넘치는 영화 체험을 특별 가격으로 만나보세요.",
     period: "2024.07.01 ~ 2024.07.31",
-    image: "/api/placeholder/400/300",
+    image: "/images/event3.png",
     badge: null,
     isFeatured: false,
   },

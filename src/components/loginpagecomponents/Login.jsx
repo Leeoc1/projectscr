@@ -34,7 +34,7 @@ const Login = () => {
     <div className="lgs-page">
       <div className="lgs-container">
         <div className="lgs-header">
-          <h1 className="lgs-title">CineMax</h1>
+          <h1 className="lgs-title">The SCREEN</h1>
           <p className="lgs-subtitle">영화 예매의 새로운 경험</p>
         </div>
 

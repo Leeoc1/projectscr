@@ -1,6 +1,5 @@
 .lgs-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #1f2937 0%, #111827 50%, #000000 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,8 +9,8 @@
 .lgs-container {
   background: white;
   border-radius: 1rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 25px 15px rgba(0, 0, 0, 0.13),
+    0 10px 10px 15px rgba(0, 0, 0, 0.04);
   width: 100%;
   max-width: 420px;
   padding: 2.5rem;
@@ -51,11 +50,13 @@
 
 .lgs-form-group input {
   width: 100%;
-  padding: 0.75rem;
+  height: 3.125rem;
+  padding: 0 0.75rem;
   border: 2px solid #e5e7eb;
   border-radius: 0.5rem;
   font-size: 1rem;
   transition: border-color 0.3s ease;
+  box-sizing: border-box;
 }
 
 .lgs-form-group input:focus {

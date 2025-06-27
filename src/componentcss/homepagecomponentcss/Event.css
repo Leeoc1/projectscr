@@ -37,6 +37,9 @@
   border-radius: 0.75rem;
   overflow: hidden;
   transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .et-event-card:hover {
@@ -51,6 +54,9 @@
 
 .et-event-content {
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .et-event-title {
@@ -58,6 +64,9 @@
   font-size: 1.125rem;
   margin-bottom: 0.5rem;
   color: #fbbf24;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .et-event-description {
@@ -70,13 +79,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: auto;
 }
 
 .et-event-badge {
   padding: 0.25rem 0.75rem;
   border-radius: 9999px;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 600;
+  color: #ffffff;
 }
 
 .et-event-link {
@@ -99,5 +110,11 @@
 @media (min-width: 1024px) {
   .et-events-grid {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .et-events-title {
+    font-size: 1rem;
   }
 }

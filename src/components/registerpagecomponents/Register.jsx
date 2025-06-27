@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../../componentcss/registerpagecomponentcss/Register.css";
 import { useNavigate } from "react-router-dom";
 
-export default function Register() {
+const Register = () => {
   const navigate = useNavigate(); // useNavigate 훅 사용
   const [formData, setFormData] = useState({
     username: "",
@@ -129,16 +129,16 @@ export default function Register() {
   };
 
   return (
-    <div className="signup-page">
-      <div className="signup-container">
-        <div className="signup-header">
-          <h1 className="signup-title">CineMax</h1>
-          <p className="signup-subtitle">회원가입</p>
+    <div className="rg-signup-page">
+      <div className="rg-signup-container">
+        <div className="rg-signup-header">
+          <h1 className="rg-signup-title">CineMax</h1>
+          <p className="rg-signup-subtitle">회원가입</p>
         </div>
 
-        <div className="signup-form-container">
-          <form className="signup-form" onSubmit={handleSignup}>
-            <div className="form-group">
+        <div className="rg-signup-form-container">
+          <form className="rg-signup-form" onSubmit={handleSignup}>
+            <div className="rg-form-group">
               <label htmlFor="name">이름</label>
               <input
                 type="text"
@@ -151,9 +151,21 @@ export default function Register() {
               />
             </div>
 
-            <div className="form-group">
+            <div className="rg-form-group">
+              <label htmlFor="birthDate">생년월일</label>
+              <input
+                type="date"
+                id="birthDate"
+                name="birthDate"
+                value={formData.birthDate}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+
+            <div className="rg-form-group">
               <label htmlFor="username">아이디</label>
-              <div className="input-with-button">
+              <div className="rg-input-with-button">
                 <input
                   type="text"
                   id="username"
@@ -165,7 +177,7 @@ export default function Register() {
                 />
                 <button
                   type="button"
-                  className="check-btn"
+                  className="rg-check-btn"
                   onClick={handleUsernameCheck}
                 >
                   중복확인
@@ -173,8 +185,8 @@ export default function Register() {
               </div>
               {validationState.usernameChecked && (
                 <p
-                  className={`validation-message ${
-                    validationState.usernameAvailable ? "success" : "error"
+                  className={`rg-validation-message ${
+                    validationState.usernameAvailable ? "rg-success" : "rg-error"
                   }`}
                 >
                   {validationState.usernameAvailable
@@ -184,7 +196,7 @@ export default function Register() {
               )}
             </div>
 
-            <div className="form-group">
+            <div className="rg-form-group">
               <label htmlFor="password">비밀번호</label>
               <input
                 type="password"
@@ -197,8 +209,7 @@ export default function Register() {
               />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="confirmPassword">비밀번호 확인</label>
+            <div className="rg-form-group">
               <input
                 type="password"
                 id="confirmPassword"
@@ -210,7 +221,7 @@ export default function Register() {
               />
             </div>
 
-            <div className="form-group">
+            <div className="rg-form-group">
               <label htmlFor="email">이메일</label>
               <input
                 type="email"
@@ -223,9 +234,9 @@ export default function Register() {
               />
             </div>
 
-            <div className="form-group">
+            <div className="rg-form-group">
               <label htmlFor="phone">전화번호</label>
-              <div className="input-with-button">
+              <div className="rg-input-with-button">
                 <input
                   type="tel"
                   id="phone"
@@ -237,20 +248,19 @@ export default function Register() {
                 />
                 <button
                   type="button"
-                  className="verify-btn"
+                  className="rg-verify-btn"
                   onClick={handlePhoneVerification}
                   disabled={validationState.phoneVerified}
                 >
-                  {validationState.phoneVerified ? "인증완료" : "인증번호 발송"}
+                  {validationState.phoneVerified ? "인증완료" : "인증하기"}
                 </button>
               </div>
             </div>
 
             {validationState.verificationSent &&
               !validationState.phoneVerified && (
-                <div className="form-group">
-                  <label htmlFor="verificationCode">인증번호</label>
-                  <div className="input-with-button">
+                <div className="rg-form-group">
+                  <div className="rg-input-with-button">
                     <input
                       type="text"
                       id="verificationCode"
@@ -261,7 +271,7 @@ export default function Register() {
                     />
                     <button
                       type="button"
-                      className="check-btn"
+                      className="rg-check-btn"
                       onClick={handleVerificationCodeCheck}
                     >
                       확인
@@ -270,34 +280,22 @@ export default function Register() {
                 </div>
               )}
 
-            <div className="form-group">
-              <label htmlFor="birthDate">생년월일</label>
-              <input
-                type="date"
-                id="birthDate"
-                name="birthDate"
-                value={formData.birthDate}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            <button type="submit" className="signup-btn">
+            <button type="submit" className="rg-signup-btn">
               회원가입
             </button>
           </form>
 
-          <div className="login-link">
+          <div className="rg-login-link">
             <p>
               이미 회원이신가요?
-              <button className="link-btn" onClick={() => navigate("/login")}>
+              <button className="rg-link-btn" onClick={() => navigate("/login")}>
                 로그인
               </button>
             </p>
           </div>
 
-          <div className="back-to-home">
-            <button className="back-btn" onClick={() => navigate("/")}>
+          <div className="rg-back-to-home">
+            <button className="rg-back-btn" onClick={() => navigate("/")}>
               홈으로 돌아가기
             </button>
           </div>
@@ -305,4 +303,6 @@ export default function Register() {
       </div>
     </div>
   );
-}
+};
+
+export default Register;

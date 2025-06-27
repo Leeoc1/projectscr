@@ -2,7 +2,7 @@ import { useState } from "react";
 import { noticesData, faqData } from "../../Data/mockData";
 import "../../componentcss/homepagecomponentcss/Notice.css";
 
-export default function Notice() {
+const Notice = () => {
   const [openFAQ, setOpenFAQ] = useState(null);
 
   const toggleFAQ = (index) => {
@@ -10,45 +10,50 @@ export default function Notice() {
   };
 
   return (
-    <section className="notice-faq-section">
-      <div className="notice-faq-container">
-        <div className="notice-faq-grid">
+    <section className="nt-notice-faq-section">
+      <div className="nt-notice-faq-container">
+        <div className="nt-notice-faq-grid">
           {/* Announcements Section */}
-          <div className="section-column">
-            <h2 className="section-title">공지사항</h2>
-            <div className="section-content">
+          <div className="nt-section-column">
+            <h2 className="nt-section-title">공지사항</h2>
+            <div className="nt-section-content">
               {noticesData.map((notice, index) => (
                 <div
                   key={index}
-                  className={`notice-item ${index === 0 ? "featured" : ""}`}
+                  className={`nt-notice-item ${
+                    index === 0 ? "nt-featured" : ""
+                  }`}
                 >
-                  <h3 className="notice-title">{notice.title}</h3>
-                  <p className="notice-date">{notice.date}</p>
+                  <h3 className="nt-notice-title">{notice.title}</h3>
                 </div>
               ))}
             </div>
           </div>
 
           {/* FAQ Section */}
-          <div className="section-column">
-            <h2 className="section-title">자주 묻는 질문</h2>
-            <div className="section-content">
+          <div className="nt-section-column">
+            <h2 className="nt-section-title">자주 묻는 질문</h2>
+            <div className="nt-section-content">
               {faqData.map((faq, index) => (
-                <div key={index} className="faq-item">
+                <div key={index} className="nt-faq-item">
                   <button
                     onClick={() => toggleFAQ(index)}
-                    className="faq-button"
+                    className={`nt-faq-button ${
+                      openFAQ === index ? "nt-open" : ""
+                    }`}
                   >
-                    <span className="faq-question">{faq.question}</span>
-                    <span className="faq-icon">
+                    <span className="nt-faq-question">{faq.question}</span>
+                    <span className="nt-faq-icon">
                       {openFAQ === index ? "−" : "+"}
                     </span>
                   </button>
                   <div
-                    className={`faq-content ${openFAQ === index ? "open" : ""}`}
+                    className={`nt-faq-content ${
+                      openFAQ === index ? "nt-open" : ""
+                    }`}
                   >
                     {openFAQ === index && (
-                      <p className="faq-answer">{faq.answer}</p>
+                      <p className="nt-faq-answer">{faq.answer}</p>
                     )}
                   </div>
                 </div>
@@ -59,4 +64,6 @@ export default function Notice() {
       </div>
     </section>
   );
-}
+};
+
+export default Notice;

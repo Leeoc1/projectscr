@@ -1,83 +1,85 @@
 /*  템플릿 가져올 것 */
-.signup-page {
+.rg-signup-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #1f2937 0%, #111827 50%, #000000 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  margin-top: calc(-1 * var(--header-height));
 }
 
-.signup-container {
+.rg-signup-container {
   background: white;
   border-radius: 1rem;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   width: 100%;
-  max-width: 480px;
+  max-width: 550px;
   padding: 2.5rem;
   max-height: 90vh;
-  overflow-y: auto;
+  /* overflow-y: auto; */
 }
 
-.signup-header {
+.rg-signup-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
-.signup-title {
+.rg-signup-title {
   font-size: 2.25rem;
   font-weight: bold;
   color: #fbbf24;
   margin-bottom: 0.5rem;
 }
 
-.signup-subtitle {
+.rg-signup-subtitle {
   color: #6b7280;
   font-size: 1.2rem;
   font-weight: 600;
 }
 
-.signup-form {
-  margin-bottom: 1.5rem;
+.rg-signup-form {
+  margin-bottom: 1rem;
 }
 
-.form-group {
-  margin-bottom: 1.25rem;
+.rg-form-group {
+  margin-bottom: 0.5rem;
 }
 
-.form-group label {
+.rg-form-group label {
   display: block;
   font-weight: 600;
   color: #374151;
   margin-bottom: 0.5rem;
 }
 
-.form-group input {
-  width: 100%;
+.rg-form-group input {
+  width: 95%;
   padding: 0.75rem;
   border: 2px solid #e5e7eb;
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: 0.8rem;
   transition: border-color 0.3s ease;
 }
 
-.form-group input:focus {
+.rg-form-group input:focus {
   outline: none;
   border-color: #fbbf24;
 }
 
-.input-with-button {
+.rg-input-with-button {
   display: flex;
   gap: 0.5rem;
 }
 
-.input-with-button input {
+.rg-input-with-button input {
   flex: 1;
 }
 
-.check-btn,
-.verify-btn {
+.rg-check-btn,
+.rg-verify-btn {
+  width: 81px;
   background-color: #6b7280;
   color: white;
   border: none;
@@ -89,31 +91,31 @@
   transition: background-color 0.3s ease;
 }
 
-.check-btn:hover,
-.verify-btn:hover {
+.rg-check-btn:hover,
+.rg-verify-btn:hover {
   background-color: #4b5563;
 }
 
-.verify-btn:disabled {
+.rg-verify-btn:disabled {
   background-color: #10b981;
   cursor: not-allowed;
 }
 
-.validation-message {
+.rg-validation-message {
   margin-top: 0.5rem;
   font-size: 0.875rem;
   font-weight: 500;
 }
 
-.validation-message.success {
+.rg-validation-message.rg-success {
   color: #10b981;
 }
 
-.validation-message.error {
+.rg-validation-message.rg-error {
   color: #ef4444;
 }
 
-.signup-btn {
+.rg-signup-btn {
   width: 100%;
   background-color: #fbbf24;
   color: black;
@@ -127,21 +129,21 @@
   margin-top: 1rem;
 }
 
-.signup-btn:hover {
+.rg-signup-btn:hover {
   background-color: #f59e0b;
 }
 
-.login-link {
+.rg-login-link {
   text-align: center;
   margin-bottom: 1rem;
 }
 
-.login-link p {
+.rg-login-link p {
   color: #6b7280;
   font-size: 0.9rem;
 }
 
-.link-btn {
+.rg-link-btn {
   background: none;
   border: none;
   color: #fbbf24;
@@ -151,15 +153,15 @@
   margin-left: 0.25rem;
 }
 
-.link-btn:hover {
+.rg-link-btn:hover {
   color: #f59e0b;
 }
 
-.back-to-home {
+.rg-back-to-home {
   text-align: center;
 }
 
-.back-btn {
+.rg-back-btn {
   background: none;
   border: 2px solid #e5e7eb;
   color: #6b7280;
@@ -169,26 +171,26 @@
   transition: all 0.3s ease;
 }
 
-.back-btn:hover {
+.rg-back-btn:hover {
   border-color: #d1d5db;
   background-color: #f9fafb;
 }
 
 /* 스크롤바 스타일링 */
-.signup-container::-webkit-scrollbar {
+.rg-signup-container::-webkit-scrollbar {
   width: 6px;
 }
 
-.signup-container::-webkit-scrollbar-track {
+.rg-signup-container::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 3px;
 }
 
-.signup-container::-webkit-scrollbar-thumb {
+.rg-signup-container::-webkit-scrollbar-thumb {
   background: #c1c1c1;
   border-radius: 3px;
 }
 
-.signup-container::-webkit-scrollbar-thumb:hover {
+.rg-signup-container::-webkit-scrollbar-thumb:hover {
   background: #a1a1a1;
 }

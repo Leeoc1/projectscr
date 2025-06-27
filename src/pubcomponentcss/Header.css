@@ -1,4 +1,8 @@
-.header {
+:root {
+  --header-height: 4rem;
+}
+
+.h-header {
   background-color: #2a2a2a;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -7,15 +11,16 @@
   width: 100%;
   z-index: 50;
   transition: all 0.3s ease;
+  height: var(--header-height);
 }
 
-.header-container {
+.h-header-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
 }
 
-.header-content {
+.h-header-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -23,51 +28,41 @@
   height: 4rem;
 }
 
-.header-content.scrolled {
-  height: 3rem;
+.h-header-content.h-scrolled {
+  height: var(--header-height);
 }
 
-.logo-container {
+.h-logo-container {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.logo-icon {
+.h-logo-icon {
   transition: all 0.3s ease;
   font-size: 2rem;
 }
 
-.logo-icon.scrolled {
-  font-size: 1.5rem;
-}
-
-.logo-text {
+.h-logo-text {
   color: white;
   font-weight: bold;
 }
 
-.logo-line {
+.h-logo-line {
   line-height: 1.2;
   transition: all 0.3s ease;
   font-size: 1.125rem;
 }
 
-.logo-line.scrolled {
-  font-size: 0.875rem;
-}
-
-.nav-scrolled {
+.h-nav-scrolled {
   display: none;
   align-items: center;
   gap: 2rem;
+  justify-content: center;
+  flex: 1;
 }
 
-.nav-scrolled.show {
-  display: flex;
-}
-
-.nav-item {
+.h-nav-item {
   font-weight: 500;
   font-size: 0.875rem;
   position: relative;
@@ -77,11 +72,11 @@
   text-decoration: none;
 }
 
-.nav-item:hover {
+.h-nav-item:hover {
   color: #fbbf24;
 }
 
-.nav-item::after {
+.h-nav-item::after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -92,17 +87,33 @@
   transition: width 0.3s ease;
 }
 
-.nav-item:hover::after {
+.h-nav-item:hover::after {
   width: 100%;
 }
 
-.user-actions {
+.h-user-actions {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.notice-btn {
+.h-admin-btn {
+  color: #000000;
+  border: 1px solid #d1d5db;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  background-color: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.h-admin-btn:hover {
+  background-color: #3b82f6;
+  color: #d1d5db;
+}
+
+.h-notice-btn {
   color: #d1d5db;
   font-size: 0.875rem;
   background: none;
@@ -111,11 +122,11 @@
   transition: color 0.3s ease;
 }
 
-.notice-btn:hover {
+.h-notice-btn:hover {
   color: #fbbf24;
 }
 
-.login-btn {
+.h-login-btn {
   color: #d1d5db;
   font-size: 0.875rem;
   background: none;
@@ -124,11 +135,11 @@
   transition: color 0.3s ease;
 }
 
-.login-btn:hover {
+.h-login-btn:hover {
   color: #fbbf24;
 }
 
-.signup-btn {
+.h-signup-btn {
   color: #ef4444;
   border: 1px solid #ef4444;
   padding: 0.5rem 1rem;
@@ -139,16 +150,12 @@
   transition: all 0.3s ease;
 }
 
-.signup-btn:hover {
+.h-signup-btn:hover {
   background-color: #ef4444;
   color: white;
 }
 
-.signup-btn.scrolled {
-  padding: 0.25rem 0.75rem;
-}
-
-.mobile-menu-btn {
+.h-mobile-menu-btn {
   color: white;
   background: none;
   border: none;
@@ -157,23 +164,23 @@
   display: none;
 }
 
-.nav-bottom {
+.h-nav-bottom {
   background-color: #1a1a1a;
   border-top: 1px solid #4b5563;
   transition: all 0.3s ease;
 }
 
-.nav-bottom.hidden {
+.h-nav-bottom.h-hidden {
   display: none;
 }
 
-.nav-bottom-container {
+.h-nav-bottom-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
 }
 
-.nav-bottom-content {
+.h-nav-bottom-content {
   display: none;
   align-items: center;
   justify-content: center;
@@ -181,20 +188,20 @@
   height: 3rem;
 }
 
-.mobile-menu {
+.h-mobile-menu {
   background-color: #2a2a2a;
   border-top: 1px solid #4b5563;
   padding: 1rem 0;
   display: none;
 }
 
-.mobile-nav {
+.h-mobile-nav {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.mobile-nav-item {
+.h-mobile-nav-item {
   color: white;
   font-weight: 500;
   padding: 0.5rem 1rem;
@@ -202,30 +209,30 @@
   transition: color 0.3s ease;
 }
 
-.mobile-nav-item:hover {
+.h-mobile-nav-item:hover {
   color: #fbbf24;
 }
 
 @media (min-width: 768px) {
-  .nav-bottom-content {
+  .h-nav-bottom-content {
     display: flex;
   }
 
-  .nav-scrolled {
+  .h-nav-scrolled {
     display: none;
   }
 
-  .nav-scrolled.show {
+  .h-nav-scrolled.h-show {
     display: flex;
   }
 }
 
 @media (max-width: 767px) {
-  .mobile-menu-btn {
+  .h-mobile-menu-btn {
     display: block;
   }
 
-  .mobile-menu.show {
+  .h-mobile-menu.h-show {
     display: block;
   }
 }

@@ -1,15 +1,16 @@
 import Header from "../../pubcomponent/Header";
 import "../../componentcss/thearterpagecomponentcss/TheaterBox.css";
+import "../../componentcss/thearterpagecomponentcss/SpecialTheaterSection.css";
 import RegionTheaterSection from "./RegionTheaterSection";
 import SpecialTheaterSection from "./SpecialTheaterSection";
 
-export default function TheaterBox() {
+const TheaterBox = () => {
   return (
-    <div className="theaters-page">
+    <div className="rts-page">
       <Header isOtherPage={true} isScrolled={true} />
-      <div className="theaters-content">
-        <div className="theaters-main">
-          <div className="theaters-container">
+      <div className="rts-content">
+        <div className="rts-main">
+          <div className="rts-container">
             <RegionTheaterSection />
             <SpecialTheaterSection />
           </div>
@@ -17,4 +18,6 @@ export default function TheaterBox() {
       </div>
     </div>
   );
-}
+};
+
+export default TheaterBox;

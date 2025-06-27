@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../../componentcss/loginpagecomponentcss/Login.css";
 import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+const Login = () => {
   const navigate = useNavigate(); // useNavigate 훅 사용
   const [formData, setFormData] = useState({
     username: "",
@@ -31,16 +31,16 @@ export default function Login() {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-container">
-        <div className="login-header">
-          <h1 className="login-title">CineMax</h1>
-          <p className="login-subtitle">영화 예매의 새로운 경험</p>
+    <div className="lgs-page">
+      <div className="lgs-container">
+        <div className="lgs-header">
+          <h1 className="lgs-title">CineMax</h1>
+          <p className="lgs-subtitle">영화 예매의 새로운 경험</p>
         </div>
 
-        <div className="login-form-container">
-          <form className="login-form" onSubmit={handleLogin}>
-            <div className="form-group">
+        <div className="lgs-form-container">
+          <form className="lgs-form" onSubmit={handleLogin}>
+            <div className="lgs-form-group">
               <label htmlFor="username">아이디</label>
               <input
                 type="text"
@@ -53,7 +53,7 @@ export default function Login() {
               />
             </div>
 
-            <div className="form-group">
+            <div className="lgs-form-group">
               <label htmlFor="password">비밀번호</label>
               <input
                 type="password"
@@ -66,62 +66,62 @@ export default function Login() {
               />
             </div>
 
-            <div className="form-options">
-              <label className="remember-me">
+            <div className="lgs-form-options">
+              <label className="lgs-remember-me">
                 <input type="checkbox" />
                 <span>자동 로그인</span>
               </label>
-              <a href="#" className="forgot-password">
+              <a href="#" className="lgs-forgot-password">
                 비밀번호 찾기
               </a>
             </div>
 
-            <button type="submit" className="login-btn">
+            <button type="submit" className="lgs-btn">
               로그인
             </button>
           </form>
 
-          <div className="divider">
+          <div className="lgs-divider">
             <span>또는</span>
           </div>
 
-          <div className="social-login">
+          <div className="lgs-social-login">
             <button
-              className="social-btn kakao"
+              className="lgs-social-btn lgs-kakao"
               onClick={() => handleSocialLogin("카카오")}
             >
-              <span className="social-icon">K</span>
+              <span className="lgs-social-icon">K</span>
               카카오로 로그인
             </button>
 
             <button
-              className="social-btn naver"
+              className="lgs-social-btn lgs-naver"
               onClick={() => handleSocialLogin("네이버")}
             >
-              <span className="social-icon">N</span>
+              <span className="lgs-social-icon">N</span>
               네이버로 로그인
             </button>
 
             <button
-              className="social-btn google"
+              className="lgs-social-btn lgs-google"
               onClick={() => handleSocialLogin("구글")}
             >
-              <span className="social-icon">G</span>
+              <span className="lgs-social-icon">G</span>
               구글로 로그인
             </button>
           </div>
 
-          <div className="signup-link">
+          <div className="lgs-signup-link">
             <p>
               아직 회원이 아니신가요?
-              <button className="link-btn" onClick={() => navigate("/signup")}>
+              <button className="lgs-link-btn" onClick={() => navigate("/signup")}>
                 회원가입
               </button>
             </p>
           </div>
 
-          <div className="back-to-home">
-            <button className="back-btn" onClick={() => navigate("/")}>
+          <div className="lgs-back-to-home">
+            <button className="lgs-back-btn" onClick={() => navigate("/")}>
               홈으로 돌아가기
             </button>
           </div>
@@ -129,4 +129,6 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};
+
+export default Login;

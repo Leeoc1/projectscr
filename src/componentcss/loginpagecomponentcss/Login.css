@@ -1,4 +1,4 @@
-.login-page {
+.lgs-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #1f2937 0%, #111827 50%, #000000 100%);
   display: flex;
@@ -7,7 +7,7 @@
   padding: 2rem;
 }
 
-.login-container {
+.lgs-container {
   background: white;
   border-radius: 1rem;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
@@ -17,39 +17,39 @@
   padding: 2.5rem;
 }
 
-.login-header {
+.lgs-header {
   text-align: center;
   margin-bottom: 2rem;
 }
 
-.login-title {
+.lgs-title {
   font-size: 2.25rem;
   font-weight: bold;
   color: #fbbf24;
   margin-bottom: 0.5rem;
 }
 
-.login-subtitle {
+.lgs-subtitle {
   color: #6b7280;
   font-size: 1rem;
 }
 
-.login-form {
+.lgs-form {
   margin-bottom: 1.5rem;
 }
 
-.form-group {
+.lgs-form-group {
   margin-bottom: 1.5rem;
 }
 
-.form-group label {
+.lgs-form-group label {
   display: block;
   font-weight: 600;
   color: #374151;
   margin-bottom: 0.5rem;
 }
 
-.form-group input {
+.lgs-form-group input {
   width: 100%;
   padding: 0.75rem;
   border: 2px solid #e5e7eb;
@@ -58,19 +58,19 @@
   transition: border-color 0.3s ease;
 }
 
-.form-group input:focus {
+.lgs-form-group input:focus {
   outline: none;
   border-color: #fbbf24;
 }
 
-.form-options {
+.lgs-form-options {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
 }
 
-.remember-me {
+.lgs-remember-me {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -79,22 +79,22 @@
   cursor: pointer;
 }
 
-.remember-me input[type="checkbox"] {
+.lgs-remember-me input[type="checkbox"] {
   width: auto;
 }
 
-.forgot-password {
+.lgs-forgot-password {
   color: #fbbf24;
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
 }
 
-.forgot-password:hover {
+.lgs-forgot-password:hover {
   text-decoration: underline;
 }
 
-.login-btn {
+.lgs-btn {
   width: 100%;
   background-color: #fbbf24;
   color: black;
@@ -107,17 +107,17 @@
   transition: background-color 0.3s ease;
 }
 
-.login-btn:hover {
+.lgs-btn:hover {
   background-color: #f59e0b;
 }
 
-.divider {
+.lgs-divider {
   text-align: center;
   margin: 2rem 0;
   position: relative;
 }
 
-.divider::before {
+.lgs-divider::before {
   content: "";
   position: absolute;
   top: 50%;
@@ -127,21 +127,21 @@
   background-color: #e5e7eb;
 }
 
-.divider span {
+.lgs-divider span {
   background: white;
   padding: 0 1rem;
   color: #6b7280;
   font-size: 0.9rem;
 }
 
-.social-login {
+.lgs-social-login {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   margin-bottom: 2rem;
 }
 
-.social-btn {
+.lgs-social-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -155,41 +155,41 @@
   transition: all 0.3s ease;
 }
 
-.social-btn:hover {
+.lgs-social-btn:hover {
   border-color: #d1d5db;
   background-color: #f9fafb;
 }
 
-.social-btn.kakao {
+.lgs-social-btn.lgs-kakao {
   border-color: #fee500;
   color: #3c1e1e;
 }
 
-.social-btn.kakao:hover {
+.lgs-social-btn.lgs-kakao:hover {
   background-color: #fee500;
 }
 
-.social-btn.naver {
+.lgs-social-btn.lgs-naver {
   border-color: #03c75a;
   color: #03c75a;
 }
 
-.social-btn.naver:hover {
+.lgs-social-btn.lgs-naver:hover {
   background-color: #03c75a;
   color: white;
 }
 
-.social-btn.google {
+.lgs-social-btn.lgs-google {
   border-color: #ea4335;
   color: #ea4335;
 }
 
-.social-btn.google:hover {
+.lgs-social-btn.lgs-google:hover {
   background-color: #ea4335;
   color: white;
 }
 
-.social-icon {
+.lgs-social-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -199,32 +199,32 @@
   border-radius: 50%;
 }
 
-.social-btn.kakao .social-icon {
+.lgs-social-btn.lgs-kakao .lgs-social-icon {
   background-color: #3c1e1e;
   color: #fee500;
 }
 
-.social-btn.naver .social-icon {
+.lgs-social-btn.lgs-naver .lgs-social-icon {
   background-color: #03c75a;
   color: white;
 }
 
-.social-btn.google .social-icon {
+.lgs-social-btn.lgs-google .lgs-social-icon {
   background-color: #ea4335;
   color: white;
 }
 
-.signup-link {
+.lgs-signup-link {
   text-align: center;
   margin-bottom: 1rem;
 }
 
-.signup-link p {
+.lgs-signup-link p {
   color: #6b7280;
   font-size: 0.9rem;
 }
 
-.link-btn {
+.lgs-link-btn {
   background: none;
   border: none;
   color: #fbbf24;
@@ -234,15 +234,15 @@
   margin-left: 0.25rem;
 }
 
-.link-btn:hover {
+.lgs-link-btn:hover {
   color: #f59e0b;
 }
 
-.back-to-home {
+.lgs-back-to-home {
   text-align: center;
 }
 
-.back-btn {
+.lgs-back-btn {
   background: none;
   border: 2px solid #e5e7eb;
   color: #6b7280;
@@ -252,7 +252,7 @@
   transition: all 0.3s ease;
 }
 
-.back-btn:hover {
+.lgs-back-btn:hover {
   border-color: #d1d5db;
   background-color: #f9fafb;
 }

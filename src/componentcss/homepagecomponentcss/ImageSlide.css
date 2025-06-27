@@ -1,11 +1,11 @@
-.hero-section {
+.isc-section {
   position: relative;
   height: 24rem;
   background: linear-gradient(135deg, #6b46c1 0%, #ec4899 50%, #f59e0b 100%);
   overflow: hidden;
 }
 
-.hero-overlay {
+.isc-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -14,7 +14,7 @@
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-.hero-container {
+.isc-container {
   position: relative;
   z-index: 10;
   max-width: 980px;
@@ -25,25 +25,25 @@
   align-items: center;
 }
 
-.hero-content {
+.isc-content {
   max-width: 32rem;
 }
 
-.hero-title {
+.isc-title {
   font-size: 2.5rem;
   font-weight: bold;
   color: #fbbf24;
   margin-bottom: 1rem;
 }
 
-.hero-description {
+.isc-description {
   font-size: 1.125rem;
   color: white;
   margin-bottom: 2rem;
   line-height: 1.75;
 }
 
-.hero-cta {
+.isc-cta {
   background: linear-gradient(45deg, #ef4444, #ff3742);
   color: white;
   padding: 0.75rem 2rem;
@@ -55,15 +55,15 @@
   transition: all 0.3s ease;
 }
 
-.hero-cta:hover {
+.isc-cta:hover {
   background: linear-gradient(45deg, #ff3742, #ef4444);
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3);
 }
 
-.hero-nav-arrow {
+.isc-nav-arrow {
   position: absolute;
-  top: 50%;
+  top: 94%;
   transform: translateY(-50%);
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
@@ -76,19 +76,19 @@
   z-index: 20;
 }
 
-.hero-nav-arrow:hover {
+.isc-nav-arrow:hover {
   background-color: rgba(0, 0, 0, 0.7);
 }
 
-.hero-nav-prev {
-  left: 1rem;
+.isc-nav-prev {
+  left: 50rem;
 }
 
-.hero-nav-next {
-  right: 1rem;
+.isc-nav-next {
+  right: 50rem;
 }
 
-.hero-dots {
+.isc-dots {
   position: absolute;
   bottom: 1.5rem;
   left: 50%;
@@ -98,7 +98,7 @@
   z-index: 20;
 }
 
-.hero-dot {
+.isc-dot {
   width: 0.75rem;
   height: 0.75rem;
   border-radius: 50%;
@@ -107,12 +107,12 @@
   background-color: rgba(255, 255, 255, 0.5);
 }
 
-.hero-dot.active {
+.isc-dot.isc-active {
   background-color: #fbbf24;
   transform: scale(1.2);
 }
 
-.hero-background {
+.isc-background {
   position: absolute;
   top: 0;
   left: 0;
@@ -125,15 +125,15 @@
 }
 
 @media (min-width: 768px) {
-  .hero-section {
+  .isc-section {
     height: 31.25rem;
   }
 
-  .hero-title {
+  .isc-title {
     font-size: 3.75rem;
   }
 
-  .hero-description {
+  .isc-description {
     font-size: 1.25rem;
   }
 }

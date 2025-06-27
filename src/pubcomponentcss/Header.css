@@ -97,6 +97,22 @@
   gap: 1rem;
 }
 
+.h-admin-btn {
+  color: #000000;
+  border: 1px solid #d1d5db;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  background-color: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.h-admin-btn:hover {
+  background-color: #3b82f6;
+  color: #d1d5db;
+}
+
 .h-notice-btn {
   color: #d1d5db;
   font-size: 0.875rem;

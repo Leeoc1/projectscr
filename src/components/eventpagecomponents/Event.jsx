@@ -32,19 +32,13 @@ const Event = () => {
                       최신 블록버스터 영화 개봉을 기념하여 모든 상영관 티켓을
                       50% 할인된 가격으로 만나보세요.
                     </p>
-                    <div className="etp-event-period">
-                      <span className="etp-period-label">이벤트 기간</span>
-                      <span className="etp-period-date">
-                        2024.06.26 ~ 2024.07.26
-                      </span>
-                    </div>
-                    <div className="etp-event-actions">
-                      <button className="etp-event-btn etp-primary">이벤트 참여</button>
-                      <button className="etp-event-btn etp-secondary">
-                        자세히 보기
-                      </button>
-                    </div>
                   </div>
+                  <div className="etp-event-period">
+                    <span className="etp-period-label">이벤트 기간</span>
+                    <span className="etp-period-date">
+                      2024.06.26 ~ 2024.07.26
+                    </span>
+                    </div>
                 </div>
 
                 <div className="etp-event-card">
@@ -59,18 +53,12 @@ const Event = () => {
                       골드 멤버십 가입 고객에게 더 많은 혜택과 특별 서비스를
                       제공합니다.
                     </p>
-                    <div className="etp-event-period">
-                      <span className="etp-period-label">이벤트 기간</span>
-                      <span className="etp-period-date">
-                        2024.06.20 ~ 2024.08.31
-                      </span>
-                    </div>
-                    <div className="etp-event-actions">
-                      <button className="etp-event-btn etp-primary">이벤트 참여</button>
-                      <button className="etp-event-btn etp-secondary">
-                        자세히 보기
-                      </button>
-                    </div>
+                  </div>
+                  <div className="etp-event-period">
+                    <span className="etp-period-label">이벤트 기간</span>
+                    <span className="etp-period-date">
+                      2024.06.20 ~ 2024.08.31
+                    </span>
                   </div>
                 </div>
 
@@ -85,19 +73,13 @@ const Event = () => {
                       IMAX 관에서만 경험할 수 있는 특별한 영화 상영회에
                       초대합니다.
                     </p>
-                    <div className="etp-event-period">
+                  </div>
+                  <div className="etp-event-period">
                       <span className="etp-period-label">이벤트 기간</span>
                       <span className="etp-period-date">
                         2024.07.01 ~ 2024.07.15
                       </span>
                     </div>
-                    <div className="etp-event-actions">
-                      <button className="etp-event-btn etp-primary">이벤트 참여</button>
-                      <button className="etp-event-btn etp-secondary">
-                        자세히 보기
-                      </button>
-                    </div>
-                  </div>
                 </div>
 
                 <div className="etp-event-card">
@@ -114,19 +96,14 @@ const Event = () => {
                       여름을 뜨겁게 달굴 최고의 블록버스터 영화들을 한자리에서
                       만나보세요.
                     </p>
-                    <div className="etp-event-period">
+                    
+                  </div>
+                  <div className="etp-event-period">
                       <span className="etp-period-label">이벤트 기간</span>
                       <span className="etp-period-date">
                         2024.07.10 ~ 2024.08.10
                       </span>
                     </div>
-                    <div className="etp-event-actions">
-                      <button className="etp-event-btn etp-primary">이벤트 참여</button>
-                      <button className="etp-event-btn etp-secondary">
-                        자세히 보기
-                      </button>
-                    </div>
-                  </div>
                 </div>
 
                 <div className="etp-event-card">
@@ -140,17 +117,12 @@ const Event = () => {
                       온 가족이 함께 즐길 수 있는 가족 영화를 특별 할인가로
                       만나보세요.
                     </p>
-                    <div className="etp-event-period">
+                    
+                  </div>
+                  <div className="etp-event-period">
                       <span className="etp-period-label">이벤트 기간</span>
                       <span className="etp-period-date">매주 토,일</span>
                     </div>
-                    <div className="etp-event-actions">
-                      <button className="etp-event-btn etp-primary">이벤트 참여</button>
-                      <button className="etp-event-btn etp-secondary">
-                        자세히 보기
-                      </button>
-                    </div>
-                  </div>
                 </div>
 
                 <div className="etp-event-card">
@@ -165,19 +137,14 @@ const Event = () => {
                       럭셔리한 VIP 라운지에서 특별한 영화 관람 경험을
                       즐겨보세요.
                     </p>
-                    <div className="etp-event-period">
+                    
+                  </div>
+                  <div className="etp-event-period">
                       <span className="etp-period-label">이벤트 기간</span>
                       <span className="etp-period-date">
                         2024.07.05 ~ 2024.07.25 (한정)
                       </span>
                     </div>
-                    <div className="etp-event-actions">
-                      <button className="etp-event-btn etp-primary">이벤트 참여</button>
-                      <button className="etp-event-btn etp-secondary">
-                        자세히 보기
-                      </button>
-                    </div>
-                  </div>
                 </div>
 
                 <div className="etp-event-card">
@@ -191,19 +158,14 @@ const Event = () => {
                       전 세계가 기다린 아바타 속편 개봉을 기념하여 특별한
                       이벤트를 준비했습니다.
                     </p>
-                    <div className="etp-event-period">
+                    
+                  </div>
+                  <div className="etp-event-period">
                       <span className="etp-period-label">이벤트 기간</span>
                       <span className="etp-period-date">
                         2024.06.25 ~ 2024.07.25
                       </span>
                     </div>
-                    <div className="etp-event-actions">
-                      <button className="etp-event-btn etp-primary">이벤트 참여</button>
-                      <button className="etp-event-btn etp-secondary">
-                        자세히 보기
-                      </button>
-                    </div>
-                  </div>
                 </div>
 
                 <div className="etp-event-card">
@@ -217,19 +179,14 @@ const Event = () => {
                       가족과 함께 영화를 관람하는 고객을 위한 특별 할인
                       패키지입니다.
                     </p>
-                    <div className="etp-event-period">
+                     
+                  </div>
+                  <div className="etp-event-period">
                       <span className="etp-period-label">이벤트 기간</span>
                       <span className="etp-period-date">
                         2024.06.15 ~ 2024.08.15
                       </span>
-                    </div>
-                    <div className="etp-event-actions">
-                      <button className="etp-event-btn etp-primary">이벤트 참여</button>
-                      <button className="etp-event-btn etp-secondary">
-                        자세히 보기
-                      </button>
-                    </div>
-                  </div>
+                    </div> 
                 </div>
 
                 <div className="etp-event-card">
@@ -243,19 +200,14 @@ const Event = () => {
                       4DX 상영관에서 몰입감 넘치는 영화 체험을 특별 가격으로
                       만나보세요.
                     </p>
-                    <div className="etp-event-period">
+                    
+                  </div>
+                  <div className="etp-event-period">
                       <span className="etp-period-label">이벤트 기간</span>
                       <span className="etp-period-date">
                         2024.07.01 ~ 2024.07.31
                       </span>
                     </div>
-                    <div className="etp-event-actions">
-                      <button className="etp-event-btn etp-primary">이벤트 참여</button>
-                      <button className="etp-event-btn etp-secondary">
-                        자세히 보기
-                      </button>
-                    </div>
-                  </div>
                 </div>
               </div>
             </section>

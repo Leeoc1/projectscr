@@ -34,5 +34,5 @@ pagecss > ReservationInfoPage.css
 =========================
 
 2025.06.27
-영화, 극장, 이벤트 페이지 css 수정 (같은 짓 3번한듯)
+영화, 극장, 이벤트 페이지 css 수정 
 header admin 버튼 좀 꾸몄어요 

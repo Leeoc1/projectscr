@@ -1,15 +1,55 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { events, winners } from "../Data/EventPageData";
 import Header from "../pubcomponent/Header";
-import Event from "../components/eventpagecomponents/Event";
+import EventFilter from "../components/eventpagecomponents/EventFilter";
+import EventCard from "../components/eventpagecomponents/EventCard";
+import WinnerItem from "../components/eventpagecomponents/WinnerItem";
 import "../pagecss/EventPage.css";
+import "../componentcss/eventpagecomponentcss/EventFilter.css";
 
-const EventPage = () => {
+const Event = () => {
+  const [filter, setFilter] = useState("전체");
+
+  const filteredEvents =
+    filter === "전체"
+      ? events
+      : events.filter((event) => event.category === filter);
+
+  useEffect(() => {
+    document.body.classList.add("no-header-padding");
+    return () => {
+      document.body.classList.remove("no-header-padding");
+    };
+  }, []);
+
   return (
-    <div>
+    <div className="evp-page">
       <Header />
-      <Event />
+      <div className="evp-content">
+        <div className="evp-main">
+          <div className="evp-container">
+            <section className="evp-section">
+              <EventFilter filter={filter} setFilter={setFilter} />
+              <div className="evp-grid">
+                {filteredEvents.map((event) => (
+                  <EventCard key={event.id} event={event} />
+                ))}
+              </div>
+            </section>
+
+            <section className="evws-section">
+              <h2 className="evws-title">당첨자 발표</h2>
+              <div className="evws-list">
+                {winners.map((winner) => (
+                  <WinnerItem key={winner.id} winner={winner} />
+                ))}
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default EventPage;
+export default Event;

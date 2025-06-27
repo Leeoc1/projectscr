@@ -29,7 +29,7 @@
   padding: 1rem 2rem;
   background: none;
   border: none;
-  font-size: 1.875rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: #666;
   cursor: pointer;
@@ -116,22 +116,6 @@
   margin-bottom: 0.25rem;
 }
 
-/* 등급별 색상 */
-.mvs-rating.rating-all {
-  color: #229c56; /* 초록색 - 전체 관람가 */
-  font-weight: 600;
-}
-
-.mvs-rating.rating-12 {
-  color: #dd7430; /* 노란색 - 12세, 15세 이상 */
-  font-weight: 600;
-}
-
-.mvs-rating.rating-19 {
-  color: #CD1327; /* 진한 빨간색 - 청불 */
-  font-weight: 600;
-}
-
 .mvs-book-btn {
   width: 100%;
   background-color: #fbbf24;
@@ -139,7 +123,6 @@
   border: none;
   padding: 0.75rem 1rem;
   border-radius: 0.25rem;
-  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;

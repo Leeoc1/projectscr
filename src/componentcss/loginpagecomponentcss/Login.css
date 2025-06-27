@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  margin-top: calc(-1 * var(--header-height));
 }
 
 .lgs-container {
@@ -118,21 +119,23 @@
   position: relative;
 }
 
-.lgs-divider::before {
+.lgs-divider::after {
   content: "";
   position: absolute;
   top: 50%;
   left: 0;
   right: 0;
   height: 1px;
-  background-color: #e5e7eb;
+  background-color: #6b7280;
 }
 
 .lgs-divider span {
-  background: white;
+  background-color: white;
   padding: 0 1rem;
   color: #6b7280;
   font-size: 0.9rem;
+  position: relative;
+  z-index: 1;
 }
 
 .lgs-social-login {
@@ -181,12 +184,12 @@
 }
 
 .lgs-social-btn.lgs-google {
-  border-color: #ea4335;
-  color: #ea4335;
+  border-color: #4285f4;
+  color: #4285f4;
 }
 
 .lgs-social-btn.lgs-google:hover {
-  background-color: #ea4335;
+  background-color: #4285f4;
   color: white;
 }
 
@@ -211,7 +214,7 @@
 }
 
 .lgs-social-btn.lgs-google .lgs-social-icon {
-  background-color: #ea4335;
+  background-color: #4285f4;
   color: white;
 }
 

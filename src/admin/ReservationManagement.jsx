@@ -70,7 +70,7 @@ const ReservationManagement = () => (
               </td>
               <td>
                 <button className="adp-btn-view">상세</button>
-                <button className="adp-btn-refund">환불처리</button>
+                <button className="adp-btn-refund">환불</button>
               </td>
             </tr>
           </tbody>

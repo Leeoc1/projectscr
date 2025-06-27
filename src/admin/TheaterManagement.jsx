@@ -30,6 +30,7 @@ const TheaterManagement = () => (
         <div className="thm-theater-actions">
           <button className="adp-btn-edit">수정</button>
           <button className="adp-btn-view">상세보기</button>
+          <button className="adp-btn-delete">삭제</button>
         </div>
       </div>
 
@@ -53,6 +54,7 @@ const TheaterManagement = () => (
         <div className="thm-theater-actions">
           <button className="adp-btn-edit">수정</button>
           <button className="adp-btn-view">상세보기</button>
+          <button className="adp-btn-delete">삭제</button>
         </div>
       </div>
 
@@ -76,6 +78,7 @@ const TheaterManagement = () => (
         <div className="thm-theater-actions">
           <button className="adp-btn-edit">수정</button>
           <button className="adp-btn-view">상세보기</button>
+          <button className="adp-btn-delete">삭제</button>
         </div>
       </div>
     </div>

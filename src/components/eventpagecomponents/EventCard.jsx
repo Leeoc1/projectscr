@@ -20,10 +20,6 @@ const EventCard = ({ event }) => {
           <span className="etp-period-label">이벤트 기간</span>
           <span className="etp-period-date">{event.period}</span>
         </div>
-        <div className="etp-event-actions">
-          <button className="etp-event-btn etp-primary">이벤트 참여</button>
-          <button className="etp-event-btn etp-secondary">자세히 보기</button>
-        </div>
       </div>
     </div>
   );

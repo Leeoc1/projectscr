@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../pubcomponent/Header";
 import "../../pagecss/reservation/ReservationPlacePage.css";
 
@@ -8,7 +8,24 @@ const theaterData = [
   {
     region: "서울",
     branches: [
-      { name: "가양", times: ["10:00", "13:00", "16:00"] },
+      {
+        name: "가양",
+        screens: [
+          {
+            type: "2D",
+            times: [
+              { time: "15:05", seats: "168 / 184", screen: "6관" },
+              { time: "16:35", seats: "328 / 332", screen: "5관" },
+              { time: "18:10", seats: "178 / 184", screen: "6관" },
+              { time: "18:55", seats: "129 / 132", screen: "4관" },
+              { time: "19:40", seats: "321 / 332", screen: "5관" },
+              { time: "20:25", seats: "128 / 142", screen: "2관" },
+              { time: "21:15", seats: "174 / 184", screen: "6관" },
+              { time: "22:45", seats: "332 / 332", screen: "5관" },
+            ],
+          },
+        ],
+      },
       { name: "강동", times: ["11:00", "14:00"] },
       { name: "건대입구", times: ["09:30", "12:30", "18:00"] },
       { name: "김포공항", times: ["10:15", "13:45"] },
@@ -117,8 +134,10 @@ function getDateArray(startDate, length = 8, today = new Date()) {
 
 const ReservationPlacePage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const selectedMovie = location.state?.selectedMovie || {
-    title: "영화 미선택",
+    title: "F1 더 무비",
+    grade: "12",
   };
 
   // 날짜 상태
@@ -131,14 +150,15 @@ const ReservationPlacePage = () => {
   // 지역/지점 상태 (초기값: 선택 안함)
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [selectedBranch, setSelectedBranch] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
 
   // 선택된 지역의 지점 리스트
   const branches =
     theaterData.find((r) => r.region === selectedRegion)?.branches || [];
 
-  // 선택된 지점의 상영시간 리스트
+  // 선택된 지점의 상영정보
   const selectedBranchObj = branches.find((b) => b.name === selectedBranch);
-  const times = selectedBranchObj?.times || [];
+  const screens = selectedBranchObj?.screens || [];
 
   // offset만큼 이동한 날짜 배열 생성 (8개)
   const baseDate = new Date(today);
@@ -177,6 +197,23 @@ const ReservationPlacePage = () => {
       d1.getDate() === d2.getDate()
     );
   }
+
+  // 선택 완료 여부 체크 (상영시간까지 선택된 경우)
+  const isReadyToSeat =
+    selectedDate && selectedRegion && selectedBranch && selectedTime;
+
+  // 좌석 선택 버튼 클릭 시 이동
+  const handleGoToSeat = () => {
+    navigate("/reservation/seat", {
+      state: {
+        selectedDate,
+        selectedRegion,
+        selectedBranch,
+        selectedTime,
+        selectedMovie: location.state?.selectedMovie || null,
+      },
+    });
+  };
 
   return (
     <div className="reservation-page">
@@ -312,17 +349,45 @@ const ReservationPlacePage = () => {
                   {selectedRegion && !selectedBranch && (
                     <div>지점을 선택하세요.</div>
                   )}
-                  {selectedRegion && selectedBranch && times.length === 0 && (
+                  {selectedRegion && selectedBranch && screens.length === 0 && (
                     <div>상영 정보가 없습니다.</div>
                   )}
-                  {selectedRegion && selectedBranch && times.length > 0 && (
-                    <div className="time-btns">
-                      {times.map((time) => (
-                        <button key={time} className="time-btn">
-                          {time}
-                        </button>
+                  {selectedRegion && selectedBranch && screens.length > 0 && (
+                    <>
+                      {/* 영화 등급, 제목, 상영관 타입 */}
+                      <div className="movie-info-box">
+                        <span className="movie-grade">
+                          {selectedMovie.grade}
+                        </span>
+                        <span className="movie-title">
+                          {selectedMovie.title}
+                        </span>
+                      </div>
+                      {screens.map((screen) => (
+                        <div key={screen.type} className="screen-type-title">
+                          {screen.type}
+                        </div>
                       ))}
-                    </div>
+                      <div className="screen-times-grid">
+                        {screens[0]?.times.map((item) => (
+                          <div
+                            className={`screen-time-card${
+                              selectedTime === item.time ? " active" : ""
+                            }`}
+                            key={item.time}
+                            onClick={() => setSelectedTime(item.time)}
+                          >
+                            <div className="screen-time-time">{item.time}</div>
+                            <div className="screen-time-seats">
+                              {item.seats}
+                            </div>
+                            <div className="screen-time-screen">
+                              {item.screen}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </>
                   )}
                 </div>
               </div>
@@ -330,6 +395,12 @@ const ReservationPlacePage = () => {
           </div>
         </div>
       </div>
+      {/* 우측 하단 고정 좌석 선택 버튼 */}
+      {isReadyToSeat && (
+        <button className="reservation-seat-btn-fixed" onClick={handleGoToSeat}>
+          좌석 선택
+        </button>
+      )}
     </div>
   );
 };

@@ -1,8 +1,22 @@
 import React from "react";
+import { ReservationData } from "../admindata/UserData";
 import "../admincss/ReservationManagement.css";
 import "../pagecss/AdminPage.css";
 
-const ReservationManagement = () => (
+const ReservationManagement = () => {
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "예약완료":
+        return "adp-active";
+      case "취소요청":
+        return "adp-pending";
+      case "환불완료":
+        return "adp-terminated";
+      default:
+        return "adp-pending";
+    }
+  };
+  return (
   <div className="adp-content">
     <div className="adp-header">
       <h2>예약 관리</h2>
@@ -37,47 +51,43 @@ const ReservationManagement = () => (
               <th>좌석</th>
               <th>금액</th>
               <th>상태</th>
+              <th>결제 수단</th>
               <th>작업</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>RSV001</td>
-              <td>김영화</td>
-              <td>아바타: 물의 길</td>
-              <td>강남점 1관</td>
-              <td>2024-06-26 14:00</td>
-              <td>E5, E6</td>
-              <td>₩28,000</td>
-              <td>
-                <span className="adp-status adp-active">예약완료</span>
-              </td>
-              <td>
-                <button className="adp-btn-view">상세</button>
-                <button className="adp-btn-cancel">취소</button>
-              </td>
-            </tr>
-            <tr>
-              <td>RSV002</td>
-              <td>이시네마</td>
-              <td>탑건: 매버릭</td>
-              <td>홍대점 2관</td>
-              <td>2024-06-26 16:30</td>
-              <td>F3, F4, F5</td>
-              <td>₩42,000</td>
-              <td>
-                <span className="adp-status adp-pending">취소요청</span>
-              </td>
-              <td>
-                <button className="adp-btn-view">상세</button>
-                <button className="adp-btn-refund">환불</button>
-              </td>
-            </tr>
+            {ReservationData.map((reservation) => (
+              <tr key={reservation.reservationId}>
+                <td>{reservation.reservationId}</td>
+                <td>{reservation.customerName}</td>
+                <td>{reservation.movieTitle}</td>
+                <td>{reservation.theater}</td>
+                <td>{reservation.showTime}</td>
+                <td>{reservation.seats}</td>
+                <td>{reservation.paymentMethod}</td>
+                <td>{reservation.amount}</td>
+                <td>
+                  <span className={`adp-status ${getStatusClass(reservation.status)}`}>
+                    {reservation.status}
+                  </span>
+                </td>
+                <td>
+                  <button className="adp-btn-view">상세</button>
+                  {reservation.status === "취소요청" ? (
+                    <button className="adp-btn-refund">환불</button>
+                  ) : (
+                    <button className="adp-btn-cancel">취소</button>
+                  )}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
     </div>
   </div>
-);
+)};
+
+
 
 export default ReservationManagement;

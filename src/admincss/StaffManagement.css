@@ -2,13 +2,16 @@
 .stm-table-container {
   background: white;
   border-radius: 0.5rem;
-  overflow: hidden;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border: 1px solid #e2e8f0;
+  max-height: 650px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-top: 10px;
 }
 
 .stm-table {
-  width: 100%;
+  width: 1200px;
   border-collapse: collapse;
 }
 
@@ -20,6 +23,8 @@
   color: #374151;
   border-bottom: 1px solid #e2e8f0;
   font-size: 0.875rem;
+  position: sticky;
+  top: 0;
 }
 
 .stm-table td {
@@ -30,5 +35,5 @@
 }
 
 .stm-table tr:hover {
-  background-color: #f8fafc;
+  background-color: #eff4fa;
 }

@@ -5,6 +5,11 @@
   gap: 1.5rem;
 }
 
+.screen-background {
+  overflow-y: auto;
+  max-height: 650px;
+}
+
 .scm-screen-card {
   background: white;
   padding: 1.5rem;

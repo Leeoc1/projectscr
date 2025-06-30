@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "user") // user 테이블 매핑
+@Table(name = "users") // user 테이블 매핑 (H2 예약어 충돌 방지)
 @Getter
 @Setter
 public class User {

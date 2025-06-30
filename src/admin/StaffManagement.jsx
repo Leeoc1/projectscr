@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../admincss/StaffManagement.css";
 import "../pagecss/AdminPage.css";
 import "../admincss/Stable.css"
-import {StaffData} from "../admindata/StaffManagementData.js"
+import { getStaffs } from "../admindata/api.js";
 
 const StaffManagement = () => {
+  const [staffs, setStaffs] = useState([]);
+
+  const stafflist = async () => {
+    try {
+      const response = await getStaffs();
+      setStaffs(response.data); 
+    } catch(e) {
+      console.log("스탭 목록 불러오기 실패");
+    }
+  };
+
+  useEffect(() => {
+    stafflist();
+  }, []);
+
 
   const getStatusClass = (status) => {
     switch(status) {
@@ -28,7 +43,7 @@ const StaffManagement = () => {
       <button className="adp-btn-primary">직원 추가</button>
     </div>
 
-    <span>총 직원 수 : {StaffData.length}</span>
+    <span>총 직원 수 : {staffs.length}</span>
     <div className="stm-table-container">
     
       <table className="stm-table">
@@ -49,18 +64,18 @@ const StaffManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {StaffData.map((item) => (
+          {staffs.map((item) => (
             <tr>
-              <td>{item.id}</td>
-              <td>{item.staffName}</td>
+              <td>{item.staffid}</td>
+              <td>{item.staffname}</td>
               <td>{item.dept}</td>
               <td>{item.theater}</td>
               <td>{item.position}</td>
               <td>{item.role}</td>
               <td>{item.phone}</td>
               <td>{item.email}</td>
-              <td>{item.hireDate}</td>
-              <td>{item.shiftType}</td>
+              <td>{item.hiredate}</td>
+              <td>{item.shifttype}</td>
               <td>
                 <span className={`adp-status ${getStatusClass(item.status)}`}>{item.status}</span>
               </td>

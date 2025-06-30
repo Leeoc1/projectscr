@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "faq")
 @Getter
 @NoArgsConstructor
-public class  Faq {
+public class Faq {
 
     @Id
     private Long faqnum; // FAQ 번호 (PK)
@@ -21,7 +21,7 @@ public class  Faq {
     @Column(length = 50)
     private String faqsub; // FAQ 제목
 
-    
+    @Column(nullable = false)
     private LocalDateTime faqdate; // 게시 날짜
 }
 

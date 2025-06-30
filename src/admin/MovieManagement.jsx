@@ -1,4 +1,5 @@
 import React from "react";
+import { MovieData } from "../admindata/MovieMamagementData";
 import "../admincss/MovieManagement.css";
 import "../pagecss/AdminPage.css";
 
@@ -17,36 +18,25 @@ const MovieManagement = () => (
         <button className="mvm-tab-btn">상영 스케줄</button>
       </div>
 
-      <div className="mvm-movie-list">
-        <div className="mvm-movie-item">
-          <img src="/api/placeholder/120/180" alt="영화 포스터" />
-          <div className="mvm-movie-details">
-            <h3>아바타: 물의 길</h3>
-            <p>장르: SF, 액션 | 등급: 12세이상관람가</p>
-            <p>상영시간: 192분 | 개봉일: 2024-01-15</p>
-            <p>상영관: 강남 1, 2, 3관 | 홍대 1, 2관</p>
-          </div>
-          <div className="mvm-movie-actions">
-            <button className="adp-btn-edit">수정</button>
-            <button className="adp-btn-schedule">스케줄</button>
-            <button className="adp-btn-delete">삭제</button>
-          </div>
-        </div>
 
-        <div className="mvm-movie-item">
-          <img src="/api/placeholder/120/180" alt="영화 포스터" />
-          <div className="mvm-movie-details">
-            <h3>탑건: 매버릭</h3>
-            <p>장르: 액션, 드라마 | 등급: 12세이상관람가</p>
-            <p>상영시간: 131분 | 개봉일: 2024-02-01</p>
-            <p>상영관: 강남 4, 5관 | 부산 1, 2관</p>
+      <div className="mvm-movie-list">
+      <span>총 상영작 : {MovieData.length}</span>
+        {MovieData.map((movie) => (
+          <div className="mvm-movie-item" key={movie.movieId}>
+            <img src={movie.posterUrl} alt={`${movie.title} 포스터`} />
+            <div className="mvm-movie-details">
+              <h3>{movie.title}</h3>
+              <p>장르: {movie.genre} | 등급: {movie.rating}</p>
+              <p>상영시간: {movie.duration}분 | 개봉일: {movie.releaseDate}</p>
+              <p>상영관: {movie.theaters}</p>
+            </div>
+            <div className="mvm-movie-actions">
+              <button className="adp-btn-edit">수정</button>
+              <button className="adp-btn-schedule">스케줄</button>
+              <button className="adp-btn-delete">삭제</button>
+            </div>
           </div>
-          <div className="mvm-movie-actions">
-            <button className="adp-btn-edit">수정</button>
-            <button className="adp-btn-schedule">스케줄</button>
-            <button className="adp-btn-delete">삭제</button>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   </div>

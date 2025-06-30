@@ -1,4 +1,5 @@
 import React from "react";
+import { TheaterData } from "../admindata/TheaterData";
 import "../admincss/TheaterManagement.css";
 import "../pagecss/AdminPage.css";
 
@@ -10,76 +11,48 @@ const TheaterManagement = () => (
     </div>
 
     <div className="thm-theater-grid">
-      <div className="thm-theater-card">
-        <h3>시네맥스 강남점</h3>
-        <div className="thm-theater-info">
-          <p>
-            <strong>주소:</strong> 서울시 강남구 테헤란로 123
-          </p>
-          <p>
-            <strong>상영관:</strong> 8개
-          </p>
-          <p>
-            <strong>좌석 수:</strong> 1,240석
-          </p>
-          <p>
-            <strong>운영 상태:</strong>{" "}
-            <span className="adp-status adp-active">정상 운영</span>
-          </p>
+      {TheaterData.map((theater) => (
+        <div className="thm-theater-card" key={theater.theaterId}>
+          <h3>{theater.theaterName}</h3>
+          <div className="thm-theater-info">
+            <p>
+              <strong>주소:</strong> {theater.address}
+            </p>
+            <p>
+              <strong>상영관:</strong> {theater.screenCount}개
+            </p>
+            <p>
+              <strong>좌석 수:</strong> {theater.seatCount}석
+            </p>
+            <p>
+              <strong>운영 상태:</strong>{" "}
+              <span className={`adp-status ${getStatusClass(theater.status)}`}>
+                {theater.status}
+              </span>
+            </p>
+          </div>
+          <div className="thm-theater-actions">
+            <button className="adp-btn-edit">수정</button>
+            <button className="adp-btn-view">상세보기</button>
+            <button className="adp-btn-delete">삭제</button>
+          </div>
         </div>
-        <div className="thm-theater-actions">
-          <button className="adp-btn-edit">수정</button>
-          <button className="adp-btn-view">상세보기</button>
-        </div>
-      </div>
-
-      <div className="thm-theater-card">
-        <h3>시네맥스 홍대점</h3>
-        <div className="thm-theater-info">
-          <p>
-            <strong>주소:</strong> 서울시 마포구 홍익로 456
-          </p>
-          <p>
-            <strong>상영관:</strong> 6개
-          </p>
-          <p>
-            <strong>좌석 수:</strong> 980석
-          </p>
-          <p>
-            <strong>운영 상태:</strong>{" "}
-            <span className="adp-status adp-active">정상 운영</span>
-          </p>
-        </div>
-        <div className="thm-theater-actions">
-          <button className="adp-btn-edit">수정</button>
-          <button className="adp-btn-view">상세보기</button>
-        </div>
-      </div>
-
-      <div className="thm-theater-card">
-        <h3>시네맥스 부산점</h3>
-        <div className="thm-theater-info">
-          <p>
-            <strong>주소:</strong> 부산시 해운대구 센텀로 789
-          </p>
-          <p>
-            <strong>상영관:</strong> 10개
-          </p>
-          <p>
-            <strong>좌석 수:</strong> 1,560석
-          </p>
-          <p>
-            <strong>운영 상태:</strong>{" "}
-            <span className="adp-status adp-maintenance">점검중</span>
-          </p>
-        </div>
-        <div className="thm-theater-actions">
-          <button className="adp-btn-edit">수정</button>
-          <button className="adp-btn-view">상세보기</button>
-        </div>
-      </div>
+      ))}
     </div>
   </div>
 );
+
+const getStatusClass = (status) => {
+  switch (status) {
+    case "정상 운영":
+      return "adp-active";
+    case "점검중":
+      return "adp-maintenance";
+    case "비활성":
+      return "adp-terminated";
+    default:
+      return "adp-pending";
+  }
+};
 
 export default TheaterManagement;

@@ -208,34 +208,6 @@
   font-size: 0.75rem;
 }
 
-/* Status Badges */
-.adp-status {
-  display: inline-block;
-  padding: 0.25rem 0.5rep;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.adp-status.adp-active {
-  background-color: #dcfce7;
-  color: #166534;
-}
-
-.adp-status.adp-inactive {
-  background-color: #fee2e2;
-  color: #991b1b;
-}
-
-.adp-status.adp-pending {
-  background-color: #fef3c7;
-  color: #92400e;
-}
-
-.adp-status.adp-maintenance {
-  background-color: #e0e7ff;
-  color: #3730a3;
-}
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -249,3 +221,7 @@
     align-items: flex-start;
   }
 }
+
+.thm-theater-actions .adp-btn-delete {
+  margin-left: auto;
+} 

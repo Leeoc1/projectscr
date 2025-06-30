@@ -1,8 +1,25 @@
 import React from "react";
+import { InquiriesData } from "../admindata/UserData";
 import "../admincss/Inquiries.css";
 import "../pagecss/AdminPage.css";
 
-const Inquiries = () => (
+const Inquiries = () => {
+
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "미답변":
+        return "adp-pending";
+      case "처리중":
+        return "adp-processing";
+      case "답변완료":
+        return "adp-active";
+      default:
+        return "adp-pending";
+    }
+  };
+
+  
+  return(
   <div className="adp-content">
     <div className="adp-header">
       <h2>고객 지원</h2>
@@ -31,39 +48,39 @@ const Inquiries = () => (
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>INQ001</td>
-            <td>김고객</td>
-            <td>예매 문의</td>
-            <td>예매 취소 문의드립니다</td>
-            <td>2024-06-26</td>
-            <td>
-              <span className="adp-status adp-pending">미답변</span>
-            </td>
-            <td>-</td>
-            <td>
-              <button className="adp-btn-reply">답변</button>
-              <button className="adp-btn-assign">배정</button>
-            </td>
-          </tr>
-          <tr>
-            <td>INQ002</td>
-            <td>이문의</td>
-            <td>시설 문의</td>
-            <td>장애인 편의시설 안내</td>
-            <td>2024-06-25</td>
-            <td>
-              <span className="adp-status adp-active">답변완료</span>
-            </td>
-            <td>김관리</td>
-            <td>
-              <button className="adp-btn-view">보기</button>
-            </td>
-          </tr>
+          {InquiriesData.map((inquiry) => (
+            <tr key={inquiry.inquiryId}>
+              <td>{inquiry.inquiryId}</td>
+              <td>{inquiry.customerName}</td>
+              <td>{inquiry.inquiryType}</td>
+              <td>{inquiry.title}</td>
+              <td>{inquiry.createdDate}</td>
+              <td>
+                <span className={`adp-status ${getStatusClass(inquiry.status)}`}>
+                  {inquiry.status}
+                </span>
+              </td>
+              <td>{inquiry.assignee}</td>
+              <td>
+                {inquiry.status === "미답변" ? (
+                  <>
+                    <button className="adp-btn-reply">답변</button>
+                    <button className="adp-btn-assign">배정</button>
+                  </>
+                ) : (
+                  <>
+                    <button className="adp-btn-view">보기</button>
+                    <button className="adp-btn-complete">완료</button>
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
   </div>
-);
+)};
+
 
 export default Inquiries;

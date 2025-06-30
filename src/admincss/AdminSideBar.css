@@ -5,9 +5,8 @@
   color: white;
   padding: 1rem 0;
   position: sticky;
-  top: 80px;
-  height: calc(100vh - 80px);
-  overflow-y: auto;
+  /* top: 80px; */
+  height: calc(100vh - 100px);
 }
 
 .adsb-sidebar-nav {

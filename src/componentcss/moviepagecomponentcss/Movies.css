@@ -116,6 +116,21 @@
   margin-bottom: 0.25rem;
 }
 
+.mvs-rating.rating-all {
+  color: #229c56;
+  font-weight: 600;
+}
+
+.mvs-rating.rating-12 {
+  color: #dd7430; /* 주황색 - 12세 이상 */
+  font-weight: 600;
+}
+
+.mvs-rating.rating-19 {
+  color: #cd1327; /* 보라색 - 19세 이상 */
+  font-weight: 600;
+}
+
 .mvs-book-btn {
   width: 100%;
   background-color: #fbbf24;
@@ -148,4 +163,52 @@
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 1rem;
   }
+}
+
+.mvs-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* 반투명 배경 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0; /* 기본적으로 숨김 */
+  transition: opacity 0.3s ease;
+}
+
+.mvs-poster:hover .mvs-overlay {
+  opacity: 1;
+}
+
+.mvs-buttons {
+  display: flex;
+  flex-direction: column; /* 수직 배치 */
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.mvs-btn {
+  background-color: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+  /*기본보더:;
+  흰색*/
+  padding: 0.5rem 3rem;
+  border-radius: 0.4rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  -webkit-border-radius: 0.4rem;
+  -moz-border-radius: 0.4rem;
+  -ms-border-radius: 0.4rem;
+  -o-border-radius: 0.4rem;
+}
+
+.mvs-btn:hover {
+  background-color: #fff; /* 호버 시 배경: 흰색 */
+  color: #000; /* 호버 시 텍스트: 검정색 */
+  border: 2px solid #fff; /* 호버 시 보더: 흰색 */
 }

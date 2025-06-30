@@ -1,77 +1,105 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../admincss/UserManagement.css";
 import "../pagecss/AdminPage.css";
+import "../admincss/Stable.css";
+import { userAPI } from "../admindata/api.js";
 
-const UserManagement = () => (
-  <div className="adp-content">
-    <div className="adp-header">
-      <h2>회원 관리</h2>
-      <div className="usm-search-bar">
-        <input type="text" placeholder="회원 검색..." />
-        <button className="adp-btn-search">검색</button>
+const UserManagement = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+    userAPI.getAllUsers()
+      .then(data => {
+        setUsers(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  // 상태에 따라 CSS 클래스와 텍스트를 다르게 반환
+  const getStatusClass = (status) => {
+    if (status === '탈퇴') return 'adp-vacation';
+    return 'adp-active';
+  };
+  const getStatusText = (status, userid) => {
+    if (userid === 'admin') return '관리자';
+    if (status === '탈퇴') return '탈퇴';
+    return '활성';
+  };
+
+  if (loading) {
+    return (
+      <div className="adp-content">
+        <div className="adp-header">
+          <h2>회원 관리</h2>
+        </div>
+        <div style={{ textAlign: 'center', padding: '50px' }}>
+          데이터를 불러오는 중...
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="adp-content">
+        <div className="adp-header">
+          <h2>회원 관리</h2>
+        </div>
+        <div style={{ textAlign: 'center', padding: '50px', color: 'red' }}>
+          오류: {error}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="adp-content">
+      <div className="adp-header">
+        <h2>회원 관리</h2>
+        <button className="adp-btn-primary">회원 추가</button>
+      </div>
+
+      <span>총 회원 수 : {users.length}</span>
+      <div className="usm-table-container">
+        <table className="usm-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>이름</th>
+              <th>이메일</th>
+              <th>전화번호</th>
+              <th>생년월일</th>
+              <th>상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.userid}>
+                <td>{user.userid}</td>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                <td>{user.phone}</td>
+                <td>{user.birth}</td>
+                <td>
+                  <span className={`adp-status ${getStatusClass(user.status)}`}>
+                    {getStatusText(user.status, user.userid)}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
-
-    <div className="usm-table-container">
-      <table className="usm-table">
-        <thead>
-          <tr>
-            <th>회원 ID</th>
-            <th>이름</th>
-            <th>이메일</th>
-            <th>가입일</th>
-            <th>예매 횟수</th>
-            <th>상태</th>
-            <th>작업</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>USR001</td>
-            <td>김영화</td>
-            <td>movie@email.com</td>
-            <td>2024-01-15</td>
-            <td>23</td>
-            <td>
-              <span className="adp-status adp-active">정상</span>
-            </td>
-            <td>
-              <button className="adp-btn-view">보기</button>
-              <button className="adp-btn-edit">수정</button>
-            </td>
-          </tr>
-          <tr>
-            <td>USR002</td>
-            <td>이시네마</td>
-            <td>cinema@email.com</td>
-            <td>2024-02-20</td>
-            <td>12</td>
-            <td>
-              <span className="adp-status adp-active">정상</span>
-            </td>
-            <td>
-              <button className="adp-btn-view">보기</button>
-              <button className="adp-btn-edit">수정</button>
-            </td>
-          </tr>
-          <tr>
-            <td>USR003</td>
-            <td>박관람</td>
-            <td>watch@email.com</td>
-            <td>2024-03-10</td>
-            <td>5</td>
-            <td>
-              <span className="adp-status adp-inactive">정지</span>
-            </td>
-            <td>
-              <button className="adp-btn-view">보기</button>
-              <button className="adp-btn-edit">수정</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-);
+  );
+};
 
 export default UserManagement;

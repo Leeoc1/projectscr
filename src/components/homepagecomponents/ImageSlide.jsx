@@ -1,64 +1,63 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useState, useEffect } from "react";
 import "../../componentcss/homepagecomponentcss/ImageSlide.css";
 
 const ImageSlide = () => {
-  const images = [
-    { src: "/images/cloud.jpg", alt: "Cloud" },
-    { src: "/images/movie.jpg", alt: "Movie" },
-    { src: "/images/tank.jpg", alt: "Tank" },
-  ];
-  const [moveImages, setMoveImages] = useState(0);
-  const scrollContain = useRef(null);
-
-  const scrollImage = (index) => {
-    if (scrollContain.current) {
-      const imageWidth = scrollContain.current.clientWidth;
-      const scrollPosition = index * imageWidth;
-      scrollContain.current.scrollTo({
-        left: scrollPosition,
-        behavior: "smooth",
-      });
-      setMoveImages(index);
-    }
-  };
-
-  const handlePrev = () => {
-    const newIndex = Math.max(moveImages - 1, 0);
-    scrollImage(newIndex);
-  };
-
-  const handleNext = () => {
-    const newIndex = Math.min(moveImages + 1, images.length - 1);
-    scrollImage(newIndex);
-  };
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const totalSlides = 3;
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      const newIndex = (moveImages + 1) % images.length;
-      scrollImage(newIndex);
-    }, 3000);
-    return () => clearInterval(timer);
-  }, [moveImages, images.length]);
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % totalSlides);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % totalSlides);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  };
 
   return (
-    <div className="mainImageSection">
-      <button className="leftArrow" onClick={handlePrev}>
-        <img src="/images/leftarrow.png" alt="Previous" className="left" />
+    <section className="isc-section">
+      <div className="isc-overlay"></div>
+
+      {/* Hero Content */}
+      <div className="isc-container">
+        <div className="isc-content">
+          <h1 className="isc-title">프리미엄 시네마 경험</h1>
+          <p className="isc-description">
+            최신 영화를 최고의 화질과 사운드로 만나보세요
+          </p>
+          <button className="isc-cta">지금 예매하기</button>
+        </div>
+      </div>
+
+      {/* Navigation Arrows */}
+      <button onClick={prevSlide} className="isc-nav-arrow isc-nav-prev">
+        ‹
       </button>
-      <div className="imageContainer" ref={scrollContain}>
-        {images.map((image, index) => (
-          <img
+      <button onClick={nextSlide} className="isc-nav-arrow isc-nav-next">
+        ›
+      </button>
+
+      {/* Carousel Dots */}
+      <div className="isc-dots">
+        {[...Array(totalSlides)].map((_, index) => (
+          <div
             key={index}
-            src={image.src}
-            alt={image.alt}
-            className="mainSlideImage"
+            onClick={() => setCurrentSlide(index)}
+            className={`isc-dot ${index === currentSlide ? "isc-active" : ""}`}
           />
         ))}
       </div>
-      <button className="rightArrow" onClick={handleNext}>
-        <img src="/images/rightarrow.png" alt="Next" />
-      </button>
-    </div>
+
+      {/* Hero Background Image */}
+      <div className="isc-background"></div>
+    </section>
   );
 };
 

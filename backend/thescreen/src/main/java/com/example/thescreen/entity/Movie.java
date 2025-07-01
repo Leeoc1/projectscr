@@ -34,9 +34,12 @@ public class Movie {
 
     private LocalDate releasedate;
 
+<<<<<<< HEAD
     @Column(length = 200)
     private String posterUrl;
 
+=======
+>>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
     @Enumerated(EnumType.STRING)
     private IsAdult isadult;
 

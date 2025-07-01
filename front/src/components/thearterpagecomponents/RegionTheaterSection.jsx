@@ -1,4 +1,5 @@
 import React from "react";
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 
 const RegionTheaterSection = ({ filteredTheaters }) => {
@@ -14,6 +15,10 @@ const RegionTheaterSection = ({ filteredTheaters }) => {
     });
   };
 
+=======
+
+const RegionTheaterSection = ({ filteredTheaters }) => {
+>>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
   return (
     <section className="rts-section">
       <div className="rts-grid">
@@ -37,12 +42,16 @@ const RegionTheaterSection = ({ filteredTheaters }) => {
               </div>
             </div>
             <div className="rts-actions">
+<<<<<<< HEAD
               <button
                 className="rts-btn primary"
                 onClick={() => handleScheduleClick(theater)}
               >
                 상영시간표
               </button>
+=======
+              <button className="rts-btn primary">상영시간표</button>
+>>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
               <button className="rts-btn secondary">길찾기</button>
             </div>
           </div>

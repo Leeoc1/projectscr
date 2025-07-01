@@ -1,11 +1,17 @@
 import React, { useState } from "react";
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
+=======
+>>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
 import Header from "../../../pubcomponent/Header";
 import "../../../componentcss/reservationcss/moviepagecomponentcss/SelectMovie.css";
 
 const SelectMovie = () => {
   const [currentStep, setCurrentStep] = useState(1);
+<<<<<<< HEAD
   const navigate = useNavigate();
+=======
+>>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
   const [data, setData] = useState({
     selectedMovie: null,
     selectedTheater: null,
@@ -15,6 +21,7 @@ const SelectMovie = () => {
     guestCount: { adult: 1, child: 0 },
   });
 
+<<<<<<< HEAD
   const handleReservationClick = (movie) => {
     // 영화 정보를 state로 전달하여 ReservationPlacePage로 이동
     navigate("/reservation/place", {
@@ -24,6 +31,8 @@ const SelectMovie = () => {
     });
   };
 
+=======
+>>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
   const handleMovieSelect = (movie) => {
     setData({ ...data, selectedMovie: movie });
     setCurrentStep(2);
@@ -92,7 +101,11 @@ const SelectMovie = () => {
             </div>
             <button
               className="rsms-select-btn rsms-reserve-btn"
+<<<<<<< HEAD
               onClick={() => handleReservationClick(movie)}
+=======
+              onClick={() => handleMovieSelect(movie)}
+>>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
             >
               예매
             </button>
@@ -224,9 +237,13 @@ const SelectMovie = () => {
         <div className="rsms-seats-grid">
           {Array.from({ length: 8 }, (_, row) => (
             <div key={row} className="rsms-seat-row">
+<<<<<<< HEAD
               <span className="rsms-row-label">
                 {String.fromCharCode(65 + row)}
               </span>
+=======
+              <span className="rsms-row-label">{String.fromCharCode(65 + row)}</span>
+>>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
               {Array.from({ length: 12 }, (_, seat) => (
                 <button
                   key={seat}
@@ -279,7 +296,12 @@ const SelectMovie = () => {
         <div className="rsms-summary-item">
           <span>인원:</span>
           <span>
+<<<<<<< HEAD
             성인 {data.guestCount.adult}명, 어린이 {data.guestCount.child}명
+=======
+            성인 {data.guestCount.adult}명, 어린이{" "}
+            {data.guestCount.child}명
+>>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
           </span>
         </div>
         <div className="rsms-summary-item">
@@ -359,7 +381,14 @@ const SelectMovie = () => {
                 <button
                   className="rsms-next-btn rsms-btn"
                   onClick={() =>
+<<<<<<< HEAD
                     handleSeatSelect(data.selectedSeats, data.guestCount)
+=======
+                    handleSeatSelect(
+                      data.selectedSeats,
+                      data.guestCount
+                    )
+>>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
                   }
                 >
                   다음 단계
@@ -376,4 +405,8 @@ const SelectMovie = () => {
   );
 };
 
+<<<<<<< HEAD
 export default SelectMovie;
+=======
+export default SelectMovie;
+>>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105

@@ -186,13 +186,7 @@ const Register = () => {
               {validationState.usernameChecked && (
                 <p
                   className={`rg-validation-message ${
-<<<<<<< HEAD
-                    validationState.usernameAvailable
-                      ? "rg-success"
-                      : "rg-error"
-=======
                     validationState.usernameAvailable ? "rg-success" : "rg-error"
->>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
                   }`}
                 >
                   {validationState.usernameAvailable
@@ -294,14 +288,7 @@ const Register = () => {
           <div className="rg-login-link">
             <p>
               이미 회원이신가요?
-<<<<<<< HEAD
-              <button
-                className="rg-link-btn"
-                onClick={() => navigate("/login")}
-              >
-=======
               <button className="rg-link-btn" onClick={() => navigate("/login")}>
->>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
                 로그인
               </button>
             </p>
@@ -318,8 +305,4 @@ const Register = () => {
   );
 };
 
-<<<<<<< HEAD
 export default Register;
-=======
-export default Register;
->>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105

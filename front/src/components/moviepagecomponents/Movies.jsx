@@ -1,10 +1,16 @@
 import React, { useState } from "react";
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import { boxofficeMovies, upcomingMovies } from "../../Data/MoviesData.js";
+=======
+import { boxofficeMovies, upcomingMovies } from "../../Data/MoviesData.js";
+import MovieCard from "./MovieCard";
+>>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
 import "../../componentcss/moviepagecomponentcss/Movies.css";
 
 const Movies = () => {
   const [activeTab, setActiveTab] = useState("boxoffice");
+<<<<<<< HEAD
   const navigate = useNavigate();
 
   const handleReservationClick = (movie) => {
@@ -15,6 +21,8 @@ const Movies = () => {
       },
     });
   };
+=======
+>>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
 
   return (
     <div className="mvs-section">
@@ -39,6 +47,7 @@ const Movies = () => {
       <div className="mvs-grid">
         {activeTab === "boxoffice"
           ? boxofficeMovies.map((movie) => (
+<<<<<<< HEAD
               <div className="mvs-card" key={movie.id}>
                 <div className="mvs-poster">
                   <img src={movie.poster} alt={movie.title} />
@@ -87,6 +96,12 @@ const Movies = () => {
                   </p>
                 </div>
               </div>
+=======
+              <MovieCard key={movie.id} movie={movie} isBoxOffice={true} />
+            ))
+          : upcomingMovies.map((movie) => (
+              <MovieCard key={movie.id} movie={movie} isBoxOffice={false} />
+>>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
             ))}
       </div>
     </div>

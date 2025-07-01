@@ -8,7 +8,10 @@ import Login from "./components/loginpagecomponents/Login";
 import Register from "./components/registerpagecomponents/Register";
 import ReservationMoviePage from "./pages/reservation/ReservationMoviePage";
 import ReservationPlacePage from "./pages/reservation/ReservationPlacePage";
+<<<<<<< HEAD
 import ReservationPlaceToMoviePage from "./pages/reservation/ReservationPlaceToMoviePage";
+=======
+>>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
 import ReservationSeatPage from "./pages/reservation/ReservationSeatPage";
 import ReservationPaymentPage from "./pages/reservation/ReservationPaymentPage";
 import ReservationSuccessPage from "./pages/reservation/ReservationSuccessPage";
@@ -24,6 +27,7 @@ function App() {
         <Route path="/event" element={<EventPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+<<<<<<< HEAD
 
         {/* 관리자 페이지 라우팅 */}
         <Route path="/admin" element={<AdminPage />} />
@@ -42,6 +46,10 @@ function App() {
           path="/reservation/movie"
           element={<ReservationPlaceToMoviePage />}
         />
+=======
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/reservation/place" element={<ReservationPlacePage />} />
+>>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
         <Route path="/reservation/seat" element={<ReservationSeatPage />} />
         <Route
           path="/reservation/payment"

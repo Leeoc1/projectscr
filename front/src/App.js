@@ -8,6 +8,7 @@ import Login from "./components/loginpagecomponents/Login";
 import Register from "./components/registerpagecomponents/Register";
 import ReservationMoviePage from "./pages/reservation/ReservationMoviePage";
 import ReservationPlacePage from "./pages/reservation/ReservationPlacePage";
+import ReservationPlaceToMoviePage from "./pages/reservation/ReservationPlaceToMoviePage";
 import ReservationSeatPage from "./pages/reservation/ReservationSeatPage";
 import ReservationPaymentPage from "./pages/reservation/ReservationPaymentPage";
 import ReservationSuccessPage from "./pages/reservation/ReservationSuccessPage";
@@ -37,6 +38,10 @@ function App() {
         <Route path="/admin/events" element={<AdminPage />} />
 
         <Route path="/reservation/place" element={<ReservationPlacePage />} />
+        <Route
+          path="/reservation/movie"
+          element={<ReservationPlaceToMoviePage />}
+        />
         <Route path="/reservation/seat" element={<ReservationSeatPage />} />
         <Route
           path="/reservation/payment"

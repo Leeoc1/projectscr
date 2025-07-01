@@ -2,18 +2,26 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../pubcomponent/Header";
 import "../../pagecss/reservation/ReservationSeatPage.css";
+import { getReservationInfo, setReservationInfo } from "../../utils/reservationStorage";
 
 const ReservationSeatPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const reservationData = location.state || {};
+  const reservationInfo = getReservationInfo();
 
+  // 반드시 최상단에서 Hook 호출
   const [guestCount, setGuestCount] = useState({
     adult: 1,
     child: 0,
     senior: 0,
   });
   const [selectedSeats, setSelectedSeats] = useState([]);
+
+  // 그 다음에 조건부 이동 처리
+  if (!reservationInfo.selectedDate || !reservationInfo.selectedBranch) {
+    navigate("/reservation/place");
+    return null;
+  }
 
   // 좌석 데이터 (8행 12열)
   const seatRows = Array.from({ length: 8 }, (_, i) =>
@@ -81,14 +89,15 @@ const ReservationSeatPage = () => {
       return;
     }
 
-    navigate("/reservation/payment", {
-      state: {
-        ...reservationData,
-        guestCount,
-        selectedSeats,
-        totalPrice,
-      },
-    });
+    // 예매 정보 누적 저장
+    const fullReservationInfo = {
+      ...reservationInfo,
+      guestCount,
+      selectedSeats,
+      totalPrice,
+    };
+    setReservationInfo(fullReservationInfo);
+    navigate("/reservation/payment");
   };
 
   return (
@@ -121,20 +130,20 @@ const ReservationSeatPage = () => {
             <div className="summary-info">
               <p>
                 <strong>영화:</strong>{" "}
-                {reservationData.selectedMovie?.title || "F1 더 무비"}
+                {reservationInfo.selectedMovie?.title || "F1 더 무비"}
               </p>
               <p>
                 <strong>날짜:</strong>{" "}
-                {reservationData.selectedDate?.toLocaleDateString() ||
+                {reservationInfo.selectedDate?.toLocaleDateString() ||
                   "날짜 미선택"}
               </p>
               <p>
-                <strong>극장:</strong> {reservationData.selectedRegion}{" "}
-                {reservationData.selectedBranch}
+                <strong>극장:</strong> {reservationInfo.selectedRegion}{" "}
+                {reservationInfo.selectedBranch}
               </p>
               <p>
                 <strong>상영시간:</strong>{" "}
-                {reservationData.selectedTime || "시간 미선택"}
+                {reservationInfo.selectedTime || "시간 미선택"}
               </p>
             </div>
           </div>

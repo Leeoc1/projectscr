@@ -46,8 +46,7 @@
     border: 1px solid #ddd;
     border-top: none;
     box-sizing: border-box;
-    min-height: 753px;
-    height: 753px;
+    height: 100%;
     display: flex;
     border-radius: 0 0 8px 8px;
     margin-top: 0;
@@ -56,11 +55,13 @@
 .rptm-movie-list {
     min-width: 280px;
     max-width: 280px;
+    max-height: 500px;
     padding: 0;
     border-radius: 0 0 0 8px;
     border-right: 1px solid #ddd;
     height: 100%;
     background: none;
+    overflow-y: auto;
 }
 
 .rptm-movie-btn {

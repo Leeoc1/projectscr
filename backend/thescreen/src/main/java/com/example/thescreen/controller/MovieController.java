@@ -2,6 +2,7 @@ package com.example.thescreen.controller;
 
 import com.example.thescreen.entity.Movie;
 import com.example.thescreen.repository.MovieRepository;
+import com.example.thescreen.repository.MovieRepository.MovieCdNmList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,5 +41,15 @@ public class MovieController {
         }
         public List<Movie> getCurrentMovies() { return currentMovies; }
         public List<Movie> getUpcomingMovies() { return upcomingMovies; }
+    }
+
+
+    // 예매: 극장 -> 영화
+    // 예매할 때 선택가능한 영화 라인업들, 제목만 반환
+    @GetMapping("/list")
+    public List<MovieCdNmList> getMovieTitleList() {
+        List<MovieCdNmList> movieList = movieRepository.findAllBy();
+
+        return movieList;
     }
 } 

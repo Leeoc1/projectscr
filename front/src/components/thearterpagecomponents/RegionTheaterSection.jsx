@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const RegionTheaterSection = ({ filteredTheaters }) => {
+const RegionTheaterSection = ({ filteredCinemas }) => {
   const navigate = useNavigate();
 
   const handleScheduleClick = (theater) => {
@@ -17,29 +17,24 @@ const RegionTheaterSection = ({ filteredTheaters }) => {
   return (
     <section className="rts-section">
       <div className="rts-grid">
-        {filteredTheaters.map((theater) => (
-          <div key={theater.id} className="rts-card">
-            {theater.image && (
-              <div className="rts-image">
-                <img src={theater.image} alt={theater.name} />
-              </div>
-            )}
+        {filteredCinemas.map((cinema) => (
+          <div key={cinema.cinemacd} className="rts-card">
             <div className="rts-info">
-              <h3 className="rts-name">{theater.name}</h3>
-              <p className="rts-address">{theater.address}</p>
-              <p className="rts-phone">{theater.phone}</p>
-              <div className="rts-features">
-                {theater.features.map((feature, index) => (
+              <h3 className="rts-name">{cinema.cinemanm}</h3>
+              <p className="rts-address">{cinema.location}</p>
+              <p className="rts-phone">{cinema.phone}</p>
+              {/* <div className="rts-features">
+                {cinema.features.map((feature, index) => (
                   <span key={index} className="rts-feature-tag">
                     {feature}
                   </span>
                 ))}
-              </div>
+              </div> */}
             </div>
             <div className="rts-actions">
               <button
                 className="rts-btn primary"
-                onClick={() => handleScheduleClick(theater)}
+                onClick={() => handleScheduleClick(cinema)}
               >
                 상영시간표
               </button>

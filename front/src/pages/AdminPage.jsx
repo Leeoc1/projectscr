@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-=======
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
->>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
 import SalesOverview from "../admin/SalesOverview";
 import StaffManagement from "../admin/StaffManagement";
 import UserManagement from "../admin/UserManagement";
@@ -20,7 +15,6 @@ import AdminHeader from "../admin/AdminHeader";
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("sales");
   const navigate = useNavigate();
-<<<<<<< HEAD
   const location = useLocation();
 
   // URL에서 탭 정보 추출
@@ -53,8 +47,6 @@ const AdminPage = () => {
     setActiveTab(tab);
     navigate(`/admin/${tab}`);
   };
-=======
->>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
 
   const renderContent = () => {
     switch (activeTab) {
@@ -85,11 +77,7 @@ const AdminPage = () => {
     <div className="adp-dashboard">
       <AdminHeader />
       <div className="adp-layout">
-<<<<<<< HEAD
         <AdminSidebar activeTab={activeTab} setActiveTab={handleTabChange} />
-=======
-        <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
->>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
         <div className="adp-main">{renderContent()}</div>
       </div>
     </div>

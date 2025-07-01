@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-<<<<<<< HEAD
 import lombok.*;
 
 @Entity
@@ -14,17 +13,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-=======
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-
-@Entity
-@Table(name = "screens")
-@Getter
-@Setter
-@NoArgsConstructor
->>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
 public class Screen {
 
     @Id

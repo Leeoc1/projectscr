@@ -1,0 +1,494 @@
+/* 좌석(seat) 관련 스타일 예시 */
+.seat-container {
+  max-width: 700px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 40px 32px 32px 32px;
+}
+.seat-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 24px;
+  text-align: center;
+}
+.seat-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.seat-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: 1.5px solid #bbb;
+  background: #f3f4f6;
+  color: #222;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0 4px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.seat-btn.selected {
+  background: #222;
+  color: #fff;
+  border: 1.5px solid #222;
+}
+.seat-btn.occupied {
+  background: #bbb;
+  color: #fff;
+  border: 1.5px solid #bbb;
+  cursor: not-allowed;
+}
+
+/* 좌석 선택 페이지 전체 레이아웃 */
+.reservation-seat-page {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.reservation-seat-content {
+  padding-top: 80px;
+  min-height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
+}
+
+.reservation-seat-container {
+  width: 980px;
+  background: white;
+  margin: 0 auto;
+  padding: 0;
+  margin-top: 48px;
+  margin-bottom: 48px;
+  box-sizing: border-box;
+}
+
+/* 페이지 타이틀 */
+.page-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #222;
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 0 40px;
+}
+
+/* 진행바 스타일 */
+.progress-bar {
+  width: 100%;
+  max-width: 980px;
+  background: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.progress-steps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  z-index: 2;
+  margin: 0 50px;
+}
+
+.progress-step:first-child {
+  margin-left: 0;
+}
+
+.progress-step:last-child {
+  margin-right: 0;
+}
+
+.step-number {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 22px;
+  transition: all 0.3s ease;
+}
+
+.step-title {
+  font-size: 17px;
+  color: #6b7280;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.3s ease;
+  line-height: 1.2;
+}
+
+.progress-step.active .step-number {
+  background: #e91e63;
+  color: white;
+}
+
+.progress-step.active .step-title {
+  color: #e91e63;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.progress-step.completed .step-number {
+  background: rgba(233, 30, 99, 0.3);
+  color: #e91e63;
+}
+
+.progress-step.completed .step-title {
+  color: #e91e63;
+  font-weight: 500;
+}
+
+/* 예매 정보 요약 섹션 */
+.reservation-summary {
+  background: #f8f9fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 32px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.reservation-summary h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 16px;
+}
+
+.summary-info p {
+  margin: 8px 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.summary-info strong {
+  color: #222;
+  font-weight: 600;
+}
+
+/* 인원 선택 섹션 */
+.guest-selection {
+  background: #f8f9fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 32px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.guest-selection h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 20px;
+}
+
+.guest-counters {
+  display: flex;
+  gap: 32px;
+}
+
+.guest-counter {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-direction: column;
+}
+
+.guest-counter label {
+  font-weight: 600;
+  color: #222;
+  min-width: 60px;
+}
+
+.price-info {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 4px;
+}
+
+.total-guests {
+  text-align: center;
+  padding: 16px;
+  background-color: #fef3c7;
+  border-radius: 8px;
+  border: 2px solid #fbbf24;
+  margin-top: 20px;
+}
+
+.counter-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.counter-controls button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.counter-controls button:hover {
+  border-color: #fbbf24;
+  color: #fbbf24;
+}
+
+.counter-controls span {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #222;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* 좌석 선택 섹션 */
+.seat-selection {
+  background: #f8f9fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 32px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.seat-selection h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.screen {
+  background: #374151;
+  color: white;
+  text-align: center;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 32px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.row-label {
+  width: 30px;
+  font-weight: bold;
+  color: #222;
+  text-align: center;
+}
+
+.seat {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #e5e5e5;
+  background: white;
+  color: #222;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.seat:hover:not(.disabled) {
+  border-color: #fbbf24;
+  background-color: #fef3c7;
+}
+
+.seat.selected {
+  background: #fbbf24;
+  color: #222;
+  border-color: #fbbf24;
+  font-weight: bold;
+}
+
+.seat.disabled {
+  background: #f5f5f5;
+  color: #ccc;
+  border-color: #e5e5e5;
+  cursor: not-allowed;
+}
+
+/* 선택된 좌석 정보 */
+.selected-seats-info {
+  background: #f8f9fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 32px;
+  margin-left: 40px;
+  margin-right: 40px;
+  text-align: center;
+}
+
+.selected-seats-info h3 {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 12px;
+}
+
+.selected-seats-info p {
+  color: #666;
+  font-size: 1rem;
+}
+
+/* 가격 정보 섹션 */
+.price-summary {
+  background: #f8f9fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 32px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.price-summary h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.price-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.price-details p {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.total-price {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 2px solid #fbbf24;
+  text-align: center;
+}
+
+.total-price strong {
+  font-size: 1.3rem;
+  color: #222;
+}
+
+/* 하단 버튼 */
+.seat-page-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  padding: 0 40px 40px 40px;
+}
+
+.back-btn,
+.payment-btn {
+  padding: 16px 32px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.back-btn {
+  background: #6b7280;
+  color: white;
+}
+
+.back-btn:hover {
+  background: #4b5563;
+}
+
+.payment-btn {
+  background: #fbbf24;
+  color: #222;
+}
+
+.payment-btn:hover:not(:disabled) {
+  background: #f59e0b;
+}
+
+.payment-btn:disabled {
+  background: #ccc;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+  .reservation-seat-container {
+    width: 90%;
+    max-width: 980px;
+  }
+}
+
+@media (max-width: 768px) {
+  .reservation-seat-container {
+    width: 95%;
+    padding: 20px 0;
+  }
+
+  .guest-counters {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .seat-page-buttons {
+    flex-direction: column;
+  }
+
+  .seat {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+}

@@ -2,11 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../admincss/UserManagement.css";
 import "../pagecss/AdminPage.css";
 import "../admincss/Stable.css";
-<<<<<<< HEAD
 import { userAPI } from "../api/api";
-=======
-import { userAPI } from "../admindata/api.js";
->>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -16,7 +12,6 @@ const UserManagement = () => {
   useEffect(() => {
     setLoading(true);
     setError(null);
-<<<<<<< HEAD
     userAPI
       .getAllUsers()
       .then((data) => {
@@ -24,14 +19,6 @@ const UserManagement = () => {
         setLoading(false);
       })
       .catch((err) => {
-=======
-    userAPI.getAllUsers()
-      .then(data => {
-        setUsers(data);
-        setLoading(false);
-      })
-      .catch(err => {
->>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
         setError(err.message);
         setLoading(false);
       });
@@ -39,7 +26,6 @@ const UserManagement = () => {
 
   // 상태에 따라 CSS 클래스와 텍스트를 다르게 반환
   const getStatusClass = (status) => {
-<<<<<<< HEAD
     if (status === "탈퇴") return "adp-vacation";
     return "adp-active";
   };
@@ -47,15 +33,6 @@ const UserManagement = () => {
     if (userid === "admin") return "관리자";
     if (status === "탈퇴") return "탈퇴";
     return "활성";
-=======
-    if (status === '탈퇴') return 'adp-vacation';
-    return 'adp-active';
-  };
-  const getStatusText = (status, userid) => {
-    if (userid === 'admin') return '관리자';
-    if (status === '탈퇴') return '탈퇴';
-    return '활성';
->>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
   };
 
   if (loading) {
@@ -64,11 +41,7 @@ const UserManagement = () => {
         <div className="adp-header">
           <h2>회원 관리</h2>
         </div>
-<<<<<<< HEAD
         <div style={{ textAlign: "center", padding: "50px" }}>
-=======
-        <div style={{ textAlign: 'center', padding: '50px' }}>
->>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
           데이터를 불러오는 중...
         </div>
       </div>
@@ -81,11 +54,7 @@ const UserManagement = () => {
         <div className="adp-header">
           <h2>회원 관리</h2>
         </div>
-<<<<<<< HEAD
         <div style={{ textAlign: "center", padding: "50px", color: "red" }}>
-=======
-        <div style={{ textAlign: 'center', padding: '50px', color: 'red' }}>
->>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
           오류: {error}
         </div>
       </div>

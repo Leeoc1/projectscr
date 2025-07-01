@@ -114,14 +114,10 @@ const Login = () => {
           <div className="lgs-signup-link">
             <p>
               아직 회원이 아니신가요?
-<<<<<<< HEAD
               <button
                 className="lgs-link-btn"
                 onClick={() => navigate("/signup")}
               >
-=======
-              <button className="lgs-link-btn" onClick={() => navigate("/signup")}>
->>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
                 회원가입
               </button>
             </p>
@@ -138,8 +134,4 @@ const Login = () => {
   );
 };
 
-<<<<<<< HEAD
 export default Login;
-=======
-export default Login;
->>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105

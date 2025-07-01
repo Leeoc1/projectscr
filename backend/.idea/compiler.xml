@@ -2,7 +2,6 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-<<<<<<< HEAD
       <profile default="true" name="Default" enabled="true" />
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -10,22 +9,5 @@
       <module name="thescreen.main" target="17" />
       <module name="thescreen.test" target="17" />
     </bytecodeTargetLevel>
-=======
-      <profile name="Gradle Imported" enabled="true">
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.38/57f8f5e02e92a30fd21b80cbd426a4172b5f8e29/lombok-1.18.38.jar" />
-        </processorPath>
-        <module name="thescreen.main" />
-      </profile>
-    </annotationProcessing>
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="thescreen" options="-parameters" />
-      <module name="thescreen.main" options="-parameters" />
-      <module name="thescreen.test" options="-parameters" />
-    </option>
->>>>>>> ee44428e6f70464f49fbb3cad2d41128779cd105
   </component>
 </project>

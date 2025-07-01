@@ -80,4 +80,16 @@ export const getRegions = () =>
       return [];
     });
 
+//영화(사용자 페이지)
+export const getMovieForUser = async () => {
+  try {
+    const response = await api.get("/movies/userMovie");
+    console.log("getMovieForUser response:", response.data);
+    return Array.isArray(response.data) ? response.data : [];
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+    return [];
+  }
+};
+
 export default api;

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { boxofficeMovies, upcomingMovies } from "../../Data/MoviesData.js";
+import { getMovieForUser } from "../../api/api.js";
 import "../../componentcss/moviepagecomponentcss/Movies.css";
 
 const Movies = () => {
   const [activeTab, setActiveTab] = useState("boxoffice");
+  const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
 
   const handleReservationClick = (movie) => {
@@ -15,6 +17,14 @@ const Movies = () => {
       },
     });
   };
+
+useEffect(() => {
+  const fetchMovies = async () => {
+    const data = await getMovieForUser();
+    setMovies(data);
+  };
+  fetchMovies();
+}, []);
 
   return (
     <div className="mvs-section">
@@ -38,10 +48,10 @@ const Movies = () => {
       </div>
       <div className="mvs-grid">
         {activeTab === "boxoffice"
-          ? boxofficeMovies.map((movie) => (
-              <div className="mvs-card" key={movie.id}>
+          ? movies.map((movie) => (
+              <div className="mvs-card" key={movie.moviecd}>
                 <div className="mvs-poster">
-                  <img src={movie.poster} alt={movie.title} />
+                  <img src={movie.movieimage} alt={movie.movienm} />
                   <div className="mvs-overlay">
                     <div className="mvs-buttons">
                       <button className="mvs-btn">상세정보</button>
@@ -61,11 +71,11 @@ const Movies = () => {
                         {movie.rank}
                       </span>
                     )}
-                    {movie.title}
+                    {movie.movienm}
                   </h3>
                   <p className="mvs-genre">{movie.genre}</p>
-                  <p className="mvs-rating">{movie.rating}</p>
-                  <p className="mvs-duration">{movie.duration}</p>
+                  <p className="mvs-rating">{movie.isadult}</p>
+                  <p className="mvs-duration">{movie.runningtime}</p>
                 </div>
               </div>
             ))

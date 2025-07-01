@@ -41,4 +41,10 @@ public class MovieController {
         public List<Movie> getCurrentMovies() { return currentMovies; }
         public List<Movie> getUpcomingMovies() { return upcomingMovies; }
     }
+
+    @GetMapping("/userMovie")
+    public List<Movie> getMovieForUser () {
+        List<Movie> movies = movieRepository.findAll();
+        return movies;
+    }
 } 

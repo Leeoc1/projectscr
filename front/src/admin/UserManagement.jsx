@@ -1,72 +1,106 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../admincss/UserManagement.css";
 import "../pagecss/AdminPage.css";
-import "../admincss/Stable.css"
-import {MemberData} from "../admindata/UserData.js"
+import "../admincss/Stable.css";
+import { userAPI } from "../admindata/api.js";
 
-const StaffManagement = () => {
+const UserManagement = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+    userAPI
+      .getAllUsers()
+      .then((data) => {
+        setUsers(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  // 상태에 따라 CSS 클래스와 텍스트를 다르게 반환
   const getStatusClass = (status) => {
-    switch(status) {
-      case '탈퇴':
-        return 'adp-vacation';
-      case '비활성':
-        return 'adp-off'
-      default:
-        return 'adp-active';
-    }
+    if (status === "탈퇴") return "adp-vacation";
+    return "adp-active";
+  };
+  const getStatusText = (status, userid) => {
+    if (userid === "admin") return "관리자";
+    if (status === "탈퇴") return "탈퇴";
+    return "활성";
+  };
+
+  if (loading) {
+    return (
+      <div className="adp-content">
+        <div className="adp-header">
+          <h2>회원 관리</h2>
+        </div>
+        <div style={{ textAlign: "center", padding: "50px" }}>
+          데이터를 불러오는 중...
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="adp-content">
+        <div className="adp-header">
+          <h2>회원 관리</h2>
+        </div>
+        <div style={{ textAlign: "center", padding: "50px", color: "red" }}>
+          오류: {error}
+        </div>
+      </div>
+    );
   }
 
   return (
-  <div className="adp-content">
-    <div className="adp-header">
-      <h2>회원 관리</h2>
-      <button className="adp-btn-primary">직원 추가</button>
-    </div>
+    <div className="adp-content">
+      <div className="adp-header">
+        <h2>회원 관리</h2>
+        <button className="adp-btn-primary">회원 추가</button>
+      </div>
 
-    <span>총 회원 수 : {MemberData.length}</span>
-    <div className="usm-table-container">
-      <table className="usm-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>이름</th>
-            <th>이메일</th>
-            <th>전화번호</th>
-            <th>성별</th>
-            <th>생년월일</th>
-            <th>가입일</th>
-            <th>회원 등급</th>
-            <th>포인트</th>
-            <th>마지막 방문일</th>
-            <th>상태</th>
-          </tr>
-        </thead>
-        <tbody>
-          {MemberData.map((member) => (
+      <span>총 회원 수 : {users.length}</span>
+      <div className="usm-table-container">
+        <table className="usm-table">
+          <thead>
             <tr>
-              <td>{member.memberId}</td>
-              <td>{member.memberName}</td>
-              <td>{member.email}</td>
-              <td>{member.phone}</td>
-              <td>{member.gender}</td>
-              <td>{member.birthDate}</td>
-              <td>{member.joinDate}</td>
-              <td>{member.membershipLevel}</td>
-              <td>{member.points}</td>
-              <td>{member.lastVisitDate}</td>
-              <td>
-                <span className={`adp-status ${getStatusClass(member.status)}`}>{member.status}</span>
-              </td>
-              
+              <th>ID</th>
+              <th>이름</th>
+              <th>이메일</th>
+              <th>전화번호</th>
+              <th>생년월일</th>
+              <th>상태</th>
             </tr>
-          ))}
-
-          
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.userid}>
+                <td>{user.userid}</td>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                <td>{user.phone}</td>
+                <td>{user.birth}</td>
+                <td>
+                  <span className={`adp-status ${getStatusClass(user.status)}`}>
+                    {getStatusText(user.status, user.userid)}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-)};
+  );
+};
 
-export default StaffManagement;
+export default UserManagement;

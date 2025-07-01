@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { movieAPI } from "../../api/api";
+import { getMoviesForAdmin } from "../../api/api";
 import "../../componentcss/moviepagecomponentcss/Movies.css";
 
 const Movies = () => {
@@ -14,7 +14,7 @@ const Movies = () => {
     const fetchMovies = async () => {
       try {
         setLoading(true);
-        const data = await movieAPI.getMoviesForUser();
+        const data = await getMoviesForAdmin();
         setCurrentMovies(data.currentMovies || []);
         setUpcomingMovies(data.upcomingMovies || []);
       } catch (error) {
@@ -39,7 +39,9 @@ const Movies = () => {
           genre: movie.genre,
           rating: movie.isadult === "Y" ? "청소년 관람불가" : "전체 관람가",
           duration: `${movie.runningtime}분`,
-          poster: movie.posterUrl ? `http://localhost:3000${movie.posterUrl}` : "/images/movie.jpg"
+          poster: movie.posterUrl
+            ? `http://localhost:3000${movie.posterUrl}`
+            : "/images/movie.jpg",
         },
       },
     });
@@ -84,9 +86,13 @@ const Movies = () => {
           ? currentMovies.map((movie, index) => (
               <div className="mvs-card" key={movie.moviecd}>
                 <div className="mvs-poster">
-                  <img 
-                    src={movie.posterUrl ? `http://localhost:3000${movie.posterUrl}` : "/images/movie.jpg"} 
-                    alt={movie.movienm} 
+                  <img
+                    src={
+                      movie.posterUrl
+                        ? `http://localhost:3000${movie.posterUrl}`
+                        : "/images/movie.jpg"
+                    }
+                    alt={movie.movienm}
                   />
                   <div className="mvs-overlay">
                     <div className="mvs-buttons">
@@ -118,9 +124,13 @@ const Movies = () => {
           : upcomingMovies.map((movie) => (
               <div className="mvs-card" key={movie.moviecd}>
                 <div className="mvs-poster">
-                  <img 
-                    src={movie.posterUrl ? `http://localhost:3000${movie.posterUrl}` : "/images/movie.jpg"} 
-                    alt={movie.movienm} 
+                  <img
+                    src={
+                      movie.posterUrl
+                        ? `http://localhost:3000${movie.posterUrl}`
+                        : "/images/movie.jpg"
+                    }
+                    alt={movie.movienm}
                   />
                   <div className="mvs-overlay">
                     <div className="mvs-buttons">

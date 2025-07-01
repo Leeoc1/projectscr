@@ -1,9 +1,6 @@
 package com.example.thescreen.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -19,12 +16,26 @@ public class Screen {
     @Column(length = 20)
     private String screencd; // 상영관 코드 (PK)
 
-    @Column(length = 50)
-    private String screenname; // 상영관 이름 (ex: 2D 1관 등)
+    @Column(length = 20)
+    private String cinemacd; // 소속 지점 코드
+
+    @Column(length = 10)
+    private String screenType; // 상영관 유형 (ex: 2D, 3D, IMAX, 4DX)
+
+    @Column(length = 10)
+    private String screenNumber; // 관 번호 (ex: 1관, 2관)
 
     @Column
-    private int seatcount; // 좌석 수
+    private int allcount; // 좌석 수
 
-    @Column(length = 20)
-    private String cinemacd; // 소속 지점 코드 (FK는 설정하지 않고 역할만)
+    @Column(columnDefinition = "INTEGER DEFAULT 0")
+    private int reservationseat; // 예약된 좌석 수
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(50) DEFAULT '운영중'")
+    private ScreenStatus scstatus; // 상영관 상태
+
+    public enum ScreenStatus {
+        운영중, 점검중;
+    }
 }

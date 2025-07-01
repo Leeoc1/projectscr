@@ -17,23 +17,43 @@ public class ScreenData {
     @PostConstruct
     public void initSampleData() {
         if (screenRepository.count() == 0) {
-            String[] screenNames = {
-                    "2D 1관", "3D 2관", "IMAX 1관", "4DX 1관", "2D 3관",
-                    "3D 1관", "2D 2관", "IMAX 2관", "4DX 2관", "2D 4관"
+            String[] screenTypes = {
+                    "2D", "3D", "IMAX", "4DX", "2D",
+                    "3D", "IMAX", "4DX", "2D", "3D",
+                    "2D", "4DX", "IMAX", "2D", "3D"
+            };
+            String[] screenNumbers = {
+                    "1관", "1관", "1관", "1관", "2관",
+                    "2관", "2관", "2관", "3관", "3관",
+                    "4관", "3관", "3관", "5관", "4관"
             };
             int[] seatCounts = {
-                    100, 80, 120, 90, 110,
-                    95, 85, 130, 100, 105
+                    120, 90, 150, 100, 110,
+                    95, 130, 85, 115, 80,
+                    105, 90, 140, 100, 95
             };
             String[] cinemaCodes = {
                     "THR001", "THR001", "THR002", "THR002", "THR003",
-                    "THR004", "THR004", "THR005", "THR006", "THR007"
+                    "THR003", "THR004", "THR004", "THR005", "THR005",
+                    "THR006", "THR006", "THR007", "THR007", "THR008"
+            };
+            int[] reservationSeats = {
+                    0, 10, 0, 5, 0,
+                    0, 20, 0, 0, 15,
+                    0, 0, 0, 5, 0
+            };
+            Screen.ScreenStatus[] statuses = {
+                    Screen.ScreenStatus.운영중, Screen.ScreenStatus.운영중, Screen.ScreenStatus.운영중,
+                    Screen.ScreenStatus.점검중, Screen.ScreenStatus.운영중, Screen.ScreenStatus.운영중,
+                    Screen.ScreenStatus.운영중, Screen.ScreenStatus.점검중, Screen.ScreenStatus.운영중,
+                    Screen.ScreenStatus.운영중, Screen.ScreenStatus.운영중, Screen.ScreenStatus.운영중,
+                    Screen.ScreenStatus.점검중, Screen.ScreenStatus.운영중, Screen.ScreenStatus.운영중
             };
 
             List<Screen> screens = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 15; i++) {
                 String screenCode = String.format("SCR%03d", i + 1); // SCR001, SCR002, ...
-                screens.add(new Screen(screenCode, screenNames[i], seatCounts[i], cinemaCodes[i]));
+                screens.add(new Screen(screenCode, cinemaCodes[i], screenTypes[i], screenNumbers[i], seatCounts[i], reservationSeats[i], statuses[i]));
             }
 
             screenRepository.saveAll(screens);

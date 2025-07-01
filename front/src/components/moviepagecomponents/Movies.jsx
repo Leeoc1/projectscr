@@ -1,9 +1,20 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { boxofficeMovies, upcomingMovies } from "../../Data/MoviesData.js";
 import "../../componentcss/moviepagecomponentcss/Movies.css";
 
 const Movies = () => {
   const [activeTab, setActiveTab] = useState("boxoffice");
+  const navigate = useNavigate();
+
+  const handleReservationClick = (movie) => {
+    // 영화 정보를 state로 전달하여 ReservationPlacePage로 이동
+    navigate("/reservation/place", {
+      state: {
+        selectedMovie: movie,
+      },
+    });
+  };
 
   return (
     <div className="mvs-section">
@@ -34,7 +45,12 @@ const Movies = () => {
                   <div className="mvs-overlay">
                     <div className="mvs-buttons">
                       <button className="mvs-btn">상세정보</button>
-                      <button className="mvs-btn">예매하기</button>
+                      <button
+                        className="mvs-btn"
+                        onClick={() => handleReservationClick(movie)}
+                      >
+                        예매하기
+                      </button>
                     </div>
                   </div>
                 </div>

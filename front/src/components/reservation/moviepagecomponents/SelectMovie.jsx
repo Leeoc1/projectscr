@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../../pubcomponent/Header";
 import "../../../componentcss/reservationcss/moviepagecomponentcss/SelectMovie.css";
 
 const SelectMovie = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const navigate = useNavigate();
   const [data, setData] = useState({
     selectedMovie: null,
     selectedTheater: null,
@@ -12,6 +14,15 @@ const SelectMovie = () => {
     selectedSeats: [],
     guestCount: { adult: 1, child: 0 },
   });
+
+  const handleReservationClick = (movie) => {
+    // 영화 정보를 state로 전달하여 ReservationPlacePage로 이동
+    navigate("/reservation/place", {
+      state: {
+        selectedMovie: movie,
+      },
+    });
+  };
 
   const handleMovieSelect = (movie) => {
     setData({ ...data, selectedMovie: movie });
@@ -81,7 +92,7 @@ const SelectMovie = () => {
             </div>
             <button
               className="rsms-select-btn rsms-reserve-btn"
-              onClick={() => handleMovieSelect(movie)}
+              onClick={() => handleReservationClick(movie)}
             >
               예매
             </button>
@@ -213,7 +224,9 @@ const SelectMovie = () => {
         <div className="rsms-seats-grid">
           {Array.from({ length: 8 }, (_, row) => (
             <div key={row} className="rsms-seat-row">
-              <span className="rsms-row-label">{String.fromCharCode(65 + row)}</span>
+              <span className="rsms-row-label">
+                {String.fromCharCode(65 + row)}
+              </span>
               {Array.from({ length: 12 }, (_, seat) => (
                 <button
                   key={seat}
@@ -266,8 +279,7 @@ const SelectMovie = () => {
         <div className="rsms-summary-item">
           <span>인원:</span>
           <span>
-            성인 {data.guestCount.adult}명, 어린이{" "}
-            {data.guestCount.child}명
+            성인 {data.guestCount.adult}명, 어린이 {data.guestCount.child}명
           </span>
         </div>
         <div className="rsms-summary-item">
@@ -347,10 +359,7 @@ const SelectMovie = () => {
                 <button
                   className="rsms-next-btn rsms-btn"
                   onClick={() =>
-                    handleSeatSelect(
-                      data.selectedSeats,
-                      data.guestCount
-                    )
+                    handleSeatSelect(data.selectedSeats, data.guestCount)
                   }
                 >
                   다음 단계

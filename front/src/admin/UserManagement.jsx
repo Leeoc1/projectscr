@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../admincss/UserManagement.css";
 import "../pagecss/AdminPage.css";
 import "../admincss/Stable.css";
-import { userAPI } from "../admindata/api.js";
+import { userAPI } from "../api/api";
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);

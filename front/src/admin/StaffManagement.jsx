@@ -2,22 +2,20 @@ import React, { useEffect, useState } from "react";
 import "../admincss/StaffManagement.css";
 import "../pagecss/AdminPage.css";
 import "../admincss/Stable.css";
-import { getStaffs } from "../admindata/api.js";
+import { getStaffs } from "../api/api";
 
 const StaffManagement = () => {
   const [staffs, setStaffs] = useState([]);
 
-  const stafflist = async () => {
-    try {
-      const response = await getStaffs();
-      setStaffs(response.data);
-    } catch (e) {
-      console.log("스탭 목록 불러오기 실패");
-    }
-  };
-
   useEffect(() => {
-    stafflist();
+    getStaffs()
+      .then((response) => {
+        setStaffs(response);
+      })
+      .catch((error) => {
+        console.error("스탭 목록 불러오기 실패:", error);
+        setStaffs([]);
+      });
   }, []);
 
   const getStatusClass = (status) => {

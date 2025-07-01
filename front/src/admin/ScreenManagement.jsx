@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ScreenData } from "../admindata/TheaterData";
 import "../admincss/ScreenManagement.css";
 import "../pagecss/AdminPage.css";
-import { getScreens } from "../admindata/api";
+import { getScreens } from "../api/api";
 
 const ScreenManagement = () => {
   const [screens, setScreens] = useState([]);

@@ -13,3 +13,5 @@ export const userAPI = {
     return response.data;
   },
 };
+
+export const getStaffs = () => api.get("/staff");

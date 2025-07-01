@@ -15,9 +15,6 @@ public class Reservation {
     @Column(length = 20) // 기본 키: reservationcd, 길이 20
     private String reservationcd;
 
-    // @Column(length = 20) // userid, 길이 20, 선택 입력
-    // private String userid;
-
     @ManyToOne
     @JoinColumn(name = "userid") // 외래 키: userid
     private User user;

@@ -136,10 +136,8 @@ const ReservationPlacePage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const selectedMovie = location.state?.selectedMovie || {
-    movienm: "F1 더 무비",
-    isadult: "N",
-    genre: "액션",
-    runningtime: 138,
+    title: "F1 더 무비",
+    grade: "12",
   };
 
   // 날짜 상태
@@ -359,15 +357,10 @@ const ReservationPlacePage = () => {
                       {/* 영화 등급, 제목, 상영관 타입 */}
                       <div className="movie-info-box">
                         <span className="movie-grade">
-                          {selectedMovie.isadult === "Y"
-                            ? "청소년 관람불가"
-                            : "전체 관람가"}
+                          {selectedMovie.grade}
                         </span>
                         <span className="movie-title">
-                          {selectedMovie.movienm}
-                        </span>
-                        <span className="movie-genre">
-                          {selectedMovie.genre} | {selectedMovie.runningtime}분
+                          {selectedMovie.title}
                         </span>
                       </div>
                       {screens.map((screen) => (

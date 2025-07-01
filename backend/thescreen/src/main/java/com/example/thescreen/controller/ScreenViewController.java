@@ -18,7 +18,7 @@ public class ScreenViewController {
     @Autowired
     private ScreenService screenService;
 
-    @GetMapping("/screens")
+    @GetMapping("/api/screens")
     public List<ScreenDTO> getScreens(@RequestParam(value = "regionCode", required = false) String regionCode) {
         return regionCode != null
                 ? screenService.getScreenDataByRegion(regionCode)

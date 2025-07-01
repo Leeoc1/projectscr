@@ -11,16 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class RegionController {
     @Autowired
     private RegionRepository regionRepository;
 
 
     @GetMapping("/regions")
-    public String getRegions(Model model) {
+    public List<Region> getRegions() {
         List<Region> regions = regionRepository.findAll();
-        model.addAttribute("regions", regions);
-        return "regions-list";
+        return regions;
     }
 }

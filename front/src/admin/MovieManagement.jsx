@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { movieAPI } from "../api/api";
+import { getMoviesForAdmin } from "../api/api";
 import "../admincss/MovieManagement.css";
 import "../pagecss/AdminPage.css";
 
@@ -10,7 +10,7 @@ const MovieManagement = () => {
 
   useEffect(() => {
     const fetchMovies = async () => {
-      const data = await movieAPI.getMoviesForAdmin();
+      const data = await getMoviesForAdmin.getMoviesForAdmin();
       setCurrentMovies(data.currentMovies || []);
       setUpcomingMovies(data.upcomingMovies || []);
     };

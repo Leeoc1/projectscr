@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../admincss/UserManagement.css";
 import "../pagecss/AdminPage.css";
 import "../admincss/Stable.css";
-import { userAPI } from "../api/api";
+import { getAllUsers } from "../api/api";
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -12,7 +12,7 @@ const UserManagement = () => {
   useEffect(() => {
     setLoading(true);
     setError(null);
-    userAPI
+    getAllUsers
       .getAllUsers()
       .then((data) => {
         setUsers(data);

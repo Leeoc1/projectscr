@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:8080", "http://localhost:3000"})
+@CrossOrigin(origins = { "http://localhost:8080", "http://localhost:3000" })
 public class ScreenViewController {
     @Autowired
     private ScreenService screenService;
 
-    @GetMapping("/api/screens")
-    public List<ScreenDTO> getScreens(@RequestParam(value = "regionCode", required = false) String regionCode) {
-        return regionCode != null
+        @GeMapp public List<ScreenDTO> getS       
+
                 ? screenService.getScreenDataByRegion(regionCode)
                 : screenService.getAllScreenData();
     }

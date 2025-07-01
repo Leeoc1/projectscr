@@ -27,8 +27,7 @@ public class CinemaData {
                     new Cinema("THR005", "시네맥스 대구점", "대구광역시 중구 동성로 2길 80", "04"),
                     new Cinema("THR006", "시네맥스 인천점", "인천광역시 중구 제물량로 266", "02"),
                     new Cinema("THR007", "시네맥스 분당점", "경기도 성남시 분당구 정자로 178", "08"),
-                    new Cinema("THR008", "시네맥스 대전점", "대전광역시 중구 중앙로 100", "03")
-            );
+                    new Cinema("THR008", "시네맥스 대전점", "대전광역시 중구 중앙로 100", "03"));
 
             // 리스트를 한 번에 저장
             cinemaRepository.saveAll(cinemas);

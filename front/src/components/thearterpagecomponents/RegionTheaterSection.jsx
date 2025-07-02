@@ -4,16 +4,21 @@ import { useNavigate } from "react-router-dom";
 const RegionTheaterSection = ({ filteredCinemas }) => {
   const navigate = useNavigate();
 
-  const handleScheduleClick = (theater) => {
+  const handleScheduleClick = (cinema) => {
     // 극장 정보를 state로 전달하여 ReservationPlaceToMoviePage로 이동
-    navigate("/reservation/movie", {
-      state: {
-        selectedRegion: theater.region,
-        selectedBranch: theater.name,
-      },
-    });
+    // navigate("/reservation/movie", {
+    //   state: {
+    //     selectedRegion: theater.region,
+    //     selectedBranch: theater.name,
+    //   },
+    // });
+
+    sessionStorage.setItem("cinemacd", cinema.cinemacd);
+    sessionStorage.setItem("cinemanm", cinema.cinemanm);
+    navigate("/reservation/movie");
   };
 
+  
   return (
     <section className="rts-section">
       <div className="rts-grid">

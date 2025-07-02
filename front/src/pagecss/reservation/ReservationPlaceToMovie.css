@@ -307,18 +307,11 @@
 
 .rptm-movie-title {
     width: 280px;
-    border-radius: 8px 0 0 0;
     display: inline-block;
-}
-
-.rptm-branch-title {
-    width: 140px;
-    border-radius: 0 8px 0 0;
 }
 
 .rptm-time-title {
     width: 700px;
-    border-radius: 0 8px 0 0;
     display: inline-block;
 }
 
@@ -327,14 +320,9 @@
     margin: 0 auto;
 }
 
-.rptm-theater-section {
+.rptm-movie-section {
     width: 980px;
     margin: 0 auto 32px auto;
-}
-
-.rptm-theater-title,
-.rptm-time-title {
-    border-radius: 0 !important;
 }
 
 .rptm-time-list-area {

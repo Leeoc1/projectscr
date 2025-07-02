@@ -63,6 +63,31 @@ const DateSelector = () => {
 
   const canGoPrev = offset > 0;
 
+  // 선택된 날짜 정보 저장
+  const handleSetSelectedDate = (item) => {
+    const year = item.date.getFullYear();
+    const month = item.date.getMonth();
+    const date = item.date.getDate();
+
+    // 현재 선택한 날짜 
+    setSelectedDateObj(
+      new Date(
+        year,
+        month,
+        date
+      )
+    );
+    
+    // 현재 선택한 날짜 세션 저장
+    sessionStorage.setItem("selectedYear", item.date.getFullYear());
+    sessionStorage.setItem("selectedMonth", item.date.getMonth() + 1);
+    sessionStorage.setItem("selectedDate", item.date.getDate());
+    sessionStorage.setItem("selectedDay", item.day);
+    sessionStorage.setItem("selectedFullDate", `${year}-${String(month + 1).padStart(2, "0")}-${String(date).padStart(2, "0")}`);
+
+    console.log(item.date);
+  }
+
   return (
     <div className="rptm-date-selector-section">
       <div className="rptm-date-header">{headerText}</div>
@@ -90,13 +115,7 @@ const DateSelector = () => {
                 }
                 onClick={() =>
                   !item.isDisabled &&
-                  setSelectedDateObj(
-                    new Date(
-                      item.date.getFullYear(),
-                      item.date.getMonth(),
-                      item.date.getDate()
-                    )
-                  )
+                  handleSetSelectedDate(item)
                 }
               >
                 <div className="rptm-date-num">{item.date.getDate()}</div>

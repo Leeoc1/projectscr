@@ -57,11 +57,16 @@ const ReservationPlaceToMoviePage = () => {
             </div>
           </div>
 
+          {/* 현재 선택한 극장 이름 */}
+          <div>
+            <h1>{sessionStorage.getItem("cinemanm")}</h1>
+          </div>
+
           {/* 날짜 선택 */}
           <DateSelector />
 
           {/* 영화 및 상영관 선택 */}
-          <div className="rptm-theater-section">
+          <div className="rptm-movie-section">
             <div className="rptm-movie-title rptm-section-title">영화선택</div>
             <div className="rptm-time-title rptm-section-title">상영시간</div>
             <div className="rptm-movie-selector">

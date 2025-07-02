@@ -186,7 +186,9 @@ const Register = () => {
               {validationState.usernameChecked && (
                 <p
                   className={`rg-validation-message ${
-                    validationState.usernameAvailable ? "rg-success" : "rg-error"
+                    validationState.usernameAvailable
+                      ? "rg-success"
+                      : "rg-error"
                   }`}
                 >
                   {validationState.usernameAvailable
@@ -288,7 +290,10 @@ const Register = () => {
           <div className="rg-login-link">
             <p>
               이미 회원이신가요?
-              <button className="rg-link-btn" onClick={() => navigate("/login")}>
+              <button
+                className="rg-link-btn"
+                onClick={() => navigate("/login")}
+              >
                 로그인
               </button>
             </p>

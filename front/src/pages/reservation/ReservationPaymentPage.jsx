@@ -1,39 +1,46 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Header from "../../pubcomponent/Header";
 import "../../pagecss/reservation/ReservationPaymentPage.css";
+import { getReservationInfo, clearReservationInfo } from "../../utils/reservationStorage";
 
 const ReservationPaymentPage = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const data = location.state || {};
+  const reservationInfo = getReservationInfo();
 
-  // 예시 데이터 (실제 데이터는 location.state에서 받아옴)
-  const movie = data.selectedMovie || {
+  // 반드시 최상단에서 Hook 호출!
+  const [payMethod, setPayMethod] = useState("card");
+
+  // 그 다음에 조건부 이동 처리
+  if (!reservationInfo.selectedSeats || !reservationInfo.guestCount) {
+    navigate("/reservation/seat");
+    return null;
+  }
+
+  // 예매 정보에서 값 추출
+  const movie = reservationInfo.selectedMovie || {
     title: "F1 더 무비",
     poster: "/images/F1_TheMovie.png",
   };
-  const theater = data.selectedRegion
-    ? `${data.selectedRegion} / ${data.selectedBranch}`
+  const theater = reservationInfo.selectedRegion
+    ? `${reservationInfo.selectedRegion} / ${reservationInfo.selectedBranch}`
     : "CGV 플러스 / 6관";
-  const date = data.selectedDate
-    ? typeof data.selectedDate === "string"
-      ? data.selectedDate
-      : data.selectedDate.toLocaleDateString()
+  const date = reservationInfo.selectedDate
+    ? typeof reservationInfo.selectedDate === "string"
+      ? reservationInfo.selectedDate
+      : reservationInfo.selectedDate.toLocaleDateString()
     : "2025년 6월 29일(일)";
-  const time = data.selectedTime || "22:20 ~ 25:05";
-  const people = data.guestCount
-    ? data.guestCount.adult + data.guestCount.child + data.guestCount.senior
+  const time = reservationInfo.selectedTime || "22:20 ~ 25:05";
+  const people = reservationInfo.guestCount
+    ? reservationInfo.guestCount.adult + reservationInfo.guestCount.child + reservationInfo.guestCount.senior
     : 1;
-  const seat = data.selectedSeats ? data.selectedSeats.join(", ") : "11번";
-  const price = data.totalPrice ? data.totalPrice.toLocaleString() : "15,000";
+  const seat = reservationInfo.selectedSeats ? reservationInfo.selectedSeats.join(", ") : "11번";
+  const price = reservationInfo.totalPrice ? reservationInfo.totalPrice.toLocaleString() : "15,000";
 
-  // 결제수단 선택 상태
-  const [payMethod, setPayMethod] = useState("card");
-
-  // 결제하기 버튼 클릭 시 예매완료 페이지로 이동
+  // 결제하기 버튼 클릭 시 예매완료 페이지로 이동 및 세션스토리지 정보 삭제
   const handlePay = () => {
-    navigate("/reservation/success", { state: data });
+    clearReservationInfo();
+    navigate("/reservation/success");
   };
 
   return (

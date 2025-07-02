@@ -16,6 +16,20 @@ public class MovieController {
     @Autowired
     private MovieRepository movieRepository;
 
+    // 사용자 페이지: 현재상영작/상영예정작 반환
+    @GetMapping("/user")
+    public MoviesResponse getMoviesForUser() {
+        List<Movie> allMovies = movieRepository.findAll();
+        LocalDate today = LocalDate.now();
+        List<Movie> currentMovies = allMovies.stream()
+                .filter(m -> m.getReleasedate() != null && !m.getReleasedate().isAfter(today))
+                .collect(Collectors.toList());
+        List<Movie> upcomingMovies = allMovies.stream()
+                .filter(m -> m.getReleasedate() != null && m.getReleasedate().isAfter(today))
+                .collect(Collectors.toList());
+        return new MoviesResponse(currentMovies, upcomingMovies);
+    }
+
     // 관리자 페이지: 현재상영작/상영예정작만 반환
     @GetMapping("/admin")
     public MoviesResponse getMoviesForAdmin() {

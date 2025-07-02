@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// axios 인스턴스 생성 (baseURL 설정)
+// API 설정 및 기본 설정
 const api = axios.create({
   baseURL: "http://localhost:8080",
   timeout: 10000,
@@ -9,17 +9,44 @@ const api = axios.create({
   },
 });
 
-// 영화 관련 API 함수들
-export const movieAPI = {
-  // 관리자용: 현재상영작/상영예정작만 가져오기
-  getMoviesForAdmin: async () => {
-    try {
-      const response = await api.get("/movies/admin");
-      return response.data;
-    } catch (error) {
+// 현재상영작과 상영예정작 목록 조회
+export const getMoviesForAdmin = () =>
+  api
+    .get("/movies/admin")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching movies for admin:", error);
       return { currentMovies: [], upcomingMovies: [] };
-    }
-  },
-};
+    });
+
+// 지역별 상영관 목록 조회
+export const getScreens = (regionCode) =>
+  api
+    .get("/api/screens", { params: { regionCode } })
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching screens:", error);
+      return [];
+    });
+
+// 직원 목록 조회
+export const getStaffs = () =>
+  api
+    .get("/staff")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching staffs:", error);
+      return [];
+    });
+
+// 전체 사용자 목록 조회
+export const getAllUsers = () =>
+  api
+    .get("/users/list")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching users:", error);
+      return [];
+    });
 
 export default api;

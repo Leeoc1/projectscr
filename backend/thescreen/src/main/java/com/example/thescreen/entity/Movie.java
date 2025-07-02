@@ -37,6 +37,9 @@ public class Movie {
     @Column(length = 200)
     private String posterUrl;
 
+    @Column(length = 20)
+    private String runningscreen;
+
     @Enumerated(EnumType.STRING)
     private IsAdult isadult;
 

@@ -114,7 +114,10 @@ const Login = () => {
           <div className="lgs-signup-link">
             <p>
               아직 회원이 아니신가요?
-              <button className="lgs-link-btn" onClick={() => navigate("/signup")}>
+              <button
+                className="lgs-link-btn"
+                onClick={() => navigate("/signup")}
+              >
                 회원가입
               </button>
             </p>

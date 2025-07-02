@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -79,14 +79,16 @@ const DateSelector = () => {
     );
     
     // 현재 선택한 날짜 세션 저장
-    sessionStorage.setItem("selectedYear", item.date.getFullYear());
-    sessionStorage.setItem("selectedMonth", item.date.getMonth() + 1);
-    sessionStorage.setItem("selectedDate", item.date.getDate());
-    sessionStorage.setItem("selectedDay", item.day);
+    // sessionStorage.setItem("selectedYear", item.date.getFullYear());
+    // sessionStorage.setItem("selectedMonth", item.date.getMonth() + 1);
+    // sessionStorage.setItem("selectedDate", item.date.getDate());
+    // sessionStorage.setItem("selectedDay", item.day);
     sessionStorage.setItem("selectedFullDate", `${year}-${String(month + 1).padStart(2, "0")}-${String(date).padStart(2, "0")}`);
-
-    console.log(item.date);
   }
+
+  useEffect(() => {
+    sessionStorage.setItem("selectedFullDate", `${baseDate.getFullYear()}-${String(baseDate.getMonth() + 1).padStart(2, "0")}-${String(baseDate.getDate()).padStart(2, "0")}`);
+    },[]);
 
   return (
     <div className="rptm-date-selector-section">

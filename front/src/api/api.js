@@ -33,7 +33,7 @@ export const getMovieList = () =>
 // 극장 목록 조회
 export const getCinemas = () =>
   api
-    .get("/cinema")
+    .get("/cinemas")
     .then((response) => response.data)
     .catch((error) => {
       console.error("Error fetching cinema:", error);
@@ -77,6 +77,17 @@ export const getRegions = () =>
     .then((response) => response.data)
     .catch((error) => {
       console.error("Error fetching regions:", error);
+      return [];
+    });
+
+
+// schedule view 불러오기
+export const getSchedules = (cinemaCd, date) =>
+  api
+    .get("/schedules", { params: { cinemaCd, date } })
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching schedules:", error);
       return [];
     });
 

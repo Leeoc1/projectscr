@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
   <diagram name="페이지-1" id="VFNtV6nY1BKfFca8tBw0">
-    <mxGraphModel dx="922" dy="874" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="6000" pageHeight="6000" math="0" shadow="0">
+    <mxGraphModel dx="1085" dy="1028" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="6000" pageHeight="6000" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -778,8 +778,8 @@
             <mxPoint x="480.914" y="1427.9899999999998" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="c5p4AmMeeu3fMXTemKIO-2" value="스케줄 코드&lt;div&gt;상영 시작 날짜&lt;/div&gt;&lt;div&gt;상영 시작 시간&lt;/div&gt;&lt;div&gt;영화 제목&lt;/div&gt;&lt;div&gt;상영 상영관&lt;/div&gt;&lt;div&gt;상영 시간(러닝타임)&lt;/div&gt;&lt;div&gt;상영관&lt;/div&gt;&lt;div&gt;상영 스크린&lt;/div&gt;&lt;div&gt;전체 좌석 수&lt;/div&gt;&lt;div&gt;예약 좌석 수&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="790" y="1650" width="120" height="200" as="geometry" />
+        <mxCell id="c5p4AmMeeu3fMXTemKIO-2" value="스케줄 코드&lt;div&gt;상영 시작 날짜&lt;/div&gt;&lt;div&gt;상영 시작 시간&lt;/div&gt;&lt;div&gt;영화 제목&lt;/div&gt;&lt;div&gt;상영 상영관&lt;/div&gt;&lt;div&gt;상영 시간(러닝타임)&lt;/div&gt;&lt;div&gt;상영관&lt;/div&gt;&lt;div&gt;상영 스크린&lt;/div&gt;&lt;div&gt;전체 좌석 수&lt;/div&gt;&lt;div&gt;예약 좌석 수&lt;/div&gt;&lt;div&gt;지점명&lt;/div&gt;&lt;div&gt;지역&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="790" y="1655" width="120" height="190" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

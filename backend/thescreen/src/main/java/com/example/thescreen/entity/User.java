@@ -25,7 +25,6 @@ public class User {
     @Column(length = 20) // 전화번호, 선택 입력
     private String phone;
 
-    @Column(length = 20)
     private String birth;  // 생년월일, 선택 입력
 
     @Column(length = 10) // 회원 상태: 활성, 탈퇴

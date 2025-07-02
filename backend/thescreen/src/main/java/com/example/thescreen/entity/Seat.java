@@ -1,31 +1,34 @@
-// package com.example.thescreen.entity;
+package com.example.thescreen.entity;
 
-// import jakarta.persistence.*;
-// import lombok.Getter;
-// import lombok.NoArgsConstructor;
-// import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-// @Entity
-// @Table(name = "seat")
-// @Getter
-// @Setter
-// @NoArgsConstructor
-// public class Seat {
+@Entity
+@Table(name = "seat")
+@Getter
+@NoArgsConstructor
+public class Seat {
 
+    @Id
+    @Column(length = 20)
+    private String seatcd; // 좌석 코드 (PK)
 
-//     @Column
-//     private int seatnum; // 좌석 번호
+    @Column(length = 20)
+    private String screencd; // 상영관 코드
 
-//     @Column(length = 20)
-//     private String schedulecd; // 상영 스케줄 코드
+    @Column(length = 2)
+    private String seatrow; // 좌석 행 (A~Z)
 
-//     @Enumerated(EnumType.STRING)
-//     private SeatStatus status; // 좌석 상태
+    @Column
+    private int seatnum; // 좌석 번호
 
-//     public enum SeatStatus {
-//         AVAILABLE,    // 예약 가능
-//         RESERVED      // 예약됨
-//     }
-// }
+    @Enumerated(EnumType.STRING)
+    private IsReservation isreservation;// 예약 여부 ("Y" or "N")
+
+    public enum IsReservation {
+        Y, N
+    }
+}
 
 

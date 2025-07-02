@@ -11,23 +11,40 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/movies")
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class MovieController {
 
     @Autowired
     private MovieRepository movieRepository;
 
-    // 사용자 페이지: 현재상영작/상영예정작 반환
-    @GetMapping("/user")
-    public MoviesResponse getMoviesForUser() {
+    // 전체 영화 목록 조회
+    @GetMapping("/movies")
+    public List<Movie> getAllMovies() {
+        return movieRepository.findAll();
+    }
+
+    // 현재상영작 조회
+    @GetMapping("/current")
+    public List<Movie> getCurrentMovies() {
         List<Movie> allMovies = movieRepository.findAll();
         LocalDate today = LocalDate.now();
         List<Movie> currentMovies = allMovies.stream()
                 .filter(m -> m.getReleasedate() != null && !m.getReleasedate().isAfter(today))
                 .collect(Collectors.toList());
+        System.out.println("현재상영작 수: " + currentMovies.size());
+        return currentMovies;
+    }
+
+    // 상영예정작 조회
+    @GetMapping("/upcoming")
+    public List<Movie> getUpcomingMovies() {
+        List<Movie> allMovies = movieRepository.findAll();
+        LocalDate today = LocalDate.now();
         List<Movie> upcomingMovies = allMovies.stream()
                 .filter(m -> m.getReleasedate() != null && m.getReleasedate().isAfter(today))
                 .collect(Collectors.toList());
-        return new MoviesResponse(currentMovies, upcomingMovies);
+        System.out.println("상영예정작 수: " + upcomingMovies.size());
+        return upcomingMovies;
     }
 
     // 관리자 페이지: 현재상영작/상영예정작만 반환

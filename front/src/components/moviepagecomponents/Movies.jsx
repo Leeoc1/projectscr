@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getMoviesForAdmin } from "../../api/api";
+import { getCurrentMovies, getUpcomingMovies } from "../../api/api";
 import "../../componentcss/moviepagecomponentcss/Movies.css";
 
 const Movies = () => {
   const [activeTab, setActiveTab] = useState("boxoffice");
   const [currentMovies, setCurrentMovies] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // 초기 로드 시 모든 데이터를 미리 로드
   useEffect(() => {
-    const fetchMovies = async () => {
+    const fetchAllMovies = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-        const data = await getMoviesForAdmin();
-        setCurrentMovies(data.currentMovies || []);
-        setUpcomingMovies(data.upcomingMovies || []);
+        const [currentData, upcomingData] = await Promise.all([
+          getCurrentMovies(),
+          getUpcomingMovies(),
+        ]);
+        setCurrentMovies(currentData);
+        setUpcomingMovies(upcomingData);
       } catch (error) {
         console.error("영화 데이터를 가져오는 중 오류 발생:", error);
         setCurrentMovies([]);
@@ -25,30 +29,49 @@ const Movies = () => {
         setLoading(false);
       }
     };
-
-    fetchMovies();
+    fetchAllMovies();
   }, []);
 
   const handleReservationClick = (movie) => {
-    // 영화 정보를 state로 전달하여 ReservationPlacePage로 이동
-    navigate("/reservation/place", {
-      state: {
-        selectedMovie: {
-          id: movie.moviecd,
-          title: movie.movienm,
-          genre: movie.genre,
-          rating: movie.isadult === "Y" ? "청소년 관람불가" : "전체 관람가",
-          duration: `${movie.runningtime}분`,
-          poster: movie.posterUrl
-            ? `http://localhost:3000${movie.posterUrl}`
-            : "/images/movie.jpg",
-        },
-      },
-    });
+    // 영화 정보를 세션 스토리지에 저장
+    const selectedMovie = {
+      id: movie.moviecd,
+      title: movie.movienm,
+      genre: movie.genre,
+      rating: movie.isadult === "Y" ? "청소년 관람불가" : "전체 관람가",
+      duration: `${movie.runningtime}분`,
+      poster: movie.posterUrl ? movie.posterUrl : "/images/movie.jpg",
+      // API 정보 추가
+      moviecd: movie.moviecd,
+      movienm: movie.movienm,
+      description: movie.description,
+      director: movie.director,
+      actors: movie.actors,
+      runningtime: movie.runningtime,
+      releasedate: movie.releasedate,
+      posterUrl: movie.posterUrl,
+      runningscreen: movie.runningscreen,
+      isadult: movie.isadult,
+    };
+
+    sessionStorage.setItem("selectedMovie", JSON.stringify(selectedMovie));
+    console.log(
+      "선택된 영화 정보가 세션 스토리지에 저장되었습니다:",
+      selectedMovie
+    );
+
+    // 페이지 전환 (state 없이)
+    navigate("/reservation/place");
   };
 
   const getRatingText = (isAdult) => {
     return isAdult === "Y" ? "청소년 관람불가" : "전체 관람가";
+  };
+
+  // 탭 변경 핸들러
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    // 이미 데이터가 로드되어 있으므로 추가 API 호출 불필요
   };
 
   if (loading) {
@@ -68,17 +91,17 @@ const Movies = () => {
           className={`mvs-tab-button ${
             activeTab === "boxoffice" ? "active" : ""
           }`}
-          onClick={() => setActiveTab("boxoffice")}
+          onClick={() => handleTabChange("boxoffice")}
         >
-          박스오피스 ({currentMovies.length})
+          박스오피스
         </button>
         <button
           className={`mvs-tab-button ${
             activeTab === "upcoming" ? "active" : ""
           }`}
-          onClick={() => setActiveTab("upcoming")}
+          onClick={() => handleTabChange("upcoming")}
         >
-          상영예정작 ({upcomingMovies.length})
+          상영예정작
         </button>
       </div>
       <div className="mvs-grid">
@@ -88,9 +111,7 @@ const Movies = () => {
                 <div className="mvs-poster">
                   <img
                     src={
-                      movie.posterUrl
-                        ? `http://localhost:3000${movie.posterUrl}`
-                        : "/images/movie.jpg"
+                      movie.posterUrl ? movie.posterUrl : "/images/movie.jpg"
                     }
                     alt={movie.movienm}
                   />
@@ -126,9 +147,7 @@ const Movies = () => {
                 <div className="mvs-poster">
                   <img
                     src={
-                      movie.posterUrl
-                        ? `http://localhost:3000${movie.posterUrl}`
-                        : "/images/movie.jpg"
+                      movie.posterUrl ? movie.posterUrl : "/images/movie.jpg"
                     }
                     alt={movie.movienm}
                   />
@@ -142,7 +161,8 @@ const Movies = () => {
                   <h3 className="mvs-title">{movie.movienm}</h3>
                   <p className="mvs-genre">{movie.genre}</p>
                   <p className="mvs-release">
-                    개봉 예정일: {movie.releasedate}
+                    개봉 예정일:{" "}
+                    {new Date(movie.releasedate).toLocaleDateString("ko-KR")}
                   </p>
                 </div>
               </div>

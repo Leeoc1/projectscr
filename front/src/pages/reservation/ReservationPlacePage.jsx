@@ -135,10 +135,27 @@ function getDateArray(startDate, length = 8, today = new Date()) {
 const ReservationPlacePage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const selectedMovie = location.state?.selectedMovie || {
-    title: "F1 더 무비",
-    grade: "12",
+
+  // 세션 스토리지에서 선택한 영화 정보 가져오기
+  const getSelectedMovie = () => {
+    try {
+      const storedMovie = sessionStorage.getItem("selectedMovie");
+      if (storedMovie) {
+        return JSON.parse(storedMovie);
+      }
+    } catch (error) {
+      console.error("세션 스토리지에서 영화 정보를 가져오는 중 오류:", error);
+    }
+
+    // 기본값 반환
+    return {
+      title: "영화를 선택해주세요",
+      genre: "장르",
+      poster: "/images/movie.jpg",
+    };
   };
+
+  const selectedMovie = getSelectedMovie();
 
   // 날짜 상태
   const today = new Date();
@@ -210,7 +227,7 @@ const ReservationPlacePage = () => {
         selectedRegion,
         selectedBranch,
         selectedTime,
-        selectedMovie: location.state?.selectedMovie || null,
+        // selectedMovie는 세션 스토리지에서 가져오므로 state로 전달하지 않음
       },
     });
   };
@@ -219,6 +236,22 @@ const ReservationPlacePage = () => {
     <div className="reservation-page">
       <Header isOtherPage={true} isScrolled={true} />
       <div className="reservation-content">
+        {/* 선택한 영화 섹션 */}
+        <div className="selected-movie-section">
+          <h1 className="selected-movie-section-title">선택한 영화</h1>
+          <div className="selected-movie-content">
+            <img
+              src={selectedMovie.poster || "/images/movie.jpg"}
+              alt={selectedMovie.title}
+              className="selected-movie-poster"
+            />
+            <div className="selected-movie-info">
+              <h2 className="selected-movie-title">{selectedMovie.title}</h2>
+              <p className="selected-movie-genre">{selectedMovie.genre}</p>
+            </div>
+          </div>
+        </div>
+
         <div className="reservation-container">
           {/* 진행바 */}
           <div className="progress-bar">

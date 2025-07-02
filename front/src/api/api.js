@@ -9,6 +9,28 @@ const api = axios.create({
   },
 });
 
+// 현재상영작 조회
+export const getCurrentMovies = async () => {
+  try {
+    const response = await api.get("/movies/current");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching current movies:", error);
+    return [];
+  }
+};
+
+// 상영예정작 조회
+export const getUpcomingMovies = async () => {
+  try {
+    const response = await api.get("/movies/upcoming");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching upcoming movies:", error);
+    return [];
+  }
+};
+
 // 현재상영작과 상영예정작 목록 조회
 export const getMoviesForAdmin = () =>
   api
@@ -22,7 +44,7 @@ export const getMoviesForAdmin = () =>
 // 지역별 상영관 목록 조회
 export const getScreens = (regionCode) =>
   api
-    .get("/api/screens", { params: { regionCode } })
+    .get("/screens", { params: { regionCode } })
     .then((response) => response.data)
     .catch((error) => {
       console.error("Error fetching screens:", error);

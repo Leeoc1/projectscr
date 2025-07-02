@@ -27,9 +27,6 @@ public class Reservation {
     @Column(length = 20) // reservationstatus, 길이 20, 선택 입력
     private String reservationstatus;
 
-    @Column
-    private int seatnum; // 좌석 번호
-
     @Column(length = 20) // paymentcd, 길이 20, 선택 입력
     private String paymentcd;
 }

@@ -10,7 +10,7 @@ const MovieManagement = () => {
 
   useEffect(() => {
     const fetchMovies = async () => {
-      const data = await getMoviesForAdmin.getMoviesForAdmin();
+      const data = await getMoviesForAdmin();
       setCurrentMovies(data.currentMovies || []);
       setUpcomingMovies(data.upcomingMovies || []);
     };

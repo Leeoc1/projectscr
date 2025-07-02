@@ -12,8 +12,7 @@ const UserManagement = () => {
   useEffect(() => {
     setLoading(true);
     setError(null);
-    getAllUsers
-      .getAllUsers()
+    getAllUsers()
       .then((data) => {
         setUsers(data);
         setLoading(false);

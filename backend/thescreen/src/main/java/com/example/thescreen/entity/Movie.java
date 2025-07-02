@@ -34,12 +34,14 @@ public class Movie {
 
     private LocalDate releasedate;
 
+    @Column(length = 200)
+    private String posterurl;
+
+    @Column(length = 20)
+    private String runningscreen;
+
     @Enumerated(EnumType.STRING)
     private IsAdult isadult;
-
-    //이미지 파일 컬럼
-    @Column(length = 200)
-    private String movieimage;
 
     public enum IsAdult {
         Y, N

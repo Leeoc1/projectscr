@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @Setter
 public class Reservation {
     @Id
-    @Column(length = 20) // 기본 키: reservationcd, 길이 20
-    private String reservationcd;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long reservationcd;
 
     @ManyToOne
     @JoinColumn(name = "userid") // 외래 키: userid

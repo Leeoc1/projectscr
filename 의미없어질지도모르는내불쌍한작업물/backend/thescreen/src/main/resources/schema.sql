@@ -38,4 +38,8 @@ from
         inner join movie m on s.moviecd = m.moviecd
         inner join screen sc on s.screencd = sc.screencd
         inner join cinema c on sc.cinemacd = c.cinemacd
-        inner join region r on c.regioncd = r.regioncd
+        inner join region r on c.regioncd = r.regioncd;
+
+
+ALTER TABLE reservation
+MODIFY COLUMN reservationcd BIGINT NOT NULL AUTO_INCREMENT;

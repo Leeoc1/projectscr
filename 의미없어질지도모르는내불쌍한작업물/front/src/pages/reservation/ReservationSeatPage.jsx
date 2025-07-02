@@ -1,21 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../pubcomponent/Header";
 import "../../pagecss/reservation/ReservationSeatPage.css";
 import { getReservationInfo, setReservationInfo } from "../../utils/reservationStorage";
 
+// 날짜 변환 유틸
+function parseDate(date) {
+  if (!date) return null;
+  if (typeof date === "string") return new Date(date);
+  return date;
+}
+
 const ReservationSeatPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const reservationInfo = getReservationInfo();
+  const reservationInfoRaw = getReservationInfo();
+  // selectedDate를 Date 객체로 변환
+  const reservationInfo = {
+    ...reservationInfoRaw,
+    selectedDate: parseDate(reservationInfoRaw.selectedDate),
+  };
 
   // 반드시 최상단에서 Hook 호출
-  const [guestCount, setGuestCount] = useState({
-    adult: 1,
-    child: 0,
-    senior: 0,
-  });
-  const [selectedSeats, setSelectedSeats] = useState([]);
+  const [guestCount, setGuestCount] = useState(
+    reservationInfo.guestCount || { adult: 1, child: 0, senior: 0 }
+  );
+  const [selectedSeats, setSelectedSeats] = useState(
+    reservationInfo.selectedSeats || []
+  );
+
+  // 가격 정보
+  const prices = { adult: 10000, child: 6000, senior: 5000 };
+  const totalGuests = guestCount.adult + guestCount.child + guestCount.senior;
+  const totalPrice =
+    guestCount.adult * prices.adult +
+    guestCount.child * prices.child +
+    guestCount.senior * prices.senior;
+
+  // 인원/좌석/총금액이 바뀔 때마다 세션스토리지에 저장
+  useEffect(() => {
+    const info = {
+      ...reservationInfo,
+      guestCount,
+      selectedSeats,
+      totalPrice,
+    };
+    setReservationInfo(info);
+  }, [guestCount, selectedSeats, totalPrice]);
 
   // 그 다음에 조건부 이동 처리
   if (!reservationInfo.selectedDate || !reservationInfo.selectedBranch) {
@@ -28,14 +59,6 @@ const ReservationSeatPage = () => {
     String.fromCharCode(65 + i)
   );
   const seatColumns = Array.from({ length: 12 }, (_, i) => i + 1);
-
-  // 가격 정보
-  const prices = { adult: 10000, child: 6000, senior: 5000 };
-  const totalGuests = guestCount.adult + guestCount.child + guestCount.senior;
-  const totalPrice =
-    guestCount.adult * prices.adult +
-    guestCount.child * prices.child +
-    guestCount.senior * prices.senior;
 
   // 인원 수 변경
   const handleGuestChange = (type, change) => {
@@ -130,12 +153,11 @@ const ReservationSeatPage = () => {
             <div className="summary-info">
               <p>
                 <strong>영화:</strong>{" "}
-                {reservationInfo.selectedMovie?.title || "F1 더 무비"}
+                {reservationInfo.selectedMovie?.title || "영화 미선택택"}
               </p>
               <p>
                 <strong>날짜:</strong>{" "}
-                {reservationInfo.selectedDate?.toLocaleDateString() ||
-                  "날짜 미선택"}
+                {reservationInfo.selectedDate ? reservationInfo.selectedDate.toLocaleDateString() : "날짜 미선택"}
               </p>
               <p>
                 <strong>극장:</strong> {reservationInfo.selectedRegion}{" "}

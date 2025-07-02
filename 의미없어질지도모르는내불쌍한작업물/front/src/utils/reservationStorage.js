@@ -6,4 +6,7 @@ export const setReservationInfo = (data) =>
   sessionStorage.setItem("reservationInfo", JSON.stringify(data));
 
 export const clearReservationInfo = () =>
-  sessionStorage.removeItem("reservationInfo"); 
+  {
+    sessionStorage.removeItem("reservationInfo");
+    sessionStorage.removeItem("selectedMovie");
+  } 

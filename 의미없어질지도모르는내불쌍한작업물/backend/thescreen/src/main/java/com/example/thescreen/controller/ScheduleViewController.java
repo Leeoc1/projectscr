@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 public class ScheduleViewController {
-    
+
     @Autowired
     private ScheduleViewRepository scheduleViewRepository;
 

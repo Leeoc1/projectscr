@@ -1,6 +1,9 @@
 package com.example.thescreen.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
@@ -16,26 +19,21 @@ public class Screen {
     @Column(length = 20)
     private String screencd; // 상영관 코드 (PK)
 
-    @Column(length = 20)
-    private String cinemacd; // 소속 지점 코드
+    @Column(length = 50)
+    private String screenname; // 상영관 이름 (ex: 1관, 2관, 3관 등)
 
-    @Column(length = 10)
-    private String screenType; // 상영관 유형 (ex: 2D, 3D, IMAX, 4DX)
-
-    @Column(length = 10)
-    private String screenNumber; // 관 번호 (ex: 1관, 2관)
+    @Column(length = 50)
+    private String screentype; // 상영관 타입 (ex: 2D, 3D, 4D, 5D 등)
 
     @Column
-    private int allcount; // 좌석 수
+    private int allseat; // 총 좌석 수
+ 
+    @Column
+    private int raservationseat; // 예약시 +1 (max = allseat) 예약 된 좌석 수
 
-    @Column(columnDefinition = "INTEGER DEFAULT 0")
-    private int reservationseat; // 예약된 좌석 수
+    @Column(length = 20)
+    private String screenstatus; // 상영관 상태 (ex: 사용중, 사용불가 등 )
 
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(50) DEFAULT '운영중'")
-    private ScreenStatus scstatus; // 상영관 상태
-
-    public enum ScreenStatus {
-        운영중, 점검중;
-    }
+    @Column(length = 20)
+    private String cinemacd; // 소속 지점 코드 (FK는 설정하지 않고 역할만)
 }

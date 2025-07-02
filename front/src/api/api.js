@@ -33,7 +33,7 @@ export const getMovieList = () =>
 // 극장 목록 조회
 export const getCinemas = () =>
   api
-    .get("/cinema")
+    .get("/cinemas")
     .then((response) => response.data)
     .catch((error) => {
       console.error("Error fetching cinema:", error);

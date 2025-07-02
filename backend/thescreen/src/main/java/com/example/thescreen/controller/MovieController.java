@@ -2,7 +2,6 @@ package com.example.thescreen.controller;
 
 import com.example.thescreen.entity.Movie;
 import com.example.thescreen.repository.MovieRepository;
-import com.example.thescreen.repository.MovieRepository.MovieCdNmList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +15,20 @@ public class MovieController {
 
     @Autowired
     private MovieRepository movieRepository;
+
+    // 사용자 페이지: 현재상영작/상영예정작 반환
+    @GetMapping("/user")
+    public MoviesResponse getMoviesForUser() {
+        List<Movie> allMovies = movieRepository.findAll();
+        LocalDate today = LocalDate.now();
+        List<Movie> currentMovies = allMovies.stream()
+                .filter(m -> m.getReleasedate() != null && !m.getReleasedate().isAfter(today))
+                .collect(Collectors.toList());
+        List<Movie> upcomingMovies = allMovies.stream()
+                .filter(m -> m.getReleasedate() != null && m.getReleasedate().isAfter(today))
+                .collect(Collectors.toList());
+        return new MoviesResponse(currentMovies, upcomingMovies);
+    }
 
     // 관리자 페이지: 현재상영작/상영예정작만 반환
     @GetMapping("/admin")
@@ -41,15 +54,5 @@ public class MovieController {
         }
         public List<Movie> getCurrentMovies() { return currentMovies; }
         public List<Movie> getUpcomingMovies() { return upcomingMovies; }
-    }
-
-
-    // 예매: 극장 -> 영화
-    // 예매할 때 선택가능한 영화 라인업들, 제목만 반환
-    @GetMapping("/list")
-    public List<MovieCdNmList> getMovieTitleList() {
-        List<MovieCdNmList> movieList = movieRepository.findAllBy();
-
-        return movieList;
     }
 } 

@@ -6,12 +6,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "schedule")
 @Getter
+@Setter
 @NoArgsConstructor
 public class Schedule {
 
@@ -26,8 +29,15 @@ public class Schedule {
     private String screencd; // 상영관 코드
 
     @Column
+    private LocalDate startdate; // 상영 시작 날짜
+
+    @Column
     private LocalDateTime starttime; // 상영 시작 시간
 
     @Column
     private LocalDateTime endtime; // 상영 종료 시간
+
+    public void setStartdate(LocalDate startdate) {
+        this.startdate = startdate;
+    }
 }

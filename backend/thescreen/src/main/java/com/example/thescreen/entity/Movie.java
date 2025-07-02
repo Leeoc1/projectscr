@@ -35,7 +35,10 @@ public class Movie {
     private LocalDate releasedate;
 
     @Column(length = 200)
-    private String posterUrl;
+    private String posterurl;
+
+    @Column(length = 20)
+    private String runningscreen;
 
     @Enumerated(EnumType.STRING)
     private IsAdult isadult;

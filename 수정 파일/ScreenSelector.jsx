@@ -1,23 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { theaterData } from "../../../Data/TheaterPageData";
 
 const ScreenSelector = () => {
-  const location = useLocation();
-  const selectedRegion = location.state?.selectedRegion || "서울";
-  const selectedBranch = location.state?.selectedBranch || "가양";
   const [selectedTime, setSelectedTime] = useState(null);
-  const [selectedMovie] = useState(location.state?.selectedMovie || null);
+  const [selectedMovie, setSelectedMovie] = useState(
+    sessionStorage.getItem("selectedMovie")
+  );
 
-  const branches =
-    theaterData.find((r) => r.region === selectedRegion)?.branches || [];
-  const selectedBranchObj = branches.find((b) => b.name === selectedBranch);
-  const screens = selectedBranchObj?.screens || [];
+  useEffect(() => {
+    const handleSessionStorageChange = (event) => {
+      setSelectedMovie(event.detail.selectedMovie || null); // selectedMovie 사용
+    };
+
+    window.addEventListener("sessionStorageChange", handleSessionStorageChange);
+    return () =>
+      window.removeEventListener(
+        "sessionStorageChange",
+        handleSessionStorageChange
+      );
+  }, []);
+
+  window.onload = () => {
+    sessionStorage.removeItem("selectedMovie");
+    setSelectedMovie(null);
+  };
 
   return (
     <div className="rptm-time-list-area">
       <div className="rptm-time-list-content">
-        {!selectedMovie && <div>영화를 먼저 선택하세요.</div>}
+        <p>{selectedMovie}</p>
+        {/* {!selectedMovie && <div>영화를 먼저 선택하세요.</div>}
         {selectedMovie && screens.length === 0 && (
           <div>상영 정보가 없습니다.</div>
         )}
@@ -44,7 +56,7 @@ const ScreenSelector = () => {
               ))}
             </div>
           </>
-        )}
+        )} */}
       </div>
     </div>
   );

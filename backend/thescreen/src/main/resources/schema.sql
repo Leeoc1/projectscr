@@ -28,7 +28,7 @@ select
     sc.screenname,
     sc.screentype,
     sc.allseat,
-    sc.raservationseat,
+    sc.reservationseat,
     c.cinemanm,
     r.regionnm
 from

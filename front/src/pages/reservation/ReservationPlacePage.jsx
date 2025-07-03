@@ -11,7 +11,7 @@ import "../../pagecss/reservation/ReservationPlacePage.css";
 
 const ReservationPlacePage = () => {
   const navigate = useNavigate();
-  
+
   // 커스텀 훅 사용
   const {
     reservationState,
@@ -38,7 +38,10 @@ const ReservationPlacePage = () => {
 
   // 페이지 로드 시 초기 날짜 콘솔 출력
   useEffect(() => {
-    console.log("🎬 예매 페이지 접속 - 선택된 날짜:", selectedDate.toLocaleDateString());
+    console.log(
+      "🎬 예매 페이지 접속 - 선택된 날짜:",
+      selectedDate.toLocaleDateString()
+    );
   }, []);
 
   // 날짜가 변경될 때마다 콘솔 출력
@@ -176,7 +179,7 @@ const ReservationPlacePage = () => {
           />
         </div>
       </div>
-      
+
       {/* 우측 하단 고정 좌석 선택 버튼 */}
       {isReadyToSeat && (
         <button className="reservation-seat-btn-fixed" onClick={handleGoToSeat}>

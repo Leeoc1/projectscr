@@ -49,9 +49,7 @@ const TheaterSelector = ({
         <div className="time-list-area">
           <div className="time-list-content">
             {!selectedRegion && <div>지역을 먼저 선택하세요.</div>}
-            {selectedRegion && !selectedBranch && (
-              <div>지점을 선택하세요.</div>
-            )}
+            {selectedRegion && !selectedBranch && <div>지점을 선택하세요.</div>}
             {selectedRegion && selectedBranch && screenTimes.length === 0 && (
               <div>상영 정보가 없습니다.</div>
             )}
@@ -83,4 +81,4 @@ const TheaterSelector = ({
   );
 };
 
-export default TheaterSelector; 
+export default TheaterSelector;

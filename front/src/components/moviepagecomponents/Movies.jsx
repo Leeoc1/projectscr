@@ -7,13 +7,9 @@ const Movies = () => {
   const [activeTab, setActiveTab] = useState("boxoffice");
   const navigate = useNavigate();
 
-  const handleReservationClick = (movie) => {
+  const handleReservationClick = () => {
     // 영화 정보를 state로 전달하여 ReservationPlacePage로 이동
-    navigate("/reservation/place", {
-      state: {
-        selectedMovie: movie,
-      },
-    });
+    navigate("/reservation/place");
   };
 
   return (
@@ -23,7 +19,7 @@ const Movies = () => {
           className={`mvs-tab-button ${
             activeTab === "boxoffice" ? "active" : ""
           }`}
-          onClick={() => handleTabChange("boxoffice")}
+          onClick={() => setActiveTab("boxoffice")}
         >
           박스오피스
         </button>
@@ -31,7 +27,7 @@ const Movies = () => {
           className={`mvs-tab-button ${
             activeTab === "upcoming" ? "active" : ""
           }`}
-          onClick={() => handleTabChange("upcoming")}
+          onClick={() => setActiveTab("upcoming")}
         >
           상영예정작
         </button>

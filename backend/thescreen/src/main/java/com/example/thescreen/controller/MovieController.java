@@ -32,6 +32,29 @@ public class MovieController {
         return new MoviesResponse(currentMovies, upcomingMovies);
     }
 
+    @GetMapping("/current")
+    public List<Movie> getCurrentMovies() {
+        List<Movie> allMovies = movieRepository.findAll();
+        LocalDate today = LocalDate.now();
+        List<Movie> currentMovies = allMovies.stream()
+                .filter(m -> m.getReleasedate() != null && !m.getReleasedate().isAfter(today))
+                .collect(Collectors.toList());
+        System.out.println("현재상영작 수: " + currentMovies.size());
+        return currentMovies;
+    }
+
+    // 상영예정작 조회
+    @GetMapping("/upcoming")
+    public List<Movie> getUpcomingMovies() {
+        List<Movie> allMovies = movieRepository.findAll();
+        LocalDate today = LocalDate.now();
+        List<Movie> upcomingMovies = allMovies.stream()
+                .filter(m -> m.getReleasedate() != null && m.getReleasedate().isAfter(today))
+                .collect(Collectors.toList());
+        System.out.println("상영예정작 수: " + upcomingMovies.size());
+        return upcomingMovies;
+    }
+
     public static class MoviesResponse {
         private List<Movie> currentMovies;
         private List<Movie> upcomingMovies;

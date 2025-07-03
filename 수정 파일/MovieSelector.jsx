@@ -1,22 +1,40 @@
-import React, { useState, useEffect } from "react";
-import { getMovieList, getSchedules } from "../../../api/api";
+import { useEffect, useState } from "react";
+import { getSchedules } from "../../../api/api";
 
 const MovieSelector = () => {
-  const [selectedMovie, setSelectedMovie] = useState(null);
-  const [movieList, setMovieList] = useState([]);
+  const [movieList, setMovieList] = useState({});
+  const [selectedMovieName, setSelectedMovieName] = useState(null);
   const [selectedDate, setSelectedDate] = useState(
     sessionStorage.getItem("selectedFullDate") || "날짜를 선택하세요"
   );
 
   useEffect(() => {
-    // 영화 목록 가져오기
     const fetchMovies = async () => {
       const schedule = await getSchedules();
 
+      // 선택된 날짜로 필터링
       const filtered = schedule.filter(
         (schedule) => schedule.startdate === selectedDate
       );
-      setMovieList(filtered);
+
+      // movienm 기준으로 스케줄 그룹화
+      const groupedMovies = filtered.reduce((acc, curr) => {
+        const movieName = curr.movienm;
+        if (!acc[movieName]) {
+          acc[movieName] = [];
+        }
+        acc[movieName].push(curr);
+        return acc;
+      }, {});
+
+      // 상영 시작 시간순으로 정렬 (선택사항)
+      Object.keys(groupedMovies).forEach((movieName) => {
+        groupedMovies[movieName].sort(
+          (a, b) => new Date(a.starttime) - new Date(b.starttime)
+        );
+      });
+
+      setMovieList(groupedMovies);
     };
     fetchMovies();
 
@@ -25,11 +43,15 @@ const MovieSelector = () => {
     if (savedDate && savedDate !== selectedDate) {
       setSelectedDate(savedDate);
     }
-  }, [selectedDate]); // 빈 의존성 배열로 마운트 시에만 실행
+  }, [selectedDate]);
 
   useEffect(() => {
     const handleSessionStorageChange = (event) => {
       setSelectedDate(event.detail.selectedFullDate || "날짜를 선택하세요");
+      const newMovieName = event.detail.selectedMovieName;
+      if (newMovieName) {
+        setSelectedMovieName(newMovieName);
+      }
     };
 
     window.addEventListener("sessionStorageChange", handleSessionStorageChange);
@@ -40,31 +62,37 @@ const MovieSelector = () => {
       );
   }, []);
 
-  const handleMovieSelect = (schedulecd) => {
-    setSelectedMovie(schedulecd);
-    sessionStorage.setItem("selectedMovie", schedulecd);
+  const handleMovieSelect = (movieName) => {
+    setSelectedMovieName(movieName);
+    sessionStorage.setItem("selectedMovieName", movieName);
     const event = new CustomEvent("sessionStorageChange", {
       detail: {
         selectedFullDate: sessionStorage.getItem("selectedFullDate"),
-        selectedMovie: schedulecd,
+        selectedMovieName: movieName,
       },
     });
     window.dispatchEvent(event);
   };
 
   return (
-    <div className="rptm-movie-list">
-      {movieList.map((movie) => (
-        <button
-          key={movie.schedulecd}
-          className={`rptm-movie-btn${
-            selectedMovie === movie.schedulecd ? " rptm-active" : ""
-          }`}
-          onClick={() => handleMovieSelect(movie.schedulecd)}
-        >
-          {movie.movienm}
-        </button>
-      ))}
+    <div className="rptm-movie-list p-4">
+      {Object.keys(movieList).length === 0 ? (
+        <p className="text-gray-500">해당 날짜에 상영 중인 영화가 없습니다.</p>
+      ) : (
+        <div>
+          {Object.keys(movieList).map((movieName) => (
+            <button
+              key={movieName}
+              className={`rptm-movie-btn ${
+                selectedMovieName === movieName ? "rptm-active" : ""
+              }`}
+              onClick={() => handleMovieSelect(movieName)}
+            >
+              {movieName}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

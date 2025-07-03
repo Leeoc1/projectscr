@@ -13,7 +13,9 @@ const MovieSelector = () => {
     const fetchMovies = async () => {
       const schedule = await getSchedules();
 
-      const filtered = schedule.filter((schedule) => schedule.startdate === selectedDate)
+      const filtered = schedule.filter(
+        (schedule) => schedule.startdate === selectedDate
+      );
       setMovieList(filtered);
     };
     fetchMovies();
@@ -23,7 +25,6 @@ const MovieSelector = () => {
     if (savedDate && savedDate !== selectedDate) {
       setSelectedDate(savedDate);
     }
-
   }, [selectedDate]); // 빈 의존성 배열로 마운트 시에만 실행
 
   useEffect(() => {
@@ -32,16 +33,20 @@ const MovieSelector = () => {
     };
 
     window.addEventListener("sessionStorageChange", handleSessionStorageChange);
-    return () => window.removeEventListener("sessionStorageChange", handleSessionStorageChange);
+    return () =>
+      window.removeEventListener(
+        "sessionStorageChange",
+        handleSessionStorageChange
+      );
   }, []);
 
-    const handleMovieSelect = (movienm) => {
-    setSelectedMovie(movienm);
-    sessionStorage.setItem("selectedMovie", movienm);
+  const handleMovieSelect = (schedulecd) => {
+    setSelectedMovie(schedulecd);
+    sessionStorage.setItem("selectedMovie", schedulecd);
     const event = new CustomEvent("sessionStorageChange", {
       detail: {
         selectedFullDate: sessionStorage.getItem("selectedFullDate"),
-        selectedMovie: movienm,
+        selectedMovie: schedulecd,
       },
     });
     window.dispatchEvent(event);
@@ -52,8 +57,10 @@ const MovieSelector = () => {
       {movieList.map((movie) => (
         <button
           key={movie.schedulecd}
-          className={`rptm-movie-btn${selectedMovie === movie.movienm ? " rptm-active" : ""}`}
-          onClick={() => handleMovieSelect(movie.movienm)}
+          className={`rptm-movie-btn${
+            selectedMovie === movie.schedulecd ? " rptm-active" : ""
+          }`}
+          onClick={() => handleMovieSelect(movie.schedulecd)}
         >
           {movie.movienm}
         </button>

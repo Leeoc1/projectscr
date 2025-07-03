@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { getSchedules } from "../../../api/api";
 
 const ScreenSelector = () => {
   const [selectedTime, setSelectedTime] = useState(null);
@@ -8,13 +9,27 @@ const ScreenSelector = () => {
   );
 
   useEffect(() => {
+    const fetchSchedule = async () => {
+      const selectedSchedule = await getSchedules();
+      // const scheduleFilter = selectedSchedule.filter((schedule) => schedule.)
+    };
+
     const handleSessionStorageChange = (event) => {
       setSelectedMovie(event.detail.selectedMovie || null); // selectedMovie 사용
     };
 
     window.addEventListener("sessionStorageChange", handleSessionStorageChange);
-    return () => window.removeEventListener("sessionStorageChange", handleSessionStorageChange);
+    return () =>
+      window.removeEventListener(
+        "sessionStorageChange",
+        handleSessionStorageChange
+      );
   }, []);
+
+  window.onload = () => {
+    sessionStorage.removeItem("selectedMovie");
+    setSelectedMovie(null);
+  };
 
   return (
     <div className="rptm-time-list-area">

@@ -14,11 +14,21 @@ const DateSelector = () => {
   const dateArr = getDateArray(baseDate, 8, today);
 
   // 선택된 날짜에 대한 라벨 계산
-  const diffDays = Math.floor(
-    (selectedDate - today) / (1000 * 60 * 60 * 24)
-  );
-  const label = diffDays === 0 ? "(오늘)" : diffDays === 1 ? "(내일)" : diffDays === 2 ? "(모레)" : `(${WEEKDAYS[selectedDate.getDay()]})`;
-  const headerText = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, "0")}-${String(selectedDate.getDate()).padStart(2, "0")}${label}`;
+  const diffDays = Math.floor((selectedDate - today) / (1000 * 60 * 60 * 24));
+  const label =
+    diffDays === 0
+      ? "(오늘)"
+      : diffDays === 1
+      ? "(내일)"
+      : diffDays === 2
+      ? "(모레)"
+      : `(${WEEKDAYS[selectedDate.getDay()]})`;
+  const headerText = `${selectedDate.getFullYear()}-${String(
+    selectedDate.getMonth() + 1
+  ).padStart(2, "0")}-${String(selectedDate.getDate()).padStart(
+    2,
+    "0"
+  )}${label}`;
 
   const isSameDay = (d1, d2) =>
     d1.getFullYear() === d2.getFullYear() &&
@@ -27,13 +37,23 @@ const DateSelector = () => {
 
   // 세션 스토리지 업데이트 및 이벤트 발생 공통 함수
   const updateSessionStorageAndNotify = (date) => {
-    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+    const formattedDate = `${date.getFullYear()}-${String(
+      date.getMonth() + 1
+    ).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
     sessionStorage.setItem("selectedFullDate", formattedDate);
-    window.dispatchEvent(new CustomEvent("sessionStorageChange", { detail: { selectedFullDate: formattedDate } }));
+    window.dispatchEvent(
+      new CustomEvent("sessionStorageChange", {
+        detail: { selectedFullDate: formattedDate },
+      })
+    );
   };
 
   const handleSetSelectedDate = (item) => {
-    const newDate = new Date(item.date.getFullYear(), item.date.getMonth(), item.date.getDate());
+    const newDate = new Date(
+      item.date.getFullYear(),
+      item.date.getMonth(),
+      item.date.getDate()
+    );
     setSelectedDate(newDate); // useEffect가 sessionStorage를 업데이트
   };
 
@@ -43,10 +63,14 @@ const DateSelector = () => {
 
   // 각 날짜 항목의 라벨 계산
   const getDateLabel = (date) => {
-    const diff = Math.floor(
-      (date - today) / (1000 * 60 * 60 * 24)
-    );
-    return diff === 0 ? "오늘" : diff === 1 ? "내일" : diff === 2 ? "모레" : WEEKDAYS[date.getDay()];
+    const diff = Math.floor((date - today) / (1000 * 60 * 60 * 24));
+    return diff === 0
+      ? "오늘"
+      : diff === 1
+      ? "내일"
+      : diff === 2
+      ? "모레"
+      : WEEKDAYS[date.getDay()];
   };
 
   return (
@@ -65,7 +89,11 @@ const DateSelector = () => {
             {dateArr.map((item, idx) => (
               <div
                 key={idx}
-                className={`rptm-date-item${isSameDay(item.date, selectedDate) ? " rptm-selected" : ""}${item.isSaturday ? " rptm-saturday" : ""}${item.isSunday ? " rptm-sunday" : ""}${item.isDisabled ? " rptm-disabled" : ""}`}
+                className={`rptm-date-item${
+                  isSameDay(item.date, selectedDate) ? " rptm-selected" : ""
+                }${item.isSaturday ? " rptm-saturday" : ""}${
+                  item.isSunday ? " rptm-sunday" : ""
+                }${item.isDisabled ? " rptm-disabled" : ""}`}
                 onClick={() => !item.isDisabled && handleSetSelectedDate(item)}
               >
                 <div className="rptm-date-num">{item.date.getDate()}</div>

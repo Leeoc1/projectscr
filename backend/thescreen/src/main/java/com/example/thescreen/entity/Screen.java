@@ -29,7 +29,7 @@ public class Screen {
     private int allseat; // 총 좌석 수
  
     @Column
-    private int raservationseat; // 예약시 +1 (max = allseat) 예약 된 좌석 수
+    private int reservationseat; // 예약시 +1 (max = allseat) 예약 된 좌석 수
 
     @Column(length = 20)
     private String screenstatus; // 상영관 상태 (ex: 사용중, 사용불가 등 )

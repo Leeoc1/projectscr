@@ -10,7 +10,6 @@ const RegionTheaterSection = ({ filteredCinemas }) => {
     navigate("/reservation/movie");
   };
 
-  
   return (
     <section className="rts-section">
       <div className="rts-grid">

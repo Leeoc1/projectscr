@@ -18,9 +18,8 @@ public class RegionController {
 
 
     @GetMapping("/regions")
-    public String getRegions(Model model) {
+    public List<Region> getRegions() {
         List<Region> regions = regionRepository.findAll();
-        model.addAttribute("regions", regions);
-        return "regions-list";
+        return regions;
     }
 }

@@ -26,6 +26,9 @@ public class Schedule {
     private String screencd; // 상영관 코드
 
     @Column
+    private LocalDateTime startdate; // 상영 시작 날짜
+
+    @Column
     private LocalDateTime starttime; // 상영 시작 시간
 
     @Column

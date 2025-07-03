@@ -17,7 +17,7 @@ public class CinemaController {
     @Autowired
     private CinemaRepository cinemaRepository;
 
-    @GetMapping("/cinema")
+    @GetMapping("/cinemas")
     public List<Cinema> getCinema () {
         List<Cinema> cinemas = cinemaRepository.findAll();
 

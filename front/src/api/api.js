@@ -80,7 +80,6 @@ export const getRegions = () =>
       return [];
     });
 
-
 // schedule view 불러오기
 export const getSchedules = (cinemaCd, date) =>
   api

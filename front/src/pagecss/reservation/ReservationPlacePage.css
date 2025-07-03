@@ -9,6 +9,86 @@
   background: none;
 }
 
+/* 선택한 영화 섹션 */
+.selected-movie-section {
+  width: 980px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px 8px 0 0;
+  padding: 30px;
+  box-sizing: border-box;
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.selected-movie-section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #222;
+  margin: 0;
+  text-align: center;
+}
+
+.selected-movie-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.selected-movie-poster {
+  width: 160px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.selected-movie-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.selected-movie-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 8px 0;
+}
+
+.selected-movie-genre {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+/* 영화가 선택되지 않았을 때 표시되는 메시지 */
+.no-movie-selected {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: #666;
+  font-size: 18px;
+  text-align: center;
+}
+
+.no-movie-selected p {
+  margin: 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 2px dashed #ddd;
+}
+
 /* reservation-container 얇은 경계선 추가 */
 .reservation-container {
   max-width: 980px;
@@ -16,7 +96,7 @@
   background: #fff;
   border-radius: 8px;
   padding: 0;
-  margin-top: 48px;
+  margin-top: 0;
   margin-bottom: 48px;
   box-sizing: border-box;
 }

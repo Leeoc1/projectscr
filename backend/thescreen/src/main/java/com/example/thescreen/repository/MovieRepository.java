@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
+@Repository
 public interface MovieRepository extends JpaRepository<Movie, String> {
 
     // moviecd, movienm 추출

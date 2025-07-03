@@ -23,7 +23,7 @@ const Movies = () => {
           className={`mvs-tab-button ${
             activeTab === "boxoffice" ? "active" : ""
           }`}
-          onClick={() => setActiveTab("boxoffice")}
+          onClick={() => handleTabChange("boxoffice")}
         >
           박스오피스
         </button>
@@ -31,7 +31,7 @@ const Movies = () => {
           className={`mvs-tab-button ${
             activeTab === "upcoming" ? "active" : ""
           }`}
-          onClick={() => setActiveTab("upcoming")}
+          onClick={() => handleTabChange("upcoming")}
         >
           상영예정작
         </button>

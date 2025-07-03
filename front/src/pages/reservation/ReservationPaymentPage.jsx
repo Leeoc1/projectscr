@@ -1,39 +1,79 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Header from "../../pubcomponent/Header";
 import "../../pagecss/reservation/ReservationPaymentPage.css";
+import { getReservationInfo, clearReservationInfo } from "../../utils/reservationStorage";
+
+// 날짜 변환 유틸
+function parseDate(date) {
+  if (!date) return null;
+  if (typeof date === "string") return new Date(date);
+  return date;
+}
 
 const ReservationPaymentPage = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const data = location.state || {};
+  const reservationInfoRaw = getReservationInfo();
+  const reservationInfo = {
+    ...reservationInfoRaw,
+    selectedDate: parseDate(reservationInfoRaw.selectedDate),
+  };
 
-  // 예시 데이터 (실제 데이터는 location.state에서 받아옴)
-  const movie = data.selectedMovie || {
+  // 반드시 최상단에서 Hook 호출!
+  const [payMethod, setPayMethod] = useState("card");
+
+  // 그 다음에 조건부 이동 처리
+  if (!reservationInfo.selectedSeats || !reservationInfo.guestCount) {
+    navigate("/reservation/seat");
+    return null;
+  }
+
+  // 관람 인원 합계 구하기
+  const totalGuests = reservationInfo.guestCount
+    ? Object.values(reservationInfo.guestCount).reduce((a, b) => a + b, 0)
+    : 0;
+
+  // 예매 정보에서 값 추출
+  const movie = reservationInfo.selectedMovie || {
     title: "F1 더 무비",
     poster: "/images/F1_TheMovie.png",
   };
-  const theater = data.selectedRegion
-    ? `${data.selectedRegion} / ${data.selectedBranch}`
+  const theater = reservationInfo.selectedRegion
+    ? `${reservationInfo.selectedRegion} / ${reservationInfo.selectedBranch}`
     : "CGV 플러스 / 6관";
-  const date = data.selectedDate
-    ? typeof data.selectedDate === "string"
-      ? data.selectedDate
-      : data.selectedDate.toLocaleDateString()
+  const date = reservationInfo.selectedDate
+    ? typeof reservationInfo.selectedDate === "string"
+      ? reservationInfo.selectedDate
+      : reservationInfo.selectedDate.toLocaleDateString()
     : "2025년 6월 29일(일)";
-  const time = data.selectedTime || "22:20 ~ 25:05";
-  const people = data.guestCount
-    ? data.guestCount.adult + data.guestCount.child + data.guestCount.senior
+  const time = reservationInfo.selectedTime || "22:20 ~ 25:05";
+  const people = reservationInfo.guestCount
+    ? reservationInfo.guestCount.adult + reservationInfo.guestCount.child + reservationInfo.guestCount.senior
     : 1;
-  const seat = data.selectedSeats ? data.selectedSeats.join(", ") : "11번";
-  const price = data.totalPrice ? data.totalPrice.toLocaleString() : "15,000";
+  const seat = reservationInfo.selectedSeats ? reservationInfo.selectedSeats.join(", ") : "11번";
+  const price = reservationInfo.totalPrice ? reservationInfo.totalPrice.toLocaleString() : "15,000";
 
-  // 결제수단 선택 상태
-  const [payMethod, setPayMethod] = useState("card");
-
-  // 결제하기 버튼 클릭 시 예매완료 페이지로 이동
-  const handlePay = () => {
-    navigate("/reservation/success", { state: data });
+  // 결제하기 버튼 클릭 시 예매완료 페이지로 이동 및 세션스토리지 정보 삭제
+  const handlePay = async () => {
+    const reservationInfoToSave = { ...reservationInfo };
+    // 1. DB 저장 (예시: fetch, 실제 API 엔드포인트에 맞게 수정 필요)
+    try {
+      const response = await fetch("/api/reservation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reservationInfoToSave),
+      });
+      if (!response.ok) {
+        alert("예매 저장에 실패했습니다. 다시 시도해 주세요.");
+        return;
+      }
+      // 2. 세션스토리지 정보 삭제
+      clearReservationInfo();
+      // 3. 성공 페이지로 이동 (state로 정보 전달)
+      navigate("/reservation/success", { state: { reservationInfo: reservationInfoToSave } });
+    } catch (error) {
+      alert("예매 저장 중 오류가 발생했습니다. 다시 시도해 주세요.");
+    }
   };
 
   return (
@@ -59,19 +99,48 @@ const ReservationPaymentPage = () => {
       </div>
       <div className="payment-container">
         <div className="payment-step-bar">
-          <div className="payment-step-circle active">1</div>
-          <div className="payment-step-line" />
-          <div className="payment-step-circle active">2</div>
-          <div className="payment-step-line" />
-          <div className="payment-step-circle active">3</div>
-          <div className="payment-step-line" />
-          <div className="payment-step-circle active">4</div>
-        </div>
-        <div className="payment-step-labels">
-          <span>결제</span>
-          <span>극장/좌석/시간</span>
-          <span>안내사항</span>
-          <span>결제</span>
+          <div className="payment-summary">
+            <h2>최종 예매 정보</h2>
+            <ul>
+              <li>
+                <strong>영화:</strong> {reservationInfo.selectedMovie?.title || "영화 미선택"}
+              </li>
+              <li>
+                <strong>날짜:</strong>{" "}
+                {reservationInfo.selectedDate
+                  ? reservationInfo.selectedDate.toLocaleDateString()
+                  : "날짜 미선택"}
+              </li>
+              <li>
+                <strong>상영 시작 시간:</strong>{" "}
+                {reservationInfo.selectedTime ? reservationInfo.selectedTime : "시간 미선택"}
+              </li>
+              <li>
+                <strong>지역:</strong> {reservationInfo.selectedRegion || "지역 미선택"}
+              </li>
+              <li>
+                <strong>지점:</strong> {reservationInfo.selectedBranch || "지점 미선택"}
+              </li>
+              <li>
+                <strong>관람 인원:</strong>{" "}
+                {reservationInfo.guestCount
+                  ? `성인 ${reservationInfo.guestCount.adult}명, 청소년 ${reservationInfo.guestCount.child}명, 우대 ${reservationInfo.guestCount.senior}명 (총 ${totalGuests}명)`
+                  : "인원 미선택"}
+              </li>
+              <li>
+                <strong>좌석:</strong>{" "}
+                {reservationInfo.selectedSeats
+                  ? reservationInfo.selectedSeats.join(", ")
+                  : "좌석 미선택"}
+              </li>
+              <li>
+                <strong>총 결제 금액:</strong>{" "}
+                {reservationInfo.totalPrice
+                  ? reservationInfo.totalPrice.toLocaleString() + "원"
+                  : "금액 미선택"}
+              </li>
+            </ul>
+          </div>
         </div>
         <div className="payment-accordion">
           <div className="payment-accordion-item">

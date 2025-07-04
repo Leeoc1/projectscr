@@ -146,28 +146,16 @@ const ReservationPlacePage = () => {
   ]);
 
   // 페이지 로드 시 선택된 영화 정보 출력
-  useEffect(() => {
-    if (reservationState.selectedMovie) {
-      console.log("🎬 선택된 영화:", reservationState.selectedMovie.title);
-    }
-  }, [reservationState.selectedMovie]);
+  // console.log("🎬 선택된 영화:", reservationState.selectedMovie.title);
 
   // 예매 상태 디버깅
-  useEffect(() => {
-    console.log("🔍 예매 상태:", {
-      selectedDate: reservationState.selectedDate,
-      selectedRegion: reservationState.selectedRegion,
-      selectedBranch: reservationState.selectedBranch,
-      selectedTime: reservationState.selectedTime,
-      isReadyToSeat: isReadyToSeat,
-    });
-  }, [
-    reservationState.selectedDate,
-    reservationState.selectedRegion,
-    reservationState.selectedBranch,
-    reservationState.selectedTime,
-    isReadyToSeat,
-  ]);
+  // console.log("🔍 예매 상태:", {
+  //   selectedDate: reservationState.selectedDate,
+  //   selectedRegion: reservationState.selectedRegion,
+  //   selectedBranch: reservationState.selectedBranch,
+  //   selectedTime: reservationState.selectedTime,
+  //   isReadyToSeat: isReadyToSeat,
+  // });
 
   // 영화가 선택되지 않은 경우 영화 선택 페이지로 리다이렉트
   if (!reservationState.selectedMovie) {
@@ -190,7 +178,7 @@ const ReservationPlacePage = () => {
 
   // 좌석 선택 페이지로 이동
   const handleGoToSeat = () => {
-    console.log("🚀 handleGoToSeat 함수 호출됨");
+    // console.log("🚀 handleGoToSeat 함수 호출됨");
 
     // 예매 정보를 세션스토리지에 저장 (useReservation 훅과 호환되는 형식)
     const reservationInfo = {
@@ -208,24 +196,24 @@ const ReservationPlacePage = () => {
       );
 
       // 콘솔에 예매 정보 출력
-      console.log("🎫 좌석 선택 버튼 클릭");
-      console.log("영화:", reservationState.selectedMovie.title);
-      console.log(
-        "날짜:",
-        reservationState.selectedDate.toLocaleDateString("ko-KR")
-      );
-      console.log(
-        "극장:",
-        `${reservationState.selectedRegion} ${reservationState.selectedBranch}`
-      );
-      console.log("상영시간:", reservationState.selectedTime);
+      // console.log("🎫 좌석 선택 버튼 클릭");
+      // console.log("영화:", reservationState.selectedMovie.title);
+      // console.log(
+      //   "날짜:",
+      //   reservationState.selectedDate.toLocaleDateString("ko-KR")
+      // );
+      // console.log(
+      //   "극장:",
+      //   `${reservationState.selectedRegion} ${reservationState.selectedBranch}`
+      // );
+      // console.log("상영시간:", reservationState.selectedTime);
     } catch (error) {
       console.error("예매 정보 저장 중 오류:", error);
     }
 
-    console.log("📍 /reservation/seat로 이동 시도");
+    // console.log("📍 /reservation/seat로 이동 시도");
     navigate("/reservation/seat");
-    console.log("✅ navigate 함수 호출 완료");
+    // console.log("✅ navigate 함수 호출 완료");
   };
 
   // 로딩 상태 표시

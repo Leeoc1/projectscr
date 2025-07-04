@@ -6,24 +6,27 @@ import "../../pagecss/reservation/ReservationSeatPage.css";
 
 const ReservationSeatPage = () => {
   const navigate = useNavigate();
-  
-  // 가격 
+
+  // 가격
   const PRICES = { adult: 10000, child: 6000, senior: 5000 };
 
-  // 세션 가져오기 
+  // 세션 가져오기
   const cinemanm = sessionStorage.getItem("cinemanm");
   const selectedMovieName = sessionStorage.getItem("selectedMovieName");
-  const selectedMovieTime = JSON.parse(sessionStorage.getItem("selectedMovieTime"));
+  const selectedMovieTimeRaw = sessionStorage.getItem("selectedMovieTime");
+  const selectedMovieTime = selectedMovieTimeRaw
+    ? JSON.parse(selectedMovieTimeRaw)
+    : null;
   const selectedFullDate = sessionStorage.getItem("selectedFullDate");
 
-  // 상영시간 
-  const runningtime = selectedMovieTime.runningtime;
+  // 상영시간
+  const runningtime = selectedMovieTime?.runningtime;
 
-  // 영화시작시간 
-  const starttime = selectedMovieTime.starttime.split(' ')[1]?.substring(0, 5);
+  // 영화시작시간
+  const starttime = selectedMovieTime?.starttime.split(" ")[1]?.substring(0, 5);
 
   // 전체 좌석
-  const allseat = selectedMovieTime.allseat;
+  const allseat = selectedMovieTime?.allseat;
 
   // 인원수 상태
   const [guestCount, setGuestCount] = useState({
@@ -32,7 +35,7 @@ const ReservationSeatPage = () => {
     senior: 0,
   });
 
-  // 총 인원수 
+  // 총 인원수
   const totalGuests = guestCount.adult + guestCount.child + guestCount.senior;
 
   // 선택된 좌석들 (배열로 관리)
@@ -43,12 +46,14 @@ const ReservationSeatPage = () => {
     setSelectedSeats([]);
   }, [totalGuests]);
 
-  // 총 가격 
-  const totalPrice = guestCount.adult * PRICES.adult + guestCount.child * PRICES.child + guestCount.senior * PRICES.senior;
-
+  // 총 가격
+  const totalPrice =
+    guestCount.adult * PRICES.adult +
+    guestCount.child * PRICES.child +
+    guestCount.senior * PRICES.senior;
 
   // 조건부 이동 처리
-  if (!sessionStorage.getItem("selectedMovieTime")) {
+  if (!selectedMovieTime) {
     navigate("/reservation/place");
     return null;
   }
@@ -59,28 +64,28 @@ const ReservationSeatPage = () => {
   // );
   // const seatColumns = Array.from({ length: 12 }, (_, i) => i + 1);
 
-
   // 좌석 데이터 (12열 고정)
   // totalRows 총 행 수 (나머지 있을 시 반올림)
-  // seatRows 행 이름 
+  // seatRows 행 이름
   const totalRows = Math.ceil(allseat / 12);
   const seatRows = Array.from({ length: totalRows }, (_, i) =>
     String.fromCharCode(65 + i)
   );
 
-  // 인원 변경 함수 
+  // 인원 변경 함수
   const handleGuestChange = (type, diff) => {
-    setGuestCount(prev => {
+    setGuestCount((prev) => {
       const next = { ...prev, [type]: Math.max(0, prev[type] + diff) };
       return next;
     });
-  }
-
+  };
 
   // 결제 페이지로 이동
   const handleGoToPayment = () => {
-      navigate("/reservation/payment");
-      sessionStorage.setItem("finalReservationInfo", JSON.stringify({
+    navigate("/reservation/payment");
+    sessionStorage.setItem(
+      "finalReservationInfo",
+      JSON.stringify({
         selectedMovieName: selectedMovieName,
         selectedFullDate: selectedFullDate,
         starttime: starttime,
@@ -89,34 +94,33 @@ const ReservationSeatPage = () => {
         totalGuests: totalGuests,
         selectedSeats: selectedSeats,
         totalPrice: totalPrice,
-      }));
+      })
+    );
   };
 
-
-  // 좌석 선택 함수 
+  // 좌석 선택 함수
   const handleSeatClick = (seatId) => {
-    setSelectedSeats(prev => {
-      // prev == selectedSeats 배열 
+    setSelectedSeats((prev) => {
+      // prev == selectedSeats 배열
 
       // 이미 선택한 좌석인지 확인
       const isSelected = prev.includes(seatId);
 
       if (isSelected) {
-        // 이미 선택된 좌석이면 제거 
-        return prev.filter(id => id !== seatId);
+        // 이미 선택된 좌석이면 제거
+        return prev.filter((id) => id !== seatId);
       } else {
         // 인원수보다 많이 선택하려고 하면 막기
         if (prev.length >= totalGuests) {
           alert(`최대 ${totalGuests}개의 좌석만 선택할 수 있습니다.`);
           return prev;
         }
-        console.log(seatId);
 
         // 좌석 추가
         return [...prev, seatId];
       }
-    })};
-
+    });
+  };
 
   return (
     <div className="reservation-seat-page">
@@ -147,20 +151,16 @@ const ReservationSeatPage = () => {
             <h2>예매 정보</h2>
             <div className="summary-info">
               <p>
-                <strong>영화:</strong>{" "}
-                {selectedMovieName || "영화 미선택"}
+                <strong>영화:</strong> {selectedMovieName || "영화 미선택"}
               </p>
               <p>
-                <strong>날짜:</strong>{" "}
-                {selectedFullDate || "날짜 미선택"}
+                <strong>날짜:</strong> {selectedFullDate || "날짜 미선택"}
               </p>
               <p>
-                <strong>극장:</strong>{" "}
-                {cinemanm}
+                <strong>극장:</strong> {cinemanm}
               </p>
               <p>
-                <strong>상영시간:</strong>{" "}
-                {runningtime} 분
+                <strong>상영시간:</strong> {runningtime} 분
               </p>
             </div>
           </div>
@@ -231,20 +231,28 @@ const ReservationSeatPage = () => {
                 <div key={row} className="seat-row">
                   <span className="row-label">{row}</span>
                   {/* 마지막 행이고 나머지가 있으면 나머지만큼의 좌석, 마지막행이 아니거나 나머지가 0이면 12개의 좌석 */}
-                  {Array.from({ length: rowIndex === totalRows - 1 && allseat % 12 !== 0 ? allseat % 12 : 12 }, (_, i) => {
-                    const column = i + 1;
-                    const seatId = `${row}${column}`;
-                    const isSelected = selectedSeats.includes(seatId);
-                    return (
-                      <button
-                        key={column}
-                        className={`seat ${isSelected ? "selected" : ""}`}
-                        onClick={() => handleSeatClick(seatId)}
-                      >
-                        {column}
-                      </button>
-                    );
-                  })}
+                  {Array.from(
+                    {
+                      length:
+                        rowIndex === totalRows - 1 && allseat % 12 !== 0
+                          ? allseat % 12
+                          : 12,
+                    },
+                    (_, i) => {
+                      const column = i + 1;
+                      const seatId = `${row}${column}`;
+                      const isSelected = selectedSeats.includes(seatId);
+                      return (
+                        <button
+                          key={column}
+                          className={`seat ${isSelected ? "selected" : ""}`}
+                          onClick={() => handleSeatClick(seatId)}
+                        >
+                          {column}
+                        </button>
+                      );
+                    }
+                  )}
                 </div>
               ))}
             </div>

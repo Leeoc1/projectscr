@@ -16,7 +16,6 @@ const MovieCard = ({ movie, isBoxOffice }) => {
     // 영화 정보를 세션 스토리지에 저장
     try {
       sessionStorage.setItem("selectedMovie", JSON.stringify(movie));
-      console.log("🎬 예매하기 버튼 클릭 - 영화:", movie.title);
     } catch (error) {
       console.error("영화 정보 저장 중 오류:", error);
     }

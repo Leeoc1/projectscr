@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../pubcomponent/Header";
 import "../../pagecss/reservation/ReservationPlaceToMovie.css";
@@ -14,39 +14,14 @@ const ReservationPlaceToMoviePage = () => {
   const selectedRegion = location.state?.selectedRegion || "서울";
   const selectedBranch = location.state?.selectedBranch || "가양";
 
-  // 영화 시간 초기화
-  useEffect(() => {
-    sessionStorage.removeItem("selectedMovieTime");
-  }, []);
-
   // 날짜 상태
   const today = new Date();
   const [selectedDateObj] = useState(
     new Date(today.getFullYear(), today.getMonth(), today.getDate())
   );
 
-  // 선택 상태를 실시간으로 추적
-  const [isReadyToSeat, setIsReadyToSeat] = useState(false);
-
-  // 선택 상태 확인 함수
-  const checkSelectionStatus = () => {
-    const selectedDate = sessionStorage.getItem("selectedFullDate");
-    const selectedMovie = sessionStorage.getItem("selectedMovieName");
-    const selectedTime = sessionStorage.getItem("selectedMovieTime");
-
-    const isReady = selectedDate && selectedMovie && selectedTime;
-    setIsReadyToSeat(isReady);
-  };
-
-  // 세션 스토리지 변경 감지
-  useEffect(() => {
-    const handleSessionStorageChange = () => {
-      checkSelectionStatus();
-    };
-
-    // 커스텀 이벤트 리스너
-    window.addEventListener("sessionStorageChange", handleSessionStorageChange);
-  }, []);
+  // 선택 완료 여부 체크
+  const isReadyToSeat = selectedDateObj && selectedRegion && selectedBranch;
 
   // 좌석 선택 버튼 클릭 시 이동
   const handleGoToSeat = () => {
@@ -59,22 +34,6 @@ const ReservationPlaceToMoviePage = () => {
       },
     });
   };
-
-  // 페이지 언마운ㅌ
-  useEffect(() => {
-    return () => {
-      const cinemacd = sessionStorage.getItem("cinemacd");
-      const cinemanm = sessionStorage.getItem("cinemanm");
-      const selectedMovieTime = sessionStorage.getItem("selectedMovieTime");
-
-      sessionStorage.clear();
-
-      if (cinemacd) sessionStorage.setItem("cinemacd", cinemacd);
-      if (cinemanm) sessionStorage.setItem("cinemanm", cinemanm);
-      if (selectedMovieTime)
-        sessionStorage.setItem("selectedMovieTime", selectedMovieTime);
-    };
-  }, []);
 
   return (
     <div className="rptm-reservation-page">

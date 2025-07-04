@@ -54,9 +54,6 @@ const MovieSelector = () => {
       const newMovieName = event.detail.selectedMovieName;
       if (newMovieName) {
         setSelectedMovieName(newMovieName);
-      } else if (sessionStorage.getItem("selectedMovieName") === null) {
-        // 날짜가 바뀌어서 영화 이름이 초기화된 경우
-        setSelectedMovieName(null);
       }
     };
 

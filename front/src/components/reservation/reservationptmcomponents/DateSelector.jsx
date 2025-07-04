@@ -54,7 +54,8 @@ const DateSelector = () => {
       item.date.getMonth(),
       item.date.getDate()
     );
-    setSelectedDate(newDate); // useEffect가 sessionStorage를 업데이트
+    setSelectedDate(newDate);
+    sessionStorage.removeItem("selectedMovieName"); // useEffect가 sessionStorage를 업데이트
   };
 
   useEffect(() => {

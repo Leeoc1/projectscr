@@ -16,22 +16,32 @@ const ScreenSelector = () => {
     const fetchSchedule = async () => {
       try {
         const selectedSchedule = await getSchedules();
-        
+
         console.log("API에서 받은 전체 스케줄:", selectedSchedule);
         console.log("선택된 영화명:", selectedMovieName);
         console.log("선택된 날짜:", selectedDate);
-        
-        const filteredSchedules = selectedSchedule.filter(
-          (schedule) => {
-            console.log("스케줄 영화명:", schedule.movienm, "선택된 영화명:", selectedMovieName);
-            console.log("스케줄 날짜:", schedule.startdate, "선택된 날짜:", selectedDate);
-            return schedule.movienm === selectedMovieName &&
-                   schedule.startdate === selectedDate;
-          }
-        );
-        
+
+        const filteredSchedules = selectedSchedule.filter((schedule) => {
+          console.log(
+            "스케줄 영화명:",
+            schedule.movienm,
+            "선택된 영화명:",
+            selectedMovieName
+          );
+          console.log(
+            "스케줄 날짜:",
+            schedule.startdate,
+            "선택된 날짜:",
+            selectedDate
+          );
+          return (
+            schedule.movienm === selectedMovieName &&
+            schedule.startdate === selectedDate
+          );
+        });
+
         console.log("필터링 결과:", filteredSchedules);
-        
+
         // 상영 시간순으로 정렬
         filteredSchedules.sort(
           (a, b) => new Date(a.starttime) - new Date(b.starttime)
@@ -77,21 +87,31 @@ const ScreenSelector = () => {
   // 상영 시간 선택
   const handleTimeSelect = (schedule) => {
     setSelectedStartTime(schedule.starttime);
-    sessionStorage.setItem(
-      "selectedMovieTime",
-      JSON.stringify({
-        starttime: schedule.starttime,
-        reservationseat: schedule.reservationseat,
-        allseat: schedule.allseat,
-        screenname: schedule.screenname,
-        schedulecd: schedule.schedulecd, // 예약 진행을 위해 schedulecd 추가
+    const timeData = {
+      starttime: schedule.starttime,
+      reservationseat: schedule.reservationseat,
+      allseat: schedule.allseat,
+      screenname: schedule.screenname,
+      schedulecd: schedule.schedulecd, // 예약 진행을 위해 schedulecd 추가
+    };
+    sessionStorage.setItem("selectedMovieTime", JSON.stringify(timeData));
+
+    // 세션 스토리지 변경 이벤트 발생
+    window.dispatchEvent(
+      new CustomEvent("sessionStorageChange", {
+        detail: {
+          selectedFullDate: sessionStorage.getItem("selectedFullDate"),
+          selectedMovieName: sessionStorage.getItem("selectedMovieName"),
+          selectedMovieTime: JSON.stringify(timeData),
+        },
       })
     );
   };
 
   // screentype 목록을 추출하고 중복 제거
-  const uniqueScreentypes = [...new Set(movieSchedule.map(schedule => schedule.screentype))];
-  
+  const uniqueScreentypes = [
+    ...new Set(movieSchedule.map((schedule) => schedule.screentype)),
+  ];
 
   return (
     <div className="rptm-time-list-area">
@@ -104,12 +124,10 @@ const ScreenSelector = () => {
           <>
             {uniqueScreentypes.map((screentype) => (
               <div key={screentype}>
-                <div className="rptm-screen-type-title">
-                  {screentype}
-                </div>
+                <div className="rptm-screen-type-title">{screentype}</div>
                 <div className="rptm-screen-times-grid">
                   {movieSchedule
-                    .filter(schedule => schedule.screentype === screentype)
+                    .filter((schedule) => schedule.screentype === screentype)
                     .map((schedule) => (
                       <div
                         key={schedule.schedulecd}
@@ -121,7 +139,7 @@ const ScreenSelector = () => {
                         onClick={() => handleTimeSelect(schedule)}
                       >
                         <div className="rptm-screen-time-time">
-                          {schedule.starttime.split(' ')[1]?.substring(0, 5)}
+                          {schedule.starttime.split(" ")[1]?.substring(0, 5)}
                         </div>
                         <div className="rptm-screen-time-seats">
                           {schedule.reservationseat}/{schedule.allseat}

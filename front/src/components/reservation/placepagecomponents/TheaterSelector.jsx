@@ -63,14 +63,9 @@ const TheaterSelector = ({
                     key={item.time + idx}
                     onClick={() => onTimeSelect(item.time)}
                   >
-                    <div className="screen-time-time">
-                      {item.time
-                        ? item.time.split(" ")[1]?.substring(0, 5)
-                        : item.time}
-                    </div>
+                    <div className="screen-time-time">{item.time}</div>
                     <div className="screen-time-seats">
-                      {item.raservationseat || item.reservationseat} /{" "}
-                      {item.allseat}
+                      {item.raservationseat} / {item.allseat}
                     </div>
                     <div className="screen-time-screen">
                       {item.screen} ({item.screentype})

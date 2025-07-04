@@ -41,7 +41,7 @@ export const useReservation = () => {
     const isMovieActuallySelected =
       selectedMovie &&
       selectedMovie.title !== "영화를 선택해주세요" &&
-      selectedMovie.id;
+      selectedMovie.moviecd !== null;
 
     setReservationState((prev) => ({
       ...prev,

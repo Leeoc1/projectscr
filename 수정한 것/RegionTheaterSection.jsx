@@ -1,17 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const RegionTheaterSection = ({ filteredTheaters }) => {
+const RegionTheaterSection = ({ filteredCinemas }) => {
   const navigate = useNavigate();
 
-  const handleScheduleClick = (theater) => {
-    // 극장 정보를 state로 전달하여 ReservationPlaceToMoviePage로 이동
-    navigate("/reservation/movie", {
-      state: {
-        selectedRegion: theater.region,
-        selectedBranch: theater.name,
-      },
-    });
+  const handleScheduleClick = (cinema) => {
+    navigate("/reservation/movie");
   };
 
   return (
@@ -34,7 +28,7 @@ const RegionTheaterSection = ({ filteredTheaters }) => {
             <div className="rts-actions">
               <button
                 className="rts-btn primary"
-                onClick={() => handleScheduleClick(theater)}
+                onClick={() => handleScheduleClick(cinema)}
               >
                 상영시간표
               </button>

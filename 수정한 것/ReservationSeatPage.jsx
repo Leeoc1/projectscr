@@ -1,25 +1,147 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../pubcomponent/Header";
-import { useSeatSelection } from "../../hooks/useSeatSelection";
+import { 
+  getSelectedMovie,
+  getSelectedDate,
+  getSelectedRegion,
+  getSelectedBranch,
+  getSelectedTime,
+  getGuestCount,
+  getSelectedSeats,
+  getTotalPrice
+} from "../../utils/reservationStorage";
+import { validateSeatSelection } from "../../utils/validationUtils";
 import "../../pagecss/reservation/ReservationSeatPage.css";
+
+// 가격 정보 (상수로 분리)
+const PRICES = { adult: 10000, child: 6000, senior: 5000 };
 
 const ReservationSeatPage = () => {
   const navigate = useNavigate();
+  
+  // 좌석 선택 상태
+  const [seatState, setSeatState] = useState({
+    guestCount: { adult: 1, child: 0, senior: 0 },
+    selectedSeats: [],
+    totalPrice: 10000,
+  });
 
-  // 커스텀 훅 사용
-  const {
-    seatState,
-    reservationInfo,
-    prices,
-    totalGuests,
-    handleGuestChange,
-    handleSeatClick,
-    prepareForPayment,
-  } = useSeatSelection();
+  // 예매 데이터
+  const [reservationData, setReservationData] = useState({
+    selectedDate: null,
+    selectedRegion: null,
+    selectedBranch: null,
+    selectedTime: null,
+    selectedMovie: null,
+  });
+
+  // 예매 정보 로드
+  useEffect(() => {
+    const selectedDate = getSelectedDate();
+    const selectedRegion = getSelectedRegion();
+    const selectedBranch = getSelectedBranch();
+    const selectedTime = getSelectedTime();
+    const selectedMovie = getSelectedMovie();
+    const guestCount = getGuestCount();
+    const selectedSeats = getSelectedSeats();
+    const totalPrice = getTotalPrice();
+
+    setReservationData({
+      selectedDate,
+      selectedRegion,
+      selectedBranch,
+      selectedTime,
+      selectedMovie,
+    });
+
+    // 저장된 좌석 정보가 있으면 로드
+    if (guestCount) {
+      setSeatState(prev => ({
+        ...prev,
+        guestCount,
+        selectedSeats: selectedSeats || [],
+        totalPrice: totalPrice || 10000,
+      }));
+    }
+  }, []);
+
+  // 총 인원 수 계산
+  const totalGuests = seatState.guestCount.adult + seatState.guestCount.child + seatState.guestCount.senior;
+
+  // 인원 수 변경
+  const handleGuestChange = (type, change) => {
+    const newCount = Math.max(0, seatState.guestCount[type] + change);
+    const newGuestCount = {
+      ...seatState.guestCount,
+      [type]: newCount,
+    };
+
+    const newTotalPrice = 
+      newGuestCount.adult * PRICES.adult +
+      newGuestCount.child * PRICES.child +
+      newGuestCount.senior * PRICES.senior;
+
+    setSeatState(prev => {
+      const newState = {
+        ...prev,
+        guestCount: newGuestCount,
+        totalPrice: newTotalPrice,
+      };
+
+      // 인원 수가 줄어들면 초과된 좌석 선택 해제
+      const newTotalGuests = newGuestCount.adult + newGuestCount.child + newGuestCount.senior;
+      if (prev.selectedSeats.length > newTotalGuests) {
+        newState.selectedSeats = prev.selectedSeats.slice(0, newTotalGuests);
+      }
+
+      return newState;
+    });
+  };
+
+  // 좌석 선택/해제
+  const handleSeatClick = (row, column) => {
+    const seatId = `${row}${column}`;
+
+    setSeatState(prev => {
+      if (prev.selectedSeats.includes(seatId)) {
+        // 이미 선택된 좌석이면 해제
+        return {
+          ...prev,
+          selectedSeats: prev.selectedSeats.filter((seat) => seat !== seatId),
+        };
+      } else {
+        // 새로운 좌석 선택 시 인원 수 체크
+        if (prev.selectedSeats.length < totalGuests) {
+          return {
+            ...prev,
+            selectedSeats: [...prev.selectedSeats, seatId],
+          };
+        } else {
+          alert(`최대 ${totalGuests}명까지만 좌석을 선택할 수 있습니다.`);
+          return prev;
+        }
+      }
+    });
+  };
+
+  // 결제 페이지로 이동 준비
+  const prepareForPayment = () => {
+    const validation = validateSeatSelection({
+      totalGuests,
+      selectedSeats: seatState.selectedSeats,
+    });
+
+    if (!validation.isValid) {
+      alert(validation.error);
+      return false;
+    }
+
+    return true;
+  };
 
   // 조건부 이동 처리
-  if (!sessionStorage.getItem("selectedMovieTime")) {
+  if (!reservationData?.selectedDate || !reservationData?.selectedBranch) {
     navigate("/reservation/place");
     return null;
   }
@@ -67,21 +189,19 @@ const ReservationSeatPage = () => {
             <div className="summary-info">
               <p>
                 <strong>영화:</strong>{" "}
-                {reservationInfo?.selectedMovie?.title || "영화 미선택"}
+                {reservationData?.selectedMovie?.movienm || "영화 미선택"}
               </p>
               <p>
                 <strong>날짜:</strong>{" "}
-                {reservationInfo?.selectedDate
-                  ? reservationInfo.selectedDate.toLocaleDateString()
-                  : "날짜 미선택"}
+                {reservationData?.selectedDate ? reservationData.selectedDate.toLocaleDateString() : "날짜 미선택"}
               </p>
               <p>
-                <strong>극장:</strong> {reservationInfo?.selectedRegion}{" "}
-                {reservationInfo?.selectedBranch}
+                <strong>극장:</strong> {reservationData?.selectedRegion}{" "}
+                {reservationData?.selectedBranch}
               </p>
               <p>
                 <strong>상영시간:</strong>{" "}
-                {reservationInfo?.selectedTime || "시간 미선택"}
+                {reservationData?.selectedTime || "시간 미선택"}
               </p>
             </div>
           </div>
@@ -102,7 +222,7 @@ const ReservationSeatPage = () => {
                   </button>
                 </div>
                 <span className="price-info">
-                  ({prices.adult.toLocaleString()}원)
+                  ({PRICES.adult.toLocaleString()}원)
                 </span>
               </div>
               <div className="guest-counter">
@@ -117,7 +237,7 @@ const ReservationSeatPage = () => {
                   </button>
                 </div>
                 <span className="price-info">
-                  ({prices.child.toLocaleString()}원)
+                  ({PRICES.child.toLocaleString()}원)
                 </span>
               </div>
               <div className="guest-counter">
@@ -132,7 +252,7 @@ const ReservationSeatPage = () => {
                   </button>
                 </div>
                 <span className="price-info">
-                  ({prices.senior.toLocaleString()}원)
+                  ({PRICES.senior.toLocaleString()}원)
                 </span>
               </div>
             </div>
@@ -173,8 +293,7 @@ const ReservationSeatPage = () => {
           <div className="selected-seats-info">
             <h3>선택된 좌석: {seatState.selectedSeats.join(", ") || "없음"}</h3>
             <p>
-              선택된 좌석: {seatState.selectedSeats.length}개 / 총 인원:{" "}
-              {totalGuests}명
+              선택된 좌석: {seatState.selectedSeats.length}개 / 총 인원: {totalGuests}명
             </p>
           </div>
 
@@ -184,34 +303,24 @@ const ReservationSeatPage = () => {
             <div className="price-details">
               {seatState.guestCount.adult > 0 && (
                 <p>
-                  성인 {seatState.guestCount.adult}명 ×{" "}
-                  {prices.adult.toLocaleString()}원 ={" "}
-                  {(seatState.guestCount.adult * prices.adult).toLocaleString()}
-                  원
+                  성인 {seatState.guestCount.adult}명 × {PRICES.adult.toLocaleString()}원
+                  = {(seatState.guestCount.adult * PRICES.adult).toLocaleString()}원
                 </p>
               )}
               {seatState.guestCount.child > 0 && (
                 <p>
-                  청소년 {seatState.guestCount.child}명 ×{" "}
-                  {prices.child.toLocaleString()}원 ={" "}
-                  {(seatState.guestCount.child * prices.child).toLocaleString()}
-                  원
+                  청소년 {seatState.guestCount.child}명 × {PRICES.child.toLocaleString()}
+                  원 = {(seatState.guestCount.child * PRICES.child).toLocaleString()}원
                 </p>
               )}
               {seatState.guestCount.senior > 0 && (
                 <p>
-                  우대 {seatState.guestCount.senior}명 ×{" "}
-                  {prices.senior.toLocaleString()}원 ={" "}
-                  {(
-                    seatState.guestCount.senior * prices.senior
-                  ).toLocaleString()}
-                  원
+                  우대 {seatState.guestCount.senior}명 × {PRICES.senior.toLocaleString()}
+                  원 = {(seatState.guestCount.senior * PRICES.senior).toLocaleString()}원
                 </p>
               )}
               <div className="total-price">
-                <strong>
-                  총 결제 금액: {seatState.totalPrice.toLocaleString()}원
-                </strong>
+                <strong>총 결제 금액: {seatState.totalPrice.toLocaleString()}원</strong>
               </div>
             </div>
           </div>
@@ -225,8 +334,7 @@ const ReservationSeatPage = () => {
               className="payment-btn"
               onClick={handleGoToPayment}
               disabled={
-                totalGuests === 0 ||
-                seatState.selectedSeats.length !== totalGuests
+                totalGuests === 0 || seatState.selectedSeats.length !== totalGuests
               }
             >
               결제하기

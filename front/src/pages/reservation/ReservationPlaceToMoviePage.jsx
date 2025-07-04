@@ -28,8 +28,8 @@ const ReservationPlaceToMoviePage = () => {
     navigate("/reservation/seat", {
       state: {
         selectedDate: selectedDateObj,
-        selectedRegion,
-        selectedBranch,
+        selectedRegion: selectedRegion,
+        selectedBranch: selectedBranch,
         selectedMovie: location.state?.selectedMovie || null,
       },
     });

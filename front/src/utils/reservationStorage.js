@@ -36,7 +36,7 @@ export const getSelectedMovie = () => {
     title: "영화를 선택해주세요",
     genre: "장르",
     poster: "/images/movie.jpg",
-    moviecd: null,
+    id: null,
   };
 };
 
@@ -47,4 +47,4 @@ export const saveReservationInfo = (info) => {
   } catch (error) {
     console.error("세션 스토리지에 예매 정보를 저장하는 중 오류:", error);
   }
-}; 
+};

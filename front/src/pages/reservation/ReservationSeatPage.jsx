@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../pubcomponent/Header";
 import { useSeatSelection } from "../../hooks/useSeatSelection";
@@ -36,6 +36,8 @@ const ReservationSeatPage = () => {
       navigate("/reservation/payment");
     }
   };
+
+
 
   return (
     <div className="reservation-seat-page">

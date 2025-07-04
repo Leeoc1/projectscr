@@ -10,6 +10,9 @@ const MoviePage = () => {
       document.body.classList.remove("no-header-padding");
     };
   }, []);
+  useEffect(() => {
+    sessionStorage.clear();
+  }, []);
 
   return (
     <div className="mvp-page">

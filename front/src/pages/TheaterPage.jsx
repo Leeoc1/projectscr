@@ -2,7 +2,9 @@ import React, { useEffect } from "react";
 import TheaterBox from "../components/thearterpagecomponents/TheaterBox";
 
 const TheaterPage = () => {
-
+useEffect(() => {
+  sessionStorage.clear();
+}, []);
 
   return (
     <div>

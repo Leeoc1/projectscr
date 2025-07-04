@@ -18,7 +18,7 @@ export const validateReservationData = () => {
   }
   
   if (!selectedTime) {
-    return { isValid: false, error: "상영시간을 선택해주세요." };
+    return { isValid: false, error: "상영시간을." };
   }
   
   return { isValid: true, error: null };
@@ -105,4 +105,4 @@ export const validateFilteredData = (filteredData) => {
   }
 
   return { isValid: true, error: null };
-}; 
+};

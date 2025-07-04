@@ -12,10 +12,6 @@ const MovieCard = ({ movie, isBoxOffice }) => {
     return "";
   };
 
-  const goSelectPlace = () => {
-    navigate("/reservation/place");
-  };
-
   return (
     <div className="mvs-card">
       <div className="mvs-poster">

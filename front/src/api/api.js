@@ -9,28 +9,6 @@ const api = axios.create({
   },
 });
 
-// 현재상영작 조회
-export const getCurrentMovies = async () => {
-  try {
-    const response = await api.get("/movies/current");
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching current movies:", error);
-    return [];
-  }
-};
-
-// 상영예정작 조회
-export const getUpcomingMovies = async () => {
-  try {
-    const response = await api.get("/movies/upcoming");
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching upcoming movies:", error);
-    return [];
-  }
-};
-
 // 현재상영작과 상영예정작 목록 조회
 export const getMoviesForAdmin = () =>
   api
@@ -41,10 +19,31 @@ export const getMoviesForAdmin = () =>
       return { currentMovies: [], upcomingMovies: [] };
     });
 
+// 극장 -> 영화 (ReservationPlaceToMoviePage)
+// 영화 목록 조회(moviecd, movienm만 조회)
+export const getMovieList = () =>
+  api
+    .get("/movies/list")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching movies:", error);
+      return [];
+    });
+
+// 극장 목록 조회
+export const getCinemas = () =>
+  api
+    .get("/cinemas")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching cinema:", error);
+      return [];
+    });
+
 // 지역별 상영관 목록 조회
 export const getScreens = (regionCode) =>
   api
-    .get("/screens", { params: { regionCode } })
+    .get("/api/screens", { params: { regionCode } })
     .then((response) => response.data)
     .catch((error) => {
       console.error("Error fetching screens:", error);
@@ -71,13 +70,24 @@ export const getAllUsers = () =>
       return [];
     });
 
-    export const getSchedules = () =>
-      api
-        .get("/schedules")
-        .then((response) => response.data)
-        .catch((error) => {
-          console.error("Error fetching users:", error);
-          return [];
-        });
+// 지역
+export const getRegions = () =>
+  api
+    .get("/regions")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching regions:", error);
+      return [];
+    });
+
+// schedule view 불러오기
+export const getSchedules = (cinemaCd, date) =>
+  api
+    .get("/schedules", { params: { cinemaCd, date } })
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching schedules:", error);
+      return [];
+    });
 
 export default api;

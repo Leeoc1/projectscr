@@ -1,17 +1,22 @@
 import { formatDate } from "./DateUtils";
 
 // 스케줄 필터링 함수
-export const filterSchedulesByMovieAndDate = (schedules, movieTitle, selectedDate) => {
+export const filterSchedulesByMovieAndDate = (
+  schedules,
+  movieTitle,
+  selectedDate
+) => {
   if (!schedules.length || !movieTitle || !selectedDate) {
     return [];
   }
 
   const selectedDateStr = formatDate(selectedDate);
-  
+
   return schedules.filter(
     (item) =>
       item.movienm === movieTitle &&
-      item.startdate && item.startdate.startsWith(selectedDateStr)
+      item.startdate &&
+      item.startdate.startsWith(selectedDateStr)
   );
 };
 
@@ -23,23 +28,28 @@ export const extractRegions = (schedules) => {
 // 지점 리스트 추출
 export const extractBranches = (schedules, selectedRegion) => {
   if (!selectedRegion) return [];
-  
-  return [...new Set(
-    schedules
-      .filter((item) => item.regionnm === selectedRegion)
-      .map((item) => item.cinemanm)
-  )];
+
+  return [
+    ...new Set(
+      schedules
+        .filter((item) => item.regionnm === selectedRegion)
+        .map((item) => item.cinemanm)
+    ),
+  ];
 };
 
 // 상영시간 리스트 추출
-export const extractScreenTimes = (schedules, selectedRegion, selectedBranch) => {
+export const extractScreenTimes = (
+  schedules,
+  selectedRegion,
+  selectedBranch
+) => {
   if (!selectedRegion || !selectedBranch) return [];
-  
+
   return schedules
     .filter(
       (item) =>
-        item.regionnm === selectedRegion &&
-        item.cinemanm === selectedBranch
+        item.regionnm === selectedRegion && item.cinemanm === selectedBranch
     )
     .map((item) => ({
       time: item.starttime,
@@ -51,12 +61,26 @@ export const extractScreenTimes = (schedules, selectedRegion, selectedBranch) =>
 };
 
 // 전체 필터링된 데이터 생성
-export const generateFilteredData = (schedules, movieTitle, selectedDate, selectedRegion, selectedBranch) => {
-  const filteredSchedules = filterSchedulesByMovieAndDate(schedules, movieTitle, selectedDate);
-  
+export const generateFilteredData = (
+  schedules,
+  movieTitle,
+  selectedDate,
+  selectedRegion,
+  selectedBranch
+) => {
+  const filteredSchedules = filterSchedulesByMovieAndDate(
+    schedules,
+    movieTitle,
+    selectedDate
+  );
+
   return {
     regions: extractRegions(filteredSchedules),
     branches: extractBranches(filteredSchedules, selectedRegion),
-    screenTimes: extractScreenTimes(filteredSchedules, selectedRegion, selectedBranch),
+    screenTimes: extractScreenTimes(
+      filteredSchedules,
+      selectedRegion,
+      selectedBranch
+    ),
   };
-}; 
+};

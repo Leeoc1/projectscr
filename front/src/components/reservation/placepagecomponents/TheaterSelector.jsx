@@ -49,9 +49,7 @@ const TheaterSelector = ({
         <div className="time-list-area">
           <div className="time-list-content">
             {!selectedRegion && <div>지역을 먼저 선택하세요.</div>}
-            {selectedRegion && !selectedBranch && (
-              <div>지점을 선택하세요.</div>
-            )}
+            {selectedRegion && !selectedBranch && <div>지점을 선택하세요.</div>}
             {selectedRegion && selectedBranch && screenTimes.length === 0 && (
               <div>상영 정보가 없습니다.</div>
             )}
@@ -63,11 +61,16 @@ const TheaterSelector = ({
                       selectedTime === item.time ? " active" : ""
                     }`}
                     key={item.time + idx}
-                    onClick={() => onTimeSelect(item.time)}
+                    onClick={() => onTimeSelect(item)}
                   >
-                    <div className="screen-time-time">{item.time}</div>
+                    <div className="screen-time-time">
+                      {item.time
+                        ? item.time.split(" ")[1]?.substring(0, 5)
+                        : item.time}
+                    </div>
                     <div className="screen-time-seats">
-                      {item.raservationseat} / {item.allseat}
+                      {item.raservationseat || item.reservationseat} /{" "}
+                      {item.allseat}
                     </div>
                     <div className="screen-time-screen">
                       {item.screen} ({item.screentype})
@@ -83,4 +86,4 @@ const TheaterSelector = ({
   );
 };
 
-export default TheaterSelector; 
+export default TheaterSelector;

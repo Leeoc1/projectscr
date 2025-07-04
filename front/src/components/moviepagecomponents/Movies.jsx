@@ -26,7 +26,7 @@ const Movies = () => {
           className={`mvs-tab-button ${
             activeTab === "boxoffice" ? "active" : ""
           }`}
-          onClick={() => handleTabChange("boxoffice")}
+          onClick={() => setActiveTab("boxoffice")}
         >
           박스오피스
         </button>
@@ -34,22 +34,17 @@ const Movies = () => {
           className={`mvs-tab-button ${
             activeTab === "upcoming" ? "active" : ""
           }`}
-          onClick={() => handleTabChange("upcoming")}
+          onClick={() => setActiveTab("upcoming")}
         >
           상영예정작
         </button>
       </div>
       <div className="mvs-grid">
         {activeTab === "boxoffice"
-          ? currentMovies.map((movie, index) => (
-              <div className="mvs-card" key={movie.moviecd}>
+          ? boxofficeMovies.map((movie) => (
+              <div className="mvs-card" key={movie.id}>
                 <div className="mvs-poster">
-                  <img
-                    src={
-                      movie.posterUrl ? movie.posterUrl : "/images/movie.jpg"
-                    }
-                    alt={movie.movienm}
-                  />
+                  <img src={movie.poster} alt={movie.title} />
                   <div className="mvs-overlay">
                     <div className="mvs-buttons">
                       <button className="mvs-btn">상세정보</button>
@@ -64,28 +59,23 @@ const Movies = () => {
                 </div>
                 <div className="mvs-info">
                   <h3 className="mvs-title">
-                    {index < 10 && (
-                      <span className={`rank-number rank-${index + 1}`}>
-                        {index + 1}
+                    {movie.rank <= 10 && (
+                      <span className={`rank-number rank-${movie.rank}`}>
+                        {movie.rank}
                       </span>
                     )}
-                    {movie.movienm}
+                    {movie.title}
                   </h3>
                   <p className="mvs-genre">{movie.genre}</p>
-                  <p className="mvs-rating">{getRatingText(movie.isadult)}</p>
-                  <p className="mvs-duration">{movie.runningtime}분</p>
+                  <p className="mvs-rating">{movie.rating}</p>
+                  <p className="mvs-duration">{movie.duration}</p>
                 </div>
               </div>
             ))
           : upcomingMovies.map((movie) => (
-              <div className="mvs-card" key={movie.moviecd}>
+              <div className="mvs-card" key={movie.id}>
                 <div className="mvs-poster">
-                  <img
-                    src={
-                      movie.posterUrl ? movie.posterUrl : "/images/movie.jpg"
-                    }
-                    alt={movie.movienm}
-                  />
+                  <img src={movie.poster} alt={movie.title} />
                   <div className="mvs-overlay">
                     <div className="mvs-buttons">
                       <button className="mvs-btn">상세정보</button>
@@ -93,11 +83,10 @@ const Movies = () => {
                   </div>
                 </div>
                 <div className="mvs-info">
-                  <h3 className="mvs-title">{movie.movienm}</h3>
+                  <h3 className="mvs-title">{movie.title}</h3>
                   <p className="mvs-genre">{movie.genre}</p>
                   <p className="mvs-release">
-                    개봉 예정일:{" "}
-                    {new Date(movie.releasedate).toLocaleDateString("ko-KR")}
+                    개봉 예정일: {movie.releaseDate}
                   </p>
                 </div>
               </div>

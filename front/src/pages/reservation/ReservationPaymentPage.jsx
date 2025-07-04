@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../pubcomponent/Header";
 import "../../pagecss/reservation/ReservationPaymentPage.css";
-import {
-  getReservationInfo,
-  clearReservationInfo,
-} from "../../utils/reservationStorage";
+import { getReservationInfo, clearReservationInfo } from "../../utils/reservationStorage";
 
 // 날짜 변환 유틸
 function parseDate(date) {
@@ -51,16 +48,10 @@ const ReservationPaymentPage = () => {
     : "2025년 6월 29일(일)";
   const time = reservationInfo.selectedTime || "22:20 ~ 25:05";
   const people = reservationInfo.guestCount
-    ? reservationInfo.guestCount.adult +
-      reservationInfo.guestCount.child +
-      reservationInfo.guestCount.senior
+    ? reservationInfo.guestCount.adult + reservationInfo.guestCount.child + reservationInfo.guestCount.senior
     : 1;
-  const seat = reservationInfo.selectedSeats
-    ? reservationInfo.selectedSeats.join(", ")
-    : "11번";
-  const price = reservationInfo.totalPrice
-    ? reservationInfo.totalPrice.toLocaleString()
-    : "15,000";
+  const seat = reservationInfo.selectedSeats ? reservationInfo.selectedSeats.join(", ") : "11번";
+  const price = reservationInfo.totalPrice ? reservationInfo.totalPrice.toLocaleString() : "15,000";
 
   // 결제하기 버튼 클릭 시 예매완료 페이지로 이동 및 세션스토리지 정보 삭제
   const handlePay = async () => {
@@ -79,9 +70,7 @@ const ReservationPaymentPage = () => {
       // 2. 세션스토리지 정보 삭제
       clearReservationInfo();
       // 3. 성공 페이지로 이동 (state로 정보 전달)
-      navigate("/reservation/success", {
-        state: { reservationInfo: reservationInfoToSave },
-      });
+      navigate("/reservation/success", { state: { reservationInfo: reservationInfoToSave } });
     } catch (error) {
       alert("예매 저장 중 오류가 발생했습니다. 다시 시도해 주세요.");
     }
@@ -114,8 +103,7 @@ const ReservationPaymentPage = () => {
             <h2>최종 예매 정보</h2>
             <ul>
               <li>
-                <strong>영화:</strong>{" "}
-                {reservationInfo.selectedMovie?.title || "영화 미선택"}
+                <strong>영화:</strong> {reservationInfo.selectedMovie?.title || "영화 미선택"}
               </li>
               <li>
                 <strong>날짜:</strong>{" "}
@@ -125,17 +113,13 @@ const ReservationPaymentPage = () => {
               </li>
               <li>
                 <strong>상영 시작 시간:</strong>{" "}
-                {reservationInfo.selectedTime
-                  ? reservationInfo.selectedTime
-                  : "시간 미선택"}
+                {reservationInfo.selectedTime ? reservationInfo.selectedTime : "시간 미선택"}
               </li>
               <li>
-                <strong>지역:</strong>{" "}
-                {reservationInfo.selectedRegion || "지역 미선택"}
+                <strong>지역:</strong> {reservationInfo.selectedRegion || "지역 미선택"}
               </li>
               <li>
-                <strong>지점:</strong>{" "}
-                {reservationInfo.selectedBranch || "지점 미선택"}
+                <strong>지점:</strong> {reservationInfo.selectedBranch || "지점 미선택"}
               </li>
               <li>
                 <strong>관람 인원:</strong>{" "}

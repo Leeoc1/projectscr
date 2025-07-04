@@ -7,7 +7,6 @@ const MovieManagement = () => {
   const [currentMovies, setCurrentMovies] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
   const [activeTab, setActiveTab] = useState("current");
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -24,19 +23,6 @@ const MovieManagement = () => {
 
   const displayMovies =
     activeTab === "current" ? currentMovies : upcomingMovies;
-
-  if (loading) {
-    return (
-      <div className="adp-content">
-        <div className="adp-header">
-          <h2>영화 관리</h2>
-        </div>
-        <div style={{ textAlign: "center", padding: "50px" }}>
-          영화 정보를 불러오는 중...
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="adp-content">

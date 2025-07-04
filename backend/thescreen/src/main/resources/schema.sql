@@ -30,7 +30,7 @@ select
     sc.screenname,
     sc.screentype,
     sc.allseat,
-    sc.raservationseat,
+    sc.reservationseat,
     c.cinemanm,
     r.regionnm
 from
@@ -43,3 +43,6 @@ from
 
 ALTER TABLE reservation
 MODIFY COLUMN reservationcd BIGINT NOT NULL AUTO_INCREMENT;
+
+-- screen 테이블에 reservationseat 컬럼 추가 (기존 컬럼이 없는 경우)
+ALTER TABLE screen ADD COLUMN IF NOT EXISTS reservationseat INT DEFAULT 0;

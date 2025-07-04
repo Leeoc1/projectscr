@@ -54,26 +54,12 @@ const ReservationPaymentPage = () => {
   const price = reservationInfo.totalPrice ? reservationInfo.totalPrice.toLocaleString() : "15,000";
 
   // 결제하기 버튼 클릭 시 예매완료 페이지로 이동 및 세션스토리지 정보 삭제
-  const handlePay = async () => {
+  const handlePay = () => {
     const reservationInfoToSave = { ...reservationInfo };
-    // 1. DB 저장 (예시: fetch, 실제 API 엔드포인트에 맞게 수정 필요)
-    try {
-      const response = await fetch("/api/reservation", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(reservationInfoToSave),
-      });
-      if (!response.ok) {
-        alert("예매 저장에 실패했습니다. 다시 시도해 주세요.");
-        return;
-      }
-      // 2. 세션스토리지 정보 삭제
-      clearReservationInfo();
-      // 3. 성공 페이지로 이동 (state로 정보 전달)
-      navigate("/reservation/success", { state: { reservationInfo: reservationInfoToSave } });
-    } catch (error) {
-      alert("예매 저장 중 오류가 발생했습니다. 다시 시도해 주세요.");
-    }
+    // 세션스토리지 정보 삭제
+    clearReservationInfo();
+    // 성공 페이지로 이동 (state로 정보 전달)
+    navigate("/reservation/success", { state: { reservationInfo: reservationInfoToSave } });
   };
 
   return (

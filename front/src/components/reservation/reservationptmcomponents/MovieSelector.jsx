@@ -3,7 +3,7 @@ import { getSchedules } from "../../../api/api";
 
 const MovieSelector = () => {
   const [movieList, setMovieList] = useState({});
-  const [selectedMovieName, setSelectedMovieName] = useState();
+  const [selectedMovieName, setSelectedMovieName] = useState(null);
   const [selectedDate, setSelectedDate] = useState(
     sessionStorage.getItem("selectedFullDate") || "날짜를 선택하세요"
   );
@@ -51,13 +51,13 @@ const MovieSelector = () => {
   useEffect(() => {
     const handleSessionStorageChange = (event) => {
       setSelectedDate(event.detail.selectedFullDate || "날짜를 선택하세요");
-      const newMovieName = sessionStorage.getItem("selectedMovieName");
+      const newMovieName = event.detail.selectedMovieName;
       if (newMovieName) {
         setSelectedMovieName(newMovieName);
+      } else if (sessionStorage.getItem("selectedMovieName") === null) {
+        // 날짜가 바뀌어서 영화 이름이 초기화된 경우
+        setSelectedMovieName(null);
       }
-      // else if (sessionStorage.getItem("selectedMovieName" === null)) {
-      //   setSelectedMovieName(null);
-      // }
     };
 
     window.addEventListener("sessionStorageChange", handleSessionStorageChange);
@@ -90,7 +90,7 @@ const MovieSelector = () => {
             <button
               key={movieName}
               className={`rptm-movie-btn ${
-                selectedMovieName === movieList ? "rptm-active" : ""
+                selectedMovieName === movieName ? "rptm-active" : ""
               }`}
               onClick={() => handleMovieSelect(movieName)}
             >

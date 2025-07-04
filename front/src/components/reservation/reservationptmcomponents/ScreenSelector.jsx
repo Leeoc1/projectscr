@@ -73,6 +73,11 @@ const ScreenSelector = () => {
         setSelectedMovieName(newMovieName);
         setSelectedDate(newDate || "날짜를 선택하세요");
         setSelectedStartTime(null); // 새로운 영화 또는 날짜 선택 시 시간 초기화
+
+        // 영화 이름이 초기화된 경우 상영시간도 초기화
+        if (event.detail.selectedMovieName === null) {
+          sessionStorage.removeItem("selectedMovieTime");
+        }
       }
     };
 
@@ -87,23 +92,15 @@ const ScreenSelector = () => {
   // 상영 시간 선택
   const handleTimeSelect = (schedule) => {
     setSelectedStartTime(schedule.starttime);
-    const timeData = {
-      starttime: schedule.starttime,
-      reservationseat: schedule.reservationseat,
-      allseat: schedule.allseat,
-      screenname: schedule.screenname,
-      schedulecd: schedule.schedulecd, // 예약 진행을 위해 schedulecd 추가
-    };
-    sessionStorage.setItem("selectedMovieTime", JSON.stringify(timeData));
-
-    // 세션 스토리지 변경 이벤트 발생
-    window.dispatchEvent(
-      new CustomEvent("sessionStorageChange", {
-        detail: {
-          selectedFullDate: sessionStorage.getItem("selectedFullDate"),
-          selectedMovieName: sessionStorage.getItem("selectedMovieName"),
-          selectedMovieTime: JSON.stringify(timeData),
-        },
+    sessionStorage.setItem(
+      "selectedMovieTime",
+      JSON.stringify({
+        starttime: schedule.starttime,
+        reservationseat: schedule.reservationseat,
+        allseat: schedule.allseat,
+        screenname: schedule.screenname,
+        schedulecd: schedule.schedulecd,
+        movienm: schedule.movienm,
       })
     );
   };

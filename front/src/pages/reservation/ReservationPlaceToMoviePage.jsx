@@ -14,39 +14,14 @@ const ReservationPlaceToMoviePage = () => {
   const selectedRegion = location.state?.selectedRegion || "서울";
   const selectedBranch = location.state?.selectedBranch || "가양";
 
-  // 영화 시간 초기화
-  useEffect(() => {
-    sessionStorage.removeItem("selectedMovieTime");
-  }, []);
-
   // 날짜 상태
   const today = new Date();
   const [selectedDateObj] = useState(
     new Date(today.getFullYear(), today.getMonth(), today.getDate())
   );
 
-  // 선택 상태를 실시간으로 추적
-  const [isReadyToSeat, setIsReadyToSeat] = useState(false);
-
-  // 선택 상태 확인 함수
-  const checkSelectionStatus = () => {
-    const selectedDate = sessionStorage.getItem("selectedFullDate");
-    const selectedMovie = sessionStorage.getItem("selectedMovieName");
-    const selectedTime = sessionStorage.getItem("selectedMovieTime");
-
-    const isReady = selectedDate && selectedMovie && selectedTime;
-    setIsReadyToSeat(isReady);
-  };
-
-  // 세션 스토리지 변경 감지
-  useEffect(() => {
-    const handleSessionStorageChange = () => {
-      checkSelectionStatus();
-    };
-
-    // 커스텀 이벤트 리스너
-    window.addEventListener("sessionStorageChange", handleSessionStorageChange);
-  }, []);
+  // 선택 완료 여부 체크
+  const isReadyToSeat = selectedDateObj && selectedRegion && selectedBranch;
 
   // 좌석 선택 버튼 클릭 시 이동
   const handleGoToSeat = () => {
@@ -55,19 +30,23 @@ const ReservationPlaceToMoviePage = () => {
         selectedDate: selectedDateObj,
         selectedRegion: selectedRegion,
         selectedBranch: selectedBranch,
+
         selectedMovie: location.state?.selectedMovie || null,
       },
     });
   };
 
-  // 페이지 언마운ㅌ
+  // 페이지 언마운트 시 예매 관련 세션 스토리지만 선택적으로 삭제
   useEffect(() => {
     return () => {
+      // 극장 정보는 유지하고 예매 관련 데이터만 삭제
       const cinemacd = sessionStorage.getItem("cinemacd");
       const cinemanm = sessionStorage.getItem("cinemanm");
 
+      // 모든 세션 스토리지 삭제
       sessionStorage.clear();
 
+      // 극장 정보 다시 저장
       if (cinemacd) sessionStorage.setItem("cinemacd", cinemacd);
       if (cinemanm) sessionStorage.setItem("cinemanm", cinemanm);
     };

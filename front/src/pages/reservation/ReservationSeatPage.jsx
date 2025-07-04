@@ -6,7 +6,7 @@ import "../../pagecss/reservation/ReservationSeatPage.css";
 
 const ReservationSeatPage = () => {
   const navigate = useNavigate();
-  
+
   // 커스텀 훅 사용
   const {
     seatState,
@@ -19,7 +19,7 @@ const ReservationSeatPage = () => {
   } = useSeatSelection();
 
   // 조건부 이동 처리
-  if (!reservationInfo?.selectedDate || !reservationInfo?.selectedBranch) {
+  if (!sessionStorage.getItem("selectedMovieTime")) {
     navigate("/reservation/place");
     return null;
   }
@@ -71,7 +71,9 @@ const ReservationSeatPage = () => {
               </p>
               <p>
                 <strong>날짜:</strong>{" "}
-                {reservationInfo?.selectedDate ? reservationInfo.selectedDate.toLocaleDateString() : "날짜 미선택"}
+                {reservationInfo?.selectedDate
+                  ? reservationInfo.selectedDate.toLocaleDateString()
+                  : "날짜 미선택"}
               </p>
               <p>
                 <strong>극장:</strong> {reservationInfo?.selectedRegion}{" "}
@@ -171,7 +173,8 @@ const ReservationSeatPage = () => {
           <div className="selected-seats-info">
             <h3>선택된 좌석: {seatState.selectedSeats.join(", ") || "없음"}</h3>
             <p>
-              선택된 좌석: {seatState.selectedSeats.length}개 / 총 인원: {totalGuests}명
+              선택된 좌석: {seatState.selectedSeats.length}개 / 총 인원:{" "}
+              {totalGuests}명
             </p>
           </div>
 
@@ -181,24 +184,34 @@ const ReservationSeatPage = () => {
             <div className="price-details">
               {seatState.guestCount.adult > 0 && (
                 <p>
-                  성인 {seatState.guestCount.adult}명 × {prices.adult.toLocaleString()}원
-                  = {(seatState.guestCount.adult * prices.adult).toLocaleString()}원
+                  성인 {seatState.guestCount.adult}명 ×{" "}
+                  {prices.adult.toLocaleString()}원 ={" "}
+                  {(seatState.guestCount.adult * prices.adult).toLocaleString()}
+                  원
                 </p>
               )}
               {seatState.guestCount.child > 0 && (
                 <p>
-                  청소년 {seatState.guestCount.child}명 × {prices.child.toLocaleString()}
-                  원 = {(seatState.guestCount.child * prices.child).toLocaleString()}원
+                  청소년 {seatState.guestCount.child}명 ×{" "}
+                  {prices.child.toLocaleString()}원 ={" "}
+                  {(seatState.guestCount.child * prices.child).toLocaleString()}
+                  원
                 </p>
               )}
               {seatState.guestCount.senior > 0 && (
                 <p>
-                  우대 {seatState.guestCount.senior}명 × {prices.senior.toLocaleString()}
-                  원 = {(seatState.guestCount.senior * prices.senior).toLocaleString()}원
+                  우대 {seatState.guestCount.senior}명 ×{" "}
+                  {prices.senior.toLocaleString()}원 ={" "}
+                  {(
+                    seatState.guestCount.senior * prices.senior
+                  ).toLocaleString()}
+                  원
                 </p>
               )}
               <div className="total-price">
-                <strong>총 결제 금액: {seatState.totalPrice.toLocaleString()}원</strong>
+                <strong>
+                  총 결제 금액: {seatState.totalPrice.toLocaleString()}원
+                </strong>
               </div>
             </div>
           </div>
@@ -212,7 +225,8 @@ const ReservationSeatPage = () => {
               className="payment-btn"
               onClick={handleGoToPayment}
               disabled={
-                totalGuests === 0 || seatState.selectedSeats.length !== totalGuests
+                totalGuests === 0 ||
+                seatState.selectedSeats.length !== totalGuests
               }
             >
               결제하기

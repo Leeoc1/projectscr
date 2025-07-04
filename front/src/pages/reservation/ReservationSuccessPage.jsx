@@ -8,7 +8,7 @@ const ReservationSuccessPage = () => {
   const data = location.state || {};
 
   const movie = data.selectedMovie || {
-    movienm: "F1 더 무비",
+    title: "F1 더 무비",
     poster: "/images/F1_TheMovie.png",
   };
   const theater = data.selectedRegion
@@ -52,7 +52,7 @@ const ReservationSuccessPage = () => {
           <h2 className="payment-done-title">예매가 완료 되었습니다.</h2>
           <div className="payment-info-section">
             <div className="payment-movie-poster">
-              <img src={movie.poster} alt={movie.movienm} />
+              <img src={movie.poster} alt={movie.title} />
             </div>
             <div className="payment-info-list">
               <div>
@@ -63,7 +63,7 @@ const ReservationSuccessPage = () => {
               </div>
               <div>
                 <span className="payment-label">영화명</span>{" "}
-                <span className="payment-value">{movie.movienm}</span>
+                <span className="payment-value">{movie.title}</span>
               </div>
               <div>
                 <span className="payment-label">극장</span>{" "}

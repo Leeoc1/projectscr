@@ -106,7 +106,7 @@ const SelectMovie = () => {
     <div className="rsms-form-section">
       <h3>극장 및 상영시간 선택</h3>
       <div className="rsms-selected-movie">
-        <h4>선택한 영화: {data.selectedMovie?.movienm}</h4>
+        <h4>선택한 영화: {data.selectedMovie?.title}</h4>
       </div>
       <div className="rsms-theater-selection">
         {[
@@ -145,7 +145,7 @@ const SelectMovie = () => {
     <div className="rsms-form-section">
       <h3>좌석 및 인원 선택</h3>
       <div className="rsms-summary">
-        <p>영화: {data.selectedMovie?.movienm}</p>
+        <p>영화: {data.selectedMovie?.title}</p>
         <p>극장: {data.selectedTheater?.name}</p>
         <p>
           일시: {data.selectedDate} {data.selectedTime}
@@ -264,7 +264,7 @@ const SelectMovie = () => {
         <h4>예매 정보</h4>
         <div className="rsms-summary-item">
           <span>영화:</span>
-          <span>{data.selectedMovie?.movienm}</span>
+          <span>{data.selectedMovie?.title}</span>
         </div>
         <div className="rsms-summary-item">
           <span>극장:</span>

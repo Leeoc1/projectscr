@@ -43,12 +43,12 @@ const DateSelector = () => {
     sessionStorage.setItem("selectedFullDate", formattedDate);
     sessionStorage.removeItem("selectedMovieName");
     sessionStorage.removeItem("selectedMovieTime");
-
+    
     window.dispatchEvent(
       new CustomEvent("sessionStorageChange", {
-        detail: {
+        detail: { 
           selectedFullDate: formattedDate,
-          selectedMovieName: null, // 영화 이름도 초기화
+          selectedMovieName: null // 영화 이름도 초기화
         },
       })
     );

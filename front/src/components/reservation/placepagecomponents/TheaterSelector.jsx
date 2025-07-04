@@ -61,7 +61,7 @@ const TheaterSelector = ({
                       selectedTime === item.time ? " active" : ""
                     }`}
                     key={item.time + idx}
-                    onClick={() => onTimeSelect(item)}
+                    onClick={() => onTimeSelect(item.time)}
                   >
                     <div className="screen-time-time">
                       {item.time

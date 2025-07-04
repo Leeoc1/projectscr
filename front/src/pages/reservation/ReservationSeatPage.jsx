@@ -15,16 +15,11 @@ const ReservationSeatPage = () => {
   });
   const [selectedSeats, setSelectedSeats] = useState([]);
 
-//   // 예매 정보 로드
-//   useEffect(() => {
-//     const selectedDate = getSelectedDate();
-//     const selectedRegion = getSelectedRegion();
-//     const selectedBranch = getSelectedBranch();
-//     const selectedTime = getSelectedTime();
-//     const selectedMovie = getSelectedMovie();
-//     const guestCount = getGuestCount();
-//     const selectedSeats = getSelectedSeats();
-//     const totalPrice = getTotalPrice();
+  // 좌석 데이터 (8행 12열)
+  const seatRows = Array.from({ length: 8 }, (_, i) =>
+    String.fromCharCode(65 + i)
+  );
+  const seatColumns = Array.from({ length: 12 }, (_, i) => i + 1);
 
   // 가격 정보
   const prices = { adult: 10000, child: 6000, senior: 5000 };
@@ -96,6 +91,29 @@ const ReservationSeatPage = () => {
     });
   };
 
+  return (
+    <div className="reservation-seat-page">
+      <Header isOtherPage={true} isScrolled={true} />
+      <div className="reservation-seat-content">
+        <div className="reservation-seat-container">
+          {/* 진행바 */}
+          <div className="progress-bar">
+            <div className="progress-steps">
+              {["날짜/극장", "인원/좌석", "결제"].map((step, idx) => (
+                <div
+                  key={step}
+                  className={`progress-step${
+                    idx === 1 ? " active" : idx < 1 ? " completed" : ""
+                  }`}
+                >
+                  <span className="step-number">{idx + 1}</span>
+                  <span className="step-title">{step}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <h1 className="page-title">인원 및 좌석 선택</h1>
 
           {/* 예매 정보 요약 */}
           <div className="reservation-summary">

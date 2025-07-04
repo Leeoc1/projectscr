@@ -1,23 +1,18 @@
-// 예매 정보 유효성 검사 - 개별 세션 스토리지 키 사용
-export const validateReservationData = () => {
-  const selectedDate = sessionStorage.getItem("selectedFullDate");
-  const selectedRegion = sessionStorage.getItem("selectedRegion");
-  const selectedBranch = sessionStorage.getItem("selectedBranch");
-  const selectedTime = sessionStorage.getItem("selectedTime");
-  
-  if (!selectedDate) {
+// 예매 정보 유효성 검사
+export const validateReservationInfo = (reservationState) => {
+  if (!reservationState.selectedDate) {
     return { isValid: false, error: "날짜를 선택해주세요." };
   }
   
-  if (!selectedRegion) {
+  if (!reservationState.selectedRegion) {
     return { isValid: false, error: "지역을 선택해주세요." };
   }
   
-  if (!selectedBranch) {
+  if (!reservationState.selectedBranch) {
     return { isValid: false, error: "극장을 선택해주세요." };
   }
   
-  if (!selectedTime) {
+  if (!reservationState.selectedTime) {
     return { isValid: false, error: "상영시간을 선택해주세요." };
   }
   

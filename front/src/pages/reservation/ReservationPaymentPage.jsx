@@ -2,7 +2,17 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../pubcomponent/Header";
 import "../../pagecss/reservation/ReservationPaymentPage.css";
-import { getReservationInfo, clearReservationInfo } from "../../utils/reservationStorage";
+import {
+  getSelectedMovie,
+  getSelectedDate,
+  getSelectedRegion,
+  getSelectedBranch,
+  getSelectedTime,
+  getGuestCount,
+  getSelectedSeats,
+  getTotalPrice,
+  clearAllReservationData,
+} from "../../utils/reservationStorage";
 
 // 날짜 변환 유틸
 function parseDate(date) {
@@ -13,45 +23,48 @@ function parseDate(date) {
 
 const ReservationPaymentPage = () => {
   const navigate = useNavigate();
-  const reservationInfoRaw = getReservationInfo();
-  const reservationInfo = {
-    ...reservationInfoRaw,
-    selectedDate: parseDate(reservationInfoRaw.selectedDate),
-  };
+
+  // 개별 세션 스토리지에서 데이터 가져오기
+  const selectedMovie = getSelectedMovie();
+  const selectedDate = getSelectedDate();
+  const selectedRegion = getSelectedRegion();
+  const selectedBranch = getSelectedBranch();
+  const selectedTime = getSelectedTime();
+  const guestCount = getGuestCount();
+  const selectedSeats = getSelectedSeats();
+  const totalPrice = getTotalPrice();
 
   // 반드시 최상단에서 Hook 호출!
   const [payMethod, setPayMethod] = useState("card");
 
   // 그 다음에 조건부 이동 처리
-  if (!reservationInfo.selectedSeats || !reservationInfo.guestCount) {
+  if (!selectedSeats || !guestCount) {
     navigate("/reservation/seat");
     return null;
   }
 
   // 관람 인원 합계 구하기
-  const totalGuests = reservationInfo.guestCount
-    ? Object.values(reservationInfo.guestCount).reduce((a, b) => a + b, 0)
+  const totalGuests = guestCount
+    ? Object.values(guestCount).reduce((a, b) => a + b, 0)
     : 0;
 
   // 예매 정보에서 값 추출
-  const movie = reservationInfo.selectedMovie || {
+  const movie = selectedMovie || {
     title: "F1 더 무비",
     poster: "/images/F1_TheMovie.png",
   };
-  const theater = reservationInfo.selectedRegion
-    ? `${reservationInfo.selectedRegion} / ${reservationInfo.selectedBranch}`
+  const theater = selectedRegion
+    ? `${selectedRegion} / ${selectedBranch}`
     : "CGV 플러스 / 6관";
-  const date = reservationInfo.selectedDate
-    ? typeof reservationInfo.selectedDate === "string"
-      ? reservationInfo.selectedDate
-      : reservationInfo.selectedDate.toLocaleDateString()
+  const date = selectedDate
+    ? selectedDate.toLocaleDateString()
     : "2025년 6월 29일(일)";
-  const time = reservationInfo.selectedTime || "22:20 ~ 25:05";
-  const people = reservationInfo.guestCount
-    ? reservationInfo.guestCount.adult + reservationInfo.guestCount.child + reservationInfo.guestCount.senior
+  const time = selectedTime || "22:20 ~ 25:05";
+  const people = guestCount
+    ? guestCount.adult + guestCount.child + guestCount.senior
     : 1;
-  const seat = reservationInfo.selectedSeats ? reservationInfo.selectedSeats.join(", ") : "11번";
-  const price = reservationInfo.totalPrice ? reservationInfo.totalPrice.toLocaleString() : "15,000";
+  const seat = selectedSeats ? selectedSeats.join(", ") : "11번";
+  const price = totalPrice ? totalPrice.toLocaleString() : "15,000";
 
   // 결제하기 버튼 클릭 시 예매완료 페이지로 이동 및 세션스토리지 정보 삭제
   const handlePay = async () => {
@@ -70,7 +83,9 @@ const ReservationPaymentPage = () => {
       // 2. 세션스토리지 정보 삭제
       clearReservationInfo();
       // 3. 성공 페이지로 이동 (state로 정보 전달)
-      navigate("/reservation/success", { state: { reservationInfo: reservationInfoToSave } });
+      navigate("/reservation/success", {
+        state: { reservationInfo: reservationInfoToSave },
+      });
     } catch (error) {
       alert("예매 저장 중 오류가 발생했습니다. 다시 시도해 주세요.");
     }
@@ -103,40 +118,38 @@ const ReservationPaymentPage = () => {
             <h2>최종 예매 정보</h2>
             <ul>
               <li>
-                <strong>영화:</strong> {reservationInfo.selectedMovie?.title || "영화 미선택"}
+                <strong>영화:</strong> {selectedMovie?.movienm || "영화 미선택"}
               </li>
               <li>
                 <strong>날짜:</strong>{" "}
-                {reservationInfo.selectedDate
-                  ? reservationInfo.selectedDate.toLocaleDateString()
+                {selectedDate
+                  ? selectedDate.toLocaleDateString()
                   : "날짜 미선택"}
               </li>
               <li>
                 <strong>상영 시작 시간:</strong>{" "}
-                {reservationInfo.selectedTime ? reservationInfo.selectedTime : "시간 미선택"}
+                {selectedTime ? selectedTime : "시간 미선택"}
               </li>
               <li>
-                <strong>지역:</strong> {reservationInfo.selectedRegion || "지역 미선택"}
+                <strong>지역:</strong> {selectedRegion || "지역 미선택"}
               </li>
               <li>
-                <strong>지점:</strong> {reservationInfo.selectedBranch || "지점 미선택"}
+                <strong>지점:</strong> {selectedBranch || "지점 미선택"}
               </li>
               <li>
                 <strong>관람 인원:</strong>{" "}
-                {reservationInfo.guestCount
-                  ? `성인 ${reservationInfo.guestCount.adult}명, 청소년 ${reservationInfo.guestCount.child}명, 우대 ${reservationInfo.guestCount.senior}명 (총 ${totalGuests}명)`
+                {guestCount
+                  ? `성인 ${guestCount.adult}명, 청소년 ${guestCount.child}명, 우대 ${guestCount.senior}명 (총 ${totalGuests}명)`
                   : "인원 미선택"}
               </li>
               <li>
                 <strong>좌석:</strong>{" "}
-                {reservationInfo.selectedSeats
-                  ? reservationInfo.selectedSeats.join(", ")
-                  : "좌석 미선택"}
+                {selectedSeats ? selectedSeats.join(", ") : "좌석 미선택"}
               </li>
               <li>
                 <strong>총 결제 금액:</strong>{" "}
-                {reservationInfo.totalPrice
-                  ? reservationInfo.totalPrice.toLocaleString() + "원"
+                {totalPrice
+                  ? totalPrice.toLocaleString() + "원"
                   : "금액 미선택"}
               </li>
             </ul>

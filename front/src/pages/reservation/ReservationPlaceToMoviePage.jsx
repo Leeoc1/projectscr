@@ -71,7 +71,8 @@ const ReservationPlaceToMoviePage = () => {
 
       if (cinemacd) sessionStorage.setItem("cinemacd", cinemacd);
       if (cinemanm) sessionStorage.setItem("cinemanm", cinemanm);
-      if (selectedMovieTime) sessionStorage.setItem("selectedMovieTime", selectedMovieTime);
+      if (selectedMovieTime)
+        sessionStorage.setItem("selectedMovieTime", selectedMovieTime);
     };
   }, []);
 

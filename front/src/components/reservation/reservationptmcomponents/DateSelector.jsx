@@ -41,9 +41,15 @@ const DateSelector = () => {
       date.getMonth() + 1
     ).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
     sessionStorage.setItem("selectedFullDate", formattedDate);
+    sessionStorage.removeItem("selectedMovieName");
+    sessionStorage.removeItem("selectedMovieTime");
+    
     window.dispatchEvent(
       new CustomEvent("sessionStorageChange", {
-        detail: { selectedFullDate: formattedDate },
+        detail: { 
+          selectedFullDate: formattedDate,
+          selectedMovieName: null // 영화 이름도 초기화
+        },
       })
     );
   };

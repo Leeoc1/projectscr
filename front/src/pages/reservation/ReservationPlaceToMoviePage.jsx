@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../pubcomponent/Header";
 import "../../pagecss/reservation/ReservationPlaceToMovie.css";
@@ -28,12 +28,29 @@ const ReservationPlaceToMoviePage = () => {
     navigate("/reservation/seat", {
       state: {
         selectedDate: selectedDateObj,
-        selectedRegion,
-        selectedBranch,
+        selectedRegion: selectedRegion,
+        selectedBranch: selectedBranch,
+        
         selectedMovie: location.state?.selectedMovie || null,
       },
     });
   };
+
+  // 페이지 언마운트 시 예매 관련 세션 스토리지만 선택적으로 삭제
+  useEffect(() => {
+    return () => {
+      // 극장 정보는 유지하고 예매 관련 데이터만 삭제
+      const cinemacd = sessionStorage.getItem("cinemacd");
+      const cinemanm = sessionStorage.getItem("cinemanm");
+      
+      // 모든 세션 스토리지 삭제
+      sessionStorage.clear();
+      
+      // 극장 정보 다시 저장
+      if (cinemacd) sessionStorage.setItem("cinemacd", cinemacd);
+      if (cinemanm) sessionStorage.setItem("cinemanm", cinemanm);
+    };
+  }, []);
 
   return (
     <div className="rptm-reservation-page">

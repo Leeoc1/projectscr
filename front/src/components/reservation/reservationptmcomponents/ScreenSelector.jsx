@@ -63,6 +63,11 @@ const ScreenSelector = () => {
         setSelectedMovieName(newMovieName);
         setSelectedDate(newDate || "날짜를 선택하세요");
         setSelectedStartTime(null); // 새로운 영화 또는 날짜 선택 시 시간 초기화
+        
+        // 영화 이름이 초기화된 경우 상영시간도 초기화
+        if (event.detail.selectedMovieName === null) {
+          sessionStorage.removeItem("selectedMovieTime");
+        }
       }
     };
 
@@ -84,7 +89,8 @@ const ScreenSelector = () => {
         reservationseat: schedule.reservationseat,
         allseat: schedule.allseat,
         screenname: schedule.screenname,
-        schedulecd: schedule.schedulecd, // 예약 진행을 위해 schedulecd 추가
+        schedulecd: schedule.schedulecd,
+        movienm: schedule.movienm,
       })
     );
   };

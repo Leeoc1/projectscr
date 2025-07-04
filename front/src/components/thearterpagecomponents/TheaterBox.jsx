@@ -4,16 +4,26 @@ import "../../componentcss/thearterpagecomponentcss/SpecialTheaterSection.css";
 import RegionTheaterSection from "./RegionTheaterSection";
 import SpecialTheaterSection from "./SpecialTheaterSection";
 import TheaterFilter from "./TheaterFilter";
-import { theaterData } from "../../Data/TheaterPageData";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getCinemas } from "../../api/api";
+
 
 const TheaterBox = () => {
-  const [selectedRegion, setSelectedRegion] = useState("전체");
+  const [selectedRegion, setSelectedRegion] = useState("00");
+  const [cinemas, setCinemas] = useState([]);
 
-  const filteredTheaters =
-    selectedRegion === "전체"
-      ? theaterData
-      : theaterData.filter((theater) => theater.region === selectedRegion);
+  useEffect(() => {
+    const fetchCinemas = async () => {
+      const data = await getCinemas();
+      setCinemas(data);
+    };
+    fetchCinemas();
+  }, []);
+
+  const filteredCinemas =
+    selectedRegion === "00"
+      ? cinemas
+      : cinemas.filter((cinema) => cinema.regioncd === selectedRegion);
 
   return (
     <div className="rts-page">
@@ -25,7 +35,7 @@ const TheaterBox = () => {
               selectedRegion={selectedRegion}
               setSelectedRegion={setSelectedRegion}
             />
-            <RegionTheaterSection filteredTheaters={filteredTheaters} />
+            <RegionTheaterSection filteredCinemas={filteredCinemas} />
             <SpecialTheaterSection />
           </div>
         </div>

@@ -1,7 +1,7 @@
 export const boxofficeMovies = [
   {
     id: 1,
-    title: "아바타: 물의 길",
+    title: "아바타 3",
     genre: "액션/SF",
     poster: "/images/Dragon.png",
     rank: 1,
@@ -10,7 +10,7 @@ export const boxofficeMovies = [
   },
   {
     id: 2,
-    title: "탑건: 매버릭",
+    title: "인터스텔라",
     genre: "액션/드라마",
     poster: "/images/Tiger.png",
     rank: 2,
@@ -19,7 +19,7 @@ export const boxofficeMovies = [
   },
   {
     id: 3,
-    title: "오펜하이머",
+    title: "어벤져스: 엔드게임",
     genre: "드라마/스릴러",
     poster: "/images/Elio.png",
     rank: 3,
@@ -28,7 +28,7 @@ export const boxofficeMovies = [
   },
   {
     id: 4,
-    title: "바비",
+    title: "기생충",
     genre: "코미디/판타지",
     poster: "/images/Seventeen.png",
     rank: 4,
@@ -37,7 +37,7 @@ export const boxofficeMovies = [
   },
   {
     id: 5,
-    title: "미션 임파서블: 데드 레코닝",
+    title: "조커",
     genre: "액션/스릴러",
     poster: "/images/F1_TheMovie.png",
     rank: 5,
@@ -46,7 +46,7 @@ export const boxofficeMovies = [
   },
   {
     id: 6,
-    title: "인디아나 존스: 운명의 다이얼",
+    title: "나우시카",
     genre: "액션/어드벤처",
     poster: "/images/Nausicaa.png",
     rank: 6,
@@ -55,7 +55,7 @@ export const boxofficeMovies = [
   },
   {
     id: 7,
-    title: "엘리멘탈",
+    title: "엘리오",
     genre: "애니메이션/판타지",
     poster: "/images/Fureru.png",
     rank: 7,
@@ -64,7 +64,7 @@ export const boxofficeMovies = [
   },
   {
     id: 8,
-    title: "인시디어스: 빨간 문",
+    title: "F1 더 무비",
     genre: "호러/스릴러",
     poster: "/images/Noise.png",
     rank: 8,
@@ -73,7 +73,7 @@ export const boxofficeMovies = [
   },
   {
     id: 9,
-    title: "스파이더맨: 어크로스 더 유니버스",
+    title: "28년 후",
     genre: "애니메이션/액션",
     poster: "/images/Hifive.png",
     rank: 9,
@@ -82,7 +82,7 @@ export const boxofficeMovies = [
   },
   {
     id: 10,
-    title: "플래시",
+    title: "퓨러루",
     genre: "액션/어드벤처",
     poster: "/images/28Years.png",
     rank: 10,
@@ -91,7 +91,7 @@ export const boxofficeMovies = [
   },
   {
     id: 11,
-    title: "트랜스포머: 비스트의 서막",
+    title: "트랜스포머: 새로운 시작",
     genre: "액션/SF",
     poster: "/images/event1.png",
     rank: 11,
@@ -100,7 +100,7 @@ export const boxofficeMovies = [
   },
   {
     id: 12,
-    title: "가디언즈 오브 갤럭시: Volume 3",
+    title: "쥬라기 월드: 새로운 시대",
     genre: "액션/어드벤처",
     poster: "/images/event2.png",
     rank: 12,

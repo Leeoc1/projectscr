@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getCurrentMovies, getUpcomingMovies } from "../api/api";
+import { getMoviesForAdmin } from "../api/api";
 import "../admincss/MovieManagement.css";
 import "../pagecss/AdminPage.css";
 
@@ -7,25 +7,12 @@ const MovieManagement = () => {
   const [currentMovies, setCurrentMovies] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
   const [activeTab, setActiveTab] = useState("current");
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchMovies = async () => {
-      try {
-        setLoading(true);
-        const [currentData, upcomingData] = await Promise.all([
-          getCurrentMovies(),
-          getUpcomingMovies(),
-        ]);
-        setCurrentMovies(currentData);
-        setUpcomingMovies(upcomingData);
-      } catch (error) {
-        console.error("영화 데이터를 가져오는 중 오류 발생:", error);
-        setCurrentMovies([]);
-        setUpcomingMovies([]);
-      } finally {
-        setLoading(false);
-      }
+      const data = await getMoviesForAdmin();
+      setCurrentMovies(data.currentMovies || []);
+      setUpcomingMovies(data.upcomingMovies || []);
     };
     fetchMovies();
   }, []);
@@ -36,19 +23,6 @@ const MovieManagement = () => {
 
   const displayMovies =
     activeTab === "current" ? currentMovies : upcomingMovies;
-
-  if (loading) {
-    return (
-      <div className="adp-content">
-        <div className="adp-header">
-          <h2>영화 관리</h2>
-        </div>
-        <div style={{ textAlign: "center", padding: "50px" }}>
-          영화 정보를 불러오는 중...
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="adp-content">

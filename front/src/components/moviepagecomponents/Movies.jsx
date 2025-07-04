@@ -1,23 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { boxofficeMovies, upcomingMovies } from "../../Data/MoviesData.js";
+import { getCurrentMovies, getUpcomingMovies } from "../../api/api.js";
 import "../../componentcss/moviepagecomponentcss/Movies.css";
 
 const Movies = () => {
   const [activeTab, setActiveTab] = useState("boxoffice");
+  const [currentMovies, setCurrentMovies] = useState([]);
+  const [upcomingMoviesData, setUpcomingMoviesData] = useState([]);
   const navigate = useNavigate();
 
   const handleReservationClick = (movie) => {
-    // 영화 정보를 세션 스토리지에 저장
-    try {
-      sessionStorage.setItem("selectedMovie", JSON.stringify(movie));
-      console.log("🎬 예매하기 버튼 클릭 - 영화:", movie.title);
-    } catch (error) {
-      console.error("영화 정보 저장 중 오류:", error);
-    }
-    // 영화 정보를 state로 전달하여 ReservationPlacePage로 이동
+    sessionStorage.setItem("moviecd", movie.moviecd);
+    sessionStorage.setItem("movienm", movie.movienm);
     navigate("/reservation/place");
   };
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const currentData = await getCurrentMovies();
+        const upcomingData = await getUpcomingMovies();
+        
+        setCurrentMovies(currentData);
+        setUpcomingMoviesData(upcomingData);
+      } catch (error) {
+        console.error("영화 데이터 로딩 실패:", error);
+      }
+    };
+
+    fetchMovies();
+  }, []);
 
   return (
     <div className="mvs-section">
@@ -40,57 +53,56 @@ const Movies = () => {
         </button>
       </div>
       <div className="mvs-grid">
-        {activeTab === "boxoffice"
-          ? boxofficeMovies.map((movie) => (
-              <div className="mvs-card" key={movie.id}>
-                <div className="mvs-poster">
-                  <img src={movie.poster} alt={movie.title} />
-                  <div className="mvs-overlay">
-                    <div className="mvs-buttons">
-                      <button className="mvs-btn">상세정보</button>
-                      <button
-                        className="mvs-btn"
-                        onClick={() => handleReservationClick(movie)}
-                      >
-                        예매하기
-                      </button>
-                    </div>
+        {activeTab === "boxoffice" ? (
+          currentMovies.map((movie) => (
+            <div className="mvs-card" key={movie.moviecd}>
+              <div className="mvs-poster">
+                <img src={movie.posterurl} alt={movie.movienm} />
+                <div className="mvs-overlay">
+                  <div className="mvs-buttons">
+                    <button className="mvs-btn">상세정보</button>
+                    <button
+                      className="mvs-btn"
+                      onClick={() => handleReservationClick(movie)}
+                    >
+                      예매하기
+                    </button>
                   </div>
                 </div>
-                <div className="mvs-info">
-                  <h3 className="mvs-title">
-                    {movie.rank <= 10 && (
-                      <span className={`rank-number rank-${movie.rank}`}>
-                        {movie.rank}
-                      </span>
-                    )}
-                    {movie.title}
-                  </h3>
-                  <p className="mvs-genre">{movie.genre}</p>
-                  <p className="mvs-rating">{movie.rating}</p>
-                  <p className="mvs-duration">{movie.duration}</p>
-                </div>
               </div>
-            ))
-          : upcomingMovies.map((movie) => (
-              <div className="mvs-card" key={movie.id}>
-                <div className="mvs-poster">
-                  <img src={movie.poster} alt={movie.title} />
-                  <div className="mvs-overlay">
-                    <div className="mvs-buttons">
-                      <button className="mvs-btn">상세정보</button>
-                    </div>
+              <div className="mvs-info">
+                <h3 className="mvs-title">
+                  {movie.movienm}
+                </h3>
+                <p className="mvs-genre">{movie.genre}</p>
+                <p className="mvs-rating">
+                  {movie.isadult === "Y" ? "청소년 관람불가" : "전체 관람가"}
+                </p>
+                <p className="mvs-duration">{movie.runningtime}분</p>
+              </div>
+            </div>
+          ))
+        ) : (
+          upcomingMoviesData.map((movie) => (
+            <div className="mvs-card" key={movie.id}>
+              <div className="mvs-poster">
+                <img src={movie.poster} alt={movie.title} />
+                <div className="mvs-overlay">
+                  <div className="mvs-buttons">
+                    <button className="mvs-btn">상세정보</button>
                   </div>
                 </div>
-                <div className="mvs-info">
-                  <h3 className="mvs-title">{movie.title}</h3>
-                  <p className="mvs-genre">{movie.genre}</p>
-                  <p className="mvs-release">
-                    개봉 예정일: {movie.releaseDate}
-                  </p>
-                </div>
               </div>
-            ))}
+              <div className="mvs-info">
+                <h3 className="mvs-title">{movie.title}</h3>
+                <p className="mvs-genre">{movie.genre}</p>
+                <p className="mvs-release">
+                  개봉 예정일: {movie.releaseDate}
+                </p>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

@@ -21,14 +21,23 @@ export const getMoviesForAdmin = () =>
 
 // 극장 -> 영화 (ReservationPlaceToMoviePage)
 // 영화 목록 조회(moviecd, movienm만 조회)
-export const getMovieList = () =>
+export const getCurrentMovies = () =>
   api
-    .get("/movies/list")
+    .get("/movies/current")
     .then((response) => response.data)
     .catch((error) => {
       console.error("Error fetching movies:", error);
       return [];
     });
+
+    export const getUpcomingMovies = () =>
+      api
+        .get("/movies/upcoming")
+        .then((response) => response.data)
+        .catch((error) => {
+          console.error("Error fetching movies:", error);
+          return [];
+        });
 
 // 극장 목록 조회
 export const getCinemas = () =>

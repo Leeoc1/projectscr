@@ -1,87 +1,134 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { getSchedules } from "../../../api/api";
+import ScreenSelectorMovie from "./ScreenSelectorMovie";
 
-const TheaterSelector = ({
-  regions,
-  branches,
-  screenTimes,
-  selectedRegion,
-  selectedBranch,
-  selectedTime,
-  onRegionSelect,
-  onBranchSelect,
-  onTimeSelect,
-}) => {
+const TheaterSelector = () => {
+  const [availableRegions, setAvailableRegions] = useState([]);
+  const [selectedRegion, setSelectedRegion] = useState(null);
+  const [availableTheaters, setAvailableTheaters] = useState([]);
+  const [selectedTheater, setSelectedTheater] = useState(null);
+
+  useEffect(() => {
+    fetchAvailableRegions();
+  }, []);
+
+  // 세션 스토리지 변경 이벤트 감지
+  useEffect(() => {
+    const handleSessionStorageChange = (event) => {
+      if (event.detail.selectedFullDate) {
+        // 날짜가 변경되면 지역과 상영관 선택 초기화
+        setSelectedRegion(null);
+        setSelectedTheater(null);
+        setAvailableTheaters([]);
+        // 새로운 날짜에 맞는 지역 다시 로드
+        fetchAvailableRegions();
+      }
+    };
+
+    window.addEventListener("sessionStorageChange", handleSessionStorageChange);
+    
+    return () => {
+      window.removeEventListener("sessionStorageChange", handleSessionStorageChange);
+    };
+  }, []);
+
+  const fetchAvailableRegions = async () => {
+    const selectedDate = sessionStorage.getItem("selectedFullDate");
+    const movienm = sessionStorage.getItem("movienm");
+    
+    if (!selectedDate || !movienm) return;
+
+    const schedules = await getSchedules();
+    
+    const filteredSchedules = schedules.filter(schedule => {
+      const scheduleDate = new Date(schedule.startdate);
+      const selectedDateObj = new Date(selectedDate);
+      
+      return schedule.movienm === movienm && 
+             scheduleDate.toDateString() === selectedDateObj.toDateString();
+    });
+    
+    const regions = [...new Set(filteredSchedules.map(schedule => schedule.regionnm))];
+    setAvailableRegions(regions);
+  };
+
+  const handleRegionClick = async (region) => {
+    setSelectedRegion(region);
+    
+    const selectedDate = sessionStorage.getItem("selectedFullDate");
+    const movienm = sessionStorage.getItem("movienm");
+    
+    if (!selectedDate || !movienm) return;
+
+    const schedules = await getSchedules();
+    
+    const filteredSchedules = schedules.filter(schedule => {
+      const scheduleDate = new Date(schedule.startdate);
+      const selectedDateObj = new Date(selectedDate);
+      
+      return schedule.movienm === movienm && 
+             scheduleDate.toDateString() === selectedDateObj.toDateString() &&
+             schedule.regionnm === region;
+    });
+    
+    const theaters = [...new Set(filteredSchedules.map(schedule => schedule.cinemanm))];
+    setAvailableTheaters(theaters);
+  };
+
+  const handleTheaterClick = (theater) => {
+    setSelectedTheater(theater);
+    sessionStorage.setItem("cinemanm", theater);
+    
+    // 세션 스토리지 변경 이벤트 발생
+    window.dispatchEvent(
+      new CustomEvent("sessionStorageChange", {
+        detail: {
+          cinemanm: theater,
+        },
+      })
+    );
+  };
+
   return (
-    <div className="theater-section">
-      {/* 상단 타이틀들 */}
-      <div className="theater-title section-title">극장선택</div>
-      <div className="time-title section-title">상영시간</div>
-      <div className="theater-selector">
-        {/* 지역 리스트 */}
+    <div className="selector-container">
+      <div className="region-section">
+        <h3>지역</h3>
         <div className="region-list">
-          {regions.map((region) => (
-            <button
-              key={region}
-              className={`region-btn${
-                selectedRegion === region ? " active" : ""
-              }`}
-              onClick={() => onRegionSelect(region)}
+          {availableRegions.map((region, index) => (
+            <div 
+              key={index} 
+              className={`region-item ${selectedRegion === region ? 'active' : ''}`}
+              onClick={() => handleRegionClick(region)}
             >
               {region}
-            </button>
+            </div>
           ))}
-        </div>
-        {/* 지점 리스트 */}
-        <div className="branch-list">
-          {branches.map((branch) => (
-            <button
-              key={branch}
-              className={`branch-btn${
-                selectedBranch === branch ? " active" : ""
-              }`}
-              onClick={() => onBranchSelect(branch)}
-            >
-              {branch}
-            </button>
-          ))}
-        </div>
-        {/* 상영시간 리스트 */}
-        <div className="time-list-area">
-          <div className="time-list-content">
-            {!selectedRegion && <div>지역을 먼저 선택하세요.</div>}
-            {selectedRegion && !selectedBranch && <div>지점을 선택하세요.</div>}
-            {selectedRegion && selectedBranch && screenTimes.length === 0 && (
-              <div>상영 정보가 없습니다.</div>
-            )}
-            {selectedRegion && selectedBranch && screenTimes.length > 0 && (
-              <>
-                {screenTimes.map((item, idx) => (
-                  <div
-                    className={`screen-time-card${
-                      selectedTime === item.time ? " active" : ""
-                    }`}
-                    key={item.time + idx}
-                    onClick={() => onTimeSelect(item.time)}
-                  >
-                    <div className="screen-time-time">
-                      {item.time
-                        ? item.time.split(" ")[1]?.substring(0, 5)
-                        : item.time}
-                    </div>
-                    <div className="screen-time-seats">
-                      {item.raservationseat || item.reservationseat} /{" "}
-                      {item.allseat}
-                    </div>
-                    <div className="screen-time-screen">
-                      {item.screen} ({item.screentype})
-                    </div>
-                  </div>
-                ))}
-              </>
-            )}
-          </div>
         </div>
       </div>
+      
+      {selectedRegion && availableTheaters.length > 0 && (
+        <div className="theater-section">
+          <h3>상영관</h3>
+          <div className="theater-list">
+            {availableTheaters.map((theater, index) => (
+              <div 
+                key={index} 
+                className={`theater-item ${selectedTheater === theater ? 'active' : ''}`}
+                onClick={() => handleTheaterClick(theater)}
+              >
+                {theater}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      
+      {selectedTheater && (
+        <div className="screen-section">
+          <h3>상영시간</h3>
+          <ScreenSelectorMovie />
+        </div>
+      )}
     </div>
   );
 };

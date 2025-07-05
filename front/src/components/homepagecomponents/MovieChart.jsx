@@ -1,16 +1,14 @@
 import { useState, useRef, useEffect } from "react";
-import { boxofficeMovies } from "../../Data/MoviesData";
+import { getCurrentMovies } from "../../api/api";
 import "../../componentcss/homepagecomponentcss/MovieChart.css";
 
 const MovieChart = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [filteredMovies, setFilteredMovies] = useState([]);
   const sliderRef = useRef(null);
   const cardWidth = 180; // 카드 1장 width(px)
   const gap = 20; // 카드 사이 gap(px)
   const visibleCards = 5;
-  const filteredMovies = boxofficeMovies
-    .filter((movie) => movie.rank <= 10)
-    .sort((a, b) => a.rank - b.rank);
   const totalCards = filteredMovies.length;
   const maxIndex = Math.ceil(totalCards / visibleCards) - 1;
 
@@ -18,6 +16,20 @@ const MovieChart = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+
+  // 영화 데이터 가져오기
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const movies = await getCurrentMovies();
+        setFilteredMovies(movies);
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+        setFilteredMovies([]);
+      }
+    };
+    fetchMovies();
+  }, []);
 
   const updateSlider = () => {
     if (sliderRef.current) {
@@ -98,23 +110,23 @@ const MovieChart = () => {
               onMouseLeave={handleMouseUp}
             >
               {filteredMovies.map((movie) => (
-                <div key={movie.id} className="mcs-movie-card">
+                <div key={movie.moviecd} className="mcs-movie-card">
                   <img
-                    src={movie.poster}
-                    alt={movie.title}
+                    src={movie.posterurl}
+                    alt={movie.movienm}
                     className="mcs-movie-poster"
                   />
                   <div className="mcs-movie-info">
-                    <h3 className="mcs-movie-title">{movie.title}</h3>
+                    <h3 className="mcs-movie-title">{movie.movienm}</h3>
                     <p className="mcs-movie-genre">{movie.genre}</p>
                     <div className="mcs-movie-meta">
                       <div className="mcs-movie-rating">
                         <span>⭐</span>
                         <span className="mcs-movie-rating-text">
-                          {movie.rating}
+                          {movie.rating || "평점 없음"}
                         </span>
                       </div>
-                      <span className="mcs-movie-rank">{movie.rank}</span>
+                      <span className="mcs-movie-rank">{movie.rank || "순위 없음"}</span>
                     </div>
                   </div>
                 </div>

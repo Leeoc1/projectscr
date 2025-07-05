@@ -92,9 +92,9 @@ export const getSchedules = (cinemaCd, date) =>
 
 
 // 영화 정보 불러오기 
-export const getMovieInfo = (selectedMovieName) =>
+export const getMovieInfo = () =>
   api
-    .get("/movies/info", { params: { selectedMovieName } })
+    .get("/movies/info")
     .then((response) => response.data)
     .catch((error) => {
       console.error("Error fetching movie info:", error);

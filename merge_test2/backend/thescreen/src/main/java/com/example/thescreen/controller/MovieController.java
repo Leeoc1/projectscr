@@ -76,4 +76,12 @@ public class MovieController {
 
         return movieList;
     }
+
+
+    @GetMapping("/info")
+    public List<Movie> getMovieInfo() {
+        List<Movie> movieInfo = movieRepository.findAll();
+
+        return movieInfo;
+    }
 } 

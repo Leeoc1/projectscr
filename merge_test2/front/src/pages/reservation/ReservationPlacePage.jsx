@@ -9,6 +9,7 @@ import SelectedMovie from "../../components/reservation/placepagecomponents/Sele
 import ProgressBar from "../../components/reservation/placepagecomponents/ProgressBar";
 import TheaterSelector from "../../components/reservation/placepagecomponents/TheaterSelector";
 import "../../pagecss/reservation/ReservationPlacePage.css";
+import DateSelector from "../../components/reservation/reservationptmcomponents/DateSelector";
 
 const ReservationPlacePage = () => {
   const navigate = useNavigate();
@@ -23,7 +24,16 @@ const ReservationPlacePage = () => {
 
   //===================
   const [movieInfo, setMovieInfo] = useState(null);
+  const [filteredSchedules, setFilteredSchedules] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(
+    sessionStorage.getItem("selectedFullDate") || "날짜를 선택하세요"
+  );
   const selectedMovieName = sessionStorage.getItem("selectedMovieName");
+
+  const filteredMovieInfo = movieInfo.filter(
+    (movie) => movie.movienm === selectedMovieName
+  );
+
   //===================
 
   // 커스텀 훅 사용
@@ -37,18 +47,10 @@ const ReservationPlacePage = () => {
     clearError,
   } = useReservation();
 
-  const {
-    selectedDate,
-    dateArr,
-    headerText,
-    canGoPrev,
-    goToPrevious,
-    goToNext,
-    handleDateSelect: handleDateNavigation,
-  } = useDateNavigation(reservationState.selectedDate);
 
-  // DB에서 스케줄 데이터 가져오기
+  
   useEffect(() => {
+    // DB에서 스케줄 데이터 가져오기
     const fetchSchedules = async () => {
       try {
         setIsLoading(true);
@@ -63,10 +65,10 @@ const ReservationPlacePage = () => {
       }
     };
 
-
+    // 영화 정보 가져오기 (전부부)
     const fetchMovieInfo = async () => {
       try {
-        const data = await getMovieInfo(selectedMovieName);
+        const data = await getMovieInfo();
         setMovieInfo(data);
       } catch (error) {
         console.error("영화 정보 로딩 실패:", error);
@@ -74,94 +76,55 @@ const ReservationPlacePage = () => {
     };
 
     fetchSchedules();
-    if (selectedMovieName) {
-      fetchMovieInfo();
-    }
+    fetchMovieInfo();
   }, []);
 
   // 스케줄 데이터 필터링
   useEffect(() => {
-    if (!schedules.length || !reservationState.selectedMovie) {
+    if (!schedules.length || !selectedMovieName) {
       setFilteredData({ regions: [], branches: [], screenTimes: [] });
       return;
     }
 
     try {
-      // 선택된 영화와 날짜로 필터링
-      const selectedDateStr = selectedDate.toISOString().split("T")[0]; // YYYY-MM-DD 형식
-
-      // 날짜 범위를 확장하여 더 많은 데이터를 포함
-      const currentDate = new Date(selectedDateStr);
-      const startDate = new Date(currentDate);
-      startDate.setDate(currentDate.getDate() - 1); // 하루 전
-      const endDate = new Date(currentDate);
-      endDate.setDate(currentDate.getDate() + 7); // 일주일 후
-
-      const filteredSchedules = schedules.filter((schedule) => {
-        const movieMatch =
-          schedule.movienm === reservationState.selectedMovie.title;
-
-        // 날짜 범위 체크
-        const scheduleDate = new Date(schedule.startdate);
-        const dateMatch = scheduleDate >= startDate && scheduleDate <= endDate;
+      const filtered = schedules.filter((schedule) => {
+        // 영화 이름 
+        const movieMatch = schedule.movienm === selectedMovieName;
+        // 날짜 체크, view에 endDate 없어서 일단 이렇게 함 
+        const dateMatch = schedule.startdate === selectedDate;
 
         return movieMatch && dateMatch;
       });
 
-      // 지역 추출
-      const regions = [
-        ...new Set(filteredSchedules.map((schedule) => schedule.regionnm)),
-      ];
+      // cinemanm 기준으로 스케줄 그룹화
+      const groupedMovies = filtered.reduce((acc, curr) => {
+        const cinemaName = curr.cinemanm;
+        if (!acc[cinemaName]) {
+          acc[cinemaName] = [];
+        }
+        acc[cinemaName].push(curr);
+        return acc;
+      }, {});
 
-      // 선택된 지역의 지점 추출
-      const branches = reservationState.selectedRegion
-        ? [
-            ...new Set(
-              filteredSchedules
-                .filter(
-                  (schedule) =>
-                    schedule.regionnm === reservationState.selectedRegion
-                )
-                .map((schedule) => schedule.cinemanm)
-            ),
-          ]
-        : [];
-
-      // 선택된 지역과 지점의 상영시간 추출
-      const screenTimes =
-        reservationState.selectedRegion && reservationState.selectedBranch
-          ? filteredSchedules
-              .filter(
-                (schedule) =>
-                  schedule.regionnm === reservationState.selectedRegion &&
-                  schedule.cinemanm === reservationState.selectedBranch
-              )
-              .map((schedule) => ({
-                time: schedule.starttime,
-                screen: schedule.screenname,
-                screentype: schedule.screentype,
-                allseat: schedule.allseat,
-                raservationseat: schedule.reservationseat,
-                schedulecd: schedule.schedulecd,
-              }))
-          : [];
-
-      setFilteredData({
-        regions,
-        branches,
-        screenTimes,
+      // 상영 시작 시간순으로 정렬 (선택사항)
+      Object.keys(groupedMovies).forEach((cinemaName) => {
+        groupedMovies[cinemaName].sort(
+          (a, b) => new Date(a.starttime) - new Date(b.starttime)
+        );
       });
+
+      setFilteredSchedules(groupedMovies);
     } catch (error) {
       console.error("데이터 필터링 실패:", error);
       setError("데이터 처리 중 오류가 발생했습니다.");
     }
-  }, [
-    schedules,
-    reservationState.selectedMovie,
-    selectedDate,
-    reservationState.selectedRegion,
-    reservationState.selectedBranch,
-  ]);
+
+    // 마운트 시 sessionStorage 확인
+    const savedDate = sessionStorage.getItem("selectedFullDate");
+    if (savedDate && savedDate !== selectedDate) {
+      setSelectedDate(savedDate);
+    }
+  }, [selectedDate]);
 
   // 페이지 로드 시 선택된 영화 정보 출력
   // console.log("🎬 선택된 영화:", reservationState.selectedMovie.title);
@@ -181,18 +144,6 @@ const ReservationPlacePage = () => {
     return null;
   }
 
-  // 날짜 선택 시 예매 상태도 함께 업데이트
-  const handleDateSelection = (dateItem) => {
-    handleDateNavigation(dateItem);
-    if (!dateItem.isDisabled) {
-      const newDate = new Date(
-        dateItem.date.getFullYear(),
-        dateItem.date.getMonth(),
-        dateItem.date.getDate()
-      );
-      handleDateSelect(newDate);
-    }
-  };
 
   // 좌석 선택 페이지로 이동
   const handleGoToSeat = () => {
@@ -270,67 +221,16 @@ const ReservationPlacePage = () => {
       <Header isOtherPage={true} isScrolled={true} />
       <div className="reservation-content">
         {/* 선택한 영화 섹션 */}
-        <SelectedMovie movieInfo={movieInfo} />
+        <SelectedMovie filteredMovieInfo={filteredMovieInfo} />
 
         <div className="reservation-container">
           {/* 진행바 */}
           <ProgressBar currentStep={0} />
 
-          {/* 날짜/요일 선택 */}
-          <div className="date-selector-section">
-            {/* 상단 날짜 헤더 */}
-            <div className="date-header">{headerText}</div>
-            {/* 하단 날짜 선택 */}
-            <div className="date-selector">
-              <div className="date-list">
-                <button
-                  className="arrow"
-                  onClick={goToPrevious}
-                  disabled={!canGoPrev}
-                >
-                  {"<"}
-                </button>
-                <div className="dates">
-                  {dateArr.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className={
-                        "date-item" +
-                        (isSameDay(item.date, selectedDate)
-                          ? " selected"
-                          : "") +
-                        (item.isSaturday ? " saturday" : "") +
-                        (item.isSunday ? " sunday" : "") +
-                        (item.isDisabled ? " disabled" : "")
-                      }
-                      onClick={() => handleDateSelection(item)}
-                    >
-                      <div className="date-num">{item.date.getDate()}</div>
-                      <div className="date-label">
-                        {getDateLabel(item.date)}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <button className="arrow" onClick={goToNext}>
-                  {">"}
-                </button>
-              </div>
-            </div>
-          </div>
+          <DateSelector />
 
           {/* 극장선택과 상영시간 선택 */}
-          <TheaterSelector
-            regions={filteredData.regions}
-            branches={filteredData.branches}
-            screenTimes={filteredData.screenTimes}
-            selectedRegion={reservationState.selectedRegion}
-            selectedBranch={reservationState.selectedBranch}
-            selectedTime={reservationState.selectedTime}
-            onRegionSelect={handleRegionSelect}
-            onBranchSelect={handleBranchSelect}
-            onTimeSelect={handleTimeSelect}
-          />
+          <TheaterSelector filteredSchedules={filteredSchedules}/>
         </div>
       </div>
 

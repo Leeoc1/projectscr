@@ -25,14 +25,7 @@ const ReservationPlaceToMoviePage = () => {
 
   // 좌석 선택 버튼 클릭 시 이동
   const handleGoToSeat = () => {
-    navigate("/reservation/seat", {
-      state: {
-        selectedDate: selectedDateObj,
-        selectedRegion: selectedRegion,
-        selectedBranch: selectedBranch,
-        selectedMovie: location.state?.selectedMovie || null,
-      },
-    });
+    navigate("/reservation/seat");
   };
 
   return (

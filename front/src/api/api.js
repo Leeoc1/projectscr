@@ -99,4 +99,32 @@ export const getSchedules = (cinemaCd, date) =>
       return [];
     });
 
+// 예약 저장
+export const saveReservation = (reservationData) =>
+  api
+    .post("/reservation", reservationData)
+    .then((response) => response.data)
+    .catch((error) => { 
+      console.error("Error saving reservation:", error);
+      throw error;
+    });
+
+export const getReservation = () =>
+  api
+    .get("view/reservation/success")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching reservation:", error);
+      return [];
+    });
+
+export const getReservationSeat = () => 
+  api
+.get("/reservation/seat")
+.then((response) => response.data)
+.catch((error) => {
+  console.error("Error fetching reservation seat:", error);
+  return [];
+});
+
 export default api;

@@ -23,3 +23,25 @@ from
     inner join screen sc on s.screencd = sc.screencd
     inner join cinema c on sc.cinemacd = c.cinemacd
     inner join region r on c.regioncd = r.regioncd;
+
+create or replace view reservation_view as
+select
+    r.reservationcd,
+    r.seatcd,
+    r.reservationtime,
+    sv.starttime,
+    sv.movienm,
+    sv.runningtime,
+    sv.screenname,
+    sv.cinemanm
+from
+    reservation r
+    inner join schedule_view sv on r.schedulecd = sv.schedulecd;
+--    inner join payment p on r.paymentcd = p.paymentcd
+
+
+--reservation의 seatnum을 seatcd로 바꾸고 string로 바꾸기 이것도 툴에서 실행
+--ALTER TABLE reservation CHANGE seatnum seatcd VARCHAR(50);
+
+--예약 테이블 pk인 예약 코드 string로 바꿔야 하는데 그걸 위해 툴에서 실행
+--ALTER TABLE reservation MODIFY reservationcd VARCHAR(12);

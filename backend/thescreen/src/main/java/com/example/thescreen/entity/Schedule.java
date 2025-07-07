@@ -7,7 +7,9 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "schedule")
@@ -26,7 +28,7 @@ public class Schedule {
     private String screencd; // 상영관 코드
 
     @Column
-    private LocalDateTime startdate; // 상영 시작 날짜
+    private LocalDate startdate; // 상영 시작 날짜
 
     @Column
     private LocalDateTime starttime; // 상영 시작 시간

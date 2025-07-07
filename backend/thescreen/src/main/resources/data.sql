@@ -3209,3 +3209,20 @@ VALUES (
         '2025-07-10 17:53:00',
         '2025-07-10'
     );
+
+INSERT IGNORE INTO payment (paymentcd, paymentmethod, paymenttime, amount, paymentstatus) VALUES
+    ('PAY001', 'Credit Card', '2025-07-01 10:00:00', 15000, 'SUCCESS'),
+    ('PAY002', 'Bank Transfer', '2025-07-01 12:30:00', 25000, 'SUCCESS'),
+    ('PAY003', 'Mobile Payment', '2025-07-02 09:15:00', 3000, 'SUCCESS'),
+    ('PAY004', 'Credit Card', '2025-07-02 14:45:00', 45000, 'SUCCESS'),
+    ('PAY005', 'PayPal', '2025-07-03 11:20:00', 12000, 'SUCCESS'),
+    ('PAY006', 'Debit Card', '2025-07-03 16:50:00', 8000, 'SUCCESS'),
+    ('PAY007', 'Bank Transfer', '2025-07-04 08:10:00', 60000, 'SUCCESS'),
+    ('PAY008', 'Credit Card', '2025-07-04 13:25:00', 22000, 'SUCCESS'),
+    ('PAY009', 'Mobile Payment', '2025-07-05 10:40:00', 5000, 'SUCCESS'),
+    ('PAY010', 'PayPal', '2025-07-05 15:15:00', 35000, 'SUCCESS'),
+    ('PAY011', 'Credit Card', '2025-07-06 09:00:00', 18000, 'SUCCESS'),
+    ('PAY012', 'Bank Transfer', '2025-07-06 12:00:00', 40000, 'SUCCESS'),
+    ('PAY013', 'Debit Card', '2025-07-07 07:30:00', 10000, 'SUCCESS'),
+    ('PAY014', 'Mobile Payment', '2025-07-07 11:45:00', 27000, 'SUCCESS'),
+    ('PAY015', 'PayPal', '2025-07-07 14:20:00', 32000, 'SUCCESS');

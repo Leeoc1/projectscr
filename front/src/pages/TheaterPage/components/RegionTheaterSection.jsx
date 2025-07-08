@@ -14,6 +14,7 @@ const RegionTheaterSection = ({ filteredCinemas }) => {
   // state로 전달 
   const handleMapClick = (cinema) => {
     const state = {
+      cinemacd: cinema.cinemacd,
       cinemanm: cinema.cinemanm,
       address: cinema.address,
       tel: cinema.tel,

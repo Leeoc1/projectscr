@@ -69,6 +69,16 @@ export const getStaffs = () =>
       return [];
     });
 
+// 수정한 직원 정보 저장
+export const updateStaff = (staffData) =>
+  api
+    .put("/staff/update", staffData)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error saving staff:", error);
+      throw error;
+    });
+
 // 전체 사용자 목록 조회
 export const getAllUsers = () =>
   api

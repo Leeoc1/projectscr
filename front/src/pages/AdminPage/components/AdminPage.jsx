@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import SalesOverview from "./SalesOverview";
-import StaffManagement from "./StaffManagement";
+import StaffManagement from "./StaffManagement/StaffManagement";
 import UserManagement from "./UserManagement";
 import TheaterManagement from "./TheaterManagement";
 import MovieManagement from "./MovieManagement";

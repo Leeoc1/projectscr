@@ -3,6 +3,7 @@ import TheaterInfo from "./components/TheaterInfo";
 import MapInfo from "./components/MapInfo";
 import { useLocation, Navigate } from "react-router-dom";
 import Header from "../../shared/Header";
+import "./style/TheaterInfoPage.css";
 
 const TheaterInfoPage = () => {
   const { state } = useLocation();
@@ -15,14 +16,14 @@ const TheaterInfoPage = () => {
   }, []);
 
   return (
-    <div>
+    <div className="tip-page">
       <Header />
-      <div>
-        <TheaterInfo cinemanm={state.cinemanm} tel={state.tel} />
+      <div className="tip-container">
+        <TheaterInfo cinemacd={state.cinemacd} cinemanm={state.cinemanm} tel={state.tel} address={state.address} />
         {!state.address ? (
           <Navigate to="/theater" replace />
         ) : (
-          <MapInfo address={state.address} />
+          <MapInfo cinemanm={state.cinemanm} tel={state.tel} address={state.address} />
         )}
       </div>
     </div>

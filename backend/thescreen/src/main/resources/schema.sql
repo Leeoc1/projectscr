@@ -45,8 +45,9 @@ from
 
 --예약 테이블 pk인 예약 코드 string로 바꿔야 하는데 그걸 위해 툴에서 실행
 --ALTER TABLE reservation MODIFY reservationcd VARCHAR(12);
-ALTER TABLE reservation
-MODIFY COLUMN reservationcd BIGINT NOT NULL AUTO_INCREMENT;
 
--- screen 테이블에 reservationseat 컬럼 추가 (기존 컬럼이 없는 경우)
-ALTER TABLE screen ADD COLUMN IF NOT EXISTS reservationseat INT DEFAULT 0;
+--ALTER TABLE reservation
+--MODIFY COLUMN reservationcd BIGINT NOT NULL AUTO_INCREMENT;
+--
+---- screen 테이블에 reservationseat 컬럼 추가 (기존 컬럼이 없는 경우)
+--ALTER TABLE screen ADD COLUMN IF NOT EXISTS reservationseat INT DEFAULT 0;

@@ -20,13 +20,13 @@ const SelectedMovie = ({ selectedMovie }) => {
       <h1 className="selected-movie-section-title">선택한 영화</h1>
       <div className="selected-movie-content">
         <img
-          src="/images/movie.jpg"
-          alt={selectedMovie.movienm || "영화 포스터"}
+          src={selectedMovie.poster || "/images/movie.jpg"}
+          alt={selectedMovie.title || "영화 포스터"}
           className="selected-movie-poster"
         />
         <div className="selected-movie-info">
-          <h2 className="selected-movie-title">{selectedMovie.movienm || "제목 없음"}</h2>
-          <p className="selected-movie-genre">영화 정보</p>
+          <h2 className="selected-movie-title">{selectedMovie.title || "제목 없음"}</h2>
+          <p className="selected-movie-genre">{selectedMovie.genre || "장르 정보 없음"}</p>
         </div>
       </div>
     </div>

@@ -147,4 +147,24 @@ export const getReservationSeat = () =>
   return [];
 });
 
+// 공지사항 전체 조회
+export const fetchAllNotices = () =>
+  api
+    .get("/api/notice/notice")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching notices:", error);
+      return [];
+    });
+
+// FAQ 전체 조회
+export const fetchAllFaqs = () =>
+  api
+    .get("/api/faq/faq")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching faqs:", error);
+      return [];
+    });
+
 export default api;

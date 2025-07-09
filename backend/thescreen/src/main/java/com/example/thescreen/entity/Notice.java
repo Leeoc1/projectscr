@@ -21,4 +21,8 @@ public class Notice {
     private String noticesub;
 
     private LocalDateTime noticedate; // noticedate, datetime, 선택 입력
+
+    private String noticecontents;
+
+    private String writer;
 }

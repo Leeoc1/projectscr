@@ -51,3 +51,20 @@ from
 --
 ---- screen 테이블에 reservationseat 컬럼 추가 (기존 컬럼이 없는 경우)
 --ALTER TABLE screen ADD COLUMN IF NOT EXISTS reservationseat INT DEFAULT 0;
+
+--notice 테이블에 컬럼 추가
+-- thescreen 데이터베이스 선택
+--USE thescreen;
+-- notice 테이블에 noticecontents 컬럼 추가
+--ALTER TABLE notice
+    --ADD noticecontents TEXT;
+-- notice 테이블에 writer 컬럼 추가
+--ALTER TABLE notice
+    --ADD writer VARCHAR(20);
+
+--faq 테이블에 컬럼 추가
+-- thescreen 데이터베이스 선택
+--USE thescreen;
+-- faq 테이블에 faqcontents 컬럼 추가
+--ALTER TABLE faq
+   --ADD faqcontents TEXT;

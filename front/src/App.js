@@ -3,6 +3,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import MoviePage from "./pages/MoviePage/MoviePage";
 import TheaterPage from "./pages/TheaterPage/TheaterPage";
 import EventPage from "./pages/EventPage/components/EventPage";
+import NoticePage from "./pages/NoticePage/components/NoticePage";
 import AdminPage from "./pages/AdminPage/components/AdminPage";
 import Login from "./pages/LoginPage/components/Login";
 import Register from "./pages/RegisterPage/components/Register";
@@ -13,6 +14,7 @@ import ReservationSeatPage from "./pages/reservation/components/ReservationSeatP
 import ReservationPaymentPage from "./pages/reservation/components/ReservationPaymentPage";
 import ReservationSuccessPage from "./pages/reservation/components/ReservationSuccessPage";
 import TheaterInfoPage from "./pages/TheaterInfoPage/TheaterInfoPage";
+import NoticeContents from "./pages/NoticePage/NoticeContentsPage/NoticeContents";
 
 function App() {
   return (
@@ -23,9 +25,14 @@ function App() {
         <Route path="/reservation" element={<ReservationMoviePage />} />
         <Route path="/theater" element={<TheaterPage />} />
         <Route path="/event" element={<EventPage />} />
+        <Route path="/notice" element={<NoticePage />} />
+        <Route path="/notice/notice" element={<NoticePage />} />
+        <Route path="/notice/faq" element={<NoticePage />} />
+        <Route path="/notice/:noticenum" element={<NoticeContents />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/theater/info" element={<TheaterInfoPage />} />
+        
 
         {/* 관리자 페이지 라우팅 */}
         <Route path="/admin" element={<AdminPage />} />

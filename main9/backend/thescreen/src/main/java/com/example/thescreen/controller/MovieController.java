@@ -1,11 +1,9 @@
 package com.example.thescreen.controller;
 
 import com.example.thescreen.entity.Movie;
-import com.example.thescreen.entity.MovieRank;
-import com.example.thescreen.repository.MovieRepository;
-import com.example.thescreen.repository.MovieRepository.MovieCdNmList;
 import com.example.thescreen.service.MovieService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.thescreen.repository.MovieRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,94 +13,53 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/movies")
+@RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:3000"})
 public class MovieController {
 
-    @Autowired
-    private MovieRepository movieRepository;
-    @Autowired
-    private MovieService movieService;
+    private final MovieRepository movieRepository;
+    private final MovieService movieService;
 
-    // 전체 영화 목록 조회
-    @GetMapping("/movies")
+    /**
+     * ✅ 1) 모든 영화 조회
+     */
+    @GetMapping
     public List<Movie> getAllMovies() {
         return movieRepository.findAll();
     }
 
-    // 현재상영작 조회
+    /**
+     * ✅ 2) 현재 상영작 조회
+     */
     @GetMapping("/current")
     public List<Movie> getCurrentMovies() {
-        List<Movie> allMovies = movieRepository.findAll();
         LocalDate today = LocalDate.now();
-        List<Movie> currentMovies = allMovies.stream()
-                .filter(m -> m.getReleasedate() != null && !m.getReleasedate().isAfter(today))
+        return movieRepository.findAll().stream()
+                .filter(movie -> movie.getReleasedate() != null && !movie.getReleasedate().isAfter(today))
                 .collect(Collectors.toList());
-        System.out.println("현재상영작 수: " + currentMovies.size());
-        return currentMovies;
     }
 
-    // 상영예정작 조회
+    /**
+     * ✅ 3) 상영 예정작 조회
+     */
     @GetMapping("/upcoming")
     public List<Movie> getUpcomingMovies() {
-        List<Movie> allMovies = movieRepository.findAll();
         LocalDate today = LocalDate.now();
-        List<Movie> upcomingMovies = allMovies.stream()
-                .filter(m -> m.getReleasedate() != null && m.getReleasedate().isAfter(today))
+        return movieRepository.findAll().stream()
+                .filter(movie -> movie.getReleasedate() != null && movie.getReleasedate().isAfter(today))
                 .collect(Collectors.toList());
-        System.out.println("상영예정작 수: " + upcomingMovies.size());
-        return upcomingMovies;
     }
 
-    // 관리자 페이지: 현재상영작/상영예정작만 반환
-    @GetMapping("/admin")
-    public MoviesResponse getMoviesForAdmin() {
-        List<Movie> allMovies = movieRepository.findAll();
-        LocalDate today = LocalDate.now();
-        List<Movie> currentMovies = allMovies.stream()
-                .filter(m -> m.getReleasedate() != null && !m.getReleasedate().isAfter(today))
-                .collect(Collectors.toList());
-        List<Movie> upcomingMovies = allMovies.stream()
-                .filter(m -> m.getReleasedate() != null && m.getReleasedate().isAfter(today))
-                .collect(Collectors.toList());
-        return new MoviesResponse(currentMovies, upcomingMovies);
-    }
-
-    public static class MoviesResponse {
-        private List<Movie> currentMovies;
-        private List<Movie> upcomingMovies;
-
-        public MoviesResponse(List<Movie> currentMovies, List<Movie> upcomingMovies) {
-            this.currentMovies = currentMovies;
-            this.upcomingMovies = upcomingMovies;
-        }
-        public List<Movie> getCurrentMovies() { return currentMovies; }
-        public List<Movie> getUpcomingMovies() { return upcomingMovies; }
-    }
-
-
-    // 예매: 극장 -> 영화
-    // 예매할 때 선택가능한 영화 라인업들, 제목만 반환
-    @GetMapping("/list")
-    public List<MovieCdNmList> getMovieTitleList() {
-        List<MovieCdNmList> movieList = movieRepository.findAllBy();
-
-        return movieList;
-    }
-
-    //영화 API 출력 엔드포인트
-    @PostMapping("/refresh")
+    /**
+     * ✅ 4) KMDB API 수동 갱신
+     */
+    @GetMapping("/refresh")
     public ResponseEntity<String> refreshMovies() {
         try {
             movieService.fetchAndSaveMovie();
-            return ResponseEntity.ok("영화 데이터 갱신 완료");
+            return ResponseEntity.ok("✅ 영화 데이터 갱신 완료!");
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("영화 데이터 갱신 실패: " + e.getMessage());
+            return ResponseEntity.status(500).body("🚨 영화 데이터 갱신 실패: " + e.getMessage());
         }
     }
-    @GetMapping("/movie/list")
-    public List<Movie> getMovieList () {
-        movieService.fetchAndSaveMovie();
-        return movieService.getMovieList();
-    }
-
-} 
+}

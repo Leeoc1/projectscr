@@ -18,20 +18,13 @@ public class MovieController {
     @Autowired
     private MovieRepository movieRepository;
 
-    // 관리자 페이지: 현재상영작/상영예정작만 반환
-    @GetMapping("/admin")
-    public MoviesResponse getMoviesForAdmin() {
-        List<Movie> allMovies = movieRepository.findAll();
-        LocalDate today = LocalDate.now();
-        List<Movie> currentMovies = allMovies.stream()
-                .filter(m -> m.getReleasedate() != null && !m.getReleasedate().isAfter(today))
-                .collect(Collectors.toList());
-        List<Movie> upcomingMovies = allMovies.stream()
-                .filter(m -> m.getReleasedate() != null && m.getReleasedate().isAfter(today))
-                .collect(Collectors.toList());
-        return new MoviesResponse(currentMovies, upcomingMovies);
+    // 전체 영화 목록 조회
+    @GetMapping("/movies")
+    public List<Movie> getAllMovies() {
+        return movieRepository.findAll();
     }
 
+    // 현재상영작 조회
     @GetMapping("/current")
     public List<Movie> getCurrentMovies() {
         List<Movie> allMovies = movieRepository.findAll();
@@ -53,6 +46,20 @@ public class MovieController {
                 .collect(Collectors.toList());
         System.out.println("상영예정작 수: " + upcomingMovies.size());
         return upcomingMovies;
+    }
+
+    // 관리자 페이지: 현재상영작/상영예정작만 반환
+    @GetMapping("/admin")
+    public MoviesResponse getMoviesForAdmin() {
+        List<Movie> allMovies = movieRepository.findAll();
+        LocalDate today = LocalDate.now();
+        List<Movie> currentMovies = allMovies.stream()
+                .filter(m -> m.getReleasedate() != null && !m.getReleasedate().isAfter(today))
+                .collect(Collectors.toList());
+        List<Movie> upcomingMovies = allMovies.stream()
+                .filter(m -> m.getReleasedate() != null && m.getReleasedate().isAfter(today))
+                .collect(Collectors.toList());
+        return new MoviesResponse(currentMovies, upcomingMovies);
     }
 
     public static class MoviesResponse {

@@ -21,14 +21,23 @@ export const getMoviesForAdmin = () =>
 
 // 극장 -> 영화 (ReservationPlaceToMoviePage)
 // 영화 목록 조회(moviecd, movienm만 조회)
-export const getMovieList = () =>
+export const getCurrentMovies = () =>
   api
-    .get("/movies/list")
+    .get("/movies/current")
     .then((response) => response.data)
     .catch((error) => {
       console.error("Error fetching movies:", error);
       return [];
     });
+
+    export const getUpcomingMovies = () =>
+      api
+        .get("/movies/upcoming")
+        .then((response) => response.data)
+        .catch((error) => {
+          console.error("Error fetching movies:", error);
+          return [];
+        });
 
 // 극장 목록 조회
 export const getCinemas = () =>
@@ -60,6 +69,26 @@ export const getStaffs = () =>
       return [];
     });
 
+// 수정한 직원 정보 저장
+export const updateStaff = async (staffData) => {
+  try {
+    const response = await api.put("/staff/update", staffData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// 직원 정보 추가
+export const addStaff = async (staffData) => {
+  try {
+    const response = await api.post("/staff/add", staffData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 // 전체 사용자 목록 조회
 export const getAllUsers = () =>
   api
@@ -89,5 +118,33 @@ export const getSchedules = (cinemaCd, date) =>
       console.error("Error fetching schedules:", error);
       return [];
     });
+
+// 예약 저장
+export const saveReservation = (reservationData) =>
+  api
+    .post("/reservation", reservationData)
+    .then((response) => response.data)
+    .catch((error) => { 
+      console.error("Error saving reservation:", error);
+      throw error;
+    });
+
+export const getReservation = () =>
+  api
+    .get("view/reservation/success")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching reservation:", error);
+      return [];
+    });
+
+export const getReservationSeat = () => 
+  api
+.get("/reservation/seat")
+.then((response) => response.data)
+.catch((error) => {
+  console.error("Error fetching reservation seat:", error);
+  return [];
+});
 
 export default api;

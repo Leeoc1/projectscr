@@ -27,7 +27,7 @@ function App() {
 
         {/* 관리자 페이지 라우팅 */}
         <Route path="/admin" element={<AdminPage />} />
-        <Route path="/admin/sales" element={<AdminPage />} />
+        <Route path="/admin/dashboard" element={<AdminPage />} />
         <Route path="/admin/staff" element={<AdminPage />} />
         <Route path="/admin/users" element={<AdminPage />} />
         <Route path="/admin/theaters" element={<AdminPage />} />

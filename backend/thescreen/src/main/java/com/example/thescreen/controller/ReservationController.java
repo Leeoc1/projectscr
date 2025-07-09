@@ -2,6 +2,7 @@ package com.example.thescreen.controller;
 
 import com.example.thescreen.entity.Reservation;
 import com.example.thescreen.repository.ReservationRepository;
+import com.example.thescreen.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,8 @@ public class ReservationController {
     public List<Reservation> getSeat() {
         return reservationRepository.findAll();
     }
+
+
 
     // 예매 정보 저장 (post)
     @PostMapping
@@ -57,10 +60,13 @@ public class ReservationController {
             
             reservation.setReservationtime(LocalDateTime.now());
             reservation.setReservationstatus("예약완료");
-            // userid는 현재 로그인한 사용자 정보에서 가져와야 함 (임시로 null)
-            reservation.setUser(null);
-            // paymentcd는 결제 완료 후 설정 (임시로 null)
-            reservation.setPaymentcd(null);
+            // paymentcd는 프론트에서 받은 값이 있으면 사용
+            Object paymentcdObj = requestData.get("paymentcd");
+            if (paymentcdObj != null) {
+                reservation.setPaymentcd(paymentcdObj.toString());
+            } else {
+                reservation.setPaymentcd(null);
+            }
 
             Long maxId = reservationRepository.findMaxReservationId();
             Long newId = (maxId != null) ? maxId + 1 : 1;

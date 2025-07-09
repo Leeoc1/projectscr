@@ -127,4 +127,13 @@ export const getReservationSeat = () =>
   return [];
 });
 
+export const getTotalVolume = () =>
+  api
+    .get("/reservation/week/sum")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching total volume:", error);
+      return [];
+    });
+
 export default api;

@@ -31,12 +31,21 @@ const ReservationPaymentPage = () => {
   const price = reservationInfo.totalPrice ? reservationInfo.totalPrice.toLocaleString() : "0";
 
   // 결제 처리
+  const getRandomPaymentCd = () => {
+    const num = Math.floor(Math.random() * 15) + 1;
+    return `PAY${String(num).padStart(3, "0")}`;
+  };
+
   const handlePay = async () => {
     try {
+      const paymentcd = getRandomPaymentCd();
+      const userid = reservationInfo.userid || "guest";
       // 디버깅을 위한 로그
       console.log("전송할 데이터:", {
         schedulecd: reservationInfo.schedulecd,
         seatcd: reservationInfo.selectedSeats,
+        paymentcd: paymentcd,
+        userid: userid,
       });
       console.log("전체 reservationInfo:", reservationInfo);
 
@@ -44,6 +53,8 @@ const ReservationPaymentPage = () => {
       await saveReservation({
         schedulecd: reservationInfo.schedulecd, // 스케줄 코드
         seatcd: reservationInfo.selectedSeats, // 선택된 좌석 배열
+        paymentcd, // 랜덤 결제 코드
+        userid,    // 사용자 ID 또는 guest
       });
 
       // 성공 시 세션 삭제 후 성공 페이지로 이동

@@ -1,7 +1,7 @@
 // SideBarData.js
 export const sidebarItems = [
   {
-    id: "sales",
+    id: "dashboard",
     label: "매출 현황",
     icon: "📊"
   },

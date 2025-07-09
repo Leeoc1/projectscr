@@ -24,6 +24,22 @@ from
     inner join cinema c on sc.cinemacd = c.cinemacd
     inner join region r on c.regioncd = r.regioncd;
 
+
+--create or replace view reservation_view as
+--select
+--    r.reservationcd,
+--    r.seatcd,
+--    r.reservationtime,
+--    sv.starttime,
+--    sv.movienm,
+--    sv.runningtime,
+--    sv.screenname,
+--    sv.cinemanm
+--from
+--    reservation r
+--    inner join schedule_view sv on r.schedulecd = sv.schedulecd;
+--    inner join payment p on r.paymentcd = p.paymentcd
+
 create or replace view reservation_view as
 select
     r.reservationcd,
@@ -53,3 +69,9 @@ from
 
 --예약 테이블 pk인 예약 코드 string로 바꿔야 하는데 그걸 위해 툴에서 실행
 --ALTER TABLE reservation MODIFY reservationcd VARCHAR(12);
+
+--유저 테이블에 가입일 컬럼 추가
+--ALTER TABLE users ADD COLUMN reg_date;
+
+--유저 테이블에 데이터가 있으면 아래 쿼리문 먼저 실행하고 해야 합니다
+--DELETE FROM users;

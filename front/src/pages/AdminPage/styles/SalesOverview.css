@@ -1,7 +1,7 @@
 /* Stats Grid */
 .slo-stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
@@ -65,25 +65,58 @@
 }
 
 .slo-chart-placeholder {
-  height: 200px;
+  height: 250px;
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: center;
   padding: 1rem;
+  border: 1px solid #e2e8f0;
 }
 
 .slo-chart-bars {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   gap: 0.5rem;
   height: 100%;
+  width: 100%;
+}
+
+.slo-chart-bar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 40px;
 }
 
 .slo-chart-bar {
   width: 30px;
   background: linear-gradient(to top, #3b82f6, #60a5fa);
   border-radius: 2px 2px 0 0;
-  min-height: 20px;
+  min-height: 4px;
+  transition: all 0.2s ease;
+  border: 1px solid #1e40af;
+}
+
+.slo-chart-bar:hover {
+  background: linear-gradient(to top, #2563eb, #3b82f6);
+  transform: scale(1.05);
+}
+
+.slo-chart-date {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.slo-chart-amount {
+  font-size: 0.625rem;
+  color: #374151;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
 }
 
 /* Pie Chart */

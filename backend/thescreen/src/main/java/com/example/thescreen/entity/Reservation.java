@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Setter
 public class Reservation {
     @Id
-    @Column(length = 20) // 기본 키: reservationcd, 길이 20
     private String reservationcd;
 
     @ManyToOne
@@ -28,7 +27,7 @@ public class Reservation {
     private String reservationstatus;
 
     @Column
-    private int seatnum; // 좌석 번호
+    private String seatcd; // 좌석 코드
 
     @Column(length = 20) // paymentcd, 길이 20, 선택 입력
     private String paymentcd;

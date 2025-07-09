@@ -1,0 +1,79 @@
+.progress-bar {
+  width: 100%;
+  max-width: 980px;
+  background: #fff;
+  padding: 40px 0 40px 0;
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin: 20px auto 0 auto; /* 상단 헤더와의 공간, 가운데 정렬 */
+  border: 1px solid #e0e0e0; /* 진행바에만 보더 추가 */
+}
+
+.progress-steps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  z-index: 2;
+  margin: 0 50px;
+}
+
+.progress-step:first-child {
+  margin-left: 0;
+}
+
+.progress-step:last-child {
+  margin-right: 0;
+}
+
+.step-number {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 22px;
+  transition: all 0.3s ease;
+}
+
+.step-title {
+  font-size: 17px;
+  color: #6b7280;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.3s ease;
+  line-height: 1.2;
+}
+
+.progress-step.active .step-number {
+  background: #222;
+  color: white;
+}
+
+.progress-step.active .step-title {
+  color: #222;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.progress-step.completed .step-number {
+  background: #222;
+  color: white;
+}
+
+.progress-step.completed .step-title {
+  color: #222;
+  font-weight: 500;
+}

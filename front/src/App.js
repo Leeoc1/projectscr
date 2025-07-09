@@ -1,17 +1,20 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import MoviePage from "./pages/MoviePage";
-import TheaterPage from "./pages/TheaterPage";
-import EventPage from "./pages/EventPage";
-import AdminPage from "./pages/AdminPage";
-import Login from "./components/loginpagecomponents/Login";
-import Register from "./components/registerpagecomponents/Register";
-import ReservationMoviePage from "./pages/reservation/ReservationMoviePage";
-import ReservationPlacePage from "./pages/reservation/ReservationPlacePage";
-import ReservationPlaceToMoviePage from "./pages/reservation/ReservationPlaceToMoviePage";
-import ReservationSeatPage from "./pages/reservation/ReservationSeatPage";
-import ReservationPaymentPage from "./pages/reservation/ReservationPaymentPage";
-import ReservationSuccessPage from "./pages/reservation/ReservationSuccessPage";
+import HomePage from "./pages/HomePage/HomePage";
+import MoviePage from "./pages/MoviePage/MoviePage";
+import TheaterPage from "./pages/TheaterPage/TheaterPage";
+import EventPage from "./pages/EventPage/components/EventPage";
+import AdminPage from "./pages/AdminPage/components/AdminPage";
+import Login from "./pages/LoginPage/components/Login";
+import Register from "./pages/RegisterPage/components/Register";
+import ReservationMoviePage from "./pages/reservation/components/ReservationMoviePage";
+import ReservationPlacePage from "./pages/reservation/components/ReservationPlacePage";
+import ReservationPlaceToMoviePage from "./pages/reservation/components/ReservationPlaceToMoviePage";
+import ReservationSeatPage from "./pages/reservation/components/ReservationSeatPage";
+import ReservationPaymentPage from "./pages/reservation/components/ReservationPaymentPage";
+import ReservationSuccessPage from "./pages/reservation/components/ReservationSuccessPage";
+import { CheckoutPage } from "./pages/reservation/Payments/Chekout";
+import { SuccessPage } from "./pages/reservation/Payments/Success";
+import { FailPage } from "./pages/reservation/Payments/Fail";
 
 function App() {
   return (
@@ -47,6 +50,12 @@ function App() {
           path="/reservation/payment"
           element={<ReservationPaymentPage />}
         />
+
+        {/* 토스 결제 api 연동 */}
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/success" element={<SuccessPage />} />
+        <Route path="/fail" element={<FailPage />} />
+
         <Route
           path="/reservation/success"
           element={<ReservationSuccessPage />}

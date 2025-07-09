@@ -29,35 +29,40 @@ const ReservationSuccessPage = () => {
       </div>
     );
   }
-  const reservationNum = String(reservationData.reservationcd).padStart(12, "0");
+  const reservationNum = String(reservationData.reservationcd).padStart(
+    12,
+    "0"
+  );
   const reservationNumber = reservationNum.match(/.{1,4}/g).join("-");
 
-    // 좌석 개수 계산
-  const seatCount = reservationData.seatcd ? reservationData.seatcd.split(',').length : 0;
+  // 좌석 개수 계산
+  const seatCount = reservationData.seatcd
+    ? reservationData.seatcd.split(",").length
+    : 0;
   //종료 시간 계산
   const endTime = new Date(reservationData.starttime);
   endTime.setMinutes(endTime.getMinutes() + reservationData.runningtime);
-  const endTimeString = endTime.toLocaleString('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+  const endTimeString = endTime.toLocaleString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 
   // 시간 포맷팅 함수
   const formatDateTime = (dateTimeString) => {
-    return dateTimeString 
-      ? new Date(dateTimeString).toLocaleString('ko-KR', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
+    return dateTimeString
+      ? new Date(dateTimeString).toLocaleString("ko-KR", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
         })
       : "정보 없음";
   };
-  
+
   // 결제 시각과 상영 시작 시간 포맷팅
   const reservationTime = formatDateTime(reservationData.reservationtime);
   const startTime = formatDateTime(reservationData.starttime);
@@ -99,21 +104,30 @@ const ReservationSuccessPage = () => {
               </div>
               <div>
                 <span className="payment-label">영화명</span>{" "}
-                <span className="payment-value">{reservationData.movienm || "정보 없음"}</span>
+                <span className="payment-value">
+                  {reservationData.movienm || "정보 없음"}
+                </span>
               </div>
               <div>
                 <span className="payment-label">지점명</span>{" "}
-                <span className="payment-value">{reservationData.cinemanm || "정보 없음"} / {reservationData.screenname}</span>
+                <span className="payment-value">
+                  {reservationData.cinemanm || "정보 없음"} /{" "}
+                  {reservationData.screenname}
+                </span>
               </div>
               <div>
                 <span className="payment-label">상영 시간</span>{" "}
-                <span className="payment-value">{startTime} ~ <br /> 
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                {endTimeString}</span>
+                <span className="payment-value">
+                  {startTime} ~ <br />
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  {endTimeString}
+                </span>
               </div>
               <div>
                 <span className="payment-label">러닝타임</span>{" "}
-                <span className="payment-value">{reservationData.runningtime || "정보 없음"}분</span>
+                <span className="payment-value">
+                  {reservationData.runningtime || "정보 없음"}분
+                </span>
               </div>
               <div>
                 <span className="payment-label">인원</span>{" "}
@@ -121,7 +135,9 @@ const ReservationSuccessPage = () => {
               </div>
               <div>
                 <span className="payment-label">좌석</span>{" "}
-                <span className="payment-value">{reservationData.seatcd || "정보 없음"}</span>
+                <span className="payment-value">
+                  {reservationData.seatcd || "정보 없음"}
+                </span>
               </div>
               <div>
                 <span className="payment-label">결제 시각</span>{" "}

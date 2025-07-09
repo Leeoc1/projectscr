@@ -69,6 +69,26 @@ export const getStaffs = () =>
       return [];
     });
 
+// 수정한 직원 정보 저장
+export const updateStaff = async (staffData) => {
+  try {
+    const response = await api.put("/staff/update", staffData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// 직원 정보 추가
+export const addStaff = async (staffData) => {
+  try {
+    const response = await api.post("/staff/add", staffData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 // 전체 사용자 목록 조회
 export const getAllUsers = () =>
   api
@@ -127,12 +147,41 @@ export const getReservationSeat = () =>
   return [];
 });
 
+// 공지사항 전체 조회
+export const fetchAllNotices = () =>
+  api
+    .get("/api/notice/notice")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching notices:", error);
+      return [];
+    });
+
+// FAQ 전체 조회
+export const fetchAllFaqs = () =>
+  api
+    .get("/api/faq/faq")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching faqs:", error);
+      return [];
+    });
+
 export const getTotalVolume = () =>
   api
     .get("/reservation/week/sum")
     .then((response) => response.data)
     .catch((error) => {
       console.error("Error fetching total volume:", error);
+      return [];
+    });
+
+export const getCinemaVolume = () =>
+  api
+    .get("/reservation/cinema/amount")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching cinema volume:", error);
       return [];
     });
 

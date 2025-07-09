@@ -10,6 +10,18 @@ const RegionTheaterSection = ({ filteredCinemas }) => {
     navigate("/reservation/movie");
   };
 
+  // 길찾기 클릭시 극장 상세 페이지로 이동
+  // state로 전달 
+  const handleMapClick = (cinema) => {
+    const state = {
+      cinemacd: cinema.cinemacd,
+      cinemanm: cinema.cinemanm,
+      address: cinema.address,
+      tel: cinema.tel,
+    };
+    navigate("/theater/info", { state });
+  };
+
   return (
     <section className="rts-section">
       <div className="rts-grid">
@@ -34,7 +46,12 @@ const RegionTheaterSection = ({ filteredCinemas }) => {
               >
                 상영시간표
               </button>
-              <button className="rts-btn secondary">길찾기</button>
+              <button
+                className="rts-btn secondary"
+                onClick={() => handleMapClick(cinema)}
+              >
+                길찾기
+              </button>
             </div>
           </div>
         ))}

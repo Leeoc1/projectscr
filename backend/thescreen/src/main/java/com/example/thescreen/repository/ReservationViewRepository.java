@@ -21,4 +21,11 @@ public interface ReservationViewRepository extends JpaRepository<ReservationView
             "ORDER BY DATE(reservationtime) DESC", nativeQuery = true)
     List<Object[]> findDailySalesBetween(@Param("startDate") LocalDateTime startDate,
                                          @Param("endDate") LocalDateTime endDate);
+
+    @Query(value = "SELECT cinemanm AS cinemaName, SUM(amount) AS totalAmount " +
+            "FROM reservation_view " +
+            "GROUP BY cinemanm " +
+            "ORDER BY cinemanm ", nativeQuery = true)
+    List<Object[]> findTotalSalesByCinema();
+
 }

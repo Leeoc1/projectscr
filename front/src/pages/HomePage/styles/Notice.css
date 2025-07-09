@@ -50,30 +50,15 @@
   min-height: 25rem;
 }
 
-.nt-notice-item {
-  background-color: #333333;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-}
-
-.nt-notice-item.featured {
-  border-left: 4px solid #fbbf24;
-}
-
-.nt-notice-title {
-  font-weight: 600;
-  font-size: 1rem;
-  color: white;
-}
-
 .nt-faq-item {
   background-color: #333333;
   border-radius: 0.5rem;
-  overflow: hidden;
+  overflow: visible;
   transition: all 0.3s ease;
+  position: relative;
 }
 
-.nt-faq-button {
+.nt-button {
   width: 100%;
   padding: 1.5rem;
   text-align: left;
@@ -82,20 +67,24 @@
   align-items: center;
   background: none;
   border: none;
+  border-radius: 0.5rem;
   color: white;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.nt-faq-button.nt-open {
+.nt-button.nt-open {
   background-color: #4b5563;
+  border-radius: 0.5rem;
 }
 
-.nt-faq-button:hover {
+.nt-button:hover {
   background-color: #4b5563;
+  border-radius: 0.5rem;
+  overflow: visible;
 }
 
-.nt-faq-question {
+.nt-question {
   font-weight: 600;
   font-size: 1rem;
 }
@@ -117,9 +106,38 @@
   max-height: 12.5rem;
 }
 
-.nt-faq-answer {
+.nt-faq-answer-block {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.7s cubic-bezier(0.4,0,0.2,1), opacity 0.7s cubic-bezier(0.4,0,0.2,1);
+  background-color: #4b5563;
+  border-radius: 0 0 0.5rem 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  margin-top: 2px;
+}
+.nt-faq-answer-block.open {
+  max-height: 200px;
+  opacity: 1;
+  transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+.nt-answer-content {
   color: #d1d5db;
-  padding-bottom: 1.5rem;
+  padding: 1.5rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+@keyframes ntSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (min-width: 1024px) {

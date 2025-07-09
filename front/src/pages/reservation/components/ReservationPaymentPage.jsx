@@ -9,7 +9,9 @@ const ReservationPaymentPage = () => {
   const [payMethod, setPayMethod] = useState("card");
 
   // finalReservationInfo에서 데이터 가져오기
-  const reservationInfo = JSON.parse(sessionStorage.getItem("finalReservationInfo") || "{}");
+  const reservationInfo = JSON.parse(
+    sessionStorage.getItem("finalReservationInfo") || "{}"
+  );
 
   // 필수 데이터가 없으면 좌석 선택 페이지로 이동
   if (!reservationInfo.selectedSeats || !reservationInfo.guestCount) {
@@ -26,26 +28,23 @@ const ReservationPaymentPage = () => {
   const date = reservationInfo.starttime
     ? new Date(reservationInfo.starttime).toLocaleDateString()
     : "날짜 미선택";
-  const time = reservationInfo.starttime ? reservationInfo.starttime.substring(11, 16) : "시간 미선택";
-  const seats = reservationInfo.selectedSeats ? reservationInfo.selectedSeats.join(", ") : "좌석 미선택";
-  const price = reservationInfo.totalPrice ? reservationInfo.totalPrice.toLocaleString() : "0";
+  const time = reservationInfo.starttime
+    ? reservationInfo.starttime.substring(11, 16)
+    : "시간 미선택";
+  const seats = reservationInfo.selectedSeats
+    ? reservationInfo.selectedSeats.join(", ")
+    : "좌석 미선택";
+  const price = reservationInfo.totalPrice
+    ? reservationInfo.totalPrice.toLocaleString()
+    : "0";
 
   // 결제 처리
-  const getRandomPaymentCd = () => {
-    const num = Math.floor(Math.random() * 15) + 1;
-    return `PAY${String(num).padStart(3, "0")}`;
-  };
-
   const handlePay = async () => {
     try {
-      const paymentcd = getRandomPaymentCd();
-      const userid = reservationInfo.userid || "guest";
       // 디버깅을 위한 로그
       console.log("전송할 데이터:", {
         schedulecd: reservationInfo.schedulecd,
         seatcd: reservationInfo.selectedSeats,
-        paymentcd: paymentcd,
-        userid: userid,
       });
       console.log("전체 reservationInfo:", reservationInfo);
 
@@ -53,8 +52,6 @@ const ReservationPaymentPage = () => {
       await saveReservation({
         schedulecd: reservationInfo.schedulecd, // 스케줄 코드
         seatcd: reservationInfo.selectedSeats, // 선택된 좌석 배열
-        paymentcd, // 랜덤 결제 코드
-        userid,    // 사용자 ID 또는 guest
       });
 
       // 성공 시 세션 삭제 후 성공 페이지로 이동
@@ -93,18 +90,30 @@ const ReservationPaymentPage = () => {
           <div className="payment-summary">
             <h2>최종 예매 정보</h2>
             <ul>
-              <li><strong>영화:</strong> {movieTitle}</li>
-              <li><strong>날짜:</strong> {date}</li>
-              <li><strong>상영 시작 시간:</strong> {time}</li>
-              <li><strong>극장:</strong> {theater}</li>
+              <li>
+                <strong>영화:</strong> {movieTitle}
+              </li>
+              <li>
+                <strong>날짜:</strong> {date}
+              </li>
+              <li>
+                <strong>상영 시작 시간:</strong> {time}
+              </li>
+              <li>
+                <strong>극장:</strong> {theater}
+              </li>
               <li>
                 <strong>관람 인원:</strong>{" "}
                 {reservationInfo.guestCount
                   ? `성인 ${reservationInfo.guestCount.adult}명, 청소년 ${reservationInfo.guestCount.child}명, 우대 ${reservationInfo.guestCount.senior}명 (총 ${totalGuests}명)`
                   : "인원 미선택"}
               </li>
-              <li><strong>좌석:</strong> {seats}</li>
-              <li><strong>총 결제 금액:</strong> {price}원</li>
+              <li>
+                <strong>좌석:</strong> {seats}
+              </li>
+              <li>
+                <strong>총 결제 금액:</strong> {price}원
+              </li>
             </ul>
           </div>
         </div>
@@ -113,10 +122,14 @@ const ReservationPaymentPage = () => {
             <div className="payment-accordion-title">STEP 1. 할인쿠폰</div>
           </div>
           <div className="payment-accordion-item">
-            <div className="payment-accordion-title">STEP 2. 관람권/기프트콘</div>
+            <div className="payment-accordion-title">
+              STEP 2. 관람권/기프트콘
+            </div>
           </div>
           <div className="payment-accordion-item">
-            <div className="payment-accordion-title">STEP 3. 포인트 및 기타결제 수단</div>
+            <div className="payment-accordion-title">
+              STEP 3. 포인트 및 기타결제 수단
+            </div>
           </div>
           <div className="payment-accordion-item payment-accordion-active">
             <div className="payment-accordion-title">STEP 4. 최종결제 수단</div>
@@ -127,7 +140,8 @@ const ReservationPaymentPage = () => {
                   name="payMethod"
                   checked={payMethod === "card"}
                   onChange={() => setPayMethod("card")}
-                /> 신용카드
+                />{" "}
+                신용카드
               </label>
               <label>
                 <input
@@ -135,7 +149,8 @@ const ReservationPaymentPage = () => {
                   name="payMethod"
                   checked={payMethod === "kakao"}
                   onChange={() => setPayMethod("kakao")}
-                /> 간편결제
+                />{" "}
+                간편결제
               </label>
               <label>
                 <input
@@ -143,7 +158,8 @@ const ReservationPaymentPage = () => {
                   name="payMethod"
                   checked={payMethod === "naver"}
                   onChange={() => setPayMethod("naver")}
-                /> 네이버결제
+                />{" "}
+                네이버결제
               </label>
             </div>
             <div className="payment-pay-form">

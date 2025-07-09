@@ -76,7 +76,7 @@ CREATE TABLE movierank (
 --ALTER TABLE reservation MODIFY reservationcd VARCHAR(12);
 
 --유저 테이블에 가입일 컬럼 추가
---ALTER TABLE users ADD COLUMN reg_date;
+--ALTER TABLE users ADD COLUMN reg_date date;
 
 --유저 테이블에 데이터가 있으면 아래 쿼리문 먼저 실행하고 해야 합니다
 --DELETE FROM users;

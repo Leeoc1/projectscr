@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getTotalVolume, getCinemaVolume } from "../../../../api/api";
+import { ResponsiveBar } from '@nivo/bar';
+import { ResponsivePie } from '@nivo/pie';
 
 const ChartSection = () => {
   const [totalVolume, setTotalVolume] = useState([]);
@@ -8,7 +10,12 @@ const ChartSection = () => {
   useEffect(() => {
     const fetchTotalVolume = async () => {
       const totalVolumeData = await getTotalVolume();
-      const cinemaVolumeData = await getCinemaVolume();
+      const cinemaVolumeData = await getCinemaVolume();console.log('cinemaVolumeData:', cinemaVolumeData); // 데이터 확인
+      console.log('pieData:', cinemaVolumeData.sort((a, b) => b.totalAmount - a.totalAmount).slice(0, 6).map((item, idx) => ({
+        id: item.cinemaName,
+        value: item.totalAmount,
+        color: pieColors[idx % pieColors.length],
+      })));
       setTotalVolume(totalVolumeData);
       setCinemaVolume(cinemaVolumeData);
     };
@@ -28,30 +35,41 @@ const ChartSection = () => {
   const minData = totalVolume.reduce((min, cur) => cur.totalAmount < min.totalAmount ? cur : min, totalVolume[0] || {totalAmount: 0, reservationDate: ''});
 
   // 최대 금액 및 막대그래프 데이터 역순
-  const maxAmount = totalVolume.length > 0 ? Math.max(...totalVolume.map(item => item.totalAmount || 0)) : 0;
-  const maxBarHeight = 180; // px
   const reversedVolume = [...totalVolume].reverse();
+
+  // Nivo Bar 차트용 데이터 변환
+  const nivoBarData = reversedVolume.map(item => ({
+    reservationDate: formatDate(item.reservationDate),
+    매출액: item.totalAmount,
+  }));
+  const barKeys = ['매출액'];
 
   // 파이차트 데이터 (상위 6개)
   const pieColors = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#a21caf", "#6366f1"];
   const sortedCinema = [...cinemaVolume].sort((a, b) => b.totalAmount - a.totalAmount).slice(0, 6);
   const totalPie = sortedCinema.reduce((sum, cur) => sum + cur.totalAmount, 0);
-  let prevPercent = 0;
-  const pieSlices = sortedCinema.map((item, idx) => {
-    const percent = totalPie > 0 ? (item.totalAmount / totalPie) * 100 : 0;
-    const start = prevPercent;
-    const end = prevPercent + percent;
-    prevPercent = end;
-    return {
-      color: pieColors[idx % pieColors.length],
-      start,
-      end,
-      label: item.cinemaName,
-      amount: item.totalAmount,
-      percent: percent
-    };
-  });
-  const pieGradient = pieSlices.map(slice => `${slice.color} ${slice.start}% ${slice.end}%`).join(", ");
+  // Nivo Pie용 데이터 변환
+  const pieData = sortedCinema.map((item, idx) => ({
+    id: item.cinemaName,
+    value: item.totalAmount,
+    color: pieColors[idx % pieColors.length],
+  }));
+
+  // Nivo Pie 중앙에 합계 표시 custom layer
+  const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
+    const total = dataWithArc.reduce((acc, datum) => acc + datum.value, 0);
+    return (
+      <text
+        x={centerX}
+        y={centerY}
+        textAnchor="middle"
+        dominantBaseline="central"
+        style={{ fontSize: 22, fontWeight: 700 }}
+      >
+        {total.toLocaleString()}원
+      </text>
+    );
+  };
 
   return (
     <div className="slo-charts-section">
@@ -64,32 +82,90 @@ const ChartSection = () => {
           </span>
         </h3>
         <div className="slo-chart-placeholder">
-          <div className="slo-chart-bars">
-            {reversedVolume.map((item, index) => (
-              <div key={index} className="slo-chart-bar-container">
-                <div
-                  className="slo-chart-bar"
-                  style={{ height: `${maxAmount > 0 ? (item.totalAmount / maxAmount) * maxBarHeight : 4}px` }}
-                  title={`${item.reservationDate}: ${item.totalAmount}원`}
-                />
-                <div className="slo-chart-date">{formatDate(item.reservationDate)}</div>
-                <div className="slo-chart-amount">{item.totalAmount}원</div>
-              </div>
-            ))}
+          {/* Nivo Bar 차트로 교체 */}
+          <div className="nivo-bar">
+            <ResponsiveBar
+              data={nivoBarData}
+              keys={barKeys}
+              indexBy="reservationDate"
+              margin={{ top: 20, right: 20, bottom: 40, left: 70 }}
+              padding={0.3}
+              groupMode="stacked"
+              colors={["#3b82f6"]}
+              axisBottom={{
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+                legend: '날짜',
+                legendPosition: 'middle',
+                legendOffset: 32,
+              }}
+              axisLeft={{
+                tickSize: 10,
+                tickRotation: 30,
+                legend: '매출',
+                legendPosition: 'middle',
+                legendOffset: -55,
+                legendRotation: 90,
+              }}
+              enableLabel={false}
+              tooltip={({ id, value, indexValue }) => (
+                <div className="bar-detail">
+                  <strong>{indexValue}</strong><br/>
+                  {id}: {value}원
+                </div>
+              )}
+              theme={{
+                axis: {
+                  ticks: {
+                    text: { fontSize: 10 },
+                  },
+                  legend: {
+                    text: { fontSize: 15 },
+                  },
+                },
+              }}
+            />
           </div>
         </div>
       </div>
       <div className="slo-chart-card">
         <h3>상영관별 매출</h3>
         <div className="slo-chart-placeholder slo-piechart-wrap">
-          <div className="slo-piechart-labels">
-            {pieSlices.map((slice, idx) => (
-              <div key={slice.label} className="slo-piechart-label" style={{ color: slice.color }}>
-                {slice.label}
-              </div>
-            ))}
+          {/* Nivo Pie 차트로 교체 */}
+          <div style={{ height: 400, width: 400, margin: '0 auto' }}>
+            <ResponsivePie
+              data={pieData}
+              colors={pieData.map(d => d.color)}
+              innerRadius={0.5}
+              margin={{ top: 20, right: 150, bottom: 20, left: 20 }}
+              padAngle={1.5}
+              cornerRadius={3}
+              activeOuterRadiusOffset={8}
+              enableArcLinkLabels={false}
+              arcLabelsSkipAngle={10}
+              arcLabelsTextColor="#222"
+              layers={['arcs', 'arcLabels', CenteredMetric]}
+              theme={{
+                labels: { text: { fontSize: 14, fontWeight: 500 } },
+              }}
+              legends={[
+                {
+                  anchor: 'top-right',
+                  direction: 'column',
+                  justify: false,
+                  translateX: 20,
+                  translateY: 0,
+                  itemsSpacing: 8,
+                  itemWidth: 10,
+                  itemHeight: 20,
+                  itemTextColor: '#222',
+                  symbolSize: 18,
+                  symbolShape: 'circle',
+                },
+              ]}
+            />
           </div>
-          <div className="slo-pie-chart slo-piechart-center" style={{ background: `conic-gradient(${pieGradient})` }} />
         </div>
       </div>
     </div>

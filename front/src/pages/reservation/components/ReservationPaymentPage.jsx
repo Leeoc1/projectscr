@@ -88,8 +88,8 @@ const ReservationPaymentPage = () => {
               <li><strong>극장:</strong> {theater}</li>
               <li>
                 <strong>관람 인원:</strong>{" "}
-                {reservationInfo.guestCount
-                  ? `성인 ${reservationInfo.guestCount.adult}명, 청소년 ${reservationInfo.guestCount.child}명, 우대 ${reservationInfo.guestCount.senior}명 (총 ${totalGuests}명)`
+                {guestCount
+                  ? `성인 ${guestCount.adult}명, 청소년 ${guestCount.child}명, 우대 ${guestCount.senior}명 (총 ${totalGuests}명)`
                   : "인원 미선택"}
               </li>
               <li><strong>좌석:</strong> {seats}</li>

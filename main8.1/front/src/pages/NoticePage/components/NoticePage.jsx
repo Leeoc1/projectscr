@@ -14,70 +14,53 @@ const NoticePage = () => {
   const [faqs, setFaqs] = useState([]);
   const [activeTab, setActiveTab] = useState('notice');
   const [currentPage, setCurrentPage] = useState(1);
+  const [openedFaqIndex, setOpenedFaqIndex] = useState(null);
   
-  // 상수
   const ITEMS_PER_PAGE = 10;
-  const TAB_CONFIG = {
-    notice: { sortKey: 'noticenum', url: '/notice/notice' },
-    faq: { sortKey: 'faqnum', url: '/notice/faq' }
-  };
 
   useEffect(() => {
     fetchAllNotices().then(setNotices);
     fetchAllFaqs().then(setFaqs);
   }, []);
 
-  // URL 경로에서 탭 정보 읽기
   useEffect(() => {
     const path = location.pathname;
     if (path === '/notice/faq') {
       setActiveTab('faq');
-    } else if (path === '/notice/notice') {
+    } else {
       setActiveTab('notice');
-    } else if (path === '/notice') {
-      setActiveTab('notice'); // 기본값
     }
-    setCurrentPage(1); // 탭 변경 시 1페이지로 리셋
+    setCurrentPage(1);
+    setOpenedFaqIndex(null);
   }, [location.pathname]);
 
-  // 데이터 처리 함수들
-  const sortData = (data, sortKey) => {
-    if (!data || !Array.isArray(data)) return [];
-    return data.sort((a, b) => b[sortKey] - a[sortKey]);
-  };
+  const currentData = (activeTab === 'notice' ? notices : faqs)
+    .sort((a, b) => b[activeTab === 'notice' ? 'noticenum' : 'faqnum'] - a[activeTab === 'notice' ? 'noticenum' : 'faqnum'])
+    .slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
-  const getCurrentData = () => {
-    const data = activeTab === 'notice' ? notices : faqs;
-    const sortKey = TAB_CONFIG[activeTab].sortKey;
-    return sortData(data, sortKey);
-  };
-
-  const getCurrentPageData = () => {
-    const allData = getCurrentData();
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-    return allData.slice(startIndex, endIndex);
-  };
-
-  const getTotalPages = () => {
-    const allData = getCurrentData();
-    return Math.ceil(allData.length / ITEMS_PER_PAGE);
-  };
-
-  // 이벤트 핸들러
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+  const totalPages = Math.ceil((activeTab === 'notice' ? notices : faqs).length / ITEMS_PER_PAGE);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setCurrentPage(1);
-    navigate(TAB_CONFIG[tab].url);
+    setOpenedFaqIndex(null); // 탭 변경 시 열린 FAQ 닫기
+    navigate(tab === 'faq' ? '/notice/faq' : '/notice/notice');
   };
 
-  // 렌더링할 데이터
-  const currentData = getCurrentPageData();
-  const totalPages = getTotalPages();
+  // 글로벌 인덱스(전체 데이터 기준)로 드롭다운 상태 관리
+  const handleFaqToggle = (globalIndex) => {
+    if (openedFaqIndex === globalIndex) {
+      setOpenedFaqIndex(null);
+    } else {
+      setOpenedFaqIndex(globalIndex);
+    }
+  };
+
+  // 전체 데이터에서의 글로벌 인덱스 계산
+  const baseIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  // 전체 건수 표시 텍스트
+  const totalCount = activeTab === 'notice' ? notices.length : faqs.length;
 
   return (
     <div className="notice-page">
@@ -85,17 +68,19 @@ const NoticePage = () => {
       <div className="notice-container">
         <h1 className="notice-page-title">고객센터</h1>
         
-        {/* 탭 네비게이션 */}
         <TabNavigation 
           activeTab={activeTab}
           onTabChange={handleTabChange}
         />
 
-        {/* 탭 콘텐츠 */}
         <div className="tab-content">
+          {/* 전체 건수 표시 */}
+          <span className="notice-total-count">
+            전체 {totalCount}건
+          </span>
           <div className="notice-list">
             {currentData.map((item, index) => {
-              const globalIndex = (currentPage - 1) * ITEMS_PER_PAGE + index;
+              const globalIndex = baseIndex + index;
               const key = activeTab === 'notice' ? item.noticenum : item.faqnum;
               return (
                 <NoticeItem
@@ -103,16 +88,17 @@ const NoticePage = () => {
                   item={item}
                   index={globalIndex}
                   type={activeTab}
+                  isExpanded={openedFaqIndex === globalIndex}
+                  onToggle={handleFaqToggle}
                 />
               );
             })}
           </div>
           
-          {/* 페이지네이션 */}
           <Pagination 
             currentPage={currentPage}
             totalPages={totalPages}
-            onPageChange={handlePageChange}
+            onPageChange={setCurrentPage}
           />
         </div>
       </div>

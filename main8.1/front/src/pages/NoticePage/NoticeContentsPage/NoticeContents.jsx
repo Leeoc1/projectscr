@@ -6,21 +6,29 @@ import "../styles/NoticeContentPage.css";
 const NoticeContents = () => {
     const { noticenum } = useParams();
     const navigate = useNavigate();
-    const [notice, setNotice] = useState([]);
+    const [notice, setNotice] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         fetch(`/api/notice/${noticenum}`)
-        .then((res) => res.json())
-        .then((data) => {
-            setNotice(data);
-            setLoading(false);
-        })
-        .catch(() => setLoading(false));
+            .then((res) => {
+                if (!res.ok) throw new Error('공지사항을 찾을 수 없습니다');
+                return res.json();
+            })
+            .then((data) => {
+                setNotice(data[0] || null);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.error('Error fetching notice:', err);
+                setError(true);
+                setLoading(false);
+            });
     }, [noticenum]);
 
     if (loading) return <div className="notice-contents-loading">로딩 중...</div>;
-    if (!notice) return <div className="notice-contents-error">공지사항을 찾을 수 없습니다.</div>;
+    if (error || !notice) return <div className="notice-contents-error">공지사항을 찾을 수 없습니다.</div>;
 
     return (
         <div className="rts-page notice-contents-bg">
@@ -31,13 +39,12 @@ const NoticeContents = () => {
                         <button className="notice-back-btn" onClick={() => navigate(-1)}>
                             목록으로
                         </button>
-                        {notice.map((notice) => (
-                            <section key={notice.noticenum} className="notice-detail-section">
-                                <div className="notice-contents-title">{notice.noticesub}</div>
-                                <div className="notice-contents-date">{notice.noticedate}</div>
-                                <div className="notice-contents-content">{notice.noticecontents}</div>
-                            </section>
-                        ))}
+                        
+                        <section className="notice-detail-section">
+                            <div className="notice-contents-title">{notice.noticesub}</div>
+                            <div className="notice-contents-date">{notice.noticedate}</div>
+                            <div className="notice-contents-content">{notice.noticecontents}</div>
+                        </section>
                     </div>
                 </div>
             </div>

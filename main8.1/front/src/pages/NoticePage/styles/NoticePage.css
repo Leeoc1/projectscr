@@ -211,6 +211,14 @@
   }
 }
 
+.notice-total-count {
+  position: relative;
+  bottom: 20px;
+  font-size: 15px;
+  margin: 5px;
+  color: #888;
+  display: block;
+}
 
 
 /* 반응형 디자인 */

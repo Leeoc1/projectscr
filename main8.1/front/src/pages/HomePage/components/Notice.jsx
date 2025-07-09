@@ -17,13 +17,12 @@ const Notice = () => {
   // 간단한 헬퍼 함수들
   const goNotice = (tab) => navigate(tab === 'faq' ? '/notice/faq' : '/notice/notice');
   
-  const getTop5NoticeTitles = (notices) => {
+  const getTop5Notices = (notices) => {
     if (!notices?.length) return [];
     return notices
       .filter(notice => notice.noticetype !== "문의")
       .sort((a, b) => b.noticenum - a.noticenum)
-      .slice(0, 5)
-      .map(notice => notice.noticesub);
+      .slice(0, 5);
   };
 
   const getTop5Faqs = (faqs) => {
@@ -31,7 +30,11 @@ const Notice = () => {
     return faqs
       .sort((a, b) => b.faqnum - a.faqnum)
       .slice(0, 5);
-  }; 
+  };
+
+  const handleNoticeClick = (noticenum) => {
+    navigate(`/notice/${noticenum}`);
+  };
 
   return (
     <section className="nt-notice-faq-section">
@@ -44,10 +47,14 @@ const Notice = () => {
               <p className="nt-section-subtitle" onClick={() => goNotice('notice')}>더보기 &gt;</p>
             </div>
             <div className="nt-section-content">
-              {getTop5NoticeTitles(notices).map((title, index) => (
-                <div key={index} className={`nt-faq-item ${index === 0 ? "nt-featured" : ""}`}>
-                  <button className="nt-button">
-                    <span className="nt-question">{title}</span>
+              {getTop5Notices(notices).map((notice, index) => (
+                <div key={notice.noticenum} className={`nt-faq-item ${index === 0 ? "nt-featured" : ""}`}>
+                  <button 
+                    className="nt-button"
+                    onClick={() => handleNoticeClick(notice.noticenum)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <span className="nt-question">{notice.noticesub}</span>
                   </button>
                 </div>
               ))}
@@ -65,7 +72,6 @@ const Notice = () => {
                   key={index} 
                   className="nt-faq-item"
                   onClick={() => setOpenedFaq(openedFaq === index ? null : index)}
-                  onMouseLeave={() => setOpenedFaq(null)}
                   style={{ cursor: 'pointer' }}
                 >
                   <button className="nt-button">

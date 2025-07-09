@@ -1,6 +1,11 @@
 import React from 'react';
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
+
   return (
     <div className="pagination">
       <button 
@@ -10,7 +15,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       >
         &lt;
       </button>
-      {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
+      
+      {pageNumbers.map(pageNum => (
         <button
           key={pageNum}
           className={`pagination-btn ${currentPage === pageNum ? 'active' : ''}`}
@@ -19,6 +25,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           {pageNum}
         </button>
       ))}
+      
       <button 
         className="pagination-btn"
         onClick={() => onPageChange(currentPage + 1)}

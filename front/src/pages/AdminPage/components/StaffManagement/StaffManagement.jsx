@@ -71,13 +71,6 @@ const StaffManagement = () => {
     setIsPopupOpen(true);
   };
 
-  // 직원 추가 핸들러 예시
-  const handleAddStaff = () => {
-    // formData를 이용해 staff 추가 로직 작성
-    // 예: setStaffs([...staffs, formData]);
-    setIsAddPopupOpen(false);
-    // formData 초기화 등 추가 작업
-  };
 
   return (
     <div className="adp-content">
@@ -91,7 +84,7 @@ const StaffManagement = () => {
           setIsAddPopupOpen={setIsAddPopupOpen}
           formData={formData}
           setFormData={setFormData}
-          handleAddStaff={handleAddStaff}
+          setStaffs={setStaffs}
         />
       )}
 

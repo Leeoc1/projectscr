@@ -1,28 +1,63 @@
 import React from "react";
+import { addStaff, getStaffs } from "../../../../api/api";
 
 const AddStaffPopup = ({
   setIsAddPopupOpen,
   formData,
   setFormData,
-  handleAddStaff,
+  setStaffs,
 }) => {
   const DEPT = ["운영팀", "고객서비스", "매표팀", "상영관팀", "매점팀"];
   const POSITION = ["매니저", "대리", "사원"];
   const ROLE = ["지점 관리", "고객 응대", "매표", "상영관 관리", "매점 판매"];
+  const SHIFTTYPE = ["주간", "야간"];
   const STATUS = ["근무중", "휴가", "퇴사", "퇴근"];
 
-  // 입력값 변경 핸들러
-  const handleChange = (e) => {
+  // 팝업 닫기
+  const handleClosePopup = () => {
+    setIsAddPopupOpen(false);
     setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+      staffid: "",
+      staffname: "",
+      dept: "",
+      theater: "",
+      position: "",
+      role: "",
+      phone: "",
+      email: "",
+      hiredate: "",
+      shifttype: "",
+      status: "",
     });
   };
 
+  // 입력값 변경 핸들러
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   // form 제출 핸들러
-  const handleSubmit = (e) => {
-    e.preventDefault(); // 새로고침 방지
-    handleAddStaff();
+  const handleSubmit = async (e) => {
+    // 폼 기본 제출 방지 
+    e.preventDefault();
+    
+    try {
+      // 직원 정보 추가 
+      await addStaff(formData);
+      handleClosePopup();
+
+      // 다시 직원 목록 조회
+      const staffs = await getStaffs();
+      setStaffs(staffs);
+    } catch (error) {
+      if (error.response) {
+        alert(error.response.data);
+      }
+    }
   };
 
   return (
@@ -38,8 +73,9 @@ const AddStaffPopup = ({
               <input
                 type="text"
                 name="staffid"
-                value={""}
+                value={formData.staffid}
                 onChange={handleChange}
+                required
               />
             </div>
             <div className="sup-form-group">
@@ -47,17 +83,14 @@ const AddStaffPopup = ({
               <input
                 type="text"
                 name="staffname"
-                value={""}
+                value={formData.staffname}
                 onChange={handleChange}
+                required
               />
             </div>
             <div className="sup-form-group">
               <label>부서:</label>
-              <select
-                name="dept"
-                value={""}
-                onChange={handleChange}
-              >
+              <select name="dept" value={formData.dept} onChange={handleChange} required>
                 <option value="">선택</option>
                 {DEPT.map((dept) => (
                   <option key={dept} value={dept}>
@@ -71,17 +104,14 @@ const AddStaffPopup = ({
               <input
                 type="text"
                 name="theater"
-                value={""}
+                value={formData.theater}
                 onChange={handleChange}
+                required
               />
             </div>
             <div className="sup-form-group">
               <label>직급:</label>
-              <select
-                name="position"
-                value={""}
-                onChange={handleChange}
-              >
+              <select name="position" value={formData.position} onChange={handleChange} required>
                 <option value="">선택</option>
                 {POSITION.map((position) => (
                   <option key={position} value={position}>
@@ -92,11 +122,7 @@ const AddStaffPopup = ({
             </div>
             <div className="sup-form-group">
               <label>담당:</label>
-              <select
-                name="role"
-                value={""}
-                onChange={handleChange}
-              >
+              <select name="role" value={formData.role} onChange={handleChange} required>
                 <option value="">선택</option>
                 {ROLE.map((role) => (
                   <option key={role} value={role}>
@@ -110,8 +136,9 @@ const AddStaffPopup = ({
               <input
                 type="text"
                 name="phone"
-                value={""}
+                value={formData.phone}
                 onChange={handleChange}
+                required
               />
             </div>
             <div className="sup-form-group">
@@ -119,8 +146,9 @@ const AddStaffPopup = ({
               <input
                 type="text"
                 name="email"
-                value={""}
+                value={formData.email}
                 onChange={handleChange}
+                required
               />
             </div>
             <div className="sup-form-group">
@@ -128,26 +156,25 @@ const AddStaffPopup = ({
               <input
                 type="text"
                 name="hiredate"
-                value={""}
-                onChange={handleChange}
+                value={formData.hiredate}
+                disabled
+                required
               />
             </div>
             <div className="sup-form-group">
               <label>고용 형태:</label>
-              <input
-                type="text"
-                name="shifttype"
-                value={""}
-                onChange={handleChange}
-              />
+              <select name="shifttype" value={formData.shifttype} onChange={handleChange} required>
+                <option value="">선택</option>
+                {SHIFTTYPE.map((shifttype) => (
+                  <option key={shifttype} value={shifttype}>
+                    {shifttype}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="sup-form-group">
               <label>근무 상태:</label>
-              <select
-                name="status"
-                value={""}
-                onChange={handleChange}
-              >
+              <select name="status" value={formData.status} onChange={handleChange} required>
                 <option value="">선택</option>
                 {STATUS.map((status) => (
                   <option key={status} value={status}>
@@ -161,7 +188,7 @@ const AddStaffPopup = ({
             <button
               className="sup-popup-btn-cancel"
               type="button"
-              onClick={() => setIsAddPopupOpen(false)}
+              onClick={handleClosePopup}
             >
               취소
             </button>

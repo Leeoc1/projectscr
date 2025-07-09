@@ -70,14 +70,24 @@ export const getStaffs = () =>
     });
 
 // 수정한 직원 정보 저장
-export const updateStaff = (staffData) =>
-  api
-    .put("/staff/update", staffData)
-    .then((response) => response.data)
-    .catch((error) => {
-      console.error("Error saving staff:", error);
-      throw error;
-    });
+export const updateStaff = async (staffData) => {
+  try {
+    const response = await api.put("/staff/update", staffData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// 직원 정보 추가
+export const addStaff = async (staffData) => {
+  try {
+    const response = await api.post("/staff/add", staffData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
 
 // 전체 사용자 목록 조회
 export const getAllUsers = () =>

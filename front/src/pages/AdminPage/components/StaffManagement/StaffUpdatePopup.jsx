@@ -53,7 +53,9 @@ const StaffUpdatePopup = ({
       const staffs = await getStaffs();
       setStaffs(staffs);
     } catch (error) {
-      console.error("Error saving staff:", error);
+      if (error.response) {
+        alert(error.response.data);
+      }
     }
   };
 

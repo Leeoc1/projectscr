@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { getTotalVolume } from "../../../../api/api";
+import { getTotalVolume, getCinemaVolume } from "../../../../api/api";
 
 const ChartSection = () => {
   const [totalVolume, setTotalVolume] = useState([]);
+  const [cinemaVolume, setCinemaVolume] = useState([]);
 
   useEffect(() => {
     const fetchTotalVolume = async () => {
       const totalVolumeData = await getTotalVolume();
+      const cinemaVolumeData = await getCinemaVolume();
       setTotalVolume(totalVolumeData);
+      setCinemaVolume(cinemaVolumeData);
     };
     fetchTotalVolume();
   }, []);
@@ -28,6 +31,27 @@ const ChartSection = () => {
   const maxAmount = totalVolume.length > 0 ? Math.max(...totalVolume.map(item => item.totalAmount || 0)) : 0;
   const maxBarHeight = 180; // px
   const reversedVolume = [...totalVolume].reverse();
+
+  // 파이차트 데이터 (상위 6개)
+  const pieColors = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#a21caf", "#6366f1"];
+  const sortedCinema = [...cinemaVolume].sort((a, b) => b.totalAmount - a.totalAmount).slice(0, 6);
+  const totalPie = sortedCinema.reduce((sum, cur) => sum + cur.totalAmount, 0);
+  let prevPercent = 0;
+  const pieSlices = sortedCinema.map((item, idx) => {
+    const percent = totalPie > 0 ? (item.totalAmount / totalPie) * 100 : 0;
+    const start = prevPercent;
+    const end = prevPercent + percent;
+    prevPercent = end;
+    return {
+      color: pieColors[idx % pieColors.length],
+      start,
+      end,
+      label: item.cinemaName,
+      amount: item.totalAmount,
+      percent: percent
+    };
+  });
+  const pieGradient = pieSlices.map(slice => `${slice.color} ${slice.start}% ${slice.end}%`).join(", ");
 
   return (
     <div className="slo-charts-section">
@@ -57,13 +81,15 @@ const ChartSection = () => {
       </div>
       <div className="slo-chart-card">
         <h3>상영관별 매출</h3>
-        <div className="slo-chart-placeholder">
-          <div className="slo-pie-chart">
-            <div className="pie-slice slice-1" />
-            <div className="pie-slice slice-2" />
-            <div className="pie-slice slice-3" />
-            <div className="pie-slice slice-4" />
+        <div className="slo-chart-placeholder slo-piechart-wrap">
+          <div className="slo-piechart-labels">
+            {pieSlices.map((slice, idx) => (
+              <div key={slice.label} className="slo-piechart-label" style={{ color: slice.color }}>
+                {slice.label}
+              </div>
+            ))}
           </div>
+          <div className="slo-pie-chart slo-piechart-center" style={{ background: `conic-gradient(${pieGradient})` }} />
         </div>
       </div>
     </div>

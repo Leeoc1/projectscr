@@ -25,11 +25,11 @@ from
     inner join region r on c.regioncd = r.regioncd;
 
 create or replace view reservation_view as
-select r.reservationcd, r.seatcd, r.reservationtime, sv.starttime, sv.movienm, sv.runningtime, sv.screenname, sv.cinemanm
+select r.reservationcd, r.seatcd, r.reservationtime, r.reservationstatus, sv.starttime, sv.movienm, sv.runningtime, sv.screenname, sv.cinemanm, r.userid, p.paymenttime, p.paymentmethod, p.amount
 from
     reservation r
-    inner join schedule_view sv on r.schedulecd = sv.schedulecd;
---    inner join payment p on r.paymentcd = p.paymentcd
+    inner join schedule_view sv on r.schedulecd = sv.schedulecd
+    inner join payment p on r.paymentcd = p.paymentcd;
 
 --reservation의 seatnum을 seatcd로 바꾸고 string로 바꾸기 이것도 툴에서 실행
 --ALTER TABLE reservation CHANGE seatnum seatcd VARCHAR(50);

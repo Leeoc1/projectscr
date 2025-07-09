@@ -167,13 +167,21 @@ export const fetchAllFaqs = () =>
       return [];
     });
 
-export default api;
 export const getTotalVolume = () =>
   api
     .get("/reservation/week/sum")
     .then((response) => response.data)
     .catch((error) => {
       console.error("Error fetching total volume:", error);
+      return [];
+    });
+
+export const getCinemaVolume = () =>
+  api
+    .get("/reservation/cinema/amount")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching cinema volume:", error);
       return [];
     });
 

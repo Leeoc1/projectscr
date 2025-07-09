@@ -4396,7 +4396,7 @@ VALUES (
         '2025-07-05 14:00:00',
         '2025-07-05 17:00:00',
         '2025-07-05'
-    ),
+    );
     -- faq 테이블 가데이터
 
 -- INSERT INTO faq (faqnum, faqsub, faqdate) VALUES

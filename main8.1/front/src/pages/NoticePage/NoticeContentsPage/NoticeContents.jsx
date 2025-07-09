@@ -36,15 +36,16 @@ const NoticeContents = () => {
             <div className="rts-content notice-detail-content">
                 <div className="rts-main notice-detail-main">
                     <div className="rts-container notice-contents-container">
-                        <button className="notice-back-btn" onClick={() => navigate(-1)}>
-                            목록으로
-                        </button>
+                        
                         
                         <section className="notice-detail-section">
                             <div className="notice-contents-title">{notice.noticesub}</div>
                             <div className="notice-contents-date">{notice.noticedate}</div>
                             <div className="notice-contents-content">{notice.noticecontents}</div>
                         </section>
+                        <button className="notice-back-btn" onClick={() => navigate(-1)}>
+                            목록으로
+                        </button>
                     </div>
                 </div>
             </div>

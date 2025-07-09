@@ -45,3 +45,21 @@ from
 
 --예약 테이블 pk인 예약 코드 string로 바꿔야 하는데 그걸 위해 툴에서 실행
 --ALTER TABLE reservation MODIFY reservationcd VARCHAR(12);
+
+
+--notice 테이블에 컬럼 추가
+-- thescreen 데이터베이스 선택
+--USE thescreen;
+-- notice 테이블에 noticecontents 컬럼 추가
+--ALTER TABLE notice
+    --ADD noticecontents TEXT;
+-- notice 테이블에 writer 컬럼 추가
+--ALTER TABLE notice
+    --ADD writer VARCHAR(20);
+
+--faq 테이블에 컬럼 추가
+-- thescreen 데이터베이스 선택
+--USE thescreen;
+-- faq 테이블에 faqcontents 컬럼 추가
+--ALTER TABLE faq
+   --ADD faqcontents TEXT;

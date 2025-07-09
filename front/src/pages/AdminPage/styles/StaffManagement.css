@@ -205,11 +205,11 @@
     width: 95%;
     margin: 20px;
   }
-  
+
   .sup-staff-edit-form {
     grid-template-columns: 1fr;
   }
-  
+
   .sup-popup-header,
   .sup-popup-body,
   .sup-popup-footer {
@@ -219,8 +219,11 @@
 
 .asp-popup-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.3);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -231,7 +234,7 @@
   padding: 32px 24px;
   border-radius: 8px;
   min-width: 320px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .sup-popup-btn-cancel,

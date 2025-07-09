@@ -5,7 +5,7 @@ export const getSelectedMovie = () => {
   try {
     const storedMovie = sessionStorage.getItem("selectedMovieName");
     const storedMovieCode = sessionStorage.getItem("selectedMovieCode");
-    
+
     if (storedMovie) {
       // 문자열로 저장된 영화 제목과 코드를 객체 형태로 변환
       return {

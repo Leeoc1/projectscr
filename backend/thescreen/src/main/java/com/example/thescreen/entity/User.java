@@ -28,11 +28,11 @@ public class User {
     private String phone;
 
     @Column(length = 20)
-    private String birth;  // 생년월일, 선택 입력
+    private LocalDate birth; // 생년월일, 선택 입력
 
     @Column(length = 10) // 회원 상태: 활성, 탈퇴
     private String status;
 
-    @Column
-    private LocalDate reg_date;
+    @Column // 가입일, 선택 입력
+    private LocalDate reg_date; // 추가된 가입일 컬럼
 }

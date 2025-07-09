@@ -15,21 +15,20 @@ const Notice = () => {
   }, []);
 
   // 간단한 헬퍼 함수들
-  const goNotice = (tab) => navigate(tab === 'faq' ? '/notice/faq' : '/notice/notice');
-  
+  const goNotice = (tab) =>
+    navigate(tab === "faq" ? "/notice/faq" : "/notice/notice");
+
   const getTop5Notices = (notices) => {
     if (!notices?.length) return [];
     return notices
-      .filter(notice => notice.noticetype !== "문의")
+      .filter((notice) => notice.noticetype !== "문의")
       .sort((a, b) => b.noticenum - a.noticenum)
       .slice(0, 5);
   };
 
   const getTop5Faqs = (faqs) => {
     if (!faqs?.length) return [];
-    return faqs
-      .sort((a, b) => b.faqnum - a.faqnum)
-      .slice(0, 5);
+    return faqs.sort((a, b) => b.faqnum - a.faqnum).slice(0, 5);
   };
 
   const handleNoticeClick = (noticenum) => {
@@ -44,15 +43,23 @@ const Notice = () => {
           <div className="nt-section-column">
             <div className="nt-section-header">
               <h2 className="nt-section-title">공지사항</h2>
-              <p className="nt-section-subtitle" onClick={() => goNotice('notice')}>더보기 &gt;</p>
+              <p
+                className="nt-section-subtitle"
+                onClick={() => goNotice("notice")}
+              >
+                더보기 &gt;
+              </p>
             </div>
             <div className="nt-section-content">
               {getTop5Notices(notices).map((notice, index) => (
-                <div key={notice.noticenum} className={`nt-faq-item ${index === 0 ? "nt-featured" : ""}`}>
-                  <button 
+                <div
+                  key={notice.noticenum}
+                  className={`nt-faq-item ${index === 0 ? "nt-featured" : ""}`}
+                >
+                  <button
                     className="nt-button"
                     onClick={() => handleNoticeClick(notice.noticenum)}
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: "pointer" }}
                   >
                     <span className="nt-question">{notice.noticesub}</span>
                   </button>
@@ -64,20 +71,31 @@ const Notice = () => {
           <div className="nt-section-column">
             <div className="nt-section-header">
               <h2 className="nt-section-title">자주 묻는 질문</h2>
-              <p className="nt-section-subtitle" onClick={() => goNotice('faq')}>더보기 &gt;</p>
+              <p
+                className="nt-section-subtitle"
+                onClick={() => goNotice("faq")}
+              >
+                더보기 &gt;
+              </p>
             </div>
             <div className="nt-section-content">
               {getTop5Faqs(faqs).map((faq, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="nt-faq-item"
-                  onClick={() => setOpenedFaq(openedFaq === index ? null : index)}
-                  style={{ cursor: 'pointer' }}
+                  onClick={() =>
+                    setOpenedFaq(openedFaq === index ? null : index)
+                  }
+                  style={{ cursor: "pointer" }}
                 >
                   <button className="nt-button">
                     <span className="nt-question">{faq.faqsub}</span>
                   </button>
-                  <div className={`nt-faq-answer-block${openedFaq === index && faq.faqcontents ? ' open' : ''}`}>
+                  <div
+                    className={`nt-faq-answer-block${
+                      openedFaq === index && faq.faqcontents ? " open" : ""
+                    }`}
+                  >
                     <div className="nt-answer-content">{faq.faqcontents}</div>
                   </div>
                 </div>

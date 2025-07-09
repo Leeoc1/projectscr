@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import SalesOverview from "./SalesOverview";
-import StaffManagement from "./StaffManagement/StaffManagement";
+import SalesOverview from "./adminmain/SalesOverview";
+import StaffManagement from "./StaffManagement";
 import UserManagement from "./UserManagement";
 import TheaterManagement from "./TheaterManagement";
 import MovieManagement from "./MovieManagement";
@@ -23,7 +23,7 @@ const AdminPage = () => {
     const tabFromUrl = pathSegments[pathSegments.length - 1];
 
     const validTabs = [
-      "sales",
+      "dashboard",
       "staff",
       "users",
       "theaters",
@@ -37,8 +37,8 @@ const AdminPage = () => {
     if (validTabs.includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
     } else if (location.pathname === "/admin") {
-      setActiveTab("sales");
-      navigate("/admin/sales", { replace: true });
+      setActiveTab("dashboard");
+      navigate("/admin/dashboard", { replace: true });
     }
   }, [location.pathname, navigate]);
 
@@ -50,7 +50,7 @@ const AdminPage = () => {
 
   const renderContent = () => {
     switch (activeTab) {
-      case "sales":
+      case "dashboard":
         return <SalesOverview />;
       case "staff":
         return <StaffManagement />;

@@ -4439,3 +4439,48 @@ VALUES (
 -- UPDATE faq SET faqcontents = '20인 이상 단체 관람은 고객센터를 통해 별도로 문의해주세요.' WHERE faqnum = 13;
 -- UPDATE faq SET faqcontents = '청소년 할인은 관람 등급과 나이에 따라 자동 적용됩니다.' WHERE faqnum = 14;
 -- UPDATE faq SET faqcontents = '환불은 취소 완료 후 영업일 기준 3~5일 이내 처리됩니다.' WHERE faqnum = 15;
+
+INSERT IGNORE INTO reservation (reservationcd, userid, schedulecd, reservationtime, reservationstatus, seatcd, paymentcd) VALUES
+-- July 3, 2025 (8 reservations)
+('RES031', 'user004', 'S223', '2025-07-03 09:30:00', 'CONFIRMED', 'A1,A2', 'PAY001'),
+('RES032', 'user008', 'S224', '2025-07-03 11:30:00', 'PENDING', 'B3,B4', 'PAY002'),
+('RES033', 'user013', 'S225', '2025-07-03 14:00:00', 'CONFIRMED', 'C1', 'PAY003'),
+('RES034', 'user017', 'S226', '2025-07-03 16:30:00', 'CANCELLED', 'D2', 'PAY004'),
+('RES035', 'user023', 'S227', '2025-07-03 17:00:00', 'CONFIRMED', 'E3,E4', 'PAY005'),
+('RES036', 'user028', 'S228', '2025-07-03 09:30:00', 'CONFIRMED', 'F1', 'PAY006'),
+('RES037', 'user033', 'S229', '2025-07-03 12:00:00', 'PENDING', 'G2,G3', 'PAY007'),
+('RES038', 'user039', 'S230', '2025-07-03 14:30:00', 'CONFIRMED', 'A4', 'PAY008'),
+-- July 4, 2025 (8 reservations)
+('RES039', 'user006', 'S245', '2025-07-04 09:30:00', 'CONFIRMED', 'A5,A6', 'PAY009'),
+('RES040', 'user011', 'S246', '2025-07-04 11:30:00', 'CONFIRMED', 'B7', 'PAY010'),
+('RES041', 'user016', 'S247', '2025-07-04 14:00:00', 'PENDING', 'C8,C9', 'PAY011'),
+('RES042', 'user021', 'S248', '2025-07-04 16:30:00', 'CONFIRMED', 'D10', 'PAY012'),
+('RES043', 'user026', 'S249', '2025-07-04 17:00:00', 'CANCELLED', 'E11', 'PAY013'),
+('RES044', 'user031', 'S250', '2025-07-04 09:30:00', 'CONFIRMED', 'F12', 'PAY014'),
+('RES045', 'user036', 'S251', '2025-07-04 12:00:00', 'CONFIRMED', 'G1,G2', 'PAY015'),
+('RES046', 'user041', 'S252', '2025-07-04 14:30:00', 'PENDING', 'A3', 'PAY001'),
+-- July 5, 2025 (3 additional reservations)
+('RES047', 'user009', 'S265', '2025-07-05 09:30:00', 'CONFIRMED', 'B4,B5', 'PAY002'),
+('RES048', 'user014', 'S390', '2025-07-05 09:00:00', 'CONFIRMED', 'C6', 'PAY003'),
+('RES049', 'user019', 'S391', '2025-07-05 11:30:00', 'PENDING', 'D7,D8', 'PAY004'),
+-- July 6, 2025 (3 additional reservations)
+('RES050', 'user024', 'S405', '2025-07-06 09:30:00', 'CONFIRMED', 'A9,A10', 'PAY005'),
+('RES051', 'user029', 'S406', '2025-07-06 11:30:00', 'CANCELLED', 'B11', 'PAY006'),
+('RES052', 'user034', 'S407', '2025-07-06 14:00:00', 'CONFIRMED', 'C12', 'PAY007'),
+-- July 7, 2025 (3 additional reservations)
+('RES053', 'user038', 'S420', '2025-07-07 09:30:00', 'CONFIRMED', 'D1,D2', 'PAY008'),
+('RES054', 'user043', 'S421', '2025-07-07 12:30:00', 'PENDING', 'E3', 'PAY009'),
+('RES055', 'user048', 'S422', '2025-07-07 16:00:00', 'CONFIRMED', 'F4,F5', 'PAY010'),
+-- July 8, 2025 (3 additional reservations)
+('RES056', 'user004', 'S435', '2025-07-08 09:30:00', 'CONFIRMED', 'G6', 'PAY011'),
+('RES057', 'user008', 'S436', '2025-07-08 11:30:00', 'CONFIRMED', 'A7,A8', 'PAY012'),
+('RES058', 'user013', 'S437', '2025-07-08 14:00:00', 'PENDING', 'B9', 'PAY013'),
+-- July 9, 2025 (8 reservations)
+('RES059', 'user017', 'S450', '2025-07-09 09:30:00', 'CONFIRMED', 'C10,C11', 'PAY014'),
+('RES060', 'user023', 'S451', '2025-07-09 11:30:00', 'CONFIRMED', 'D12', 'PAY015'),
+('RES061', 'user028', 'S452', '2025-07-09 14:00:00', 'PENDING', 'E1,E2', 'PAY001'),
+('RES062', 'user033', 'S453', '2025-07-09 09:30:00', 'CANCELLED', 'F3', 'PAY002'),
+('RES063', 'user039', 'S454', '2025-07-09 13:00:00', 'CONFIRMED', 'G4,G5', 'PAY003'),
+('RES064', 'user006', 'S455', '2025-07-09 16:30:00', 'CONFIRMED', 'A6', 'PAY004'),
+('RES065', 'user011', 'S456', '2025-07-09 10:00:00', 'CONFIRMED', 'B7,B8', 'PAY005'),
+('RES066', 'user016', 'S457', '2025-07-09 13:30:00', 'PENDING', 'C9', 'PAY006');

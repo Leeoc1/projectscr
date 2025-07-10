@@ -15,16 +15,16 @@ public class Movie {
     @Column(length = 20)
     private String moviecd;
 
-    @Column(length = 100)
+    @Column(columnDefinition = "TEXT")
     private String movienm;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(length = 255)
+    @Column(columnDefinition = "TEXT")
     private String genre;
 
-    @Column(length = 50)
+    @Column(columnDefinition = "TEXT")
     private String director;
 
     @Column(columnDefinition = "TEXT")
@@ -34,7 +34,7 @@ public class Movie {
 
     private LocalDate releasedate;
 
-    @Column(length = 200)
+    @Column(columnDefinition = "TEXT")
     private String posterurl;
 
     @Column(length = 20)

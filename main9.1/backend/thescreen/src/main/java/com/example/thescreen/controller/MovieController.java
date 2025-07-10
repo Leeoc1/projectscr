@@ -54,7 +54,7 @@ public class MovieController {
      */
     @GetMapping("/save")
     public String saveMoviesByPeriod() {
-        movieService.saveDailyBoxOffice();
+        movieService.fetchAndSaveMovies();
         return "✅ 기간별 영화 데이터 저장 완료!";
 
     }

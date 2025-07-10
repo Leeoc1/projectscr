@@ -6,7 +6,7 @@ import {
   getReservation,
 } from "../../../../api/api";
 import BarChart from "./chart/BarChart";
-import LineChart from "./chart/LineChart";
+import LineChartComponent from "./chart/LineChart";
 import PieChartComponent from "./chart/PieChart";
 import PieMovieChartComponent from "./chart/PieMovieChart";
 
@@ -130,7 +130,7 @@ const ChartSection = () => {
         );
       case 1:
         return (
-          <LineChart
+          <LineChartComponent
             data={dailyUserCount}
             onPrevious={handlePrevious}
             onNext={handleNext}

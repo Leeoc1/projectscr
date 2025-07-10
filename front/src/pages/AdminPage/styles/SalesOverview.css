@@ -146,7 +146,7 @@
 /* Pie Chart */
 .slo-pie-chart {
   width: 200px;
-  height: 200px;
+  height: 350px;
   border-radius: 50%;
   background: conic-gradient(
     #3b82f6 0deg 90deg,
@@ -169,6 +169,7 @@
   border: 1px solid #e2e8f0;
   background: #fff;
   box-sizing: border-box;
+  margin-top: 30px;
 }
 
 .slo-chart-card,

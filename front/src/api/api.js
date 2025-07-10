@@ -30,14 +30,14 @@ export const getCurrentMovies = () =>
       return [];
     });
 
-    export const getUpcomingMovies = () =>
-      api
-        .get("/movies/upcoming")
-        .then((response) => response.data)
-        .catch((error) => {
-          console.error("Error fetching movies:", error);
-          return [];
-        });
+export const getUpcomingMovies = () =>
+  api
+    .get("/movies/upcoming")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching movies:", error);
+      return [];
+    });
 
 // 극장 목록 조회
 export const getCinemas = () =>
@@ -77,7 +77,7 @@ export const updateStaff = async (staffData) => {
   } catch (error) {
     throw error;
   }
-}
+};
 
 // 직원 정보 추가
 export const addStaff = async (staffData) => {
@@ -87,7 +87,7 @@ export const addStaff = async (staffData) => {
   } catch (error) {
     throw error;
   }
-}
+};
 
 // 전체 사용자 목록 조회
 export const getAllUsers = () =>
@@ -124,7 +124,7 @@ export const saveReservation = (reservationData) =>
   api
     .post("/reservation", reservationData)
     .then((response) => response.data)
-    .catch((error) => { 
+    .catch((error) => {
       console.error("Error saving reservation:", error);
       throw error;
     });
@@ -138,14 +138,14 @@ export const getReservation = () =>
       return [];
     });
 
-export const getReservationSeat = () => 
+export const getReservationSeat = () =>
   api
-.get("/reservation/seat")
-.then((response) => response.data)
-.catch((error) => {
-  console.error("Error fetching reservation seat:", error);
-  return [];
-});
+    .get("/reservation/seat")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching reservation seat:", error);
+      return [];
+    });
 
 // 공지사항 전체 조회
 export const fetchAllNotices = () =>
@@ -183,6 +183,16 @@ export const getCinemaVolume = () =>
     .catch((error) => {
       console.error("Error fetching cinema volume:", error);
       return [];
+    });
+
+// 결제 정보 저장
+export const savePayment = (paymentData) =>
+  api
+    .post("/payment/save", paymentData)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error saving payment:", error);
+      throw error;
     });
 
 export default api;

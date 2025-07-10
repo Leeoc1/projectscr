@@ -6,8 +6,6 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @Entity
 @Table(name = "reservation_view")
 @Getter
@@ -16,7 +14,8 @@ public class ReservationView {
     @Id
     private String reservationcd;
     private String seatcd;
-    private LocalDate reservationtime;
+    private String reservationtime;
+    private String reservationstatus;
     private String starttime;
     private String movienm;
     private Integer runningtime;
@@ -25,5 +24,5 @@ public class ReservationView {
     private String userid;
     private String paymenttime;
     private String paymentmethod;
-    private Integer amount;
+    private Long amount;
 }

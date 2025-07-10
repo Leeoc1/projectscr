@@ -1,17 +1,33 @@
 // 예매 정보 세션스토리지 관리 유틸
+export const getReservationInfo = () => {
+  try {
+    const saved = sessionStorage.getItem("reservationInfo");
+    if (saved) return JSON.parse(saved);
+  } catch (e) {
+    console.error("세션 스토리지에서 예매 정보를 불러오는 중 오류:", e);
+  }
+  return {};
+};
+
+export const setReservationInfo = (data) => {
+  try {
+    sessionStorage.setItem("reservationInfo", JSON.stringify(data));
+  } catch (error) {
+    console.error("세션 스토리지에 예매 정보를 저장하는 중 오류:", error);
+  }
+};
+
+export const clearReservationInfo = () => {
+  sessionStorage.removeItem("reservationInfo");
+  sessionStorage.removeItem("selectedMovie");
+};
 
 // 선택한 영화 정보 가져오기
 export const getSelectedMovie = () => {
   try {
-    const storedMovie = sessionStorage.getItem("selectedMovieName");
-    const storedMovieCode = sessionStorage.getItem("selectedMovieCode");
-
+    const storedMovie = sessionStorage.getItem("selectedMovie");
     if (storedMovie) {
-      // 문자열로 저장된 영화 제목과 코드를 객체 형태로 변환
-      return {
-        movienm: storedMovie,
-        moviecd: storedMovieCode || null,
-      };
+      return JSON.parse(storedMovie);
     }
   } catch (error) {
     console.error("세션 스토리지에서 영화 정보를 가져오는 중 오류:", error);
@@ -24,13 +40,11 @@ export const getSelectedMovie = () => {
   };
 };
 
-// 개별 예매 정보 가져오기 함수들
-export const getSelectedDate = () => {
+// 예매 정보를 세션 스토리지에 저장 (기존 setReservationInfo와 동일)
+export const saveReservationInfo = (info) => {
   try {
-    const date = sessionStorage.getItem("selectedFullDate");
-    return date ? new Date(date) : null;
+    sessionStorage.setItem("reservationInfo", JSON.stringify(info));
   } catch (error) {
-    console.error("세션 스토리지에서 날짜를 가져오는 중 오류:", error);
-    return null;
+    console.error("세션 스토리지에 예매 정보를 저장하는 중 오류:", error);
   }
 };

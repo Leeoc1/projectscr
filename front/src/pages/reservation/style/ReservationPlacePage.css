@@ -1,18 +1,20 @@
-/* reservation-page 배경색 제거 및 하얀색 배경 */
+/* reservation-page 배경색 제거 */
 .reservation-page {
   background: #fff;
   min-height: 100vh;
 }
 
-/* reservation-content 배경색 제거 */
+/* reservation-content를 seat 페이지와 동일한 구조로 변경 */
 .reservation-content {
-  background: none;
+  padding-top: 0;
+  min-height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
 }
 
 /* 선택한 영화 섹션 */
 .selected-movie-section {
-  width: 980px;
-  margin: 0 auto;
+  width: 100%;
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 8px 8px 0 0;
@@ -89,12 +91,11 @@
   border: 2px dashed #ddd;
 }
 
-/* reservation-container 얇은 경계선 추가 */
+/* reservation-container를 seat 페이지와 동일한 구조로 변경 */
 .reservation-container {
-  max-width: 980px;
+  width: 980px;
+  background: white;
   margin: 0 auto;
-  background: #fff;
-  border-radius: 8px;
   padding: 0;
   margin-top: 0;
   margin-bottom: 48px;
@@ -215,11 +216,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0;
+  margin: 20px auto 0 auto;
   border: 1px solid #ddd;
   border-bottom: none;
   width: 980px;
-  margin: 0 auto;
   box-sizing: border-box;
 }
 
@@ -334,6 +334,7 @@
   display: flex;
   gap: 20px;
   position: relative;
+  min-height: 600px;
 }
 
 .region-section {
@@ -360,7 +361,7 @@
 
 .theater-section::before,
 .screen-section::before {
-  content: '';
+  content: "";
   position: absolute;
   left: -10px;
   top: 0;
@@ -509,7 +510,178 @@
   color: #888;
 }
 
+.region-section {
+  min-width: 0;
+  flex: 0 0 auto;
+}
 
+.theater-section {
+  min-width: 0;
+  flex: 0 0 auto;
+  position: relative;
+}
+
+.screen-section {
+  min-width: 0;
+  flex: 1;
+  position: relative;
+  background: #fff;
+  border-radius: 0 0 8px 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.theater-section::before,
+.screen-section::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: #ddd;
+}
+
+.region-section h3,
+.theater-section h3,
+.screen-section h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 15px 0;
+}
+
+.region-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.region-item {
+  display: block;
+  width: fit-content;
+  min-width: 120px;
+  padding: 10px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 400;
+  color: #222;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.region-item:hover {
+  background: #ececec;
+}
+
+.region-item.active {
+  font-weight: 700;
+  color: #e91e63;
+  background: #ececec;
+}
+
+.theater-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.theater-item {
+  display: block;
+  width: fit-content;
+  min-width: 120px;
+  padding: 8px 20px 8px 16px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 400;
+  color: #222;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.theater-item:hover {
+  background: #ececec;
+}
+
+.theater-item.active {
+  font-weight: 700;
+  color: #e91e63;
+  background: #ececec;
+}
+
+/* Place 페이지 전용 상영시간 스타일 */
+.place-time-list-content {
+  padding: 0 24px;
+}
+
+.place-screen-type-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 12px 0 8px 0;
+  color: #222;
+}
+
+.place-screen-times-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.place-screen-time-card {
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.place-screen-time-card:hover {
+  border-color: #fbbf24;
+  background-color: #fef3c7;
+}
+
+.place-screen-time-card.place-active {
+  border-color: #fbbf24;
+  background-color: #fbbf24;
+  color: #222;
+  font-weight: bold;
+}
+
+.place-screen-time-card.place-active .place-screen-time-time,
+.place-screen-time-card.place-active .place-screen-time-seats,
+.place-screen-time-card.place-active .place-screen-time-screen {
+  color: #222;
+}
+
+.place-screen-time-time {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 2px;
+}
+
+.place-screen-time-seats {
+  font-size: 0.95rem;
+  color: #388e3c;
+  font-weight: 500;
+}
+
+.place-screen-time-screen {
+  font-size: 0.9rem;
+  color: #888;
+}
 
 .theater-title,
 .time-title {

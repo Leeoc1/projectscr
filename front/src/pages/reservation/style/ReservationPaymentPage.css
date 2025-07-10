@@ -37,20 +37,29 @@
   color: #222;
 }
 
-/* 결제(payment) 페이지 전체 레이아웃 */
+/* Payment 페이지 스타일 */
 .reservation-payment-page {
   min-height: 100vh;
-  background: #f8f9fa;
+  background-color: #fff;
+  padding-top: 0;
 }
 
-.payment-header {
-  width: 100%;
-  max-width: 980px;
+/* reservation-payment-content를 seat 페이지와 동일한 구조로 변경 */
+.reservation-payment-content {
+  padding-top: 0;
+  min-height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
+}
+
+/* reservation-payment-container를 seat 페이지와 동일한 구조로 변경 */
+.reservation-payment-container {
+  width: 980px;
+  background: white;
   margin: 0 auto;
-  background: #222;
-  color: #fff;
-  border-radius: 0 0 0 0;
   padding: 0;
+  margin-top: 0;
+  margin-bottom: 48px;
   box-sizing: border-box;
 }
 
@@ -61,88 +70,203 @@
   padding: 18px 0 18px 0;
   background: #222;
   color: #fff;
-  border-radius: 0 0 0 0;
+  border-radius: 8px 8px 0 0;
+  margin: 20px auto 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  border-left: 1px solid #e0e0e0; /* 왼쪽 보더 선 */
+  border-right: 1px solid #e0e0e0; /* 오른쪽 보더 선 */
 }
 
 .payment-container {
-  max-width: 980px;
+  width: 980px;
   margin: 0 auto;
   background: #fff;
-  min-height: 700px;
-  padding: 0 0 40px 0;
+  min-height: 00px;
+  padding: 0;
   box-sizing: border-box;
-  border-radius: 8px;
+  border-radius: 0 0 8px 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-top: 0;
+  border-top: 1px solid #e0e0e0; /* 타이틀과 컨테이너 사이 구분선 */
+  border-left: 1px solid #e0e0e0; /* 왼쪽 보더 선 */
+  border-right: 1px solid #e0e0e0; /* 오른쪽 보더 선 */
+  border-bottom: 1px solid #e0e0e0; /* 하단 보더 선 */
 }
 
-/* 진행바 (통일) */
-.progress-bar {
+/* 아코디언 스타일 */
+.payment-container .payment-accordion {
+  background-color: white;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 50px auto 0 auto; /* 타이틀과 아코디언 사이 공간 조정 및 가운데 정렬 */
+  overflow: hidden;
+  max-width: 800px; /* 아코디언 최대 너비 설정 */
   width: 100%;
-  max-width: 980px;
-  background: #fff;
-  padding: 40px 0 40px 0;
-  border-radius: 8px 8px 0 0;
-  box-sizing: border-box;
-  margin: 0 auto;
 }
-.progress-steps {
+
+.payment-accordion-item {
+  margin-bottom: 15px; /* 아이템 간 간격 증가 */
+}
+
+.payment-accordion-item:last-child {
+  margin-bottom: 0; /* 마지막 아이템 하단 마진 제거 */
+}
+
+.payment-container .payment-accordion .payment-accordion-title {
+  background-color: #f5f5f5 !important; /* 연한 회색 */
+  padding: 16px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #222;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
   display: flex;
-  justify-content: center;
   align-items: center;
-  position: relative;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #dee2e6; /* 보더 선 추가 */
+  border-radius: 4px 4px 0 0; /* 상단만 둥글게 */
 }
-.progress-step {
+
+.payment-accordion-title:hover {
+  background-color: #d1ecf1; /* 호버 시 더 진한 색상 */
+  border-color: #bee5eb;
+}
+
+.payment-accordion-title::after {
+  content: "▼";
+  font-size: 12px;
+  transition: transform 0.3s ease;
+}
+
+.payment-accordion-title.active::after {
+  transform: rotate(180deg);
+}
+
+.payment-accordion-content {
+  padding: 20px;
+  background-color: white;
+  border: 1px solid #dee2e6; /* 전체 보더 추가 */
+  border-top: none; /* 상단 보더 제거 (타이틀과 연결) */
+  border-radius: 0 0 4px 4px; /* 하단만 둥글게 */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 쿠폰 옵션 스타일 */
+.coupon-options,
+.gift-options,
+.point-options {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  position: relative;
-  z-index: 2;
-  margin: 0 50px;
+  gap: 12px;
 }
-.progress-step:first-child {
-  margin-left: 0;
-}
-.progress-step:last-child {
-  margin-right: 0;
-}
-.step-number {
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
-  background: #f3f4f6;
-  color: #6b7280;
+
+.coupon-options label,
+.gift-options label,
+.point-options label {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 22px;
-  transition: all 0.3s ease;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px 0;
 }
-.step-title {
-  font-size: 17px;
-  color: #6b7280;
-  font-weight: 500;
+
+.coupon-options input[type="radio"],
+.gift-options input[type="radio"],
+.point-options input[type="radio"] {
+  margin: 0;
+}
+
+/* 포인트 입력 스타일 */
+.point-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.point-input input[type="number"] {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 150px;
+}
+
+.point-input span {
+  color: #666;
+  font-size: 14px;
+}
+
+.other-payment {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 최종 결제 금액 박스 */
+.payment-final-amount-box {
+  background-color: white;
+  border-radius: 8px;
+  padding: 15px 20px;
+  margin: 20px auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
-  transition: all 0.3s ease;
-  line-height: 1.2;
+  width: fit-content;
+  min-width: 200px;
 }
-.progress-step.active .step-number {
-  background: #e91e63;
+
+.payment-final-label {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.payment-final-amount {
+  font-size: 28px;
+  font-weight: bold;
+  color: #e50914;
+  display: block;
+}
+
+/* 하단 버튼 */
+.payment-bottom-btns {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin: 20px;
+}
+
+.payment-back-btn,
+.payment-main-btn {
+  padding: 12px 30px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.payment-back-btn {
+  background-color: #6c757d;
   color: white;
 }
-.progress-step.active .step-title {
-  color: #e91e63;
-  font-weight: 600;
-  font-size: 18px;
+
+.payment-back-btn:hover {
+  background-color: #5a6268;
 }
-.progress-step.completed .step-number {
-  background: rgba(233, 30, 99, 0.3);
-  color: #e91e63;
+
+.payment-main-btn {
+  background-color: #e50914;
+  color: white;
 }
-.progress-step.completed .step-title {
-  color: #e91e63;
-  font-weight: 500;
+
+.payment-main-btn:hover {
+  background-color: #c4080f;
 }
 
 /* 카드/섹션 스타일 */
@@ -214,30 +338,7 @@
   font-weight: bold;
 }
 
-/* 결제 단계(아코디언) 스타일 */
-.payment-accordion {
-  margin-bottom: 32px;
-  padding: 0;
-  box-shadow: none;
-  background: none;
-  border-radius: 0;
-  max-width: 700px;
-}
-.payment-accordion-item {
-  border-bottom: 1px solid #e5e7eb;
-  padding: 0;
-}
-.payment-accordion-title {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #222;
-  background: #f8f9fa;
-  padding: 16px 20px;
-  cursor: pointer;
-}
-.payment-accordion-active {
-  background: #fffbe7;
-}
+/* 결제 단계(아코디언) 스타일 - 중복 제거 */
 .payment-pay-methods {
   display: flex;
   gap: 24px;

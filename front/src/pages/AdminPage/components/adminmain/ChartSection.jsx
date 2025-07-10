@@ -1,40 +1,199 @@
 import React, { useEffect, useState } from "react";
-import { getTotalVolume, getCinemaVolume } from "../../../../api/api";
+import {
+  getTotalVolume,
+  getCinemaVolume,
+  getAllUsers,
+  getReservation,
+} from "../../../../api/api";
+import BarChart from "./chart/BarChart";
+import LineChart from "./chart/LineChart";
+import PieChartComponent from "./chart/PieChart";
+import PieMovieChartComponent from "./chart/PieMovieChart";
 
 const ChartSection = () => {
   const [totalVolume, setTotalVolume] = useState([]);
   const [cinemaVolume, setCinemaVolume] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [currentChartIndex, setCurrentChartIndex] = useState(0);
+  const [currentRightChartIndex, setCurrentRightChartIndex] = useState(0);
+  const [dailyUserCount, setDailyUserCount] = useState([]);
+  const [movieVolume, setMovieVolume] = useState([]);
 
   useEffect(() => {
-    const fetchTotalVolume = async () => {
-      const totalVolumeData = await getTotalVolume();
-      const cinemaVolumeData = await getCinemaVolume();
-      setTotalVolume(totalVolumeData);
-      setCinemaVolume(cinemaVolumeData);
+    const fetchData = async () => {
+      try {
+        const [
+          totalVolumeData,
+          cinemaVolumeData,
+          allUsersData,
+          reservationData,
+        ] = await Promise.all([
+          getTotalVolume(),
+          getCinemaVolume(),
+          getAllUsers(),
+          getReservation(),
+        ]);
+
+        console.log("그래프용 totalVolumeData:", totalVolumeData);
+        console.log("cinemaVolumeData:", cinemaVolumeData);
+        console.log("전체 유저 데이터:", allUsersData);
+        console.log("예약 데이터:", reservationData);
+
+        setTotalVolume(totalVolumeData);
+        setCinemaVolume(cinemaVolumeData);
+
+        // 날짜별 전체 유저 수 계산 (오늘부터 7일 전까지)
+        const today = new Date();
+        const dailyCounts = [];
+
+        for (let i = 6; i >= 0; i--) {
+          const date = new Date(today);
+          date.setDate(today.getDate() - i);
+          const dateStr = date.toISOString().split("T")[0]; // YYYY-MM-DD 형식
+
+          // 해당 날짜까지의 전체 유저 수 계산 (누적)
+          const totalUsersOnDate = allUsersData.filter((user) => {
+            if (user.reg_date) {
+              const userDate = new Date(user.reg_date);
+              const userDateStr = userDate.toISOString().split("T")[0];
+              return userDateStr <= dateStr; // 해당 날짜까지 가입한 모든 유저
+            }
+            return false;
+          });
+
+          dailyCounts.push({
+            date: dateStr,
+            count: totalUsersOnDate.length,
+          });
+        }
+
+        console.log("날짜별 전체 유저 수:", dailyCounts);
+        setDailyUserCount(dailyCounts);
+
+        // 영화별 매출 계산
+        const movieSales = {};
+        reservationData.forEach((reservation) => {
+          if (reservation.movienm && reservation.amount) {
+            if (movieSales[reservation.movienm]) {
+              movieSales[reservation.movienm] += reservation.amount;
+            } else {
+              movieSales[reservation.movienm] = reservation.amount;
+            }
+          }
+        });
+
+        const movieVolumeData = Object.entries(movieSales)
+          .map(([movieName, totalAmount]) => ({
+            movieName,
+            totalAmount,
+          }))
+          .sort((a, b) => b.totalAmount - a.totalAmount)
+          .slice(0, 10);
+
+        console.log("영화별 매출 데이터:", movieVolumeData);
+        setMovieVolume(movieVolumeData);
+      } catch (error) {
+        console.error("데이터 가져오기 오류:", error);
+      }
     };
-    fetchTotalVolume();
+
+    fetchData();
   }, []);
 
-  // 날짜 포맷 함수
-  const formatDate = (dateStr) => {
-    const d = new Date(dateStr);
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    return `${mm}-${dd}`;
+  const handlePrevious = () => {
+    setCurrentChartIndex((prev) => Math.max(0, prev - 1));
   };
 
-  // 최대/최소 매출 데이터
-  const maxData = totalVolume.reduce((max, cur) => cur.totalAmount > max.totalAmount ? cur : max, totalVolume[0] || {totalAmount: 0, reservationDate: ''});
-  const minData = totalVolume.reduce((min, cur) => cur.totalAmount < min.totalAmount ? cur : min, totalVolume[0] || {totalAmount: 0, reservationDate: ''});
+  const handleNext = () => {
+    setCurrentChartIndex((prev) => Math.min(1, prev + 1));
+  };
 
-  // 최대 금액 및 막대그래프 데이터 역순
-  const maxAmount = totalVolume.length > 0 ? Math.max(...totalVolume.map(item => item.totalAmount || 0)) : 0;
-  const maxBarHeight = 180; // px
-  const reversedVolume = [...totalVolume].reverse();
+  const handleRightPrevious = () => {
+    setCurrentRightChartIndex((prev) => Math.max(0, prev - 1));
+  };
+
+  const handleRightNext = () => {
+    setCurrentRightChartIndex((prev) => Math.min(1, prev + 1));
+  };
+
+  const renderChart = () => {
+    switch (currentChartIndex) {
+      case 0:
+        return (
+          <BarChart
+            data={totalVolume}
+            userData={userData}
+            onPrevious={handlePrevious}
+            onNext={handleNext}
+            currentChartIndex={currentChartIndex}
+          />
+        );
+      case 1:
+        return (
+          <LineChart
+            data={dailyUserCount}
+            onPrevious={handlePrevious}
+            onNext={handleNext}
+            currentChartIndex={currentChartIndex}
+          />
+        );
+      default:
+        return (
+          <BarChart
+            data={totalVolume}
+            userData={userData}
+            onPrevious={handlePrevious}
+            onNext={handleNext}
+            currentChartIndex={currentChartIndex}
+          />
+        );
+    }
+  };
+
+  const renderRightChart = () => {
+    switch (currentRightChartIndex) {
+      case 0:
+        return (
+          <PieChartComponent
+            data={cinemaVolume}
+            onPrevious={handleRightPrevious}
+            onNext={handleRightNext}
+            currentChartIndex={currentRightChartIndex}
+          />
+        );
+      case 1:
+        return (
+          <PieMovieChartComponent
+            data={movieVolume}
+            onPrevious={handleRightPrevious}
+            onNext={handleRightNext}
+            currentChartIndex={currentRightChartIndex}
+          />
+        );
+      default:
+        return (
+          <PieChartComponent
+            data={cinemaVolume}
+            onPrevious={handleRightPrevious}
+            onNext={handleRightNext}
+            currentChartIndex={currentRightChartIndex}
+          />
+        );
+    }
+  };
 
   // 파이차트 데이터 (상위 6개)
-  const pieColors = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#a21caf", "#6366f1"];
-  const sortedCinema = [...cinemaVolume].sort((a, b) => b.totalAmount - a.totalAmount).slice(0, 6);
+  const pieColors = [
+    "#3b82f6",
+    "#10b981",
+    "#f59e0b",
+    "#ef4444",
+    "#a21caf",
+    "#6366f1",
+  ];
+  const sortedCinema = [...cinemaVolume]
+    .sort((a, b) => b.totalAmount - a.totalAmount)
+    .slice(0, 6);
   const totalPie = sortedCinema.reduce((sum, cur) => sum + cur.totalAmount, 0);
   let prevPercent = 0;
   const pieSlices = sortedCinema.map((item, idx) => {
@@ -48,50 +207,17 @@ const ChartSection = () => {
       end,
       label: item.cinemaName,
       amount: item.totalAmount,
-      percent: percent
+      percent: percent,
     };
   });
-  const pieGradient = pieSlices.map(slice => `${slice.color} ${slice.start}% ${slice.end}%`).join(", ");
+  const pieGradient = pieSlices
+    .map((slice) => `${slice.color} ${slice.start}% ${slice.end}%`)
+    .join(", ");
 
   return (
     <div className="slo-charts-section">
-      <div className="slo-chart-card">
-        <h3 style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          일별 매출 추이
-          <span style={{fontSize: '0.9rem', fontWeight: 400, textAlign: 'right', lineHeight: 1.3}}>
-            최대: {maxData ? `${formatDate(maxData.reservationDate)} (${maxData.totalAmount}원)` : '-'}<br/>
-            최소: {minData ? `${formatDate(minData.reservationDate)} (${minData.totalAmount}원)` : '-'}
-          </span>
-        </h3>
-        <div className="slo-chart-placeholder">
-          <div className="slo-chart-bars">
-            {reversedVolume.map((item, index) => (
-              <div key={index} className="slo-chart-bar-container">
-                <div
-                  className="slo-chart-bar"
-                  style={{ height: `${maxAmount > 0 ? (item.totalAmount / maxAmount) * maxBarHeight : 4}px` }}
-                  title={`${item.reservationDate}: ${item.totalAmount}원`}
-                />
-                <div className="slo-chart-date">{formatDate(item.reservationDate)}</div>
-                <div className="slo-chart-amount">{item.totalAmount}원</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="slo-chart-card">
-        <h3>상영관별 매출</h3>
-        <div className="slo-chart-placeholder slo-piechart-wrap">
-          <div className="slo-piechart-labels">
-            {pieSlices.map((slice, idx) => (
-              <div key={slice.label} className="slo-piechart-label" style={{ color: slice.color }}>
-                {slice.label}
-              </div>
-            ))}
-          </div>
-          <div className="slo-pie-chart slo-piechart-center" style={{ background: `conic-gradient(${pieGradient})` }} />
-        </div>
-      </div>
+      {renderChart()}
+      {renderRightChart()}
     </div>
   );
 };

@@ -25,21 +25,7 @@ from
     inner join region r on c.regioncd = r.regioncd;
 
 create or replace view reservation_view as
-select
-    r.reservationcd,
-    r.seatcd,
-    r.reservationtime,
-    r.reservationstatus,
-    sv.starttime,
-    sv.movienm,
-    sv.runningtime,
-    sv.screenname,
-    sv.cinemanm,
-    r.userid,
-    p.paymenttime,
-    p.paymentmethod,
-    p.amount
-
+select r.reservationcd, r.seatcd, r.reservationtime, r.reservationstatus, sv.starttime, sv.movienm, sv.runningtime, sv.screenname, sv.cinemanm, r.userid, p.paymenttime, p.paymentmethod, p.amount
 from
     reservation r
     inner join schedule_view sv on r.schedulecd = sv.schedulecd
@@ -90,7 +76,7 @@ CREATE TABLE movierank (
 --ALTER TABLE reservation MODIFY reservationcd VARCHAR(12);
 
 --유저 테이블에 가입일 컬럼 추가
---ALTER TABLE users ADD COLUMN reg_date;
+--ALTER TABLE users ADD COLUMN reg_date date;
 
 --유저 테이블에 데이터가 있으면 아래 쿼리문 먼저 실행하고 해야 합니다
 --DELETE FROM users;

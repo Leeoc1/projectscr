@@ -27,6 +27,8 @@ const SalesOverview = () => {
     navigate("/admin/sales");
   }
 
+  console.log(totalVolume);
+
   return (
     <div className="adp-content">
       <div className="adp-header">

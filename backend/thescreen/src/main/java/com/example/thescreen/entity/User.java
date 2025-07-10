@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "users") // user 테이블 매핑 (H2 예약어 충돌 방지)
 @Getter
@@ -25,8 +27,12 @@ public class User {
     @Column(length = 20) // 전화번호, 선택 입력
     private String phone;
 
-    private String birth;  // 생년월일, 선택 입력
+    @Column(length = 20)
+    private LocalDate birth; // 생년월일, 선택 입력
 
     @Column(length = 10) // 회원 상태: 활성, 탈퇴
     private String status;
+
+    @Column // 가입일, 선택 입력
+    private LocalDate reg_date; // 추가된 가입일 컬럼
 }

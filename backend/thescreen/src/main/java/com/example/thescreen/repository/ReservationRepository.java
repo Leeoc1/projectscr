@@ -2,7 +2,11 @@ package com.example.thescreen.repository;
 
 import com.example.thescreen.entity.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
-public interface ReservationRepository extends JpaRepository<Reservation, String> { // Reservation 엔티티 리포지토리
-
+@Repository
+public interface ReservationRepository extends JpaRepository<Reservation, String> {
+    @Query("SELECT MAX(CAST(r.reservationcd AS LONG)) FROM Reservation r")
+    Long findMaxReservationId();
 }

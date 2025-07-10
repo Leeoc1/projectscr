@@ -37,6 +37,7 @@ public class Staff {
     @Column(length = 20) // theater
     private String theater;
 
+    @Column
     private LocalDate hiredate; //hireDate
 
     @Column(length = 10) // shiftType
@@ -47,4 +48,6 @@ public class Staff {
 
     @Column(length = 10) // status(근무중/휴가/퇴근/퇴사)
     private String status;
+
+
 }

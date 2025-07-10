@@ -21,6 +21,9 @@ public class Faq {
     @Column(length = 50)
     private String faqsub; // FAQ 제목
 
+    @Column(columnDefinition = "TEXT")
+    private String faqcontents; // FAQ 답변 내용
+
     @Column(nullable = false)
     private LocalDateTime faqdate; // 게시 날짜
 }

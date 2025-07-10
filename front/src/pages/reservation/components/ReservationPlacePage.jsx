@@ -19,8 +19,10 @@ const ReservationPlacePage = () => {
       const storedMovieCd = sessionStorage.getItem("moviecd");
       if (storedMovieCd) {
         const allMovies = await getCurrentMovies();
-        const movieData = allMovies.find(movie => movie.moviecd === storedMovieCd);
-        
+        const movieData = allMovies.find(
+          (movie) => movie.moviecd === storedMovieCd
+        );
+
         if (movieData) {
           sessionStorage.setItem("moviecd", movieData.moviecd);
           sessionStorage.setItem("movienm", movieData.movienm);
@@ -51,12 +53,24 @@ const ReservationPlacePage = () => {
       checkSelectedMovieTime();
     };
 
-    window.addEventListener("selectedMovieTimeChanged", handleSelectedMovieTimeChanged);
-    window.addEventListener("selectedMovieTimeCleared", handleSelectedMovieTimeCleared);
-    
+    window.addEventListener(
+      "selectedMovieTimeChanged",
+      handleSelectedMovieTimeChanged
+    );
+    window.addEventListener(
+      "selectedMovieTimeCleared",
+      handleSelectedMovieTimeCleared
+    );
+
     return () => {
-      window.removeEventListener("selectedMovieTimeChanged", handleSelectedMovieTimeChanged);
-      window.removeEventListener("selectedMovieTimeCleared", handleSelectedMovieTimeCleared);
+      window.removeEventListener(
+        "selectedMovieTimeChanged",
+        handleSelectedMovieTimeChanged
+      );
+      window.removeEventListener(
+        "selectedMovieTimeCleared",
+        handleSelectedMovieTimeCleared
+      );
     };
   }, []);
 
@@ -70,10 +84,10 @@ const ReservationPlacePage = () => {
 
       if (moviecd) sessionStorage.setItem("moviecd", moviecd);
       if (movienm) sessionStorage.setItem("movienm", movienm);
-      if (selectedMovieTime) sessionStorage.setItem("selectedMovieTime", selectedMovieTime);
+      if (selectedMovieTime)
+        sessionStorage.setItem("selectedMovieTime", selectedMovieTime);
     };
   }, []);
-
 
   // 좌석 선택 버튼 클릭 시 이동
   const handleGoToSeat = () => {
@@ -83,37 +97,49 @@ const ReservationPlacePage = () => {
   return (
     <div className="reservation-page">
       <Header isOtherPage={true} isScrolled={true} />
-      <ProgressBar />
       <div className="reservation-content">
-        {movieDetails && (
-          <div className="selected-movie-section">
-            <h2 className="selected-movie-section-title">선택한 영화</h2>
-            <div className="selected-movie-content">
-              {movieDetails.posterurl && (
-                <img
-                  src={movieDetails.posterurl}
-                  alt={movieDetails.movienm}
-                  className="selected-movie-poster"
-                />
-              )}
-              <div className="selected-movie-info">
-                <h3 className="selected-movie-title">{movieDetails.movienm}</h3>
-                <p className="selected-movie-genre">상영시간: {movieDetails.runningtime}분</p>
-                <p className="selected-movie-genre">
-                  관람등급: {movieDetails.isadult === "Y" ? "청소년 관람불가" : "전체 관람가"}
-                </p>
+        <div className="reservation-container">
+          <ProgressBar currentStep={0} />
+          {movieDetails && (
+            <div className="selected-movie-section">
+              <h2 className="selected-movie-section-title">선택한 영화</h2>
+              <div className="selected-movie-content">
+                {movieDetails.posterurl && (
+                  <img
+                    src={movieDetails.posterurl}
+                    alt={movieDetails.movienm}
+                    className="selected-movie-poster"
+                  />
+                )}
+                <div className="selected-movie-info">
+                  <h3 className="selected-movie-title">
+                    {movieDetails.movienm}
+                  </h3>
+                  <p className="selected-movie-genre">
+                    상영시간: {movieDetails.runningtime}분
+                  </p>
+                  <p className="selected-movie-genre">
+                    관람등급:{" "}
+                    {movieDetails.isadult === "Y"
+                      ? "청소년 관람불가"
+                      : "전체 관람가"}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+          <DateSelectorMovie />
+          <TheaterSelector />
+          {isReadyToSeat && (
+            <button
+              className="rptm-reservation-seat-btn-fixed"
+              onClick={handleGoToSeat}
+            >
+              좌석 선택
+            </button>
+          )}
+        </div>
       </div>
-      <DateSelectorMovie />
-      <TheaterSelector />
-      {isReadyToSeat && (
-        <button className="rptm-reservation-seat-btn-fixed" onClick={handleGoToSeat}>
-          좌석 선택
-        </button>
-      )}
     </div>
   );
 };

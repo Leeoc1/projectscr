@@ -10,6 +10,7 @@ export function SuccessPage() {
     const savedResponseData = sessionStorage.getItem("paymentResponseData");
     return savedResponseData ? JSON.parse(savedResponseData) : null;
   });
+  const [showResponseData, setShowResponseData] = useState(false);
 
   // 페이지 로드 시 body 백그라운드 설정
   useEffect(() => {
@@ -145,20 +146,13 @@ export function SuccessPage() {
           <div className="p-grid-col text--left">
             <b>주문번호</b>
           </div>
-          <div className="p-grid-col text--right" id="orderId">
-            {`${searchParams.get("orderId")}`}
-          </div>
-        </div>
-        <div className="p-grid typography--p" style={{ marginTop: "10px" }}>
-          <div className="p-grid-col text--left">
-            <b>paymentKey</b>
-          </div>
           <div
             className="p-grid-col text--right"
-            id="paymentKey"
-            style={{ whiteSpace: "initial", width: "250px" }}
+            id="orderId"
+            style={{ cursor: "pointer", textDecoration: "underline" }}
+            onClick={() => setShowResponseData(!showResponseData)}
           >
-            {`${searchParams.get("paymentKey")}`}
+            {`${searchParams.get("orderId")}`}
           </div>
         </div>
         <div className="p-grid-col">
@@ -172,15 +166,17 @@ export function SuccessPage() {
           </Link>
         </div>
       </div>
-      <div
-        className="box_section"
-        style={{ width: "600px", textAlign: "left" }}
-      >
-        <b>Response Data :</b>
-        <div id="response" style={{ whiteSpace: "initial" }}>
-          {responseData && <pre>{JSON.stringify(responseData, null, 4)}</pre>}
+      {showResponseData && (
+        <div
+          className="box_section"
+          style={{ width: "600px", textAlign: "left" }}
+        >
+          <b>토스페이먼츠 결제 응답 데이터 :</b>
+          <div id="response" style={{ whiteSpace: "initial" }}>
+            {responseData && <pre>{JSON.stringify(responseData, null, 4)}</pre>}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

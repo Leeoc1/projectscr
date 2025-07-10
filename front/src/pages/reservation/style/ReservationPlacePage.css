@@ -1,18 +1,20 @@
-/* reservation-page 배경색 제거 및 하얀색 배경 */
+/* reservation-page 배경색 제거 */
 .reservation-page {
   background: #fff;
   min-height: 100vh;
 }
 
-/* reservation-content 배경색 제거 */
+/* reservation-content를 seat 페이지와 동일한 구조로 변경 */
 .reservation-content {
-  background: none;
+  padding-top: 0;
+  min-height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
 }
 
 /* 선택한 영화 섹션 */
 .selected-movie-section {
-  width: 980px;
-  margin: 0 auto;
+  width: 100%;
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 8px 8px 0 0;
@@ -89,12 +91,11 @@
   border: 2px dashed #ddd;
 }
 
-/* reservation-container 얇은 경계선 추가 */
+/* reservation-container를 seat 페이지와 동일한 구조로 변경 */
 .reservation-container {
-  max-width: 980px;
+  width: 980px;
+  background: white;
   margin: 0 auto;
-  background: #fff;
-  border-radius: 8px;
   padding: 0;
   margin-top: 0;
   margin-bottom: 48px;
@@ -215,11 +216,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0;
+  margin: 20px auto 0 auto;
   border: 1px solid #ddd;
   border-bottom: none;
   width: 980px;
-  margin: 0 auto;
   box-sizing: border-box;
 }
 
@@ -334,6 +334,7 @@
   display: flex;
   gap: 20px;
   position: relative;
+  min-height: 600px;
 }
 
 .region-section {
@@ -360,7 +361,7 @@
 
 .theater-section::before,
 .screen-section::before {
-  content: '';
+  content: "";
   position: absolute;
   left: -10px;
   top: 0;
@@ -508,8 +509,6 @@
   font-size: 0.9rem;
   color: #888;
 }
-
-
 
 .theater-title,
 .time-title {

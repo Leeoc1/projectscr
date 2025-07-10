@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../../shared/Header";
 import { getReservation } from "../../../api/api";
 import "../style/ReservationSuccessPage.css";
 
 const ReservationSuccessPage = () => {
+  const navigate = useNavigate();
   const [reservationData, setReservationData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -171,8 +173,8 @@ const ReservationSuccessPage = () => {
     <div className="reservation-payment-page">
       <Header isOtherPage={true} isScrolled={true} />
       {/* 진행바 삭제됨 */}
-      <div className="payment-header">
-        <div className="payment-title">예매 완료</div>
+      <div className="success-header">
+        <div className="success-page-title">예매 완료</div>
       </div>
       <div className="payment-container">
         <div className="payment-box">
@@ -262,7 +264,12 @@ const ReservationSuccessPage = () => {
         </div>
         <div className="payment-bottom-info">
           <b>알고 계시나요?</b> 현재 진행중인 스페셜 이벤트!{" "}
-          <button className="payment-more-btn">+ MORE</button>
+          <button
+            className="payment-more-btn"
+            onClick={() => navigate("/event")}
+          >
+            + MORE
+          </button>
         </div>
       </div>
     </div>

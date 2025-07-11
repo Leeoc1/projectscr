@@ -22,7 +22,9 @@ public class Notice {
 
     private LocalDateTime noticedate; // noticedate, datetime, 선택 입력
 
+    @Column
     private String noticecontents;
 
+    @Column
     private String writer;
 }

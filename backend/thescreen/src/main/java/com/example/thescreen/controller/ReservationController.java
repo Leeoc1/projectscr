@@ -2,6 +2,7 @@ package com.example.thescreen.controller;
 
 import com.example.thescreen.entity.Reservation;
 import com.example.thescreen.repository.ReservationRepository;
+import com.example.thescreen.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,7 @@ public class ReservationController {
             // Reservation 엔티티 생성
             Reservation reservation = new Reservation();
             reservation.setSchedulecd((String) requestData.get("schedulecd"));
-            
+
             // seatcd 처리 - 배열을 문자열로 변환
             Object seatcdObj = requestData.get("seatcd");
             String seatcd;
@@ -54,13 +55,16 @@ public class ReservationController {
                 seatcd = (String) seatcdObj;
             }
             reservation.setSeatcd(seatcd);
-            
+
             reservation.setReservationtime(LocalDateTime.now());
             reservation.setReservationstatus("예약완료");
-            // userid는 현재 로그인한 사용자 정보에서 가져와야 함 (임시로 null)
-            reservation.setUser(null);
-            // paymentcd는 결제 완료 후 설정 (임시로 null)
-            reservation.setPaymentcd(null);
+            // paymentcd는 프론트에서 받은 값이 있으면 사용
+            Object paymentcdObj = requestData.get("paymentcd");
+            if (paymentcdObj != null) {
+                reservation.setPaymentcd(paymentcdObj.toString());
+            } else {
+                reservation.setPaymentcd(null);
+            }
 
             Long maxId = reservationRepository.findMaxReservationId();
             Long newId = (maxId != null) ? maxId + 1 : 1;
@@ -68,13 +72,13 @@ public class ReservationController {
             reservation.setReservationcd(formattedId);
             // 저장
             Reservation savedReservation = reservationRepository.save(reservation);
-            
+
             Map<String, Object> response = new HashMap<>();
             response.put("message", "예약이 성공적으로 저장되었습니다.");
             response.put("reservationId", savedReservation.getReservationcd());
-            
+
             return ResponseEntity.ok(response);
-            
+
         } catch (Exception e) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "예약 저장 중 오류가 발생했습니다: " + e.getMessage());

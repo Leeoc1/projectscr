@@ -2,7 +2,6 @@ package com.example.thescreen.controller;
 
 import com.example.thescreen.entity.Reservation;
 import com.example.thescreen.repository.ReservationRepository;
-import com.example.thescreen.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -204,4 +204,22 @@ export const getKakaoApiKey = async () => {
   }
 };
 
+export const isAvailableUserId = async (userid) => {
+  try {
+    const response = await api.post("/users/idcheck", { userid: userid });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const registerUser = async (userData) => {
+  try {
+    const response = await api.post("/users/register", userData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export default api;

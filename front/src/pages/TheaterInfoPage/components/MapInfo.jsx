@@ -91,9 +91,7 @@ const MapInfo = ({ cinemanm, tel, address }) => {
           // GeoLocation을 이용해서 접속 위치를 얻어오기
           navigator.geolocation.getCurrentPosition(success, error, options);
         }
-      } else {
-        setTimeout(waitForKakao, 100);
-      }
+      } 
     };
 
     waitForKakao();

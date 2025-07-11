@@ -4,7 +4,11 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.ben-manes.caffeine/caffeine/3.2.1/f5b6d9d584c6751ac8a7e89f1c33d9288f5247be/caffeine-3.2.1.jar!/" />
     </CLASSES>
-    <JAVADOC />
-    <SOURCES />
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.ben-manes.caffeine/caffeine/3.2.1/97b88e149e67b53ab59b35f6935145848160cae3/caffeine-3.2.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.ben-manes.caffeine/caffeine/3.2.1/77dd92f810844cc2377a5558809703173750aea3/caffeine-3.2.1-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

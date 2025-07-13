@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
+import { kakaoLogin } from "../../../api/api";
 
 const Login = () => {
   const navigate = useNavigate(); // useNavigate 훅 사용
@@ -8,6 +9,12 @@ const Login = () => {
     username: "",
     password: "",
   });
+
+  const handleKakaoLogin = async () => {
+      const response = await kakaoLogin();
+      console.log(response);
+    
+  };
 
   const handleInputChange = (e) => {
     setFormData({
@@ -88,26 +95,35 @@ const Login = () => {
           <div className="lgs-social-login">
             <button
               className="lgs-social-btn lgs-kakao"
-              onClick={() => handleSocialLogin("카카오")}
+              onClick={handleKakaoLogin}
             >
-              <span className="lgs-social-icon">K</span>
-              카카오로 로그인
+              <img 
+                src="/images/kakao_button.png" 
+                alt="카카오 로그인" 
+                className="lgs-social-img"
+              />
             </button>
 
             <button
               className="lgs-social-btn lgs-naver"
               onClick={() => handleSocialLogin("네이버")}
             >
-              <span className="lgs-social-icon">N</span>
-              네이버로 로그인
+              <img 
+                src="/images/naver_button.png" 
+                alt="네이버 로그인" 
+                className="lgs-social-img"
+              />
             </button>
 
             <button
               className="lgs-social-btn lgs-google"
               onClick={() => handleSocialLogin("구글")}
             >
-              <span className="lgs-social-icon">G</span>
-              구글로 로그인
+              <img 
+                src="/images/google_button.png" 
+                alt="구글 로그인" 
+                className="lgs-social-img"
+              />
             </button>
           </div>
 

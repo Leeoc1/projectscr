@@ -27,5 +27,5 @@ public class ReservationView {
     private String userid;
     private String paymenttime;
     private String paymentmethod;
-    private Integer amount;
+    private Long amount;
 }

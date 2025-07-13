@@ -15,6 +15,9 @@ import ReservationPaymentPage from "./pages/reservation/components/ReservationPa
 import ReservationSuccessPage from "./pages/reservation/components/ReservationSuccessPage";
 import TheaterInfoPage from "./pages/TheaterInfoPage/TheaterInfoPage";
 import NoticeContents from "./pages/NoticePage/NoticeContentsPage/NoticeContents";
+import { CheckoutPage } from "./pages/reservation/Payments/Chekout";
+import { SuccessPage } from "./pages/reservation/Payments/Success";
+import { FailPage } from "./pages/reservation/Payments/Fail";
 
 function App() {
   return (
@@ -55,6 +58,12 @@ function App() {
           path="/reservation/payment"
           element={<ReservationPaymentPage />}
         />
+
+        {/* 토스 결제 api 연동 */}
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/success" element={<SuccessPage />} />
+        <Route path="/fail" element={<FailPage />} />
+
         <Route
           path="/reservation/success"
           element={<ReservationSuccessPage />}

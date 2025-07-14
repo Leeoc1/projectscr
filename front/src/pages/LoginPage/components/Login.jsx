@@ -129,7 +129,7 @@ const Login = () => {
               아직 회원이 아니신가요?
               <button
                 className="lgs-link-btn"
-                onClick={() => navigate("/signup")}
+                onClick={() => navigate("/register")}
               >
                 회원가입
               </button>

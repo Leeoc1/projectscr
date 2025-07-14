@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../styles/Register.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   validateUsernameLength,
   validateUsernameFormat,

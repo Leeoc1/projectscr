@@ -20,12 +20,12 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     console.log("로그인 시도:", formData);
-    navigate("/home", { replace: true });
+    navigate("/", { replace: true });
   };
 
   const handleSocialLogin = (provider) => {
     console.log(`${provider} 로그인 시도`);
-    navigate("/home", { replace: true });
+    navigate("/", { replace: true });
   };
 
   return (

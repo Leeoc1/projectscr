@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import GoogleLogin from "./GoogleLogin";
 import KakaoLogin from "./KakaoLogin";
 
-// 내부 컴포넌트
-const LoginContent = () => {
+const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
@@ -119,15 +117,6 @@ const LoginContent = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-// 외부 컴포넌트
-const Login = () => {
-  return (
-    <GoogleOAuthProvider clientId="955753367282-kld27dcb1ve81mur0qfien2g911jsn2d.apps.googleusercontent.com">
-      <LoginContent />
-    </GoogleOAuthProvider>
   );
 };
 

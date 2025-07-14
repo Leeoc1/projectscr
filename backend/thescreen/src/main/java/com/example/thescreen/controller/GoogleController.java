@@ -3,9 +3,11 @@ package com.example.thescreen.controller;
 import com.example.thescreen.entity.User;
 import com.example.thescreen.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,19 @@ public class GoogleController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Value("${google.client.id:}")
+    private String googleClientId;
+
+    /**
+     * Google OAuth 클라이언트 ID 제공
+     */
+    @GetMapping("/client-id")
+    public Map<String, String> getGoogleClientId() {
+        Map<String, String> response = new HashMap<>();
+        response.put("clientId", googleClientId);
+        return response;
+    }
 
     @PostMapping("/login")
     public User googleLogin(@RequestBody Map<String, Object> googleUserData) {

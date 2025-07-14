@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import {
   getGoogleUserInfo,
   getGooglePeopleData,
   saveGoogleUserToBackend,
+  getGoogleClientId,
 } from "../../../api/api";
 
-const GoogleLogin = ({ onLoginAttempt }) => {
+const GoogleLoginButton = ({ onLoginAttempt }) => {
   const navigate = useNavigate();
 
   const googleLogin = useGoogleLogin({
@@ -34,20 +35,17 @@ const GoogleLogin = ({ onLoginAttempt }) => {
 
         navigate("/");
       } catch (error) {
-        console.error("사용자 정보 가져오기 실패:", error);
-        handleGoogleError(error);
+        console.error("Google 로그인 처리 실패:", error);
       }
     },
-    onError: (error) => handleGoogleError(error),
+    onError: (error) => {
+      console.error("Google 로그인 실패:", error);
+    },
     scope:
       "openid email profile https://www.googleapis.com/auth/user.birthday.read https://www.googleapis.com/auth/user.phonenumbers.read",
   });
 
-  const handleGoogleError = (error) => {
-    console.error("Google 로그인 실패:", error);
-  };
-
-  const handleGoogleLogin = () => {
+  const handleClick = () => {
     if (onLoginAttempt) {
       onLoginAttempt("구글");
     }
@@ -55,10 +53,45 @@ const GoogleLogin = ({ onLoginAttempt }) => {
   };
 
   return (
-    <button className="lgs-social-btn lgs-google" onClick={handleGoogleLogin}>
+    <button className="lgs-social-btn lgs-google" onClick={handleClick}>
       <span className="lgs-social-icon">G</span>
       구글로 로그인
     </button>
+  );
+};
+
+const GoogleLogin = ({ onLoginAttempt }) => {
+  const [googleClientId, setGoogleClientId] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchClientId = async () => {
+      try {
+        const clientId = await getGoogleClientId();
+        setGoogleClientId(clientId);
+      } catch (error) {
+        console.error("Google 클라이언트 ID 가져오기 실패:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchClientId();
+  }, []);
+
+  if (isLoading || !googleClientId) {
+    return (
+      <button className="lgs-social-btn lgs-google" disabled>
+        <span className="lgs-social-icon">G</span>
+        로딩 중...
+      </button>
+    );
+  }
+
+  return (
+    <GoogleOAuthProvider clientId={googleClientId}>
+      <GoogleLoginButton onLoginAttempt={onLoginAttempt} />
+    </GoogleOAuthProvider>
   );
 };
 

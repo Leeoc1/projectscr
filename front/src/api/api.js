@@ -10,6 +10,16 @@ const api = axios.create({
 });
 
 // Google OAuth API 함수들
+export const getGoogleClientId = async () => {
+  try {
+    const response = await api.get("/google/client-id");
+    return response.data.clientId;
+  } catch (error) {
+    console.error("Error fetching Google client ID:", error);
+    throw error;
+  }
+};
+
 export const getGoogleUserInfo = async (accessToken) => {
   const response = await fetch(
     "https://www.googleapis.com/oauth2/v3/userinfo",

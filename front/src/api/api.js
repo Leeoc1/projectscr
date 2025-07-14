@@ -100,15 +100,25 @@ export const getCinemas = () =>
       return [];
     });
 
-// 지역별 상영관 목록 조회
-export const getScreens = (regionCode) =>
+// 상영관 조회
+export const getScreens = () =>
   api
-    .get("/api/screens", { params: { regionCode } })
+    .get("/screens")
     .then((response) => response.data)
     .catch((error) => {
       console.error("Error fetching screens:", error);
       return [];
     });
+
+// screenview 조회
+export const getScreenView = async () => {
+  try {
+    const response = await api.get("/screens/view");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 // 직원 목록 조회
 export const getStaffs = () =>
@@ -245,5 +255,43 @@ export const savePayment = (paymentData) =>
       console.error("Error saving payment:", error);
       throw error;
     });
+export const getKakaoApiKey = async () => {
+  try {
+    const response = await api.get("/api/kakao");
+    return response.data.key;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const isAvailableUserId = async (userid) => {
+  try {
+    const response = await api.post("/users/idcheck", { userid: userid });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const registerUser = async (userData) => {
+  try {
+    const response = await api.post("/users/register", userData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const kakaoLogin = async (params) => {
+  const response = await axios.post("/login/kakao", null, { params });
+  return response.data;
+};
+
+export const kakaoCallback = async (code) => {
+  const response = await axios.get("/login/oauth2/code/kakao", {
+    params: { code },
+  });
+  return response.data;
+};
 
 export default api;

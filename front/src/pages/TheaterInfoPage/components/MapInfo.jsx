@@ -32,9 +32,6 @@ const MapInfo = ({ cinemanm, tel, address }) => {
   // 지도 키면 오버레이 확장 되어 있음
   const [isOpen, setIsOpen] = useState(true);
 
-  // 현위치 버튼
-  const [isFindMyState, setIsFindMyState] = useState(false);
-
   // 내 위치 매개변수
   // 1. 성공시
   function success(position) {
@@ -59,31 +56,11 @@ const MapInfo = ({ cinemanm, tel, address }) => {
     maximumAge: 0,
   };
 
-  // // 중간 위치 좌표
-  // function getCenter(myState, theaterState) {
-  //   // 1. 라디안 단위로 변환
-  //   const lat1 = (myState.center.lat * Math.PI) / 180;
-  //   const lat2 = (theaterState.center.lat * Math.PI) / 180;
-  //   const lon1 = (myState.center.lng * Math.PI) / 180;
-  //   const lon2 = (theaterState.center.lng * Math.PI) / 180;
-
-  //   // 2. 공식 적용
-  //   const dLon = lon2 - lon1;
-  //   const Bx = Math.cos(lat2) * Math.cos(dLon);
-  //   const By = Math.cos(lat2) * Math.sin(dLon);
-
-  //   const lat3 = Math.atan2(
-  //     Math.sin(lat1) + Math.sin(lat2),
-  //     Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By)
-  //   );
-  //   const lon3 = lon1 + Math.atan2(By, Math.cos(lat1) + Bx);
-
-  //   //3. 라디안 → 도 변환
-  //   setState({
-  //     center: { lat: (lat3 * 180) / Math.PI, lng: (lon3 * 180) / Math.PI },
-  //     isLoading: false,
-  //   });
-  // }
+  const handleMyState = () => {
+    setState({
+      center: { lat: myState.center.lat, lng: myState.center.lng },
+    });
+  };
 
   useEffect(() => {
     // window.kakao가 로드될 때까지 기다림
@@ -114,25 +91,16 @@ const MapInfo = ({ cinemanm, tel, address }) => {
           // GeoLocation을 이용해서 접속 위치를 얻어오기
           navigator.geolocation.getCurrentPosition(success, error, options);
         }
-      } else {
-        setTimeout(waitForKakao, 100);
-      }
+      } 
     };
 
     waitForKakao();
   }, [address]);
 
-  // // myState, theaterState가 모두 로드되면 중간 위치 계산
-  // useEffect(() => {
-  //   if (!myState.isLoading && !theaterState.isLoading) {
-  //     getCenter(myState, theaterState);
-  //   }
-  // }, [myState, theaterState]);
-
   return (
     <div className="mpi-map-wrap">
       <Map
-        center={isFindMyState ? myState.center : state.center}
+        center={state.center}
         style={{ width: "100%", height: "500px" }}
         level={5}
         onCenterChanged={(m) => {
@@ -147,9 +115,7 @@ const MapInfo = ({ cinemanm, tel, address }) => {
       >
         <MapTypeControl position={"TOPRIGHT"} />
         <ZoomControl position={"RIGHT"} />
-        {!myState.isLoading && isFindMyState && (
-          <MapMarker position={myState.center} />
-        )}
+        {!myState.isLoading && <MapMarker position={myState.center} />}
         {!theaterState.isLoading && (
           <MapMarker
             position={theaterState.center}
@@ -169,7 +135,6 @@ const MapInfo = ({ cinemanm, tel, address }) => {
                   ></div>
                 </div>
                 <div className="mpi-body">
-                  {/* <div className="mpi-img"></div> */}
                   <div className="mpi-desc">
                     <div className="mpi-ellipsis">{address}</div>
                     <div className="mpi-jibun mpi-ellipsis">{tel}</div>
@@ -181,16 +146,9 @@ const MapInfo = ({ cinemanm, tel, address }) => {
         )}
       </Map>
       <div
-        className={`mpi-mystate-button ${isFindMyState ? "active" : ""}`}
+        className="mpi-mystate-button"
         onClick={() => {
-          setIsFindMyState(!isFindMyState);
-          // 현위치 버튼 누르면 state에 현위치 저장
-          // 이거 없으면 현위치 활성화 하자마자 isFindMyState 비활성화 하면 center가 현위치가 아닌 활성화 바로 전 위치로 돌아감 
-          if (!isFindMyState) {
-            setState({
-              center: { lat: myState.center.lat, lng: myState.center.lng },
-            });
-          }
+          handleMyState();
         }}
       >
         <img src="/images/mygps.png" alt="mygps" />

@@ -3,6 +3,7 @@ import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import GoogleLogin from "./GoogleLogin";
+import KakaoLogin from "./KakaoLogin";
 
 // 내부 컴포넌트
 const LoginContent = () => {
@@ -85,13 +86,7 @@ const LoginContent = () => {
           </div>
 
           <div className="lgs-social-login">
-            <button
-              className="lgs-social-btn lgs-kakao"
-              onClick={() => handleSocialLogin("카카오")}
-            >
-              <span className="lgs-social-icon">K</span>
-              카카오로 로그인
-            </button>
+            <KakaoLogin />
 
             <button
               className="lgs-social-btn lgs-naver"

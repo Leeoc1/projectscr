@@ -19,6 +19,7 @@ import { CheckoutPage } from "./pages/reservation/Payments/Chekout";
 import { SuccessPage } from "./pages/reservation/Payments/Success";
 import { FailPage } from "./pages/reservation/Payments/Fail";
 
+
 function App() {
   return (
     <Router>
@@ -35,6 +36,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/theater/info" element={<TheaterInfoPage />} />
+
 
         {/* 관리자 페이지 라우팅 */}
         <Route path="/admin" element={<AdminPage />} />

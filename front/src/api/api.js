@@ -232,13 +232,18 @@ export const registerUser = async (userData) => {
   }
 }
 
-export const kakaoLogin = async () => {
-  try {
-    const response = await api.post("/login/kakao");
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-}
+export const kakaoLogin = async (params) => {
+  const response = await axios.post("/login/kakao", null, { params });
+  return response.data;
+};
+
+export const kakaoCallback = async (code) => {
+  const response = await axios.get("/login/oauth2/code/kakao", {
+      params: { code },
+  });
+  return response.data;
+};
+
+
 
 export default api;

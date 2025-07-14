@@ -80,14 +80,3 @@ CREATE TABLE movierank (
 
 --유저 테이블에 데이터가 있으면 아래 쿼리문 먼저 실행하고 해야 합니다
 --DELETE FROM users;
---ALTER TABLE users ADD COLUMN reg_date;
-
---유저 테이블에 데이터가 있으면 아래 쿼리문 먼저 실행하고 해야 합니다
---DELETE FROM users;
-
-create or replace view screen_view as
-select s.screencd, s.allseat, s.cinemacd, s.reservationseat, s.screenname, s.screenstatus, s.screentype, c.cinemanm, rg.regioncd, rg.regionnm
-from
-    screen s
-    inner join cinema c on s.cinemacd = c.cinemacd
-    inner join region rg on rg.regioncd = c.regioncd;

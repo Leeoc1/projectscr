@@ -9,6 +9,57 @@ const api = axios.create({
   },
 });
 
+// Google OAuth API 함수들
+export const getGoogleUserInfo = async (accessToken) => {
+  const response = await fetch(
+    "https://www.googleapis.com/oauth2/v3/userinfo",
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch user info");
+  }
+
+  return response.json();
+};
+
+export const getGooglePeopleData = async (accessToken) => {
+  const response = await fetch(
+    "https://people.googleapis.com/v1/people/me?personFields=birthdays,phoneNumbers,names,emailAddresses",
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch people data");
+  }
+
+  return response.json();
+};
+
+export const saveGoogleUserToBackend = async (userInfo) => {
+  const response = await fetch("http://localhost:8080/google/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userInfo),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to save user to backend");
+  }
+
+  return response.json();
+};
+
 // 현재상영작과 상영예정작 목록 조회
 export const getMoviesForAdmin = () =>
   api
@@ -49,26 +100,15 @@ export const getCinemas = () =>
       return [];
     });
 
-
-// 상영관 조회
-export const getScreens = () =>
+// 지역별 상영관 목록 조회
+export const getScreens = (regionCode) =>
   api
-    .get("/screens")
+    .get("/api/screens", { params: { regionCode } })
     .then((response) => response.data)
     .catch((error) => {
       console.error("Error fetching screens:", error);
       return [];
     });
-
-// screenview 조회
-export const getScreenView = async () => {
-  try {
-    const response = await api.get("/screens/view");
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
 
 // 직원 목록 조회
 export const getStaffs = () =>
@@ -205,31 +245,5 @@ export const savePayment = (paymentData) =>
       console.error("Error saving payment:", error);
       throw error;
     });
-export const getKakaoApiKey = async () => {
-  try {
-    const response = await api.get("/api/kakao");
-    return response.data.key;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const isAvailableUserId = async (userid) => {
-  try {
-    const response = await api.post("/users/idcheck", { userid: userid });
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const registerUser = async (userData) => {
-  try {
-    const response = await api.post("/users/register", userData);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-}
 
 export default api;

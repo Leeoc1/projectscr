@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import GoogleLogin from "./GoogleLogin";
 
-const Login = () => {
-  const navigate = useNavigate(); // useNavigate 훅 사용
+// 내부 컴포넌트
+const LoginContent = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -18,16 +21,12 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // 로그인 로직 (백엔드 구현 없이 버튼만)
     console.log("로그인 시도:", formData);
-    // 성공 시 홈으로 이동
     navigate("/");
   };
 
   const handleSocialLogin = (provider) => {
     console.log(`${provider} 로그인 시도`);
-    // 소셜 로그인 로직 (백엔드 구현 없이 버튼만)
-    navigate("/");
   };
 
   return (
@@ -102,13 +101,7 @@ const Login = () => {
               네이버로 로그인
             </button>
 
-            <button
-              className="lgs-social-btn lgs-google"
-              onClick={() => handleSocialLogin("구글")}
-            >
-              <span className="lgs-social-icon">G</span>
-              구글로 로그인
-            </button>
+            <GoogleLogin onLoginAttempt={handleSocialLogin} />
           </div>
 
           <div className="lgs-signup-link">
@@ -131,6 +124,15 @@ const Login = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+// 외부 컴포넌트
+const Login = () => {
+  return (
+    <GoogleOAuthProvider clientId="955753367282-kld27dcb1ve81mur0qfien2g911jsn2d.apps.googleusercontent.com">
+      <LoginContent />
+    </GoogleOAuthProvider>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import TheaterInfo from "./components/TheaterInfo";
 import MapInfo from "./components/MapInfo";
 import { useLocation, Navigate } from "react-router-dom";

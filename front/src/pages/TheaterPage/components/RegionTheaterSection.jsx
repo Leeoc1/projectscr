@@ -11,7 +11,7 @@ const RegionTheaterSection = ({ filteredCinemas }) => {
   };
 
   // 길찾기 클릭시 극장 상세 페이지로 이동
-  // state로 전달 
+  // state로 전달
   const handleMapClick = (cinema) => {
     const state = {
       cinemacd: cinema.cinemacd,

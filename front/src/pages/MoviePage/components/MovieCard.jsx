@@ -11,13 +11,27 @@ const MovieCard = ({ movie, isBoxOffice }) => {
   };
 
   const goSelectPlace = () => {
-    // 영화 정보를 세션 스토리지에 저장
-    try {
-      sessionStorage.setItem("selectedMovie", JSON.stringify(movie));
-      console.log("🎬 예매하기 버튼 클릭 - 영화:", movie.movienm);
-    } catch (error) {
-      console.error("영화 정보 저장 중 오류:", error);
-    }
+    // 홈페이지와 동일한 방식으로 영화 정보를 세션 스토리지에 저장
+    sessionStorage.setItem("moviecd", movie.moviecd);
+    sessionStorage.setItem("movienm", movie.movienm);
+
+    // 예매 페이지와 동일한 방식으로 전체 영화 객체도 저장
+    const movieData = {
+      moviecd: movie.moviecd,
+      movienm: movie.movienm,
+      posterurl: movie.posterurl,
+      genre: movie.genre,
+      runningtime: movie.runningtime,
+      isadult: movie.isadult,
+    };
+    sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
+
+    console.log(
+      "🎬 영화 페이지 예매하기 버튼 클릭 - 영화:",
+      movie.movienm,
+      "moviecd:",
+      movie.moviecd
+    );
     navigate("/reservation/place");
   };
 

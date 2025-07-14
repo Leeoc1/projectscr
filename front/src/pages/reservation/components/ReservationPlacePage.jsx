@@ -16,6 +16,15 @@ const ReservationPlacePage = () => {
   // 영화 정보를 가져와서 세션스토리지에 저장
   useEffect(() => {
     const fetchMovieDetails = async () => {
+      // 먼저 selectedMovie에서 정보를 가져오기 (홈페이지에서 선택한 경우)
+      const selectedMovieStr = sessionStorage.getItem("selectedMovie");
+      if (selectedMovieStr) {
+        const selectedMovie = JSON.parse(selectedMovieStr);
+        setMovieDetails(selectedMovie);
+        return; // selectedMovie가 있으면 API 호출하지 않음
+      }
+
+      // selectedMovie가 없으면 기존 방식으로 moviecd 사용
       const storedMovieCd = sessionStorage.getItem("moviecd");
       if (storedMovieCd) {
         const allMovies = await getCurrentMovies();

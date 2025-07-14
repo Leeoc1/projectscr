@@ -81,11 +81,19 @@
 }
 
 .isc-nav-prev {
-  left: 50rem;
+  left: 50%;
+  transform: translate(
+    calc(-50% - 100px),
+    -50%
+  ); /* 부모 중앙에서 왼쪽으로 50px 이동 */
 }
 
 .isc-nav-next {
-  right: 50rem;
+  left: 50%;
+  transform: translate(
+    calc(-50% + 100px),
+    -50%
+  ); /* 부모 중앙에서 오른쪽으로 50px 이동 */
 }
 
 .isc-dots {

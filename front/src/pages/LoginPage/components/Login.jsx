@@ -3,6 +3,7 @@ import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
 import GoogleLogin from "./GoogleLogin";
 import KakaoLogin from "./KakaoLogin";
+import NaverLogin from "./NaverLogin";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -86,13 +87,8 @@ const Login = () => {
           <div className="lgs-social-login">
             <KakaoLogin />
 
-            <button
-              className="lgs-social-btn lgs-naver"
-              onClick={() => handleSocialLogin("네이버")}
-            >
-              <span className="lgs-social-icon">N</span>
-              네이버로 로그인
-            </button>
+            {/* 네이버 로그인 컴포넌트 */}
+            <NaverLogin />
 
             <GoogleLogin onLoginAttempt={handleSocialLogin} />
           </div>

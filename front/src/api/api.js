@@ -110,6 +110,7 @@ export const getCinemas = () =>
       return [];
     });
 
+
 // 상영관 조회
 export const getScreens = () =>
   api
@@ -302,6 +303,30 @@ export const kakaoCallback = async (code) => {
     params: { code },
   });
   return response.data;
+};
+
+// 네이버 로그인
+export const naverLogin = async () => {
+  try {
+    const response = await api.post("/login/naver");
+    return response.data;
+  } catch (error) {
+    console.error("네이버 로그인 URL 가져오기 실패:", error);
+    throw error;
+  }
+}
+
+export const naverLoginCallback = async (code, state) => {
+  try {
+    const response = await api.post(`/login/naver/callback?code=${code}&state=${state}`);
+
+    // console.log("Naver callback response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("네이버 로그인 콜백 처리 실패:", error);
+    console.error("에러 상세:", error.response?.data);
+    throw error;
+  }
 };
 
 export default api;

@@ -110,7 +110,6 @@ export const getCinemas = () =>
       return [];
     });
 
-
 // 상영관 조회
 export const getScreens = () =>
   api
@@ -314,11 +313,13 @@ export const naverLogin = async () => {
     console.error("네이버 로그인 URL 가져오기 실패:", error);
     throw error;
   }
-}
+};
 
 export const naverLoginCallback = async (code, state) => {
   try {
-    const response = await api.post(`/login/naver/callback?code=${code}&state=${state}`);
+    const response = await api.post(
+      `/login/naver/callback?code=${code}&state=${state}`
+    );
 
     // console.log("Naver callback response:", response.data);
     return response.data;

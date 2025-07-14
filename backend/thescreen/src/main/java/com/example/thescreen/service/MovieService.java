@@ -4,6 +4,7 @@ import com.example.thescreen.entity.Movie;
 import com.example.thescreen.repository.MovieRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -124,6 +125,13 @@ public class MovieService {
             log.error("❌ 박스오피스 저장 실패 targetDt={}", targetDt, e);
         }
     }
+
+    @PostConstruct
+    public void init() {
+        saveDailyBoxOffice();
+        log.info("✅ 서버 시작 시 박스오피스 저장 완료!");
+    }
+
     @Scheduled(cron = "0 0 1 * * ?")
     public void scheduledSaveDailyBoxOffice() {
         saveDailyBoxOffice();

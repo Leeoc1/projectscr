@@ -4,12 +4,13 @@ import { useNavigate } from "react-router-dom";
 import GoogleLogin from "./GoogleLogin";
 import KakaoLogin from "./KakaoLogin";
 import NaverLogin from "./NaverLogin";
+import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: "",
-    password: "",
+    userid: "",
+    userpw: "",
   });
 
   const handleInputChange = (e) => {
@@ -19,12 +20,42 @@ const Login = () => {
     });
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("로그인 시도:", formData);
-    navigate("/");
-  };
 
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/login",
+        {
+          userid: formData.userid,
+          userpw: formData.userpw,
+        }
+      );
+
+      console.log("응답 데이터:", response.data);
+
+      if (response.status === 200) {
+        // 로컬스토리지에 로그인 상태 저장
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userid", formData.userid);
+
+        alert(response.data); // 로그인 성공
+        navigate("/"); // 메인으로 이동
+      }
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 401) {
+          alert("비밀번호가 틀렸습니다.");
+        } else if (error.response.status === 404) {
+          alert("아이디가 존재하지 않습니다.");
+        } else {
+          alert("알 수 없는 오류가 발생했습니다.");
+        }
+      } else {
+        console.error("네트워크 오류:", error);
+      }
+    }
+  };
   const handleSocialLogin = (provider) => {
     console.log(`${provider} 로그인 시도`);
   };
@@ -40,12 +71,12 @@ const Login = () => {
         <div className="lgs-form-container">
           <form className="lgs-form" onSubmit={handleLogin}>
             <div className="lgs-form-group">
-              <label htmlFor="username">아이디</label>
+              <label htmlFor="userid">아이디</label>
               <input
                 type="text"
-                id="username"
-                name="username"
-                value={formData.username}
+                id="userid"
+                name="userid"
+                value={formData.userid}
                 onChange={handleInputChange}
                 placeholder="아이디를 입력하세요"
                 required
@@ -53,12 +84,12 @@ const Login = () => {
             </div>
 
             <div className="lgs-form-group">
-              <label htmlFor="password">비밀번호</label>
+              <label htmlFor="userpw">비밀번호</label>
               <input
                 type="password"
-                id="password"
-                name="password"
-                value={formData.password}
+                id="userpw"
+                name="userpw"
+                value={formData.userpw}
                 onChange={handleInputChange}
                 placeholder="비밀번호를 입력하세요"
                 required

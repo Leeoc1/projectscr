@@ -21,7 +21,7 @@ public class Movie {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(length = 255)
+    @Column(columnDefinition = "TEXT")
     private String genre;
 
     @Column(length = 50)

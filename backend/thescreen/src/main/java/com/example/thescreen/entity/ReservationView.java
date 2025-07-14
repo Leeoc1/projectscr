@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "reservation_view")
@@ -16,14 +17,15 @@ public class ReservationView {
     @Id
     private String reservationcd;
     private String seatcd;
-    private LocalDate reservationtime;
+    private LocalDateTime reservationtime;
     private String starttime;
     private String movienm;
+    private String reservationstatus;
     private Integer runningtime;
     private String screenname;
     private String cinemanm;
     private String userid;
     private String paymenttime;
     private String paymentmethod;
-    private Integer amount;
+    private Long amount;
 }

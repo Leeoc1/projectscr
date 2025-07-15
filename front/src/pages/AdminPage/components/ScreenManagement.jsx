@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ScreenData } from "../../../data/TheaterData.js";
 import "../styles/ScreenManagement.css";
 import "../styles/AdminPage.css";
-import { getScreens } from "../../../api/api";
+import { getScreenView } from "../../../api/api";
 
 const ScreenManagement = () => {
   const [screens, setScreens] = useState([]);
@@ -20,15 +20,11 @@ const ScreenManagement = () => {
   // };
 
   useEffect(() => {
-    getScreens()
-      .then((response) => {
-        // response.data가 배열인지 확인, 아니면 빈 배열 설정
-        setScreens(Array.isArray(response.data) ? response.data : []);
-      })
-      .catch((error) => {
-        console.error("Error fetching screens:", error);
-        setScreens([]); // 에러 발생 시 빈 배열 설정
-      });
+    const fetchScreens = async () => {
+      const data = await getScreenView();
+      setScreens(data);
+    };
+    fetchScreens();
   }, []);
   return (
     <div className="adp-content">
@@ -58,7 +54,7 @@ const ScreenManagement = () => {
                   <strong>상영관 이름:</strong> {screen.screenname}
                 </p>
                 <p>
-                  <strong>좌석 수:</strong> {screen.seatcount}석
+                  <strong>좌석 수:</strong> {screen.allseat}석
                 </p>
               </div>
               <div className="scm-screen-actions">

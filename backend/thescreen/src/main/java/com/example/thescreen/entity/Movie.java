@@ -21,13 +21,13 @@ public class Movie {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(length = 20)
+    @Column(columnDefinition = "TEXT")
     private String genre;
 
     @Column(length = 50)
     private String director;
 
-    @Column(length = 100)
+    @Column(columnDefinition = "TEXT")
     private String actors;
 
     private Integer runningtime;

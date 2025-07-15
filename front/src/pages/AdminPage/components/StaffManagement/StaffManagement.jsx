@@ -1,11 +1,29 @@
 import React, { useEffect, useState } from "react";
-import "../styles/StaffManagement.css";
-import "../styles/AdminPage.css";
-import "../styles/Stable.css";
-import { getStaffs } from "../../../api/api";
+import "../../styles/StaffManagement.css";
+import "../../styles/AdminPage.css";
+import "../../styles/Stable.css";
+import { getStaffs } from "../../../../api/api";
+import StaffUpdatePopup from "./StaffUpdatePopup";
+import AddStaffPopup from "./AddStaffPopup";
 
 const StaffManagement = () => {
   const [staffs, setStaffs] = useState([]);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
+  const [selectedStaff, setSelectedStaff] = useState(null);
+  const [formData, setFormData] = useState({
+    staffid: "",
+    staffname: "",
+    dept: "",
+    theater: "",
+    position: "",
+    role: "",
+    phone: "",
+    email: "",
+    hiredate: "",
+    shifttype: "",
+    status: "",
+  });
 
   useEffect(() => {
     getStaffs()
@@ -33,12 +51,42 @@ const StaffManagement = () => {
     }
   };
 
+  // 수정 버튼 누를 시 작동
+  // 선택된 직원, formData는 현재 선택된 직원의 정보로 초기화, 팝업 열기 
+  const handleEditClick = (staff) => {
+    setSelectedStaff(staff);
+    setFormData({
+      staffid: staff.staffid,
+      staffname: staff.staffname,
+      dept: staff.dept,
+      theater: staff.theater,
+      position: staff.position,
+      role: staff.role,
+      phone: staff.phone,
+      email: staff.email,
+      hiredate: staff.hiredate,
+      shifttype: staff.shifttype,
+      status: staff.status,
+    });
+    setIsPopupOpen(true);
+  };
+
+
   return (
     <div className="adp-content">
       <div className="adp-header">
         <h2>직원 관리</h2>
-        <button className="adp-btn-primary">직원 추가</button>
+        <button className="adp-btn-primary" onClick={() => setIsAddPopupOpen(true)}>직원 추가</button>
       </div>
+
+      {isAddPopupOpen && (
+        <AddStaffPopup
+          setIsAddPopupOpen={setIsAddPopupOpen}
+          formData={formData}
+          setFormData={setFormData}
+          setStaffs={setStaffs}
+        />
+      )}
 
       <span>총 직원 수 : {staffs.length}</span>
       <div className="stm-table-container">
@@ -78,13 +126,30 @@ const StaffManagement = () => {
                   </span>
                 </td>
                 <td>
-                  <button className="adp-btn-edit">수정</button>
+                  <button
+                    className="adp-btn-edit"
+                    onClick={() => handleEditClick(item)}
+                  >
+                    수정
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {/* 팝업 오버레이 */}
+      {isPopupOpen && (
+        <StaffUpdatePopup 
+          selectedStaff={selectedStaff}
+          setIsPopupOpen={setIsPopupOpen}
+          setSelectedStaff={setSelectedStaff}
+          formData={formData}
+          setFormData={setFormData}
+          setStaffs={setStaffs}
+        />
+      )}
     </div>
   );
 };

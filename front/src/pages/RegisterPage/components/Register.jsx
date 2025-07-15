@@ -1,8 +1,19 @@
 import React, { useState } from "react";
 import "../styles/Register.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import {
+  validateUsernameLength,
+  validateUsernameFormat,
+  validatePasswordLength,
+  validatePasswordStrength,
+} from "./RegisterValidation";
+import { isAvailableUserId, registerUser } from "../../../api/api";
 
 const Register = () => {
+  // 네이버 로그인 시 회원정보 없을 때 넘어옴
+  const location = useLocation();
+  const naverUserInfo = location.state?.naverUserInfo; // 넘어온 네이버 정보
+
   const navigate = useNavigate(); // useNavigate 훅 사용
   const [formData, setFormData] = useState({
     username: "",
@@ -18,6 +29,8 @@ const Register = () => {
   const [validationState, setValidationState] = useState({
     usernameChecked: false,
     usernameAvailable: false,
+    usernameError: false,
+    passwordError: false,
     phoneVerified: false,
     verificationSent: false,
   });
@@ -38,28 +51,79 @@ const Register = () => {
     }
   };
 
-  const handleUsernameCheck = () => {
+  // 아이디 필드에서 포커스 벗어날 때 유효성 검사
+  const validateUsernameBlur = () => {
+    if (formData.username) {
+      const lengthValid = validateUsernameLength(formData.username);
+      const formatValid = validateUsernameFormat(formData.username);
+
+      if (!lengthValid || !formatValid) {
+        setValidationState({
+          ...validationState,
+          usernameError: true,
+        });
+      } else {
+        setValidationState({
+          ...validationState,
+          usernameError: false,
+        });
+      }
+    }
+  };
+
+  // 비밀번호 필드에서 포커스 벗어날 때 유효성 검사
+  const validatePasswordBlur = () => {
+    if (formData.password) {
+      const lengthValid = validatePasswordLength(formData.password);
+      const strengthValid = validatePasswordStrength(formData.password);
+
+      if (!lengthValid || !strengthValid) {
+        setValidationState({
+          ...validationState,
+          passwordError: true,
+        });
+      } else {
+        setValidationState({
+          ...validationState,
+          passwordError: false,
+        });
+      }
+    }
+  };
+
+  const handleUsernameCheck = async () => {
     if (!formData.username) {
       alert("아이디를 입력해주세요.");
       return;
     }
 
-    // 아이디 중복 체크 로직 (백엔드 구현 없이 버튼만)
-    console.log("아이디 중복 체크:", formData.username);
+    if (validationState.usernameError) {
+      alert("아이디 형식이 올바르지 않습니다.");
+      return;
+    }
 
-    // 시뮬레이션: 랜덤하게 사용 가능/불가능 결정
-    const isAvailable = Math.random() > 0.3;
+    try {
+      const response = await isAvailableUserId(formData.username);
 
-    setValidationState({
-      ...validationState,
-      usernameChecked: true,
-      usernameAvailable: isAvailable,
-    });
-
-    if (isAvailable) {
-      alert("사용 가능한 아이디입니다.");
-    } else {
-      alert("이미 사용 중인 아이디입니다.");
+      if (response) {
+        // 사용가능한 아이디
+        setValidationState({
+          ...validationState,
+          usernameChecked: true,
+          usernameAvailable: true,
+        });
+        alert("사용 가능한 아이디입니다.");
+      } else {
+        // 사용불가능한 아이디
+        setValidationState({
+          ...validationState,
+          usernameChecked: true,
+          usernameAvailable: false,
+        });
+        alert("이미 사용 중인 아이디입니다.");
+      }
+    } catch (error) {
+      console.error("아이디 중복 체크 오류:", error);
     }
   };
 
@@ -103,7 +167,7 @@ const Register = () => {
     }
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
 
     // 유효성 검사
@@ -117,15 +181,38 @@ const Register = () => {
       return;
     }
 
+    if (validationState.passwordError) {
+      alert("비밀번호 형식이 올바르지 않습니다.");
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       alert("비밀번호가 일치하지 않습니다.");
       return;
     }
 
-    // 회원가입 로직 (백엔드 구현 없이 버튼만)
-    console.log("회원가입 시도:", formData);
-    alert("회원가입이 완료되었습니다!");
-    navigate("/login"); // 페이지 이동
+    // 회원가입 요청
+    try {
+      const userData = {
+        userid: formData.username,
+        userpw: formData.password,
+        username: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        birth: formData.birthDate,
+      };
+      const response = await registerUser(userData);
+      if (response) {
+        alert("회원가입이 완료되었습니다!");
+        navigate("/login");
+      } else {
+        alert("회원가입에 실패했습니다.");
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("회원가입 오류:", error);
+      alert("회원가입에 실패했습니다.");
+    }
   };
 
   return (
@@ -172,6 +259,7 @@ const Register = () => {
                   name="username"
                   value={formData.username}
                   onChange={handleInputChange}
+                  onBlur={validateUsernameBlur}
                   placeholder="아이디를 입력하세요"
                   required
                 />
@@ -183,6 +271,11 @@ const Register = () => {
                   중복확인
                 </button>
               </div>
+              {validationState.usernameError && (
+                <p className="rg-validation-message rg-error">
+                  아이디는 6~12자 영문, 숫자, 특수문자만 가능합니다.
+                </p>
+              )}
               {validationState.usernameChecked && (
                 <p
                   className={`rg-validation-message ${
@@ -206,10 +299,16 @@ const Register = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
+                onBlur={validatePasswordBlur}
                 placeholder="비밀번호를 입력하세요"
                 required
               />
             </div>
+            {validationState.passwordError && (
+              <p className="rg-validation-message rg-error">
+                비밀번호는 8~20자 영문, 숫자, 특수문자만 가능합니다.
+              </p>
+            )}
 
             <div className="rg-form-group">
               <input

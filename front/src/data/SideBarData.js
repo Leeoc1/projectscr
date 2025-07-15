@@ -1,48 +1,48 @@
 // SideBarData.js
 export const sidebarItems = [
   {
-    id: "sales",
+    id: "dashboard",
     label: "매출 현황",
-    icon: "📊"
+    icon: "📊",
   },
   {
     id: "staff",
     label: "직원 관리",
-    icon: "👥"
+    icon: "👥",
   },
   {
     id: "users",
     label: "회원 관리",
-    icon: "👤"
+    icon: "👤",
   },
   {
     id: "theaters",
     label: "극장 관리",
-    icon: "🎭"
+    icon: "🎭",
   },
   {
     id: "movies",
     label: "영화 관리",
-    icon: "🎬"
+    icon: "🎬",
   },
   {
     id: "screens",
     label: "상영관 관리",
-    icon: "🎥"
+    icon: "🎥",
   },
   {
     id: "reservations",
     label: "예매 관리",
-    icon: "🎫"
+    icon: "🎫",
   },
   {
     id: "inquiries",
     label: "문의 관리",
-    icon: "❓"
+    icon: "❓",
   },
   {
     id: "events",
     label: "이벤트 관리",
-    icon: "🎉"
-  }
-]; 
+    icon: "🎉",
+  },
+];

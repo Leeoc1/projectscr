@@ -1,25 +1,40 @@
 import { useState, useRef, useEffect } from "react";
-// import { getCurrentMovies } from "../../../api/api";
-// 이거 api로 바꿔야 함
-import { boxofficeMovies } from "../../../data/MoviesData";
+import { useNavigate } from "react-router-dom";
+import { getCurrentMovies } from "../../../api/api";
 import "../styles/MovieChart.css";
 
 const MovieChart = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [movies, setMovies] = useState([]);
   const sliderRef = useRef(null);
   const cardWidth = 180; // 카드 1장 width(px)
   const gap = 20; // 카드 사이 gap(px)
   const visibleCards = 5;
-  const filteredMovies = boxofficeMovies
-    .filter((movie) => movie.rank <= 10)
-    .sort((a, b) => a.rank - b.rank);
-  const totalCards = filteredMovies.length;
+
+  // API에서 영화 데이터 가져오기
+  useEffect(() => {
+    const fetchMovies = async () => {
+      const currentMovies = await getCurrentMovies();
+      // 상위 10개 영화만 필터링 (rank 정보가 없으므로 처음 10개)
+      const top10Movies = currentMovies.slice(0, 10).map((movie, index) => ({
+        ...movie,
+        rank: index + 1,
+      }));
+      setMovies(top10Movies);
+    };
+
+    fetchMovies();
+  }, []);
+
+  const totalCards = movies.length;
   const maxIndex = Math.ceil(totalCards / visibleCards) - 1;
 
   // Mouse drag state
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+
+  const navigate = useNavigate();
 
   const updateSlider = () => {
     if (sliderRef.current) {
@@ -73,6 +88,31 @@ const MovieChart = () => {
     setIsDragging(false);
   };
 
+  const handleMovieCardClick = (movie) => {
+    // 예매 페이지와 동일한 방식으로 영화 정보를 세션 스토리지에 저장
+    sessionStorage.setItem("moviecd", movie.moviecd);
+    sessionStorage.setItem("movienm", movie.movienm);
+
+    // 예매 페이지와 동일한 방식으로 전체 영화 객체도 저장
+    const movieData = {
+      moviecd: movie.moviecd,
+      movienm: movie.movienm,
+      posterurl: movie.posterurl,
+      genre: movie.genre,
+      runningtime: movie.runningtime,
+      isadult: movie.isadult,
+    };
+    sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
+
+    console.log(
+      "🎬 홈페이지 영화카드 클릭 - 영화:",
+      movie.movienm,
+      "moviecd:",
+      movie.moviecd
+    );
+    navigate("/reservation/place");
+  };
+
   return (
     <section className="mcs-section">
       <div className="mcs-container">
@@ -99,21 +139,27 @@ const MovieChart = () => {
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
             >
-              {filteredMovies.map((movie) => (
-                <div key={movie.id} className="mcs-movie-card">
+              {movies.map((movie) => (
+                <div
+                  key={movie.moviecd}
+                  className="mcs-movie-card"
+                  onClick={() => handleMovieCardClick(movie)}
+                >
                   <img
-                    src={movie.poster}
-                    alt={movie.title}
+                    src={movie.posterurl}
+                    alt={movie.movienm}
                     className="mcs-movie-poster"
                   />
                   <div className="mcs-movie-info">
-                    <h3 className="mcs-movie-title">{movie.title}</h3>
+                    <h3 className="mcs-movie-title">{movie.movienm}</h3>
                     <p className="mcs-movie-genre">{movie.genre}</p>
                     <div className="mcs-movie-meta">
                       <div className="mcs-movie-rating">
                         <span>⭐</span>
                         <span className="mcs-movie-rating-text">
-                          {movie.rating}
+                          {movie.isadult === "Y"
+                            ? "청소년 관람불가"
+                            : "전체 관람가"}
                         </span>
                       </div>
                       <span className="mcs-movie-rank">{movie.rank}</span>

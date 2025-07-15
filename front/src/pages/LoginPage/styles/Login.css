@@ -261,3 +261,11 @@
   border-color: #d1d5db;
   background-color: #f9fafb;
 }
+
+.lgs-google-login-button {
+  width: 100% !important;
+  justify-content: center !important;
+  margin-bottom: 10px !important;
+  height: 45px !important;
+  border-radius: 0.5rem !important;
+}

@@ -54,12 +54,12 @@ public class ScreenController {
         return screenRepository.save(screen);
     }
 
-    // REST API - 상영관 수정
-    @PutMapping("/screens/{screencd}")
-    public Screen updateScreen(@PathVariable String screencd, @RequestBody Screen screen) {
-        screen.setScreencd(screencd);
-        return screenRepository.save(screen);
-    }
+//    // REST API - 상영관 수정
+//    @PutMapping("/screens/{screencd}")
+//    public Screen updateScreen(@PathVariable String screencd, @RequestBody Screen screen) {
+//        screen.setScreencd(screencd);
+//        return screenRepository.save(screen);
+//    }
 
     // REST API - 상영관 삭제
     @DeleteMapping("/screens/{screencd}")

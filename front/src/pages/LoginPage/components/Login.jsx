@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
+import GoogleLogin from "./GoogleLogin";
+import KakaoLogin from "./KakaoLogin";
+import NaverLogin from "./NaverLogin";
 import axios from "axios";
 
 const Login = () => {
-  const navigate = useNavigate(); // useNavigate 훅 사용
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     userid: "",
     userpw: "",
@@ -17,14 +20,17 @@ const Login = () => {
     });
   };
 
-  const handleLogin = async(e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-   
+
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/login",{
-        userid: formData.userid,
-        userpw: formData.userpw,
-      });
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/login",
+        {
+          userid: formData.userid,
+          userpw: formData.userpw,
+        }
+      );
 
       console.log("응답 데이터:", response.data);
 
@@ -36,24 +42,22 @@ const Login = () => {
         alert(response.data); // 로그인 성공
         navigate("/"); // 메인으로 이동
       }
-  } catch (error) {
-    if (error.response) {
-      if (error.response.status === 401) {
-        alert("비밀번호가 틀렸습니다.");
-      } else if (error.response.status === 404) {
-        alert("아이디가 존재하지 않습니다.");
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 401) {
+          alert("비밀번호가 틀렸습니다.");
+        } else if (error.response.status === 404) {
+          alert("아이디가 존재하지 않습니다.");
+        } else {
+          alert("알 수 없는 오류가 발생했습니다.");
+        }
       } else {
-        alert("알 수 없는 오류가 발생했습니다.");
+        console.error("네트워크 오류:", error);
       }
-    } else {
-      console.error("네트워크 오류:", error);
     }
-  }
-};
+  };
   const handleSocialLogin = (provider) => {
     console.log(`${provider} 로그인 시도`);
-    // 소셜 로그인 로직 (백엔드 구현 없이 버튼만)
-    navigate("/");
   };
 
   return (
@@ -112,29 +116,12 @@ const Login = () => {
           </div>
 
           <div className="lgs-social-login">
-            <button
-              className="lgs-social-btn lgs-kakao"
-              onClick={() => handleSocialLogin("카카오")}
-            >
-              <span className="lgs-social-icon">K</span>
-              카카오로 로그인
-            </button>
+            <KakaoLogin />
 
-            <button
-              className="lgs-social-btn lgs-naver"
-              onClick={() => handleSocialLogin("네이버")}
-            >
-              <span className="lgs-social-icon">N</span>
-              네이버로 로그인
-            </button>
+            {/* 네이버 로그인 컴포넌트 */}
+            <NaverLogin />
 
-            <button
-              className="lgs-social-btn lgs-google"
-              onClick={() => handleSocialLogin("구글")}
-            >
-              <span className="lgs-social-icon">G</span>
-              구글로 로그인
-            </button>
+            <GoogleLogin onLoginAttempt={handleSocialLogin} />
           </div>
 
           <div className="lgs-signup-link">
@@ -142,7 +129,7 @@ const Login = () => {
               아직 회원이 아니신가요?
               <button
                 className="lgs-link-btn"
-                onClick={() => navigate("/signup")}
+                onClick={() => navigate("/register")}
               >
                 회원가입
               </button>

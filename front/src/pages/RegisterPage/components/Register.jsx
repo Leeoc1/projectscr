@@ -1,10 +1,19 @@
 import React, { useState } from "react";
 import "../styles/Register.css";
-import { useNavigate } from "react-router-dom";
-import { validateUsernameLength, validateUsernameFormat, validatePasswordLength, validatePasswordStrength } from "./RegisterValidation";
+import { useNavigate, useLocation } from "react-router-dom";
+import {
+  validateUsernameLength,
+  validateUsernameFormat,
+  validatePasswordLength,
+  validatePasswordStrength,
+} from "./RegisterValidation";
 import { isAvailableUserId, registerUser } from "../../../api/api";
 
 const Register = () => {
+  // 네이버 로그인 시 회원정보 없을 때 넘어옴
+  const location = useLocation();
+  const naverUserInfo = location.state?.naverUserInfo; // 넘어온 네이버 정보
+
   const navigate = useNavigate(); // useNavigate 훅 사용
   const [formData, setFormData] = useState({
     username: "",
@@ -62,7 +71,7 @@ const Register = () => {
     }
   };
 
-  // 비밀번호 필드에서 포커스 벗어날 때 유효성 검사 
+  // 비밀번호 필드에서 포커스 벗어날 때 유효성 검사
   const validatePasswordBlur = () => {
     if (formData.password) {
       const lengthValid = validatePasswordLength(formData.password);
@@ -80,7 +89,7 @@ const Register = () => {
         });
       }
     }
-  }
+  };
 
   const handleUsernameCheck = async () => {
     if (!formData.username) {
@@ -106,7 +115,7 @@ const Register = () => {
         alert("사용 가능한 아이디입니다.");
       } else {
         // 사용불가능한 아이디
-        setValidationState({  
+        setValidationState({
           ...validationState,
           usernameChecked: true,
           usernameAvailable: false,
@@ -296,10 +305,10 @@ const Register = () => {
               />
             </div>
             {validationState.passwordError && (
-                <p className="rg-validation-message rg-error">
-                  비밀번호는 8~20자 영문, 숫자, 특수문자만 가능합니다.
-                </p>
-              )}
+              <p className="rg-validation-message rg-error">
+                비밀번호는 8~20자 영문, 숫자, 특수문자만 가능합니다.
+              </p>
+            )}
 
             <div className="rg-form-group">
               <input

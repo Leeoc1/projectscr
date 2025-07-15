@@ -9,6 +9,67 @@ const api = axios.create({
   },
 });
 
+// Google OAuth API 함수들
+export const getGoogleClientId = async () => {
+  try {
+    const response = await api.get("/google/client-id");
+    return response.data.clientId;
+  } catch (error) {
+    console.error("Error fetching Google client ID:", error);
+    throw error;
+  }
+};
+
+export const getGoogleUserInfo = async (accessToken) => {
+  const response = await fetch(
+    "https://www.googleapis.com/oauth2/v3/userinfo",
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch user info");
+  }
+
+  return response.json();
+};
+
+export const getGooglePeopleData = async (accessToken) => {
+  const response = await fetch(
+    "https://people.googleapis.com/v1/people/me?personFields=birthdays,phoneNumbers,names,emailAddresses",
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch people data");
+  }
+
+  return response.json();
+};
+
+export const saveGoogleUserToBackend = async (userInfo) => {
+  const response = await fetch("http://localhost:8080/google/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userInfo),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to save user to backend");
+  }
+
+  return response.json();
+};
+
 // 현재상영작과 상영예정작 목록 조회
 export const getMoviesForAdmin = () =>
   api
@@ -48,7 +109,6 @@ export const getCinemas = () =>
       console.error("Error fetching cinema:", error);
       return [];
     });
-
 
 // 상영관 조회
 export const getScreens = () =>
@@ -230,7 +290,7 @@ export const registerUser = async (userData) => {
   } catch (error) {
     throw error;
   }
-}
+};
 
 export const kakaoLogin = async (params) => {
   const response = await axios.post("/login/kakao", null, { params });
@@ -239,11 +299,35 @@ export const kakaoLogin = async (params) => {
 
 export const kakaoCallback = async (code) => {
   const response = await axios.get("/login/oauth2/code/kakao", {
-      params: { code },
+    params: { code },
   });
   return response.data;
 };
 
+// 네이버 로그인
+export const naverLogin = async () => {
+  try {
+    const response = await api.post("/login/naver");
+    return response.data;
+  } catch (error) {
+    console.error("네이버 로그인 URL 가져오기 실패:", error);
+    throw error;
+  }
+};
 
+export const naverLoginCallback = async (code, state) => {
+  try {
+    const response = await api.post(
+      `/login/naver/callback?code=${code}&state=${state}`
+    );
+
+    // console.log("Naver callback response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("네이버 로그인 콜백 처리 실패:", error);
+    console.error("에러 상세:", error.response?.data);
+    throw error;
+  }
+};
 
 export default api;

@@ -7,12 +7,16 @@
   max-height: 650px;
 }
 
+/* 카드에 상대 위치 지정 */
 .thm-theater-card {
+  position: relative;
   background: white;
   padding: 1.5rem;
   border-radius: 0.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border: 1px solid #e2e8f0;
+  height: 150px;
+  width: 300px;
 }
 
 .thm-theater-card h3 {
@@ -28,8 +32,68 @@
   font-size: 0.875rem;
 }
 
+/* 버튼 영역을 카드 하단에서 20px 위에 고정 */
 .thm-theater-actions {
-  margin-top: 1rem;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 0 20px;
+}
+/* ... 기존 코드 ... */
+
+.thm-theater-detail-dropdown {
+  grid-column: 1 / -1;
+  width: 92%;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0 0 8px 8px;
+  margin-bottom: 20px;
+  margin-top: -10px;
+  padding: 24px 32px;
+  font-size: 1rem;
+  color: #334155;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.thm-theater-detail-screenscroll {
+  max-height: 150px;
+  min-height: 80px;
+  overflow-y: auto;
+  margin-top: 1rem;
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem 1rem;
+}
+
+.thm-theater-detail-screenscroll ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.thm-theater-detail-screenscroll li {
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.97rem;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.thm-theater-detail-screenscroll li:last-child {
+  border-bottom: none;
+}
+
+/* thm-theater-grid가 display: grid일 때 드롭다운이 한 줄 전체를 차지하도록 */
+.thm-theater-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }

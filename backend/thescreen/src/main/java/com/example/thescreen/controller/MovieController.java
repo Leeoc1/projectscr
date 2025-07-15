@@ -32,10 +32,7 @@ public class MovieController {
      */
     @GetMapping("/current")
     public List<Movie> getCurrentMovies() {
-        LocalDate today = LocalDate.now();
-        return movieRepository.findAll().stream()
-                .filter(movie -> movie.getReleasedate() != null && !movie.getReleasedate().isAfter(today))
-                .collect(Collectors.toList());
+        return movieRepository.findAll();
     }
 
     /**

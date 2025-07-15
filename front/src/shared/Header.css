@@ -128,7 +128,7 @@
   color: #fbbf24;
 }
 
-.h-login-btn {
+.h-login-btn, .h-logout-btn {
   color: #d1d5db;
   font-size: 0.875rem;
   background: none;
@@ -137,7 +137,7 @@
   transition: color 0.3s ease;
 }
 
-.h-login-btn:hover {
+.h-login-btn:hover, .h-logout-btn:hover {
   color: #fbbf24;
 }
 
@@ -152,10 +152,27 @@
   transition: all 0.3s ease;
 }
 
+.h-mypage-btn {
+  color: #fbbf24;
+  border: 1px solid #fbbf24;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  background: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
 .h-signup-btn:hover {
   background-color: #ef4444;
   color: white;
 }
+
+.h-mypage-btn:hover {
+  background-color: #fbbf24;
+  color: #2a2a2a;
+}
+
 
 .h-mobile-menu-btn {
   color: white;

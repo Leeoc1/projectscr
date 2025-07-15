@@ -4,7 +4,7 @@ import numpy as np
 
 # # cp949로 저장 (덮어쓰기)
 
-df = pd.read_csv('front/cinema_data.csv', encoding='utf-8')
+df = pd.read_csv('cinema_data.csv', encoding='utf-8')
 # try:
 #     df = pd.read_csv('front/cinema_data.csv', encoding='cp949')
 # except UnicodeDecodeError:
@@ -127,29 +127,32 @@ df = pd.read_csv('front/cinema_data.csv', encoding='utf-8')
 
 # df['screen_type'] = df['screen'].apply(extract_screen_type)
 
-# screen 컬럼에서 '제'라는 단어 제거
-if 'screen' in df.columns:
-    df['screen'] = df['screen'].str.replace('제', '', regex=False)
+# # screen 컬럼에서 '제'라는 단어 제거
+# if 'screen' in df.columns:
+#     df['screen'] = df['screen'].str.replace('제', '', regex=False)
 
-# screen 컬럼에서 괄호와 괄호 안의 내용 모두 제거
-if 'screen' in df.columns:
-    df['screen'] = df['screen'].str.replace(r'\(.*?\)', '', regex=True).str.strip()
+# # screen 컬럼에서 괄호와 괄호 안의 내용 모두 제거
+# if 'screen' in df.columns:
+#     df['screen'] = df['screen'].str.replace(r'\(.*?\)', '', regex=True).str.strip()
 
 
-def remove_all_parentheses(text):
-    if pd.isna(text):
-        return text
-    # 반각/전각 괄호 모두 반복적으로 제거
-    while re.search(r'[\(（][^\)\）]*[\)）]', text):
-        text = re.sub(r'[\(（][^\)\）]*[\)）]', '', text)
-    return text.strip()
+# def remove_all_parentheses(text):
+#     if pd.isna(text):
+#         return text
+#     # 반각/전각 괄호 모두 반복적으로 제거
+#     while re.search(r'[\(（][^\)\）]*[\)）]', text):
+#         text = re.sub(r'[\(（][^\)\）]*[\)）]', '', text)
+#     return text.strip()
 
-if 'screen' in df.columns:
-    df['screen'] = df['screen'].apply(remove_all_parentheses)
+# if 'screen' in df.columns:
+#     df['screen'] = df['screen'].apply(remove_all_parentheses)
 
 
 # UTF-8로 덮어써서 저장
-df.to_csv('front/cinema_data.csv', index=False, encoding='utf-8')
+
+mask = df['name'].str.contains('CGV', na=False)
+df = df[mask]
+df.to_csv('cgv_data.csv', index=False, encoding='utf-8')
 
 # # screen 컬럼의 결측치 개수 출력
 # print('screen 결측치 개수:', df['screen'].isna().sum())

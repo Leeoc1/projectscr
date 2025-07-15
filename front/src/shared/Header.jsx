@@ -7,6 +7,12 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
 
+  // 로컬스토리지 기반 상태 추가
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("isLoggedIn") === "true"
+  );
+  const [userid, setUserid] = useState(localStorage.getItem("userid") || "");
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
@@ -26,6 +32,16 @@ export default function Header() {
   const goRegister = () => navigate("/register");
   const goNotice = () => navigate("/notice");
   const goHome = () => navigate("/");
+  const goMyPage = () => navigate("/mypage");
+
+  // 로그아웃 핸들러
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userid");
+    setIsLoggedIn(false);
+    setUserid("");
+    navigate("/");
+  };
 
   return (
     <header className="h-header">
@@ -64,12 +80,25 @@ export default function Header() {
             <button className="h-notice-btn" onClick={goNotice}>
               공지사항
             </button>
-            <button className="h-login-btn" onClick={goLogin}>
-              로그인
-            </button>
-            <button className="h-signup-btn" onClick={goRegister}>
-              회원가입
-            </button>
+            {isLoggedIn ? (
+              <>
+                <button className="h-logout-btn" onClick={handleLogout}>
+                  로그아웃
+                </button>
+                <button className="h-mypage-btn" onClick={goMyPage}>
+                  {userid}
+                </button>
+              </>
+            ) : (
+              <>
+                <button className="h-login-btn" onClick={goLogin}>
+                  로그인
+                </button>
+                <button className="h-signup-btn" onClick={goRegister}>
+                  회원가입
+                </button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}

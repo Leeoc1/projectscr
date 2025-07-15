@@ -523,23 +523,23 @@ SELECT CONCAT('SCR', LPAD(n, 3, '0'))
 FROM numbers WHERE n <= 15;
 
 -- 3. 가데이터 삽입
-INSERT IGNORE INTO schedule (schedulecd, moviecd, screencd, startdate, starttime, endtime)
+-- 3. 가데이터 삽입 (스케줄 테이블)
+-- 7일 × 20개씩 스케줄 데이터 생성
+INSERT INTO schedule (schedulecd, moviecd, screencd, startdate, starttime, endtime)
 SELECT
-    CONCAT('SCH', LPAD(n.n, 4, '0')) AS schedulecd,
-    (SELECT moviecd FROM temp_movies ORDER BY RAND() LIMIT 1) AS moviecd,
-    (SELECT screencd FROM temp_screens ORDER BY RAND() LIMIT 1) AS screencd,
-    DATE_ADD('2025-07-10', INTERVAL FLOOR(RAND() * 15) DAY) AS startdate,
-    -- 시작 시간: 08:00 ~ 20:00 사이 랜덤
+    CONCAT('SCH', LPAD((d.n - 1) * 20 + s.n, 4, '0')) AS schedulecd,
+    (SELECT moviecd FROM movie ORDER BY RAND() LIMIT 1) AS moviecd,
+    (SELECT screencd FROM screen ORDER BY RAND() LIMIT 1) AS screencd,
+    DATE_ADD(CURRENT_DATE(), INTERVAL (d.n - 1) DAY) AS startdate,
     SEC_TO_TIME(FLOOR(RAND() * (12 * 3600)) + (8 * 3600)) AS starttime,
-    -- 종료 시간: 시작 시간 + 러닝타임(90~150분) + 30분 청소 시간
-    DATE_ADD(
-        DATE_ADD('2025-07-10', INTERVAL FLOOR(RAND() * 15) DAY),
-        INTERVAL (
-            FLOOR(RAND() * (12 * 60)) + (8 * 60) + -- 시작 시간(분)
-            FLOOR(RAND() * 61 + 90) + 30 -- 러닝타임 + 청소 시간
-        ) MINUTE
+    ADDTIME(
+        SEC_TO_TIME(FLOOR(RAND() * (12 * 3600)) + (8 * 3600)),
+        SEC_TO_TIME(FLOOR(RAND() * 61 + 90) * 60 + 30 * 60)
     ) AS endtime
-FROM numbers n;
+FROM
+    (SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7) d, -- 7일
+    (SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+     UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20) s; -- 1일당 20개
 
 -- 4. 임시 테이블 삭제
 DROP TEMPORARY TABLE numbers;

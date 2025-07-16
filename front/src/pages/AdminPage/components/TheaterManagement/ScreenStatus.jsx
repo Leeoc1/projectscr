@@ -26,35 +26,39 @@ const ScreenStatus = ({ screen, onStatusChange, onClose }) => {
       <div className="scm-popup-content" onClick={(e) => e.stopPropagation()}>
         <div className="scm-popup-header">
           <h3>상영관 상태 변경</h3>
-          <button 
-            className="scm-popup-close"
-            onClick={onClose}
-          >
+          <button className="scm-popup-close" onClick={onClose}>
             ×
           </button>
         </div>
         <div className="scm-popup-body">
           <p className="scm-popup-info">
-            <strong>{screen.cinemanm} - {screen.screenname}</strong>
+            <strong>
+              {screen.cinemanm} - {screen.screenname}
+            </strong>
             <br />
-            현재 상태: <span className={`scm-current-status ${getStatusClass(screen.screenstatus)}`}>
+            현재 상태:{" "}
+            <span
+              className={`scm-current-status ${getStatusClass(
+                screen.screenstatus
+              )}`}
+            >
               {screen.screenstatus}
             </span>
           </p>
           <div className="scm-status-options">
-            <button 
+            <button
               className="scm-status-option"
               onClick={() => handleStatusSelect("운영중")}
             >
               운영중
             </button>
-            <button 
+            <button
               className="scm-status-option"
               onClick={() => handleStatusSelect("점검중")}
             >
               점검중
             </button>
-            <button 
+            <button
               className="scm-status-option"
               onClick={() => handleStatusSelect("비활성")}
             >
@@ -67,4 +71,4 @@ const ScreenStatus = ({ screen, onStatusChange, onClose }) => {
   );
 };
 
-export default ScreenStatus; 
+export default ScreenStatus;

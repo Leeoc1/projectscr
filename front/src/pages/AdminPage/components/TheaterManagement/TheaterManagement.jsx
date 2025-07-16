@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getCinemas, getScreenView, updateScreenStatus } from "../../../../api/api";
+import {
+  getCinemas,
+  getScreenView,
+  updateScreenStatus,
+} from "../../../../api/api";
 import "../../styles/TheaterManagement.css";
 import "../../styles/AdminPage.css";
 import ScreenStatus from "./ScreenStatus";
@@ -62,14 +66,20 @@ const TheaterManagement = () => {
       });
 
       if (response) {
-        setScreenList(prevScreens => prevScreens.map(s => s.screencd === screen.screencd ? { ...s, screenstatus: newStatus } : s));
+        setScreenList((prevScreens) =>
+          prevScreens.map((s) =>
+            s.screencd === screen.screencd
+              ? { ...s, screenstatus: newStatus }
+              : s
+          )
+        );
         console.log("상영관 상태 변경 성공");
       }
     } catch (error) {
       console.error("상영관 상태 변경 실패:", error);
       // 에러 처리 (알림 등)
     }
-    
+
     setShowStatusPopup(false);
     setSelectedScreen(null);
   };
@@ -148,7 +158,7 @@ const TheaterManagement = () => {
                                     screen.screenstatus
                                   )}`}
                                 >
-                                    {screen.screenstatus}
+                                  {screen.screenstatus}
                                 </div>
                                 <strong>{screen.screenname}</strong> |{" "}
                                 {screen.screentype} | 전체좌석: {screen.allseat}{" "}

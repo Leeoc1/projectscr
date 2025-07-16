@@ -86,4 +86,53 @@ public class ReservationController {
             return ResponseEntity.internalServerError().body(errorResponse);
         }
     }
+
+    // 예약 취소 API (PUT)
+    @PutMapping("/cancel")
+    public ResponseEntity<?> cancelReservation(@RequestBody Map<String, Object> requestData) {
+        try {
+            String reservationcd = (String) requestData.get("reservationcd");
+            String reservationstatus = (String) requestData.get("reservationstatus");
+
+            // 필수 데이터 검증
+            if (reservationcd == null || reservationstatus == null) {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "예매번호와 예약상태는 필수입니다.");
+                return ResponseEntity.badRequest().body(errorResponse);
+            }
+
+            // 예약 정보 조회
+            java.util.Optional<Reservation> optionalReservation = reservationRepository.findById(reservationcd);
+            if (optionalReservation.isEmpty()) {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "해당 예매번호를 찾을 수 없습니다.");
+                return ResponseEntity.notFound().build();
+            }
+
+            Reservation reservation = optionalReservation.get();
+            
+            // 이미 취소된 예약인지 확인
+            if ("예약취소".equals(reservation.getReservationstatus())) {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "이미 취소된 예약입니다.");
+                return ResponseEntity.badRequest().body(errorResponse);
+            }
+
+            // 예약 상태 업데이트
+            reservation.setReservationstatus(reservationstatus);
+            reservationRepository.save(reservation);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "예약이 성공적으로 취소되었습니다.");
+            response.put("reservationcd", reservationcd);
+            response.put("status", reservationstatus);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "예약 취소 중 오류가 발생했습니다: " + e.getMessage());
+            return ResponseEntity.internalServerError().body(errorResponse);
+        }
+    }
 }

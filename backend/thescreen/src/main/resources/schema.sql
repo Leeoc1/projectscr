@@ -16,7 +16,7 @@
 --    AND CAST(SUBSTRING(s.screencd FROM 4) AS INTEGER) <= 10;
 
 create or replace view schedule_view as
-select s.schedulecd, s.startdate, s.starttime, m.movienm, m.runningscreen, m.runningtime, sc.screenname, sc.screenstatus, sc.screentype, sc.allseat, sc.reservationseat, c.cinemanm, r.regionnm
+select s.schedulecd, s.startdate, s.starttime, m.movienm, m.runningscreen, m.runningtime, sc.screenname, sc.screentype, sc.allseat, sc.reservationseat, c.cinemanm, r.regionnm
 from
     schedule s
     inner join movie m on s.moviecd = m.moviecd
@@ -97,6 +97,9 @@ from
  UPDATE movie
  SET
      description = CASE
+                     WHEN movienm = '라이언 일병 구하기' THEN '세계 2차 대전 중 미군인 밀러 대위는 모마하 해변을 공격하는데 예정지가 아닌 곳에 상륙하게 돼 부하들의 희생이 많았다. 그럼에도 밀러 대위는 몇 안 되는 부하와 함께 해변을 정복한다. 한편 미군 사령관은 군인인 라이언 형제에 관한 보고를 듣는다. 참전중인 네 형제 중 세 형제가 전사했고 넷째이자 막내인 제임스 라이언은 생사조차 확인 할 수 없다는 내용이었다. 사령관은 막내를 찾아 집으로 돌려보내라는 명령을 내리고, 밀러 대위의 지휘하에 8명의 군인이 명령을 수행하게 된다. 8명이 목숨을 걸고 한 명을 구해야 하는 임무를 부여받은 부대원들은 불만에 차 있었지만 밀러 대위는 이들을 이해시키며 작전을 진행시킨다.'
+                     WHEN movienm = '무명 無名' THEN '나는 조선과 조선인을 사랑하는 일본인 선교사입니다”1896년, 노리마츠는 조선에서 온 한 남자로부터 조선의 국모가 일본인에게 살해당했다는 소식을 전해 듣는다.일본인으로서의 죄책감을 가진 그는 주변의 만류에도 불구하고 암흑과 같은 시기를 보내던 조선 땅으로 향한다.그로부터 수년 후, 노리마츠의 정신을 이은 또 한 명의 일본인이 여전히 예수가 필요한 곳, 조선으로 향하는데….오직 복음만 전한, 이름 대신 예수의 사랑만 남긴 선교사들의 이야기를 만난다.'
+                     WHEN movienm = '영화 코바야시네 메이드래곤 외로움쟁이 용' THEN '이 손을 놓고 싶지 않아. 이제 우린, 가족이니까. 평범한 회사원 코바야시 씨.코바야시 씨에게 이끌려 모인 드래곤들.그중 하나 어린 드래곤 칸나에게 누군가가 찾아온다.그 정체는 놀랍게도 칸나의 아버지였는데.'
                        WHEN movienm = '노이즈' THEN '시끄러워 죽겠어요못 살겠네 죽이고 싶다내 집 마련에 성공한 주영(이선빈)과 주희(한수아) 자매어느 날부터 아파트 어딘가에서 들려오는 정체불명의 층간소음에 시달린다.그러던 중 동생 주희와 연락이 끊기자 불안에 휩싸인 주영은급히 지방 공장에서 집으로 돌아오고,주희의 남자친구 기훈(김민석)과 함께 실종된 동생을 추적하기 시작한다.한편, 자매와 마찬가지로 층간소음에 시달리던 아랫집 남자(류경수)는그 소음의 근원이 윗집 자매에게 있다고 생각해 살인 협박을 하게 되는데….'
                        WHEN movienm = '드래곤 길들이기' THEN '수백년간 지속되어온 바이킹과 드래곤의 전쟁.드래곤을 없애는 것이 삶의 모든 목적인 바이킹들과 다른 신념을 가진 ‘히컵’은 무리 속에 속하지 못하고 족장인 아버지에게도 인정받지 못한다.그러던 어느 날,히컵은 베일에 싸인 전설의 드래곤 나이트 퓨어리인 ‘투슬리스’와 만나게 되고, 드래곤을 죽이라는 바이킹의 신념을 깨고 ‘투슬리스’와 친구가 된다.하지만 드래곤을 죽여야 된다고 믿는 바이킹 족과 모든 드래곤을 위협하는 더 거대한 존재와 맞닥뜨리게 된 ‘히컵’과 ‘투슬리스’.세상을 변화시키기 위한 특별한 여정을 시작하게 되는데...다르다는 건, 특별하다는 것.세상을 바꿀 우리들의 모험이 시작된다!'
                        WHEN movienm = '엘리오' THEN '나도 어딘가에 속하고 싶어” 세상 그 어디에서도 소속감을 느끼지 못한 채, 외계인의 납치를 꿈꾸는 외톨이 소년 엘리오. 그러던 어느 날 작은 오해로 인해 지구 대표로 우주에 소환되고, 그곳에서 자신과는 너무도 다른 특별한 존재 글로든을 만나 처음으로 마음을 나눌 친구를 갖게 된다. 낯설지만 따뜻한 우주에서 꿈같은 나날들을 보내던 엘리오 앞에 온 우주를 위험에 빠뜨릴 크나큰 위기가 닥쳐오는데... 조금은 외롭고, 조금은 다른 지구별 여행자들을 위한 디즈니·픽사가 보내는 따뜻한 위로!'
@@ -110,6 +113,9 @@ from
                        ELSE description
          END,
      posterurl = CASE
+                     WHEN movienm = '라이언 일병 구하기' THEN 'http://file.koreafilm.or.kr/thm/02/99/19/03/tn_DPF031411.jpg'
+                     WHEN movienm = '무명 無名' THEN 'http://file.koreafilm.or.kr/thm/02/99/19/00/tn_DPA002218.jpg'
+                     WHEN movienm = '영화 코바야시네 메이드래곤 외로움쟁이 용' THEN 'http://file.koreafilm.or.kr/thm/02/99/19/05/tn_DPF031474.jpg'
                      WHEN movienm = '노이즈' THEN 'http://file.koreafilm.or.kr/thm/02/99/19/01/tn_DPK024077.jpg'
                      WHEN movienm = '드래곤 길들이기' THEN 'http://file.koreafilm.or.kr/thm/02/99/18/74/tn_DPF030717.jpg'
                      WHEN movienm = '엘리오' THEN 'http://file.koreafilm.or.kr/thm/02/99/19/00/tn_DPF031210.jpg'
@@ -123,6 +129,6 @@ from
                      ELSE posterurl
          END
  WHERE movienm IN (
-                   '노이즈', '드래곤 길들이기', '엘리오', '괴기열차', '슈퍼맨',
+                   '라이언 일병 구하기','무명 無名','영화 코바야시네 메이드래곤 외로움쟁이 용', '노이즈', '드래곤 길들이기', '엘리오', '괴기열차', '슈퍼맨',
                    '쥬라기 월드: 새로운 시작', 'F1 더 무비', '신명', '명탐정 코난: 척안의 잔상', '극장판 도라에몽: 진구의 그림이야기'
      );

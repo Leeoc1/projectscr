@@ -3,14 +3,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 import SalesOverview from "./adminmain/SalesOverview";
 import StaffManagement from "./StaffManagement/StaffManagement";
 import UserManagement from "./UserManagement";
-import TheaterManagement from "./TheaterManagement/TheaterManagement";
 import MovieManagement from "./MovieManagement";
-import ScreenManagement from "./ScreenManagement/ScreenManagement";
+import ScreenManagement from "./ScreenManagement";
 import ReservationManagement from "./ReservationManagement";
 import Inquiries from "./Inquiries";
 import EventManagement from "./EventManagement";
 import AdminSidebar from "./AdminSideBar";
 import AdminHeader from "./AdminHeader";
+import TheaterManagement from "./TheaterManagement/TheaterManagement";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("sales");

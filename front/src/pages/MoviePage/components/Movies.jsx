@@ -51,6 +51,11 @@ const Movies = () => {
     fetchMovies();
   }, []);
 
+  // 영화 상세 정보 페이지로 이동
+  const goMovieDetail = (moviecd) => {
+    navigate(`/moviedetail?movieno=${moviecd}`);
+  };
+
   return (
     <div className="mvs-section">
       <div className="mvs-tabs">
@@ -79,7 +84,12 @@ const Movies = () => {
                   <img src={movie.posterurl} alt={movie.movienm} />
                   <div className="mvs-overlay">
                     <div className="mvs-buttons">
-                      <button className="mvs-btn">상세정보</button>
+                      <button
+                        className="mvs-btn"
+                        onClick={() => goMovieDetail(movie.moviecd)}
+                      >
+                        상세정보
+                      </button>
                       <button
                         className="mvs-btn"
                         onClick={() => handleReservationClick(movie)}

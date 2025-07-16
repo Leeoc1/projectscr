@@ -70,6 +70,16 @@ export const saveGoogleUserToBackend = async (userInfo) => {
   return response.json();
 };
 
+// 관리자용 KOBIS 영화 데이터 가져오기
+export const fetchMoviesFromKobis = () =>
+  api
+    .post("/movies/fetch-movies")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching movies from KOBIS:", error);
+      throw error;
+    });
+
 // 현재상영작과 상영예정작 목록 조회
 export const getMoviesForAdmin = () =>
   api
@@ -78,6 +88,46 @@ export const getMoviesForAdmin = () =>
     .catch((error) => {
       console.error("Error fetching movies for admin:", error);
       return { currentMovies: [], upcomingMovies: [] };
+    });
+
+// 영화 정보 수정
+export const updateMovie = (moviecd, movieData) =>
+  api
+    .put(`/movies/${moviecd}`, movieData)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error updating movie:", error);
+      throw error;
+    });
+
+// 영화 삭제
+export const deleteMovie = (moviecd) =>
+  api
+    .delete(`/movies/${moviecd}`)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error deleting movie:", error);
+      throw error;
+    });
+
+// 영화 상영 상태 변경
+export const updateScreeningStatus = (moviecd) =>
+  api
+    .put(`/movies/${moviecd}/screening-status`)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error updating screening status:", error);
+      throw error;
+    });
+
+// 영화 상영 종료 (논리적 삭제)
+export const archiveMovie = (moviecd) =>
+  api
+    .put(`/movies/${moviecd}/archive`)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error archiving movie:", error);
+      throw error;
     });
 
 // 극장 -> 영화 (ReservationPlaceToMoviePage)
@@ -99,6 +149,16 @@ export const getUpcomingMovies = () =>
       console.error("Error fetching movies:", error);
       return [];
     });
+
+// 영화 상세 정보 조회
+export const getMovieDetail = async (moviecd) => {
+  try {
+    const response = await api.post("/movies/detail", { movieno: moviecd});
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 // 극장 목록 조회
 export const getCinemas = () =>
@@ -124,19 +184,6 @@ export const getScreens = () =>
 export const getScreenView = async () => {
   try {
     const response = await api.get("/screens/view");
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-// 상영관 상태 관리
-export const updateScreenStatus = async (screenData) => {
-  try {
-    const response = await api.put("/screens/statusupdate", {
-      screencd: screenData.screencd,
-      screenstatus: screenData.screenstatus,
-    });
     return response.data;
   } catch (error) {
     throw error;
@@ -339,6 +386,17 @@ export const naverLoginCallback = async (code, state) => {
   } catch (error) {
     console.error("네이버 로그인 콜백 처리 실패:", error);
     console.error("에러 상세:", error.response?.data);
+    throw error;
+  }
+};
+export const updateScreenStatus = async (screenData) => {
+  try {
+    const response = await api.put("/screens/statusupdate", {
+      screencd: screenData.screencd,
+      screenstatus: screenData.screenstatus,
+    });
+    return response.data;
+  } catch (error) {
     throw error;
   }
 };

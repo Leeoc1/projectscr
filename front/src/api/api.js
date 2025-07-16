@@ -460,4 +460,15 @@ export const createReview = (reviewData) => {
     });
 };
 
+// 리뷰 목록 조회
+export const fetchAllReviews = () => {
+  return api
+    .get("/api/review/review")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("리뷰 목록 조회 실패:", error);
+      return [];
+    });
+};
+
 export default api;

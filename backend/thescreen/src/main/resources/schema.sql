@@ -112,3 +112,15 @@ SELECT
     r.rankchange
 FROM movie m
 LEFT JOIN movierank r ON m.movienm = r.moviename;
+
+CREATE OR REPLACE VIEW review_view AS
+SELECT
+r.reviewnum,               -- 리뷰 번호
+u.userid,                  -- 유저 ID
+m.movienm,                 -- 영화 이름
+r.rating,                  -- 평점
+r.likes                    -- 추천(좋아요)
+FROM
+review r
+LEFT JOIN users u ON r.userid = u.userid
+LEFT JOIN movie m ON r.moviecd = m.moviecd;

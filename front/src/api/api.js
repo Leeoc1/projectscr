@@ -379,5 +379,16 @@ export const naverLoginCallback = async (code, state) => {
     throw error;
   }
 };
+export const updateScreenStatus = async (screenData) => {
+  try {
+    const response = await api.put("/screens/statusupdate", {
+      screencd: screenData.screencd,
+      screenstatus: screenData.screenstatus,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export default api;

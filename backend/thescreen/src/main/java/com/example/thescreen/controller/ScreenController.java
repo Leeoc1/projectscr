@@ -1,9 +1,9 @@
 package com.example.thescreen.controller;
 
 import com.example.thescreen.entity.Screen;
-//import com.example.thescreen.entity.ScreenView;
+import com.example.thescreen.entity.ScreenView;
 import com.example.thescreen.repository.ScreenRepository;
-//import com.example.thescreen.repository.ScreenViewRepository;
+import com.example.thescreen.repository.ScreenViewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class ScreenController {
     @Autowired
     private ScreenRepository screenRepository;
     @Autowired
-//    private ScreenViewRepository screenViewRepository;
+   private ScreenViewRepository screenViewRepository;
 
     // REST API - 전체 상영관 조회
     @GetMapping("/screens")
@@ -27,14 +27,14 @@ public class ScreenController {
         return screenRepository.findAll();
     }
 
-//    // screen view 조회
-//    // adminpage 상영관 관리에 사용
-//    @GetMapping("/screens/view")
-//    public ResponseEntity<List<ScreenView>> getAllScreenViews() {
-//        List<ScreenView> screenViews = screenViewRepository.findAll();
-//
-//        return new ResponseEntity<>(screenViews, HttpStatus.OK);
-//    }
+   // screen view 조회
+   // adminpage 상영관 관리에 사용
+   @GetMapping("/screens/view")
+   public ResponseEntity<List<ScreenView>> getAllScreenViews() {
+       List<ScreenView> screenViews = screenViewRepository.findAll();
+
+       return new ResponseEntity<>(screenViews, HttpStatus.OK);
+   }
 
     // REST API - 특정 상영관 조회
     @GetMapping("/screens/{screencd}")

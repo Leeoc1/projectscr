@@ -10,9 +10,6 @@ import {
 import { isAvailableUserId, registerUser } from "../../../api/api";
 
 const Register = () => {
-  // 네이버 로그인 시 회원정보 없을 때 넘어옴
-  const location = useLocation();
-  const naverUserInfo = location.state?.naverUserInfo; // 넘어온 네이버 정보
 
   const navigate = useNavigate(); // useNavigate 훅 사용
   const [formData, setFormData] = useState({

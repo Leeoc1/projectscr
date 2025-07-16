@@ -26,7 +26,8 @@ const ScreenSelector = () => {
           return (
             schedule.movienm === selectedMovieName &&
             schedule.startdate === selectedDate &&
-            schedule.cinemanm === sessionStorage.getItem("cinemanm")
+            schedule.cinemanm === sessionStorage.getItem("cinemanm") &&
+            schedule.screenstatus === "운영중"
           );
         });
 

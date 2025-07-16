@@ -436,4 +436,28 @@ export const naverLoginCallback = async (code, state) => {
   }
 };
 
+// 리뷰 작성
+export const createReview = (reviewData) => {
+  console.log("API 호출 - 리뷰 데이터:", reviewData);
+  return api
+    .post("/api/review/review", reviewData)
+    .then((response) => {
+      console.log("API 응답 성공:", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("API 호출 실패:", error);
+      if (error.response) {
+        console.error("응답 에러 데이터:", error.response.data);
+        console.error("응답 상태 코드:", error.response.status);
+        console.error("응답 헤더:", error.response.headers);
+      } else if (error.request) {
+        console.error("요청 에러:", error.request);
+      } else {
+        console.error("기타 에러:", error.message);
+      }
+      throw error;
+    });
+};
+
 export default api;

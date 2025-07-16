@@ -288,6 +288,16 @@ export const fetchAllFaqs = () =>
       return [];
     });
 
+// 리뷰 전체 조회
+export const fetchAllReviews = () =>
+  api
+    .get("/api/review/review")
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching reviews:", error);
+      return [];
+    });
+
 export const getTotalVolume = () =>
   api
     .get("/reservation/week/sum")
@@ -378,6 +388,30 @@ export const naverLoginCallback = async (code, state) => {
     console.error("에러 상세:", error.response?.data);
     throw error;
   }
+};
+
+// 리뷰 작성
+export const createReview = (reviewData) => {
+  console.log("API 호출 - 리뷰 데이터:", reviewData);
+  return api
+    .post("/api/review/review", reviewData)
+    .then((response) => {
+      console.log("API 응답 성공:", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("API 호출 실패:", error);
+      if (error.response) {
+        console.error("응답 에러 데이터:", error.response.data);
+        console.error("응답 상태 코드:", error.response.status);
+        console.error("응답 헤더:", error.response.headers);
+      } else if (error.request) {
+        console.error("요청 에러:", error.request);
+      } else {
+        console.error("기타 에러:", error.message);
+      }
+      throw error;
+    });
 };
 
 export default api;

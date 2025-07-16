@@ -4,6 +4,7 @@ import com.example.thescreen.entity.Movie;
 import com.example.thescreen.repository.MovieRepository;
 import com.example.thescreen.service.MovieService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -51,8 +52,11 @@ public class MovieController {
      * ✅ 4) KOBIS 박스오피스 + 상세 정보 저장
      */
     @GetMapping("/save")
-    public String saveMovies() {
-        movieService.saveDailyBoxOffice();
-        return "✅ 박스오피스 + 상세 정보 저장 완료!";
+    public ResponseEntity<List<Movie>> saveMovies() {
+        List<Movie> movies = movieService.saveBoxOfficeMovies();
+        if (movies.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(movies);
     }
 }

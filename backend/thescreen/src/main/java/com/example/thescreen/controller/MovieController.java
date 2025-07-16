@@ -58,7 +58,7 @@ public class MovieController {
             // 저장 전 영화 개수
             long beforeCount = movieRepository.count();
 
-            movieService.saveDailyBoxOffice();
+//            movieService.saveDailyBoxOffice();
 
             // 저장 후 영화 개수
             long afterCount = movieRepository.count();

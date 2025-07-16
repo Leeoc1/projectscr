@@ -3,8 +3,8 @@ import {
   fetchAllNotices,
   fetchAllFaqs,
   fetchAllReviews,
-  getMoviesForAdmin,
-} from "../../../api/api";
+} from "../../../api/userApi";
+import { getMoviesForAdmin } from "../../../api/movieApi";
 import Pagination from "./Pagination";
 import NoticeItem from "./NoticeItem";
 import TabNavigation from "./TabNavigation";

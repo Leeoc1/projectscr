@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getRegions } from "../../../api/api";
+import { getRegions } from "../../../api/cinemaApi";
 
 const TheaterFilter = ({ selectedRegion, setSelectedRegion }) => {
   const [regions, setRegions] = useState([]);

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getSchedules, getReservationSeat } from "../../../../../api/api";
+import { getSchedules } from "../../../../../api/cinemaApi";
+import { getReservationSeat } from "../../../../../api/reservationApi";
 
 const ScreenSelectorMovie = () => {
   const [movieSchedule, setMovieSchedule] = useState([]);

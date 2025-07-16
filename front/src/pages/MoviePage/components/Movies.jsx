@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { boxofficeMovies, upcomingMovies } from "../../../data/MoviesData.js";
-import { getCurrentMovies, getUpcomingMovies } from "../../../api/api.js";
+import { getCurrentMovies, getUpcomingMovies } from "../../../api/movieApi";
 import "../styles/Movies.css";
 
 const Movies = () => {

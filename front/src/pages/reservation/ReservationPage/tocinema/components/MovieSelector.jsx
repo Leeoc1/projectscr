@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getSchedules } from "../../../../../api/api";
+import { getSchedules } from "../../../../../api/cinemaApi";
 
 const MovieSelector = () => {
   const [movieList, setMovieList] = useState({});

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCurrentMovies } from "../../../api/api";
+import { getCurrentMovies } from "../../../api/movieApi";
 import "../styles/MovieChart.css";
 
 const MovieChart = () => {

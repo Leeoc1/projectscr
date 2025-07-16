@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getMoviesForAdmin, archiveMovie, updateScreeningStatus, fetchMoviesFromKobis } from "../../../api/api";
+import { getMoviesForAdmin, archiveMovie, updateScreeningStatus, fetchMoviesFromKobis } from "../../../api/movieApi";
 import "../styles/MovieManagement.css";
 import "../styles/AdminPage.css";
 

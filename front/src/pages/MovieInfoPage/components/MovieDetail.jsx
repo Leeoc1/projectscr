@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../styles/MovieDetail.css";
 import Header from "../../../shared/Header";
 import { useSearchParams } from "react-router-dom";
-import { getMovieDetail } from "../../../api/api";
+import { getMovieDetail } from "../../../api/movieApi";
 import { useNavigate } from "react-router-dom";
 
 export default function MovieDetail() {

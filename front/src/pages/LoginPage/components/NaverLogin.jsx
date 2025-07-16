@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { naverLogin, naverLoginCallback } from "../../../api/api";
+import { naverLogin, naverLoginCallback } from "../../../api/userApi";
 
 const NaverLogin = () => {
   const navigate = useNavigate();

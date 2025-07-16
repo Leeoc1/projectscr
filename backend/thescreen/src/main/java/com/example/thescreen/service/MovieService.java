@@ -42,32 +42,32 @@ public class MovieService {
         System.out.println("KOBIS Title: " + kobisTitle);
         System.out.println("openDt: " + openDt);
         System.out.println("API Key2: " + (apiKey2 != null ? "설정됨" : "NULL"));
-        
+
         try {
             // URL 인코딩 추가
             String encodedTitle = java.net.URLEncoder.encode(kobisTitle, "UTF-8");
             String releaseYear = (openDt != null && openDt.length() >= 4) ? openDt.substring(0, 4) : "";
-            
+
             String url = String.format(
                     "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&title=%s&releaseDts=%s&ServiceKey=%s",
                     encodedTitle, releaseYear, apiKey2
             );
-            
+
             System.out.println("KMDB API URL: " + url);
-            
+
             String kmdbResponse = restTemplate.getForObject(url, String.class);
             System.out.println("KMDB 응답 길이: " + (kmdbResponse != null ? kmdbResponse.length() : "NULL"));
-            
+
             if (kmdbResponse != null) {
                 JsonNode root = objectMapper.readTree(kmdbResponse);
                 JsonNode dataArray = root.path("Data");
-                
+
                 System.out.println("Data 배열 크기: " + dataArray.size());
-                
+
                 if (dataArray.isArray() && dataArray.size() > 0) {
                     JsonNode results = dataArray.get(0).path("Result");
                     System.out.println("Result 배열 크기: " + results.size());
-                    
+
                     for (JsonNode movieNode : results) {
                         String kmdbTitle = movieNode.path("title").asText();
                         System.out.println(">>> KOBIS Title: " + kobisTitle);
@@ -90,31 +90,31 @@ public class MovieService {
     // KMDB API에서 포스터 URL을 가져오는 메서드
     private String getPosterFromKmdb(String kobisTitle, String openDt) {
         System.out.println("🖼️ 포스터 검색 시작: " + kobisTitle);
-        
+
         try {
             // URL 인코딩 추가
             String encodedTitle = java.net.URLEncoder.encode(kobisTitle, "UTF-8");
             String releaseYear = (openDt != null && openDt.length() >= 4) ? openDt.substring(0, 4) : "";
-            
+
             String url = String.format(
                     "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&title=%s&releaseDts=%s&ServiceKey=%s",
                     encodedTitle, releaseYear, apiKey2
             );
-            
+
             System.out.println("🔗 포스터 검색 URL: " + url);
-            
+
             String kmdbResponse = restTemplate.getForObject(url, String.class);
-            
+
             if (kmdbResponse != null) {
                 JsonNode root = objectMapper.readTree(kmdbResponse);
                 JsonNode dataArray = root.path("Data");
-                
+
                 if (dataArray.isArray() && dataArray.size() > 0) {
                     JsonNode results = dataArray.get(0).path("Result");
-                    
+
                     for (JsonNode movieNode : results) {
                         String kmdbTitle = movieNode.path("title").asText();
-                        
+
                         // 제목 유사성 체크 (간단한 포함 관계 체크)
                         if (isSimilarTitle(kobisTitle, kmdbTitle)) {
                             JsonNode posters = movieNode.path("posters");
@@ -127,10 +127,10 @@ public class MovieService {
                     }
                 }
             }
-            
+
             System.out.println("❌ 포스터를 찾지 못했습니다: " + kobisTitle);
             return null;
-            
+
         } catch (Exception e) {
             System.out.println("❌ 포스터 검색 중 오류: " + e.getMessage());
             return null;
@@ -140,19 +140,19 @@ public class MovieService {
     // 제목 유사성 체크 메서드 (간단한 버전)
     private boolean isSimilarTitle(String kobisTitle, String kmdbTitle) {
         if (kobisTitle == null || kmdbTitle == null) return false;
-        
+
         // HTML 태그 제거
         String cleanKmdbTitle = kmdbTitle.replaceAll("<[^>]*>", "").trim();
-        
+
         // 공백 제거 후 비교
         String cleanKobis = kobisTitle.replaceAll("\\s+", "");
         String cleanKmdb = cleanKmdbTitle.replaceAll("\\s+", "");
-        
+
         System.out.println("🔍 제목 비교: [" + cleanKobis + "] vs [" + cleanKmdb + "]");
-        
+
         // 완전 일치 또는 포함 관계 체크
-        return cleanKobis.equals(cleanKmdb) || 
-               cleanKmdb.contains(cleanKobis) || 
+        return cleanKobis.equals(cleanKmdb) ||
+               cleanKmdb.contains(cleanKobis) ||
                cleanKobis.contains(cleanKmdb);
     }
 

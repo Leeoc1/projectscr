@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { getReservation } from "../../../../api/api";
-import { getStaffs } from "../../../../api/api";
-import { getAllUsers } from "../../../../api/api";
+import { getReservation } from "../../../../api/reservationApi";
+import { getStaffs } from "../../../../api/userApi";
+import { getAllUsers } from "../../../../api/userApi";
 
 export const useSalesData = () => {
   const [totalVolume, setTotalVolume] = useState(0);

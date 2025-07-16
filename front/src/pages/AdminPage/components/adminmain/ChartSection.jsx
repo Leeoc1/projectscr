@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import {
   getTotalVolume,
   getCinemaVolume,
-  getAllUsers,
   getReservation,
-} from "../../../../api/api";
+} from "../../../../api/reservationApi";
+import { getAllUsers } from "../../../../api/userApi";
 import BarChart from "./chart/BarChart";
 import LineChartComponent from "./chart/LineChart";
 import PieChartComponent from "./chart/PieChart";

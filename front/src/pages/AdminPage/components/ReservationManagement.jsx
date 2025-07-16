@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getReservation } from "../../../api/api";
+import { getReservation } from "../../../api/reservationApi";
 import "../styles/ReservationManagement.css";
 import "../styles/AdminPage.css";
 

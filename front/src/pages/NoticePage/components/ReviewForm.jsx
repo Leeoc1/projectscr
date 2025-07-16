@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createReview } from '../../../api/api';
+import { createReview } from '../../../api/userApi';
 
 const ReviewForm = ({ onReviewCreated, currentMovies }) => {
   const [formData, setFormData] = useState({

@@ -16,7 +16,7 @@
 --    AND CAST(SUBSTRING(s.screencd FROM 4) AS INTEGER) <= 10;
 
 create or replace view schedule_view as
-select s.schedulecd, s.startdate, s.starttime, m.movienm, m.runningscreen, m.runningtime, sc.screenname, sc.screenstatus, sc.screentype, sc.allseat, sc.reservationseat, c.cinemanm, r.regionnm
+select s.schedulecd, s.startdate, s.starttime, m.movienm, m.runningscreen, m.runningtime, sc.screenname, sc.screentype, sc.allseat, sc.reservationseat, c.cinemanm, r.regionnm
 from
     schedule s
     inner join movie m on s.moviecd = m.moviecd

@@ -45,8 +45,7 @@ const TheaterSelector = () => {
       const selectedDateObj = new Date(selectedDate);
       
       return schedule.movienm === movienm && 
-             scheduleDate.toDateString() === selectedDateObj.toDateString() &&
-             schedule.screenstatus === "운영중";
+             scheduleDate.toDateString() === selectedDateObj.toDateString();
     });
     
     const regions = [...new Set(filteredSchedules.map(schedule => schedule.regionnm))];

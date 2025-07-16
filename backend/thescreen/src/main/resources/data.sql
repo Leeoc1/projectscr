@@ -1,244 +1,244 @@
----- Region 데이터 삽입
---INSERT IGNORE INTO
---    region (regioncd, regionnm)
---VALUES ('01', '서울'),
---    ('02', '인천'),
---    ('03', '대전'),
---    ('04', '대구'),
---    ('05', '광주'),
---    ('06', '울산'),
---    ('07', '부산'),
---    ('08', '경기'),
---    ('09', '강원'),
---    ('10', '충북'),
---    ('11', '충남'),
---    ('12', '경북'),
---    ('13', '경남'),
---    ('14', '전북'),
---    ('15', '전남'),
---    ('16', '제주');
---
----- Cinema 데이터 삽입
---INSERT IGNORE INTO
---    cinema (
---        cinemacd,
---        cinemanm,
---        address,
---        tel,
---        status,
---        regioncd
---    )
---VALUES (
---        'THR001',
---        '시네맥스 강남점',
---        '서울특별시 강남구 테헤란로 123',
---        '02-1234-5678',
---        '정상',
---        '01'
---    ),
---    (
---        'THR002',
---        '시네맥스 잠실점',
---        '서울특별시 송파구 올림픽로 240',
---        '02-2345-6789',
---        '정상',
---        '01'
---    ),
---    (
---        'THR003',
---        '시네맥스 부산점',
---        '부산광역시 부산진구 중앙대로 668',
---        '051-3456-7890',
---        '점검중',
---        '07'
---    ),
---    (
---        'THR004',
---        '시네맥스 여의도점',
---        '서울특별시 영등포구 여의대로 108',
---        '02-4567-8901',
---        '정상',
---        '01'
---    ),
---    (
---        'THR005',
---        '시네맥스 대구점',
---        '대구광역시 중구 동성로 2길 80',
---        '053-5678-9012',
---        '정상',
---        '04'
---    ),
---    (
---        'THR006',
---        '시네맥스 인천점',
---        '인천광역시 중구 제물량로 266',
---        '032-6789-0123',
---        '정상',
---        '02'
---    ),
---    (
---        'THR007',
---        '시네맥스 분당점',
---        '경기도 성남시 분당구 정자로 178',
---        '031-7890-1234',
---        '정상',
---        '08'
---    ),
---    (
---        'THR008',
---        '시네맥스 대전점',
---        '대전광역시 중구 중앙로 100',
---        '042-8901-2345',
---        '정상',
---        '03'
---    );
---
----- Screen 데이터 삽입
---INSERT IGNORE INTO
---    screen (
---        screencd,
---        screenname,
---        screentype,
---        allseat,
---        reservationseat,
---        screenstatus,
---        cinemacd
---    )
---VALUES (
---        'SCR001',
---        '1관',
---        '2D',
---        120,
---        0,
---        '운영중',
---        'THR001'
---    ),
---    (
---        'SCR002',
---        '1관',
---        '3D',
---        90,
---        10,
---        '운영중',
---        'THR001'
---    ),
---    (
---        'SCR003',
---        '1관',
---        'IMAX',
---        150,
---        0,
---        '운영중',
---        'THR002'
---    ),
---    (
---        'SCR004',
---        '1관',
---        '4DX',
---        100,
---        5,
---        '운영중',
---        'THR002'
---    ),
---    (
---        'SCR005',
---        '2관',
---        '2D',
---        110,
---        0,
---        '운영중',
---        'THR003'
---    ),
---    (
---        'SCR006',
---        '2관',
---        '3D',
---        95,
---        0,
---        '운영중',
---        'THR003'
---    ),
---    (
---        'SCR007',
---        '2관',
---        'IMAX',
---        130,
---        20,
---        '운영중',
---        'THR004'
---    ),
---    (
---        'SCR008',
---        '2관',
---        '4DX',
---        85,
---        0,
---        '운영중',
---        'THR004'
---    ),
---    (
---        'SCR009',
---        '3관',
---        '2D',
---        115,
---        0,
---        '운영중',
---        'THR005'
---    ),
---    (
---        'SCR010',
---        '3관',
---        '3D',
---        80,
---        15,
---        '운영중',
---        'THR005'
---    ),
---    (
---        'SCR011',
---        '4관',
---        '2D',
---        105,
---        0,
---        '운영중',
---        'THR006'
---    ),
---    (
---        'SCR012',
---        '3관',
---        '4DX',
---        90,
---        0,
---        '운영중',
---        'THR006'
---    ),
---    (
---        'SCR013',
---        '3관',
---        'IMAX',
---        140,
---        0,
---        '운영중',
---        'THR007'
---    ),
---    (
---        'SCR014',
---        '5관',
---        '2D',
---        100,
---        5,
---        '운영중',
---        'THR007'
---    ),
---    (
---        'SCR015',
---        '4관',
---        '3D',
---        95,
---        0,
---        '운영중',
---        'THR008'
---    );
+-- Region 데이터 삽입
+INSERT IGNORE INTO
+    region (regioncd, regionnm)
+VALUES ('01', '서울'),
+    ('02', '인천'),
+    ('03', '대전'),
+    ('04', '대구'),
+    ('05', '광주'),
+    ('06', '울산'),
+    ('07', '부산'),
+    ('08', '경기'),
+    ('09', '강원'),
+    ('10', '충북'),
+    ('11', '충남'),
+    ('12', '경북'),
+    ('13', '경남'),
+    ('14', '전북'),
+    ('15', '전남'),
+    ('16', '제주');
+
+-- Cinema 데이터 삽입
+INSERT IGNORE INTO
+    cinema (
+        cinemacd,
+        cinemanm,
+        address,
+        tel,
+        status,
+        regioncd
+    )
+VALUES (
+        'THR001',
+        '시네맥스 강남점',
+        '서울특별시 강남구 테헤란로 123',
+        '02-1234-5678',
+        '정상',
+        '01'
+    ),
+    (
+        'THR002',
+        '시네맥스 잠실점',
+        '서울특별시 송파구 올림픽로 240',
+        '02-2345-6789',
+        '정상',
+        '01'
+    ),
+    (
+        'THR003',
+        '시네맥스 부산점',
+        '부산광역시 부산진구 중앙대로 668',
+        '051-3456-7890',
+        '점검중',
+        '07'
+    ),
+    (
+        'THR004',
+        '시네맥스 여의도점',
+        '서울특별시 영등포구 여의대로 108',
+        '02-4567-8901',
+        '정상',
+        '01'
+    ),
+    (
+        'THR005',
+        '시네맥스 대구점',
+        '대구광역시 중구 동성로 2길 80',
+        '053-5678-9012',
+        '정상',
+        '04'
+    ),
+    (
+        'THR006',
+        '시네맥스 인천점',
+        '인천광역시 중구 제물량로 266',
+        '032-6789-0123',
+        '정상',
+        '02'
+    ),
+    (
+        'THR007',
+        '시네맥스 분당점',
+        '경기도 성남시 분당구 정자로 178',
+        '031-7890-1234',
+        '정상',
+        '08'
+    ),
+    (
+        'THR008',
+        '시네맥스 대전점',
+        '대전광역시 중구 중앙로 100',
+        '042-8901-2345',
+        '정상',
+        '03'
+    );
+
+-- Screen 데이터 삽입
+INSERT IGNORE INTO
+    screen (
+        screencd,
+        screenname,
+        screentype,
+        allseat,
+        reservationseat,
+        screenstatus,
+        cinemacd
+    )
+VALUES (
+        'SCR001',
+        '1관',
+        '2D',
+        120,
+        0,
+        '운영중',
+        'THR001'
+    ),
+    (
+        'SCR002',
+        '1관',
+        '3D',
+        90,
+        10,
+        '운영중',
+        'THR001'
+    ),
+    (
+        'SCR003',
+        '1관',
+        'IMAX',
+        150,
+        0,
+        '운영중',
+        'THR002'
+    ),
+    (
+        'SCR004',
+        '1관',
+        '4DX',
+        100,
+        5,
+        '운영중',
+        'THR002'
+    ),
+    (
+        'SCR005',
+        '2관',
+        '2D',
+        110,
+        0,
+        '운영중',
+        'THR003'
+    ),
+    (
+        'SCR006',
+        '2관',
+        '3D',
+        95,
+        0,
+        '운영중',
+        'THR003'
+    ),
+    (
+        'SCR007',
+        '2관',
+        'IMAX',
+        130,
+        20,
+        '운영중',
+        'THR004'
+    ),
+    (
+        'SCR008',
+        '2관',
+        '4DX',
+        85,
+        0,
+        '운영중',
+        'THR004'
+    ),
+    (
+        'SCR009',
+        '3관',
+        '2D',
+        115,
+        0,
+        '운영중',
+        'THR005'
+    ),
+    (
+        'SCR010',
+        '3관',
+        '3D',
+        80,
+        15,
+        '운영중',
+        'THR005'
+    ),
+    (
+        'SCR011',
+        '4관',
+        '2D',
+        105,
+        0,
+        '운영중',
+        'THR006'
+    ),
+    (
+        'SCR012',
+        '3관',
+        '4DX',
+        90,
+        0,
+        '운영중',
+        'THR006'
+    ),
+    (
+        'SCR013',
+        '3관',
+        'IMAX',
+        140,
+        0,
+        '운영중',
+        'THR007'
+    ),
+    (
+        'SCR014',
+        '5관',
+        '2D',
+        100,
+        5,
+        '운영중',
+        'THR007'
+    ),
+    (
+        'SCR015',
+        '4관',
+        '3D',
+        95,
+        0,
+        '운영중',
+        'THR008'
+    );
 
 -- -- Movie 데이터 삽입
 -- INSERT IGNORE INTO
@@ -530,19 +530,19 @@ FROM numbers WHERE n <= 15;
 -- 7일 × 20개씩 스케줄 데이터 생성
 INSERT IGNORE INTO schedule (schedulecd, moviecd, screencd, startdate, starttime, endtime)
 SELECT
-CONCAT('SCH', LPAD((d.n - 1) * 20 + s.n, 4, '0')) AS schedulecd,
-(SELECT moviecd FROM movie ORDER BY RAND() LIMIT 1) AS moviecd,
-(SELECT screencd FROM screen ORDER BY RAND() LIMIT 1) AS screencd,
-DATE_ADD(CURRENT_DATE(), INTERVAL (d.n - 1) DAY) AS startdate,
-SEC_TO_TIME(FLOOR(RAND() * (12 * 3600)) + (8 * 3600)) AS starttime,
-ADDTIME(
-SEC_TO_TIME(FLOOR(RAND() * (12 * 3600)) + (8 * 3600)),
-SEC_TO_TIME(FLOOR(RAND() * 61 + 90) * 60 + 30 * 60)
-) AS endtime
+    CONCAT('SCH', LPAD((d.n - 1) * 20 + s.n, 4, '0')) AS schedulecd,
+    (SELECT moviecd FROM movie ORDER BY RAND() LIMIT 1) AS moviecd,
+    (SELECT screencd FROM screen ORDER BY RAND() LIMIT 1) AS screencd,
+    DATE_ADD(CURRENT_DATE(), INTERVAL (d.n - 1) DAY) AS startdate,
+    SEC_TO_TIME(FLOOR(RAND() * (12 * 3600)) + (8 * 3600)) AS starttime,
+    ADDTIME(
+        SEC_TO_TIME(FLOOR(RAND() * (12 * 3600)) + (8 * 3600)),
+        SEC_TO_TIME(FLOOR(RAND() * 61 + 90) * 60 + 30 * 60)
+    ) AS endtime
 FROM
-(SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7) d, -- 7일
-(SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
-UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20) s; -- 1일당 20개
+    (SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7) d, -- 7일
+    (SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+     UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20) s; -- 1일당 20개
 
 -- 4. 임시 테이블 삭제
 DROP TEMPORARY TABLE numbers;

@@ -180,19 +180,6 @@ export const getScreenView = async () => {
   }
 };
 
-// 상영관 상태 관리
-export const updateScreenStatus = async (screenData) => {
-  try {
-    const response = await api.put("/screens/statusupdate", {
-      screencd: screenData.screencd,
-      screenstatus: screenData.screenstatus,
-    });
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
 // 직원 목록 조회
 export const getStaffs = () =>
   api

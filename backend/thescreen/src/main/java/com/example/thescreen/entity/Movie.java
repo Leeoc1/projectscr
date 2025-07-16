@@ -40,6 +40,9 @@ public class Movie {
     @Column(length = 20)
     private String runningscreen;
 
+    @Column(length = 50, columnDefinition = "VARCHAR(50) DEFAULT 'N'")
+    private String movieinfo = "N";
+
     @Enumerated(EnumType.STRING)
     private IsAdult isadult;
 

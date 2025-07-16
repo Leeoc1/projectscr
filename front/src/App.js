@@ -18,6 +18,7 @@ import NoticeContents from "./pages/NoticePage/NoticeContentsPage/NoticeContents
 import { CheckoutPage } from "./pages/reservation/Payments/Chekout";
 import { SuccessPage } from "./pages/reservation/Payments/Success";
 import { FailPage } from "./pages/reservation/Payments/Fail";
+import MovieDetail from "./pages/MovieInfoPage/components/MovieDetail";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/movie" element={<MoviePage />} />
+        <Route path="/moviedetail" element={<MovieDetail />} />
         <Route path="/reservation" element={<ReservationMoviePage />} />
         <Route path="/theater" element={<TheaterPage />} />
         <Route path="/event" element={<EventPage />} />

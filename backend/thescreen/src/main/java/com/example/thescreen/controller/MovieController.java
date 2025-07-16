@@ -4,10 +4,14 @@ import com.example.thescreen.entity.Movie;
 import com.example.thescreen.repository.MovieRepository;
 import com.example.thescreen.service.MovieService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -194,5 +198,15 @@ public class MovieController {
         movie.setMovieinfo("D");
         
         return movieRepository.save(movie);
+    }
+
+
+
+    @PostMapping("/detail")
+    public ResponseEntity<Optional<Movie>> getMovieDetail(@RequestBody Map<String, Object> params) {
+        String moviecd = (String) params.get("movieno");
+        Optional<Movie> movie = movieRepository.findById(moviecd);
+
+        return new ResponseEntity<>(movie, HttpStatus.OK);
     }
 }

@@ -10,6 +10,15 @@ const api = axios.create({
 });
 
 // ========== 영화 관련 API (movie 테이블) ==========
+// 영화 상세 정보 조회
+export const getMovieDetail = async (moviecd) => {
+  try {
+    const response = await api.post("/movies/detail", { movieno: moviecd });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 // 관리자용 KOBIS 영화 데이터 가져오기 (movie 테이블에 저장)
 export const fetchMoviesFromKobis = () =>

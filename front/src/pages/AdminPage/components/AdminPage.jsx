@@ -3,14 +3,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 import SalesOverview from "./adminmain/SalesOverview";
 import StaffManagement from "./StaffManagement/StaffManagement";
 import UserManagement from "./UserManagement";
-import TheaterManagement from "./TheaterManagement";
 import MovieManagement from "./MovieManagement";
-import ScreenManagement from "./ScreenManagement";
 import ReservationManagement from "./ReservationManagement";
 import Inquiries from "./Inquiries";
 import EventManagement from "./EventManagement";
 import AdminSidebar from "./AdminSideBar";
 import AdminHeader from "./AdminHeader";
+import TheaterManagement from "./TheaterManagement/TheaterManagement";
+import { NotificationProvider } from "../../../contexts/NotificationContext";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("sales");
@@ -28,7 +28,6 @@ const AdminPage = () => {
       "users",
       "theaters",
       "movies",
-      "screens",
       "reservations",
       "inquiries",
       "events",
@@ -60,8 +59,6 @@ const AdminPage = () => {
         return <TheaterManagement />;
       case "movies":
         return <MovieManagement />;
-      case "screens":
-        return <ScreenManagement />;
       case "reservations":
         return <ReservationManagement />;
       case "inquiries":
@@ -74,13 +71,15 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="adp-dashboard">
-      <AdminHeader />
-      <div className="adp-layout">
-        <AdminSidebar activeTab={activeTab} setActiveTab={handleTabChange} />
-        <div className="adp-main">{renderContent()}</div>
+    <NotificationProvider>
+      <div className="adp-dashboard">
+        <AdminHeader />
+        <div className="adp-layout">
+          <AdminSidebar activeTab={activeTab} setActiveTab={handleTabChange} />
+          <div className="adp-main">{renderContent()}</div>
+        </div>
       </div>
-    </div>
+    </NotificationProvider>
   );
 };
 

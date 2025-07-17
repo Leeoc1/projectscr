@@ -1,80 +1,87 @@
 .progress-bar {
   width: 100%;
-  max-width: 980px;
-  background: #fff;
-  padding: 40px 0 40px 0;
-  border-radius: 8px;
-  box-sizing: border-box;
-  margin: 84px auto 0 auto; /* 헤더 높이(64px) + 추가 여백(20px) */
-  border: 1px solid #e0e0e0; /* 진행바에만 보더 추가 */
+  max-width: 1000px;
+  margin: 80px auto 0;
 }
 
-.progress-steps {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
+.card {
+  border: none;
+  background: #ffffff;
+}
+
+.progress-wrapper {
+  margin-bottom: 20px;
+}
+
+.progress-bar.bg-gradient {
+  background: linear-gradient(
+    90deg,
+    #4dabf7,
+    #0d6efd
+  ); /* 부드러운 그라디언트 */
+  transition: width 0.5s ease-in-out; /* 부드러운 애니메이션 */
+  box-shadow: 0 2px 4px rgba(13, 110, 253, 0.3); /* 그림자 강조 */
 }
 
 .progress-step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  position: relative;
-  z-index: 2;
-  margin: 0 50px;
-}
-
-.progress-step:first-child {
-  margin-left: 0;
-}
-
-.progress-step:last-child {
-  margin-right: 0;
+  flex: 1;
+  transition: all 0.3s ease;
+  z-index: 1;
 }
 
 .step-number {
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
-  background: #f3f4f6;
-  color: #6b7280;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 22px;
+  background: #e9ecef;
+  color: #6c757d;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 6px 12px;
   transition: all 0.3s ease;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
 }
 
 .step-title {
-  font-size: 16px;
-  color: #6b7280;
-  font-weight: 400;
-  text-align: center;
-  transition: all 0.3s ease;
-  line-height: 1.2;
+  color: #6c757d;
+  font-weight: 500;
+  max-width: 120px;
+  margin-left: 20px;
+  z-index: 10;
 }
 
 .progress-step.active .step-number {
-  background: #e91e63;
-  color: white;
+  background: #198754;
+  color: #fff;
+  transform: scale(1.1);
 }
 
 .progress-step.active .step-title {
-  color: #e91e63;
-  font-weight: 900;
-  font-size: 22px;
+  color: #198754;
+  font-weight: 600;
 }
 
 .progress-step.completed .step-number {
-  background: #e91e63;
-  color: white;
+  background: #0d6efd;
+  color: #fff;
 }
 
 .progress-step.completed .step-title {
-  color: #e91e63;
-  font-weight: 400;
-  font-size: 16px;
+  color: #0d6efd;
+}
+
+.progress-line {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  height: 4px;
+  background: #0d6efd;
+  /*진행중인색상*/
+  transition: width 0.5s ease-in-out;
+  /*진행바와동기화*/
+  z-index: 0;
+  -webkit-transition: width 0.5s ease-in-out;
+  -moz-transition: width 0.5s ease-in-out;
+  -ms-transition: width 0.5s ease-in-out;
+  -o-transition: width 0.5s ease-in-out;
 }

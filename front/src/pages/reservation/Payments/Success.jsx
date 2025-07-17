@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { saveReservation, savePayment } from "../../../api/api";
+import { saveReservation, savePayment } from "../../../api/reservationApi";
 
 export function SuccessPage() {
   const navigate = useNavigate();

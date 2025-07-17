@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { boxofficeMovies, upcomingMovies } from "../../../data/MoviesData.js";
-import { getCurrentMovies, getUpcomingMovies } from "../../../api/api.js";
+import { getCurrentMovies, getMoviesForAdmin } from "../../../api/movieApi";
 import "../styles/Movies.css";
 
 const Movies = () => {
@@ -39,10 +38,25 @@ const Movies = () => {
     const fetchMovies = async () => {
       try {
         const currentData = await getCurrentMovies();
-        const upcomingData = await getUpcomingMovies();
+        const adminData = await getMoviesForAdmin();
 
-        setCurrentMovies(currentData);
-        setUpcomingMoviesData(upcomingData);
+        // 관리자 API에서 상영예정작(movieinfo === "E") 필터링
+        const upcomingData = adminData.currentMovies.filter(
+          (movie) => movie.movieinfo === "E"
+        );
+
+        // releasedate 기준 최신순(내림차순) 정렬
+        const sortedCurrent = currentData.slice().sort((a, b) => {
+          // releasedate가 YYYY-MM-DD 형식이라고 가정
+          return new Date(b.releasedate) - new Date(a.releasedate);
+        });
+
+        const sortedUpcoming = upcomingData.slice().sort((a, b) => {
+          return new Date(a.releasedate) - new Date(b.releasedate); // 개봉예정일 빠른 순
+        });
+
+        setCurrentMovies(sortedCurrent);
+        setUpcomingMoviesData(sortedUpcoming);
       } catch (error) {
         console.error("영화 데이터 로딩 실패:", error);
       }
@@ -50,6 +64,11 @@ const Movies = () => {
 
     fetchMovies();
   }, []);
+
+  // 영화 상세 정보 페이지로 이동
+  const goMovieDetail = (moviecd) => {
+    navigate(`/moviedetail?movieno=${moviecd}`);
+  };
 
   return (
     <div className="mvs-section">
@@ -79,7 +98,12 @@ const Movies = () => {
                   <img src={movie.posterurl} alt={movie.movienm} />
                   <div className="mvs-overlay">
                     <div className="mvs-buttons">
-                      <button className="mvs-btn">상세정보</button>
+                      <button
+                        className="mvs-btn"
+                        onClick={() => goMovieDetail(movie.moviecd)}
+                      >
+                        상세정보
+                      </button>
                       <button
                         className="mvs-btn"
                         onClick={() => handleReservationClick(movie)}
@@ -100,20 +124,31 @@ const Movies = () => {
               </div>
             ))
           : upcomingMoviesData.map((movie) => (
-              <div className="mvs-card" key={movie.id}>
+              <div className="mvs-card" key={movie.moviecd}>
                 <div className="mvs-poster">
-                  <img src={movie.poster} alt={movie.title} />
+                  <img
+                    src={movie.posterurl || "/images/movie.jpg"}
+                    alt={movie.movienm}
+                  />
                   <div className="mvs-overlay">
                     <div className="mvs-buttons">
-                      <button className="mvs-btn">상세정보</button>
+                      <button
+                        className="mvs-btn"
+                        onClick={() => goMovieDetail(movie.moviecd)}
+                      >
+                        상세정보
+                      </button>
                     </div>
                   </div>
                 </div>
                 <div className="mvs-info">
-                  <h3 className="mvs-title">{movie.title}</h3>
+                  <h3 className="mvs-title">{movie.movienm}</h3>
                   <p className="mvs-genre">{movie.genre}</p>
+                  <p className="mvs-rating">
+                    {movie.isadult === "Y" ? "청소년 관람불가" : "전체 관람가"}
+                  </p>
                   <p className="mvs-release">
-                    개봉 예정일: {movie.releaseDate}
+                    개봉 예정일: {movie.releasedate}
                   </p>
                 </div>
               </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../../shared/Header";
-import { saveReservation } from "../../../api/api";
+import { saveReservation } from "../../../api/reservationApi";
 import ProgressBar from "./ProgressBar";
 import "../style/ReservationPaymentPage.css";
 

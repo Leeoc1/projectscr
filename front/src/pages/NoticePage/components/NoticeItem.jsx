@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const NoticeItem = ({ item, index, type, isExpanded, onToggle }) => {
   const navigate = useNavigate();
   const isFaq = type === 'faq';
+  const isReview = type === 'review';
 
   const handleClick = () => {
     if (isFaq) {
@@ -21,16 +22,28 @@ const NoticeItem = ({ item, index, type, isExpanded, onToggle }) => {
 
   return (
     <div
-      className={`notice-item ${isFaq ? 'faq-item' : ''}`}
+      className={`notice-item ${isFaq ? 'faq-item' : ''} ${isReview ? 'review-item' : ''}`}
       onClick={isFaq ? handleClick : undefined}
       style={{ cursor: isFaq ? 'pointer' : 'default' }}
     >
       <div className="notice-number">
-        {isFaq ? `Q${index + 1}` : index + 1}
+        {isFaq ? `Q${index + 1}` : isReview ? `R${index + 1}` : index + 1}
       </div>
       
       <div className="notice-content">
-        {isFaq ? (
+        {isReview ? (
+          <div className="review-content">
+            <div className="notice-title">{item.movienm}</div>
+            <div className="review-user">작성자: {item.userid}</div>
+            <div className="review-rating">
+              평점: {item.rating || 10}/10점
+            </div>
+            <div className="review-text">{item.reviewcontent}</div>
+            {item.likes > 0 && (
+              <div className="review-likes">👍 {item.likes}</div>
+            )}
+          </div>
+        ) : isFaq ? (
           <div className="faq-content">
             <div className="notice-title">{item.faqsub}</div>
             {isExpanded && item.faqcontents && (
@@ -54,7 +67,7 @@ const NoticeItem = ({ item, index, type, isExpanded, onToggle }) => {
       </div>
       
       <div className="notice-date">
-        {formatDate(item.faqdate || item.noticedate)}
+        {formatDate(item.faqdate || item.noticedate || item.reviewdate)}
       </div>
     </div>
   );

@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCurrentMovies } from "../../../api/api";
+import { getCurrentMovies, getTopTenMovies } from "../../../api/movieApi";
 import "../styles/MovieChart.css";
 
 const MovieChart = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [movies, setMovies] = useState([]);
+  const [movieRank, setMovieRank] = useState([]);
   const sliderRef = useRef(null);
   const cardWidth = 180; // 카드 1장 width(px)
   const gap = 20; // 카드 사이 gap(px)
@@ -14,19 +14,17 @@ const MovieChart = () => {
   // API에서 영화 데이터 가져오기
   useEffect(() => {
     const fetchMovies = async () => {
-      const currentMovies = await getCurrentMovies();
-      // 상위 10개 영화만 필터링 (rank 정보가 없으므로 처음 10개)
-      const top10Movies = currentMovies.slice(0, 10).map((movie, index) => ({
-        ...movie,
-        rank: index + 1,
-      }));
-      setMovies(top10Movies);
+      const top10Movies = await getTopTenMovies();
+      // movierank 오름차순 정렬
+      const sorted = [...top10Movies].sort(
+        (a, b) => Number(a.movierank) - Number(b.movierank)
+      );
+      setMovieRank(sorted);
     };
-
     fetchMovies();
   }, []);
 
-  const totalCards = movies.length;
+  const totalCards = movieRank.length;
   const maxIndex = Math.ceil(totalCards / visibleCards) - 1;
 
   // Mouse drag state
@@ -139,7 +137,7 @@ const MovieChart = () => {
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
             >
-              {movies.map((movie) => (
+              {movieRank.map((movie) => (
                 <div
                   key={movie.moviecd}
                   className="mcs-movie-card"
@@ -162,7 +160,7 @@ const MovieChart = () => {
                             : "전체 관람가"}
                         </span>
                       </div>
-                      <span className="mcs-movie-rank">{movie.rank}</span>
+                      <span className="mcs-movie-rank">{movie.movierank}</span>
                     </div>
                   </div>
                 </div>

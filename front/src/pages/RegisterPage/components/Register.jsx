@@ -7,7 +7,7 @@ import {
   validatePasswordLength,
   validatePasswordStrength,
 } from "./RegisterValidation";
-import { isAvailableUserId, registerUser } from "../../../api/api";
+import { isAvailableUserId, registerUser } from "../../../api/userApi";
 
 const Register = () => {
   // 네이버 로그인 시 회원정보 없을 때 넘어옴

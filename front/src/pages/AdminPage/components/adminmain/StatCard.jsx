@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { getTotalVolume, getReservation } from "../../../../api/api";
+import { getTotalVolume, getReservation } from "../../../../api/reservationApi";
 
 const StatCard = ({ title, value, change, isNegative = false, onClick }) => {
 

@@ -27,16 +27,24 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
 
     // 중복 체크 및 조회
     boolean existsByMovienmAndReleasedate(String movienm, LocalDate releasedate);
+
     Movie findByMovienmAndReleasedate(String movienm, LocalDate releasedate);
 
     // moviecd, movienm 추출 프로젝션
     interface MovieCdNmList {
         String getMoviecd();
+
         String getMovienm();
     }
 
     @Query("SELECT MAX(m.releasedate) FROM Movie m")
     LocalDate findMaxReleasedate();
 
+    List<Movie> findByReleasedateBetween(LocalDate start, LocalDate end);
 
+    List<Movie> findByReleasedateAfter(LocalDate date);
+
+    List<Movie> findByReleasedateBefore(LocalDate date);
+
+    List<Movie> findByReleasedate(LocalDate date);
 }

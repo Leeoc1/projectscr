@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../styles/MovieDetail.css";
 import Header from "../../../shared/Header";
 import { useSearchParams } from "react-router-dom";
-import { getMovieDetail } from "../../../api/api";
+import { getMovieDetail } from "../../../api/movieApi";
 import { useNavigate } from "react-router-dom";
 
 export default function MovieDetail() {
@@ -57,90 +57,95 @@ export default function MovieDetail() {
     <div>
       <Header />
       {movie && (
-      <div className="mvd-movie-detail-page">
-        {/* Movie Detail Section */}
-        <section className="mvd-movie-detail-section">
-          <div className="mvd-container">
-            <div className="mvd-movie-content">
-              {/* Movie Poster */}
-              <div className="mvd-movie-poster">
-                <img src={movie.posterurl} alt={movie.movienm} />
-              </div>
-
-              {/* Movie Info */}
-              <div className="mvd-movie-info">
-                <h1 className="mvd-movie-title">{movie.movienm}</h1>
-                {/* <p className="mvd-movie-subtitle">{movieData.subtitle}</p> */}
-
-                <div className="mvd-movie-meta">
-                  <div className="mvd-meta-item">
-                    <span className="mvd-meta-label">개봉일</span>
-                    <span className="mvd-meta-value">
-                      {movie.releasedate}
-                    </span>
-                  </div>
-                  <div className="mvd-meta-item">
-                    <span className="mvd-meta-label">관람등급</span>
-                    <span className="mvd-meta-value">{movie.isadult}</span>
-                  </div>
-                  <div className="mvd-meta-item">
-                    <span className="mvd-meta-label">상영시간</span>
-                    <span className="mvd-meta-value">
-                      {movie.runningtime}
-                    </span>
-                  </div>
+        <div className="mvd-movie-detail-page">
+          {/* Movie Detail Section */}
+          <section className="mvd-movie-detail-section">
+            <div className="mvd-container">
+              <div className="mvd-movie-content">
+                {/* Movie Poster */}
+                <div className="mvd-movie-poster">
+                  <img src={movie.posterurl} alt={movie.movienm} />
                 </div>
 
-                <div className="mvd-movie-details">
-                  <div className="mvd-detail-row">
-                    <span className="mvd-detail-label">장르</span>
-                    <span className="mvd-detail-value">{movie.genre}</span>
-                  </div>
-                  <div className="mvd-detail-row">
-                    <span className="mvd-detail-label">감독</span>
-                    <span className="mvd-detail-value">
-                      {movie.director}
-                    </span>
-                  </div>
-                  <div className="mvd-detail-row">
-                    <span className="mvd-detail-label">출연</span>
-                    <span className="mvd-detail-value">{movie.actors}</span>
-                  </div>
-                </div>
+                {/* Movie Info */}
+                <div className="mvd-movie-info">
+                  <h1 className="mvd-movie-title">{movie.movienm}</h1>
+                  {/* <p className="mvd-movie-subtitle">{movieData.subtitle}</p> */}
 
-                <div className="mvd-movie-booking-info">
-                  <div className="mvd-booking-info-item">
-                    <span className="mvd-booking-info-label">실관람평</span>
-                    <span className="mvd-booking-info-value">9.8</span>
+                  <div className="mvd-movie-meta">
+                    <div className="mvd-meta-item">
+                      <span className="mvd-meta-label">개봉일</span>
+                      <span className="mvd-meta-value">
+                        {movie.releasedate}
+                      </span>
+                    </div>
+                    <div className="mvd-meta-item">
+                      <span className="mvd-meta-label">관람등급</span>
+                      <span className="mvd-meta-value">
+                        {movie.isadult === "Y"
+                          ? "청소년 관람불가"
+                          : "전체 관람가"}
+                      </span>
+                    </div>
+                    <div className="mvd-meta-item">
+                      <span className="mvd-meta-label">상영시간</span>
+                      <span className="mvd-meta-value">
+                        {movie.runningtime}분
+                      </span>
+                    </div>
                   </div>
-                  <div className="mvd-booking-info-item">
-                    <span className="mvd-booking-info-label">예매율</span>
-                    <span className="mvd-booking-info-value">2위</span>
-                  </div>
-                  <div className="mvd-booking-info-item">
-                    <span className="mvd-booking-info-label">누적관객수</span>
-                    <span className="mvd-booking-info-value">1,23명</span>
-                  </div>
-                </div>
 
-                <button className="mvd-booking-button" onClick={handleReservationClick}>
-                  예매하기
-                </button>
+                  <div className="mvd-movie-details">
+                    <div className="mvd-detail-row">
+                      <span className="mvd-detail-label">장르</span>
+                      <span className="mvd-detail-value">{movie.genre}</span>
+                    </div>
+                    <div className="mvd-detail-row">
+                      <span className="mvd-detail-label">감독</span>
+                      <span className="mvd-detail-value">{movie.director}</span>
+                    </div>
+                    <div className="mvd-detail-row">
+                      <span className="mvd-detail-label">출연</span>
+                      <span className="mvd-detail-value">{movie.actors}</span>
+                    </div>
+                  </div>
+
+                  <div className="mvd-movie-booking-info">
+                    <div className="mvd-booking-info-item">
+                      <span className="mvd-booking-info-label">실관람평</span>
+                      <span className="mvd-booking-info-value">9.8</span>
+                    </div>
+                    <div className="mvd-booking-info-item">
+                      <span className="mvd-booking-info-label">예매율</span>
+                      <span className="mvd-booking-info-value">2위</span>
+                    </div>
+                    <div className="mvd-booking-info-item">
+                      <span className="mvd-booking-info-label">누적관객수</span>
+                      <span className="mvd-booking-info-value">1,23명</span>
+                    </div>
+                  </div>
+
+                  <button
+                    className="mvd-booking-button"
+                    onClick={handleReservationClick}
+                  >
+                    예매하기
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Synopsis Section */}
-        <section className="mvd-synopsis-section">
-          <div className="mvd-container">
-            <h2 className="mvd-synopsis-title">줄거리</h2>
-            <div className="mvd-synopsis-content">
-              <p>{movie.description}</p>
+          {/* Synopsis Section */}
+          <section className="mvd-synopsis-section">
+            <div className="mvd-container">
+              <h2 className="mvd-synopsis-title">줄거리</h2>
+              <div className="mvd-synopsis-content">
+                <p>{movie.description}</p>
+              </div>
             </div>
-          </div>
-        </section>
-      </div>
+          </section>
+        </div>
       )}
     </div>
   );

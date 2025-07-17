@@ -324,17 +324,18 @@
 
 /* 선택기 컨테이너 */
 .selector-container {
-  width: 980px;
-  margin: 20px auto;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  box-sizing: border-box;
-  display: flex;
-  gap: 20px;
-  position: relative;
-  min-height: 600px;
+width: 980px;
+margin: 20px auto;
+background: #fff;
+border: 1px solid #ddd;
+border-radius: 8px;
+padding: 20px;
+box-sizing: border-box;
+display: flex;
+gap: 20px;
+position: relative;
+min-height: 600px;
+align-items: stretch; /* 추가: 자식 높이 맞춤 */
 }
 
 .region-section {
@@ -349,14 +350,15 @@
 }
 
 .screen-section {
-  min-width: 0;
-  flex: 1;
-  position: relative;
-  background: #fff;
-  border-radius: 0 0 8px 0;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+min-width: 0;
+flex: 1;
+position: relative;
+background: #fff;
+border-radius: 0 0 8px 0;
+height: 100%;
+min-height: 600px; /* 부모와 동일하게 맞춤 */
+display: flex;
+flex-direction: column;
 }
 
 .theater-section::before,
@@ -368,6 +370,7 @@
   bottom: 0;
   width: 1px;
   background-color: #ddd;
+  height: 100%; /* 명시적으로 추가 */
 }
 
 .region-section h3,

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../../shared/Header";
 import ProgressBar from "./ProgressBar";
 import "../style/ReservationSeatPage.css";
-import { getReservationSeat } from "../../../api/api";
+import { getReservationSeat } from "../../../api/reservationApi";
 
 const ReservationSeatPage = () => {
   const navigate = useNavigate();
@@ -232,9 +232,9 @@ const ReservationSeatPage = () => {
                 </span>
               </div>
             </div>
-            <div className="total-guests">
+            {/* <div className="total-guests">
               <strong>총 인원: {totalGuests}명</strong>
-            </div>
+            </div> */}
           </div>
 
           {/* 좌석 선택 */}

@@ -1,42 +1,44 @@
 import React, { useEffect, useState } from "react";
-import { getSchedules, getReservationSeat } from "../../../../../api/api";
+import { getSchedules } from "../../../../../api/cinemaApi";
+import { getReservationSeat } from "../../../../../api/reservationApi";
 
 const ScreenSelectorMovie = () => {
   const [movieSchedule, setMovieSchedule] = useState([]);
   const [selectedStartTime, setSelectedStartTime] = useState(null);
   const [reservedSeatsCount, setReservedSeatsCount] = useState({});
 
-  // 상영 정보 가져오기
-  useEffect(() => {
-    const fetchSchedule = async () => {
-      const movienm = sessionStorage.getItem("movienm");
-      const selectedFullDate = sessionStorage.getItem("selectedFullDate");
-      const selectedTheater = sessionStorage.getItem("cinemanm");
-      
-      if (!movienm || !selectedFullDate || !selectedTheater) {
-        setMovieSchedule([]);
-        return;
-      }
+  // // 상영 정보 가져오기
+  // useEffect(() => {
+  //   const fetchSchedule = async () => {
+  //     const movienm = sessionStorage.getItem("movienm");
+  //     const selectedFullDate = sessionStorage.getItem("selectedFullDate");
+  //     const selectedTheater = sessionStorage.getItem("cinemanm");
 
-      const selectedSchedule = await getSchedules();
-      
-      const filteredSchedules = selectedSchedule.filter((schedule) => {
-        return (
-          schedule.movienm === movienm &&
-          schedule.startdate === selectedFullDate &&
-          schedule.cinemanm === selectedTheater
-        );
-      });
+  //     if (!movienm || !selectedFullDate || !selectedTheater) {
+  //       setMovieSchedule([]);
+  //       return;
+  //     }
 
-      // 상영 시간순으로 정렬
-      filteredSchedules.sort(
-        (a, b) => new Date(a.starttime) - new Date(b.starttime)
-      );
-      setMovieSchedule(filteredSchedules);
-    };
+  //     const selectedSchedule = await getSchedules();
 
-    fetchSchedule();
-  }, []);
+  //     const filteredSchedules = selectedSchedule.filter((schedule) => {
+  //       return (
+  //         schedule.movienm === movienm &&
+  //         schedule.startdate === selectedFullDate &&
+  //         schedule.cinemanm === selectedTheater &&
+  //         schedule.screenstatus === "운영중"
+  //       );
+  //     });
+
+  //     // 상영 시간순으로 정렬
+  //     filteredSchedules.sort(
+  //       (a, b) => new Date(a.starttime) - new Date(b.starttime)
+  //     );
+  //     setMovieSchedule(filteredSchedules);
+  //   };
+
+  //   fetchSchedule();
+  // }, []);
 
   // 세션 스토리지 변경 감지
   useEffect(() => {
@@ -44,16 +46,17 @@ const ScreenSelectorMovie = () => {
       const movienm = sessionStorage.getItem("movienm");
       const selectedFullDate = sessionStorage.getItem("selectedFullDate");
       const selectedTheater = sessionStorage.getItem("cinemanm");
-      
+
       if (movienm && selectedFullDate && selectedTheater) {
         const fetchSchedule = async () => {
           const selectedSchedule = await getSchedules();
-          
+
           const filteredSchedules = selectedSchedule.filter((schedule) => {
             return (
               schedule.movienm === movienm &&
               schedule.startdate === selectedFullDate &&
-              schedule.cinemanm === selectedTheater
+              schedule.cinemanm === selectedTheater &&
+              schedule.screenstatus === "운영중"
             );
           });
 
@@ -62,7 +65,7 @@ const ScreenSelectorMovie = () => {
             (a, b) => new Date(a.starttime) - new Date(b.starttime)
           );
           setMovieSchedule(filteredSchedules);
-          
+
           // 상영관이 변경되면 선택된 시간 초기화
           setSelectedStartTime(null);
         };
@@ -75,14 +78,17 @@ const ScreenSelectorMovie = () => {
     handleSessionStorageChange();
 
     // storage 이벤트 리스너 추가
-    window.addEventListener('storage', handleSessionStorageChange);
-    
+    window.addEventListener("storage", handleSessionStorageChange);
+
     // 커스텀 이벤트 리스너 추가 (다른 컴포넌트에서 발생하는 이벤트)
-    window.addEventListener('sessionStorageChange', handleSessionStorageChange);
+    window.addEventListener("sessionStorageChange", handleSessionStorageChange);
 
     return () => {
-      window.removeEventListener('storage', handleSessionStorageChange);
-      window.removeEventListener('sessionStorageChange', handleSessionStorageChange);
+      window.removeEventListener("storage", handleSessionStorageChange);
+      window.removeEventListener(
+        "sessionStorageChange",
+        handleSessionStorageChange
+      );
     };
   }, []);
 
@@ -96,11 +102,11 @@ const ScreenSelectorMovie = () => {
       movienm: sessionStorage.getItem("movienm"),
       screenname: schedule.screenname,
       schedulecd: schedule.schedulecd, // 예약 진행을 위해 schedulecd 추가
-      runningtime: schedule.runningtime, // 상영시간 
+      runningtime: schedule.runningtime, // 상영시간
       cinemanm: sessionStorage.getItem("cinemanm"),
     };
     sessionStorage.setItem("selectedMovieTime", JSON.stringify(timeData));
-    
+
     // 커스텀 이벤트 발생
     window.dispatchEvent(new CustomEvent("selectedMovieTimeChanged"));
   };
@@ -110,18 +116,20 @@ const ScreenSelectorMovie = () => {
     const fetchReservedSeats = async () => {
       const reservations = await getReservationSeat();
       const reservedCounts = {};
-      
-      reservations.forEach(reservation => {
+
+      reservations.forEach((reservation) => {
         const schedulecd = reservation.schedulecd;
-        const seatCount = reservation.seatcd ? reservation.seatcd.split(',').length : 0;
-        
+        const seatCount = reservation.seatcd
+          ? reservation.seatcd.split(",").length
+          : 0;
+
         if (reservedCounts[schedulecd]) {
           reservedCounts[schedulecd] += seatCount;
         } else {
           reservedCounts[schedulecd] = seatCount;
         }
       });
-      
+
       setReservedSeatsCount(reservedCounts);
     };
 
@@ -160,7 +168,8 @@ const ScreenSelectorMovie = () => {
                         {schedule.starttime.split(" ")[1]?.substring(0, 5)}
                       </div>
                       <div className="place-screen-time-seats">
-                        {reservedSeatsCount[schedule.schedulecd] || 0}/{schedule.allseat}
+                        {reservedSeatsCount[schedule.schedulecd] || 0}/
+                        {schedule.allseat}
                       </div>
                       <div className="place-screen-time-screen">
                         {schedule.screenname}

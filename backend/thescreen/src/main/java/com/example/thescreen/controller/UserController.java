@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @RestController
@@ -25,6 +26,17 @@ public class UserController {
         return userRepository.findAll();
     }
 
+    // 아이디 중복 체크
+    @PostMapping("/idcheck")
+    public ResponseEntity<Boolean> isAvailableUserId(@RequestBody Map<String, String> request) {
+        String userid = request.get("userid");
+        Optional<User> result = userRepository.findById(userid);
+
+        // 아이디가 없으면 true (사용 가능), 있으면 false (사용 불가)
+        return ResponseEntity.ok(!result.isPresent());
+    }
+
+    // 회원가입
     @PostMapping("/register")
     public User registerUser(@RequestBody Map<String, Object> userData) {
         try {

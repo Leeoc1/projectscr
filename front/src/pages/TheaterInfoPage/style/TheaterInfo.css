@@ -11,11 +11,24 @@
 
 .ti-reservation-button {
     padding: 12px 16px;
+    margin-right: 10px;
     border-radius: 10px;
     background-color: #fbbf24;
     border: none;
     cursor: pointer;
 }
 .ti-reservation-button:hover {
+    background-color: #f59e0b;
+}
+
+.ti-findroad-button {
+    padding: 12px 16px;
+    margin-right: 10px;
+    border-radius: 10px;
+    background-color: #fbbf24;
+    border: none;
+    cursor: pointer;
+}
+.ti-findroad-button:hover {
     background-color: #f59e0b;
 }

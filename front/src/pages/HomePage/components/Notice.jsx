@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../styles/Notice.css";
 import { useNavigate } from "react-router-dom";
-import { fetchAllNotices, fetchAllFaqs } from "../../../api/api";
+import { fetchAllNotices, fetchAllFaqs } from "../../../api/userApi";
 
 const Notice = () => {
   const navigate = useNavigate();

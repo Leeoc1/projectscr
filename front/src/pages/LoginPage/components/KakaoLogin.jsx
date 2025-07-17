@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { kakaoLogin, kakaoCallback } from "../../../api/api";
+import { kakaoLogin, kakaoCallback } from "../../../api/userApi";
 
 const KakaoLogin = () => {
     const navigate = useNavigate();

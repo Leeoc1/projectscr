@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../../shared/Header";
-import { getCurrentMovies } from "../../../api/api";
+import { getCurrentMovies } from "../../../api/movieApi";
 import "../style/ReservationPlacePage.css";
 import DateSelectorMovie from "../ReservationPage/tomovie/components/DateSelectorMovie";
 import TheaterSelector from "../ReservationPage/tomovie/components/TheaterSelector";

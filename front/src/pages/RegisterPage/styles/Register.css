@@ -17,8 +17,7 @@
   width: 100%;
   max-width: 550px;
   padding: 2.5rem;
-  max-height: 90vh;
-  /* overflow-y: auto; */
+  height: 100%;
 }
 
 .rg-signup-header {
@@ -102,7 +101,7 @@
 }
 
 .rg-validation-message {
-  margin-top: 0.5rem;
+  margin: 0.5rem 0;
   font-size: 0.875rem;
   font-weight: 500;
 }

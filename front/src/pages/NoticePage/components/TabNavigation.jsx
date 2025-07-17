@@ -4,6 +4,12 @@ const TabNavigation = ({ activeTab, onTabChange }) => {
   return (
     <div className="tab-navigation">
       <button 
+        className={`tab-button ${activeTab === 'review' ? 'active' : ''}`}
+        onClick={() => onTabChange('review')}
+      >
+        리뷰
+      </button>
+      <button 
         className={`tab-button ${activeTab === 'notice' ? 'active' : ''}`}
         onClick={() => onTabChange('notice')}
       >

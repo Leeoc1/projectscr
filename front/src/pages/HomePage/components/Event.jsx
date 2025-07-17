@@ -1,4 +1,4 @@
-import { eventsData } from "../../../data/mockData.js";
+import { eventsData } from "../../../data/EventPageData.js";
 import "../styles/Event.css";
 
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getReservationSeat, getSchedules } from "../../../../../api/api";
+import { getReservationSeat } from "../../../../../api/reservationApi";
+import { getSchedules } from "../../../../../api/cinemaApi";
 
 const ScreenSelector = () => {
   const [selectedMovieName, setSelectedMovieName] = useState(
@@ -26,6 +27,7 @@ const ScreenSelector = () => {
           return (
             schedule.movienm === selectedMovieName &&
             schedule.startdate === selectedDate &&
+            schedule.screenstatus === "운영중" &&
             schedule.cinemanm === sessionStorage.getItem("cinemanm")
           );
         });

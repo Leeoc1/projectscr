@@ -8,6 +8,7 @@ import {
   validatePasswordStrength,
 } from "./RegisterValidation";
 import { isAvailableUserId, registerUser } from "../../../api/userApi";
+import logoImg from "../../../images/logo_2.png";
 
 const Register = () => {
   // 네이버 로그인 시 회원정보 없을 때 넘어옴
@@ -219,7 +220,13 @@ const Register = () => {
     <div className="rg-signup-page">
       <div className="rg-signup-container">
         <div className="rg-signup-header">
-          <h1 className="rg-signup-title">CineMax</h1>
+          <img
+            src={logoImg}
+            alt="logo"
+            className="l-logo-img"
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate("/")}
+          />
           <p className="rg-signup-subtitle">회원가입</p>
         </div>
 

@@ -425,3 +425,28 @@
     font-size: 0.8rem;
   }
 }
+
+/* 좌석 범례 스타일 */
+.seat-legend {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-color {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.legend-color.reserved {
+  color: #ccc;
+}

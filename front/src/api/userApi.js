@@ -5,11 +5,11 @@ import { api, apiRequest, apiRequestWithErrorHandling } from "./apiUtils";
 // 전체 사용자 목록 조회 (users 테이블)
 export const getAllUsers = () =>
   apiRequestWithErrorHandling(
-    "get", 
-    "/users/list", 
-    null, 
-    {}, 
-    "Error fetching users:", 
+    "get",
+    "/users/list",
+    null,
+    {},
+    "Error fetching users:",
     []
   );
 
@@ -23,16 +23,26 @@ export const registerUser = async (userData) => {
   return await apiRequest("post", "/users/register", userData);
 };
 
+// 사용자 정보 조회 (users 테이블)
+export const getUserInfo = async (userid) => {
+  return await apiRequest("get", `/users/info/${userid}`);
+};
+
+// 사용자별 예약 정보 조회 (users 테이블)
+export const getUserReservations = async (userid) => {
+  return await apiRequest("get", `/users/${userid}/reservations`);
+};
+
 // ========== 직원 관리 API (staff 테이블) ==========
 
 // 직원 목록 조회 (staff 테이블)
 export const getStaffs = () =>
   apiRequestWithErrorHandling(
-    "get", 
-    "/staff", 
-    null, 
-    {}, 
-    "Error fetching staffs:", 
+    "get",
+    "/staff",
+    null,
+    {},
+    "Error fetching staffs:",
     []
   );
 
@@ -51,22 +61,22 @@ export const addStaff = async (staffData) => {
 // 공지사항 전체 조회 (notice 테이블)
 export const fetchAllNotices = () =>
   apiRequestWithErrorHandling(
-    "get", 
-    "/api/notice/notice", 
-    null, 
-    {}, 
-    "Error fetching notices:", 
+    "get",
+    "/api/notice/notice",
+    null,
+    {},
+    "Error fetching notices:",
     []
   );
 
 // FAQ 전체 조회 (faq 테이블)
 export const fetchAllFaqs = () =>
   apiRequestWithErrorHandling(
-    "get", 
-    "/api/faq/faq", 
-    null, 
-    {}, 
-    "Error fetching faqs:", 
+    "get",
+    "/api/faq/faq",
+    null,
+    {},
+    "Error fetching faqs:",
     []
   );
 
@@ -172,7 +182,10 @@ export const naverLogin = async () => {
 // 네이버 로그인 콜백 처리 (외부 네이버 API, users 테이블에 저장)
 export const naverLoginCallback = async (code, state) => {
   try {
-    const response = await apiRequest("post", `/login/naver/callback?code=${code}&state=${state}`);
+    const response = await apiRequest(
+      "post",
+      `/login/naver/callback?code=${code}&state=${state}`
+    );
     return response;
   } catch (error) {
     console.error("네이버 로그인 콜백 처리 실패:", error);
@@ -208,11 +221,11 @@ export const createReview = (reviewData) => {
 // 리뷰 목록 조회
 export const fetchAllReviews = () => {
   return apiRequestWithErrorHandling(
-    "get", 
-    "/api/review/review", 
-    null, 
-    {}, 
-    "리뷰 목록 조회 실패:", 
+    "get",
+    "/api/review/review",
+    null,
+    {},
+    "리뷰 목록 조회 실패:",
     []
   );
 };

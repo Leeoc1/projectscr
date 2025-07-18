@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Header.css";
+import logoImg from "../images/logo_1.png";
+import { getUserInfo } from "../api/userApi";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,6 +14,46 @@ export default function Header() {
     localStorage.getItem("isLoggedIn") === "true"
   );
   const [userid, setUserid] = useState(localStorage.getItem("userid") || "");
+  const [username, setUsername] = useState(""); // DB에서 가져올 username
+
+  // 로그인 상태 변화 감지 및 사용자 정보 로드
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const storedIsLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+      const storedUserid = localStorage.getItem("userid") || "";
+
+      setIsLoggedIn(storedIsLoggedIn);
+      setUserid(storedUserid);
+
+      // 로그인 상태이고 userid가 있으면 DB에서 username 조회
+      if (storedIsLoggedIn && storedUserid) {
+        try {
+          const userInfo = await getUserInfo(storedUserid);
+          setUsername(userInfo.username || storedUserid); // username이 없으면 userid 사용
+        } catch (error) {
+          // API 실패 시 localStorage의 username 사용 (카카오 로그인 등)
+          const storedUsername =
+            localStorage.getItem("username") || storedUserid;
+          setUsername(storedUsername);
+        }
+      } else {
+        setUsername("");
+      }
+    };
+
+    checkLoginStatus();
+
+    // localStorage 변화 감지
+    const handleStorageChange = () => {
+      checkLoginStatus();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,10 +78,37 @@ export default function Header() {
 
   // 로그아웃 핸들러
   const handleLogout = () => {
+    // 기본 로그인 정보 제거
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("userid");
+    localStorage.removeItem("username");
+
+    // 카카오 로그인 관련 데이터 제거
+    localStorage.removeItem("loginType");
+    sessionStorage.removeItem("loginType");
+
+    // 토스페이먼츠 관련 데이터 제거
+    localStorage.removeItem("@tosspayments/merchant-browser-id");
+    localStorage.removeItem(
+      "@tosspayments/payment-widget-previous-payment-method-id"
+    );
+
+    // 추가 보안을 위해 다른 사용자 관련 데이터도 제거
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("authData");
+
+    // 세션 스토리지 전체 정리
+    sessionStorage.clear();
+
+    // 상태 초기화
     setIsLoggedIn(false);
     setUserid("");
+    setUsername("");
+
+    // 홈페이지로 리다이렉트
     navigate("/");
   };
 
@@ -49,11 +118,7 @@ export default function Header() {
         <div className={`h-header-content ${isScrolled ? "h-scrolled" : ""}`}>
           {/* Logo */}
           <div className="h-logo-container" onClick={goHome}>
-            <div className="h-logo-icon">🍿</div>
-            <div className="h-logo-text">
-              <div className="h-logo-line">The</div>
-              <div className="h-logo-line">Screen</div>
-            </div>
+            <img src={logoImg} alt="logo" className="h-logo-img" />
           </div>
 
           {/* Navigation - Shows when scrolled */}
@@ -77,16 +142,18 @@ export default function Header() {
             <button className="h-admin-btn" onClick={goAdmin}>
               admin
             </button>
-            <button className="h-notice-btn" onClick={goNotice}>
-              공지사항
-            </button>
             {isLoggedIn ? (
               <>
+                <div className="h-user-profile" onClick={goMyPage}>
+                  <img
+                    src="https://img.megabox.co.kr/static/pc/images/common/ico/ico-mymega.png"
+                    alt="User Icon"
+                    className="h-user-icon-img"
+                  />
+                  <span className="h-username">{username || userid}님</span>
+                </div>
                 <button className="h-logout-btn" onClick={handleLogout}>
                   로그아웃
-                </button>
-                <button className="h-mypage-btn" onClick={goMyPage}>
-                  {userid}
                 </button>
               </>
             ) : (
@@ -96,6 +163,9 @@ export default function Header() {
                 </button>
                 <button className="h-signup-btn" onClick={goRegister}>
                   회원가입
+                </button>
+                <button className="h-notice-btn" onClick={goNotice}>
+                  공지사항
                 </button>
               </>
             )}

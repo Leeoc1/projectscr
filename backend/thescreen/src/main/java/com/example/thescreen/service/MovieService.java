@@ -152,20 +152,22 @@ public class MovieService {
 
         // 완전 일치 또는 포함 관계 체크
         return cleanKobis.equals(cleanKmdb) ||
-               cleanKmdb.contains(cleanKobis) ||
-               cleanKobis.contains(cleanKmdb);
+                cleanKmdb.contains(cleanKobis) ||
+                cleanKobis.contains(cleanKmdb);
     }
 
     /**
-     * KOBIS에서 2025년 개봉 영화 목록을 가져와 DB 저장 후 반환
+     * KOBIS에서 오늘 이후 개봉 영화 목록을 가져와 DB 저장 후 반환
      */
     @Transactional
     public List<Movie> saveDailyBoxOffice() {
-        String openStartDt = "2025";
+        // 오늘 날짜 이후부터 올해 말까지
+        LocalDate today = LocalDate.now();
+        String openStartDt = "2025"; // KOBIS는 yyyy 형식만 지원
         String openEndDt = "2025";
         int itemPerPage = 100; // KOBIS API 최대 100개까지 가능
         int curPage = 1;
-        int totalToFetch = 200;
+        int totalToFetch = 50;
 
         List<Movie> savedMovies = new ArrayList<>();
         int totalFetched = 0;
@@ -173,23 +175,29 @@ public class MovieService {
         while (totalFetched < totalToFetch) {
             String kobisUrl = String.format(
                     "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=%s&openStartDt=%s&openEndDt=%s&itemPerPage=%d&curPage=%d",
-                    kobisApiKey, openStartDt, openEndDt, itemPerPage, curPage
-            );
+                    kobisApiKey, openStartDt, openEndDt, itemPerPage, curPage);
 
             try {
                 String response = restTemplate.getForObject(kobisUrl, String.class);
                 JsonNode root = objectMapper.readTree(response);
                 JsonNode movieList = root.path("movieListResult").path("movieList");
 
-                if (movieList.isEmpty()) break;
+                if (movieList.isEmpty())
+                    break;
 
                 for (JsonNode movieNode : movieList) {
-                    if (totalFetched >= totalToFetch) break;
+                    if (totalFetched >= totalToFetch)
+                        break;
 
                     String movieCd = movieNode.path("movieCd").asText();
                     String movieNm = movieNode.path("movieNm").asText();
                     String openDt = movieNode.path("openDt").asText();
                     LocalDate releaseDate = openDt.isBlank() ? null : parseReleaseDate(openDt);
+
+                    // 오늘 이후 개봉 영화만 처리
+                    if (releaseDate == null || releaseDate.isBefore(today.plusDays(1))) {
+                        continue;
+                    }
 
                     if (releaseDate != null && movieRepository.existsByMovienmAndReleasedate(movieNm, releaseDate)) {
                         savedMovies.add(movieRepository.findByMovienmAndReleasedate(movieNm, releaseDate));
@@ -200,8 +208,7 @@ public class MovieService {
                     // KOBIS 상세 정보
                     String kobisInfoUrl = String.format(
                             "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=%s&movieCd=%s",
-                            kobisApiKey, movieCd
-                    );
+                            kobisApiKey, movieCd);
                     String kobisInfoResponse = restTemplate.getForObject(kobisInfoUrl, String.class);
                     JsonNode movieInfo = objectMapper.readTree(kobisInfoResponse)
                             .path("movieInfoResult").path("movieInfo");
@@ -228,8 +235,7 @@ public class MovieService {
                     String releaseDts = parseReleaseDateForKmdb(openDt);
                     String kmdbUrl = String.format(
                             "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&ServiceKey=%s&query=%s&releaseDts=%s&releaseDte=%s",
-                            kmdbApiKey, movieNm, releaseDts, releaseDts
-                    );
+                            kmdbApiKey, movieNm, releaseDts, releaseDts);
 
                     String description = null;
                     String posterUrl = null;

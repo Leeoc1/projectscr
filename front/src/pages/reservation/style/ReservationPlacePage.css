@@ -71,6 +71,38 @@
   margin: 0;
 }
 
+.selected-movie-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 4px 0 0 0;
+}
+
+.rpp-age-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 20px;
+  border-radius: 3px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: white;
+}
+
+.rpp-age-19 {
+  background-color: #dc2626;
+}
+
+.rpp-age-all {
+  background-color: #059669;
+}
+
+.rpp-rating-text {
+  font-size: 16px;
+  color: #666;
+}
+
 /* 영화가 선택되지 않았을 때 표시되는 메시지 */
 .no-movie-selected {
   display: flex;

@@ -1,22 +1,20 @@
-/* Theater Grid */
+/* thm-theater-grid가 display: grid일 때 드롭다운이 한 줄 전체를 차지하도록 */
 .thm-theater-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 1.5rem;
-  overflow-y: auto;
-  max-height: 650px;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 30px; /* 위아래 20px, 좌우 12px */
 }
 
 /* 카드에 상대 위치 지정 */
 .thm-theater-card {
   position: relative;
   background: white;
-  padding: 1.5rem;
+  padding: 1rem;
   border-radius: 0.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border: 1px solid #e2e8f0;
-  height: 150px;
-  width: 300px;
+  height: 200px;
+  width: 100%;
 }
 
 .thm-theater-card h3 {
@@ -48,7 +46,7 @@
 
 .thm-theater-detail-dropdown {
   grid-column: 1 / -1;
-  width: 92%;
+  width: 100%;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 0 0 8px 8px;
@@ -89,13 +87,6 @@
 
 .thm-theater-detail-screenscroll li:last-child {
   border-bottom: none;
-}
-
-/* thm-theater-grid가 display: grid일 때 드롭다운이 한 줄 전체를 차지하도록 */
-.thm-theater-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
 }
 
 /* 상영관 상태 뱃지 */
@@ -260,4 +251,107 @@
 
 .scm-status-option:active {
   background-color: #f3f4f6;
+}
+
+/* Theater Detail Content Layout */
+.thm-theater-detail-content {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.thm-theater-detail-section {
+  flex: 1;
+}
+
+.thm-theater-detail-section h5 {
+  margin: 0 0 1rem 0;
+  color: #1e293b;
+  font-size: 1rem;
+  font-weight: 600;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #3b82f6;
+}
+
+/* 가운데 구분선 */
+.thm-theater-detail-divider {
+  width: 1px;
+  background-color: #e2e8f0;
+  margin: 1.5rem 0;
+  flex-shrink: 0;
+}
+
+/* Theater Movies List - 상영관 목록과 동일한 스타일 적용 */
+.thm-theater-movies {
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem 1rem;
+}
+
+.thm-movies-list {
+  max-height: 150px;
+  min-height: 80px;
+  overflow-y: auto;
+}
+
+.thm-movies-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.thm-movie-list-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.97rem;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.thm-movie-list-item:last-child {
+  border-bottom: none;
+}
+
+.thm-movie-list-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.thm-movie-poster-inline {
+  flex-shrink: 0;
+}
+
+.thm-movie-poster-inline img {
+  width: 24px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 2px;
+  border: 1px solid #e2e8f0;
+}
+
+.thm-movie-details-inline {
+  flex: 1;
+  font-size: 0.97rem;
+  color: #334155;
+}
+
+.thm-movies-loading,
+.thm-no-movies {
+  text-align: center;
+  color: #64748b;
+  padding: 2rem 0;
+  font-size: 0.875rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .thm-theater-detail-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
 }

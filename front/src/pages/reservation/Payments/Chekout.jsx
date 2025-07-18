@@ -29,15 +29,17 @@ export function CheckoutPage() {
 
   useEffect(() => {
     const reservationInfo = JSON.parse(
-      // finalReservationInfo에서 결제 금액 가져오기
       sessionStorage.getItem("finalReservationInfo") || "{}"
     );
-    if (reservationInfo.totalPrice) {
-      setAmount({
-        currency: "KRW",
-        value: reservationInfo.totalPrice,
-      });
-    }
+    // finalPrice가 있으면 그 값을 사용, 없으면 totalPrice 사용
+    const price =
+      reservationInfo.finalPrice !== undefined
+        ? reservationInfo.finalPrice
+        : reservationInfo.totalPrice;
+    setAmount({
+      currency: "KRW",
+      value: price || 0,
+    });
     console.log("=== Checkout 페이지의 예약 정보 ===");
     console.log("전체 예약 정보:", reservationInfo);
     console.log("영화 제목:", reservationInfo.movienm);
@@ -48,7 +50,7 @@ export function CheckoutPage() {
     console.log("선택된 좌석:", reservationInfo.selectedSeats);
     console.log("인원 정보:", reservationInfo.guestCount);
     console.log("총 인원:", reservationInfo.totalGuests);
-    console.log("총 금액:", reservationInfo.totalPrice);
+    console.log("최종 결제 금액:", price);
     console.log("================================");
   }, []);
 
@@ -132,12 +134,9 @@ export function CheckoutPage() {
             className="button"
             style={{ marginTop: "30px" }}
             disabled={!ready}
-            // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
-            // @docs https://docs.tosspayments.com/sdk/v2/js#widgetsrequestpayment
             onClick={async () => {
               try {
-                // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
-                // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
+                // 결제 요청 시 amount.value(즉, finalPrice)로 결제
                 await widgets.requestPayment({
                   orderId: generateRandomString(),
                   orderName: "영화 예매",
@@ -146,9 +145,9 @@ export function CheckoutPage() {
                   customerEmail: "customer123@gmail.com",
                   customerName: "전요한",
                   customerMobilePhone: "01012341234",
+                  amount: amount.value,
                 });
               } catch (error) {
-                // 에러 처리하기
                 console.error(error);
               }
             }}

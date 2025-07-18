@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { events, winners } from "../../../data/EventPageData.js";
 import Header from "../../../shared/Header";
+import Footer from "../../../shared/Footer";
 import EventFilter from "./EventFilter";
 import EventCard from "./EventCard";
 import WinnerItem from "./WinnerItem";
@@ -37,17 +38,18 @@ const Event = () => {
               </div>
             </section>
 
-            <section className="evws-section">
+            {/* <section className="evws-section">
               <h2 className="evws-title">당첨자 발표</h2>
               <div className="evws-list">
                 {winners.map((winner) => (
                   <WinnerItem key={winner.id} winner={winner} />
                 ))}
               </div>
-            </section>
+            </section> */}
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

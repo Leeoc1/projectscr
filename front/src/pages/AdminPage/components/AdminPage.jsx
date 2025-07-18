@@ -10,6 +10,7 @@ import EventManagement from "./EventManagement";
 import AdminSidebar from "./AdminSideBar";
 import AdminHeader from "./AdminHeader";
 import TheaterManagement from "./TheaterManagement/TheaterManagement";
+import { NotificationProvider } from "../../../contexts/NotificationContext";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("sales");
@@ -70,13 +71,15 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="adp-dashboard">
-      <AdminHeader />
-      <div className="adp-layout">
-        <AdminSidebar activeTab={activeTab} setActiveTab={handleTabChange} />
-        <div className="adp-main">{renderContent()}</div>
+    <NotificationProvider>
+      <div className="adp-dashboard">
+        <AdminHeader />
+        <div className="adp-layout">
+          <AdminSidebar activeTab={activeTab} setActiveTab={handleTabChange} />
+          <div className="adp-main">{renderContent()}</div>
+        </div>
       </div>
-    </div>
+    </NotificationProvider>
   );
 };
 

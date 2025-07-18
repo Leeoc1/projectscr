@@ -31,7 +31,6 @@ const StaffManagement = () => {
         setStaffs(response);
       })
       .catch((error) => {
-        console.error("스탭 목록 불러오기 실패:", error);
         setStaffs([]);
       });
   }, []);
@@ -52,7 +51,7 @@ const StaffManagement = () => {
   };
 
   // 수정 버튼 누를 시 작동
-  // 선택된 직원, formData는 현재 선택된 직원의 정보로 초기화, 팝업 열기 
+  // 선택된 직원, formData는 현재 선택된 직원의 정보로 초기화, 팝업 열기
   const handleEditClick = (staff) => {
     setSelectedStaff(staff);
     setFormData({
@@ -71,12 +70,16 @@ const StaffManagement = () => {
     setIsPopupOpen(true);
   };
 
-
   return (
     <div className="adp-content">
       <div className="adp-header">
         <h2>직원 관리</h2>
-        <button className="adp-btn-primary" onClick={() => setIsAddPopupOpen(true)}>직원 추가</button>
+        <button
+          className="adp-btn-primary"
+          onClick={() => setIsAddPopupOpen(true)}
+        >
+          직원 추가
+        </button>
       </div>
 
       {isAddPopupOpen && (
@@ -141,7 +144,7 @@ const StaffManagement = () => {
 
       {/* 팝업 오버레이 */}
       {isPopupOpen && (
-        <StaffUpdatePopup 
+        <StaffUpdatePopup
           selectedStaff={selectedStaff}
           setIsPopupOpen={setIsPopupOpen}
           setSelectedStaff={setSelectedStaff}

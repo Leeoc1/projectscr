@@ -44,7 +44,6 @@ public class KakaoLoginController {
         }
         Map<String, String> response = new HashMap<>();
         response.put("redirectUrl", authorizationUrl);
-        System.out.println("Generated authorizationUrl: " + authorizationUrl);
         return response;
     }
 
@@ -68,7 +67,6 @@ public class KakaoLoginController {
             ResponseEntity<Map> tokenResponse = restTemplate.postForEntity(tokenUrl, tokenRequest, Map.class);
             Map<String, Object> tokenData = tokenResponse.getBody();
             String accessToken = (String) tokenData.get("access_token");
-            System.out.println("Access Token: " + accessToken);
 
             // 2. 토큰으로 사용자 정보 요청
             String userInfoUrl = "https://kapi.kakao.com/v2/user/me";
@@ -78,7 +76,6 @@ public class KakaoLoginController {
 
             ResponseEntity<Map> userInfoResponse = restTemplate.exchange(userInfoUrl, HttpMethod.GET, userInfoRequest, Map.class);
             Map<String, Object> userInfo = userInfoResponse.getBody();
-            System.out.println("User Info: " + userInfo);
 
             // 3. 사용자 정보 처리
             String userId = String.valueOf(userInfo.get("id"));
@@ -87,17 +84,14 @@ public class KakaoLoginController {
             // 4. 데이터베이스 확인
             if (userRepository.existsByUserid(userId)) {
                 // 기존 사용자: 로그인 처리
-                System.out.println("기존 사용자 로그인: " + userId + ", " + nickname);
                 HttpHeaders headers = new HttpHeaders();
-                headers.add("Location", "http://localhost:3000");
+                headers.add("Location", "http://localhost:3000/login?kakao_login=success&userid=" + userId + "&username=" + nickname);
                 return new ResponseEntity<>(headers, HttpStatus.FOUND);
             } else {
                 // 신규 사용자: 회원가입 처리
-                System.out.println("신규 사용자 처리: " + userId + ", " + nickname);
                 return registerUser(userId, nickname);
             }
         } catch (HttpClientErrorException e) {
-            System.out.println("카카오 로그인 에러: " + e.getMessage());
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("error", "카카오 로그인 실패: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
@@ -116,11 +110,10 @@ public class KakaoLoginController {
         newUser.setStatus("활성");
         newUser.setReg_date(LocalDate.now());
         userRepository.save(newUser);
-        System.out.println("신규 사용자 등록 완료: " + userId + ", " + nickname);
 
-        // 홈페이지로 리다이렉트
+        // 홈페이지로 리다이렉트 (사용자 정보 포함)
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "http://localhost:3000");
+        headers.add("Location", "http://localhost:3000/login?kakao_login=success&userid=" + userId + "&username=" + nickname);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 }

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import Header from "../../shared/Header";
+import Footer from "../../shared/Footer";
 import Movies from "./components/Movies";
 import "./styles/MoviePage.css";
 
@@ -23,6 +24,7 @@ const MoviePage = () => {
           <Movies />
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

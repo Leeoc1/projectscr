@@ -26,7 +26,6 @@ export const useSalesData = () => {
     const fetchReservation = async () => {
       try {
         const reservationView = await getReservation();
-        console.log("예약 데이터:", reservationView); // 디버깅용
 
         // 날짜 비교 로직 수정 - reservationtime이 LocalDateTime 형태이므로 날짜 부분만 추출
         const todayReservation = reservationView.filter((reservation) => {
@@ -40,9 +39,6 @@ export const useSalesData = () => {
           const reservationDate = reservation.reservationtime.split("T")[0];
           return reservationDate === yesterday;
         });
-
-        console.log("오늘 예약:", todayReservation); // 디버깅용
-        console.log("어제 예약:", yesterdayReservation); // 디버깅용
 
         //매출 계산
         const todayTotalVolume = todayReservation.reduce(
@@ -103,15 +99,38 @@ export const useSalesData = () => {
         //직원 수 계산 - 전체 직원 수
         const staffCount = await getStaffs();
         const todayStaffCount = staffCount.length; // 전체 직원 수
-        const yesterdayStaffCount = staffCount.length; // 임시로 같은 값 사용
+
+        // 어제까지 가입한 직원 수 계산
+        const yesterdayStaff = staffCount.filter((staff) => {
+          if (staff.hiredate) {
+            const staffDate = new Date(staff.hiredate);
+            const staffDateStr = staffDate.toISOString().split("T")[0];
+            return staffDateStr <= yesterday; // 어제까지 가입한 직원
+          }
+          return false;
+        });
+        const yesterdayStaffCount = yesterdayStaff.length;
+
+        // 직원 수 차이값 (오늘 - 어제)
+        const staffCountDifference = todayStaffCount - yesterdayStaffCount;
 
         //유저 수 계산 - 전체 사용자 수
         const userCount = await getAllUsers();
         const todayUserCount = userCount.length; // 전체 사용자 수
-        const yesterdayUserCount = userCount.length; // 임시로 같은 값 사용
 
-        console.log("오늘 매출:", todayTotalVolume); // 디버깅용
-        console.log("어제 매출:", yesterdayTotalVolume); // 디버깅용
+        // 어제까지 가입한 유저 수 계산
+        const yesterdayUsers = userCount.filter((user) => {
+          if (user.reg_date) {
+            const userDate = new Date(user.reg_date);
+            const userDateStr = userDate.toISOString().split("T")[0];
+            return userDateStr <= yesterday; // 어제까지 가입한 유저
+          }
+          return false;
+        });
+        const yesterdayUserCount = yesterdayUsers.length;
+
+        // 유저 수 차이값 (오늘 - 어제)
+        const userCountDifference = todayUserCount - yesterdayUserCount;
 
         setTotalVolume(todayTotalVolume);
         setIncreaseVolume(increaseVolume);
@@ -120,11 +139,11 @@ export const useSalesData = () => {
         setAveragePrice(averagePrice);
         setIncreaseAveragePrice(increaseAveragePrice);
         setStaffCount(todayStaffCount);
-        setIncreaseStaffCount(yesterdayStaffCount);
+        setIncreaseStaffCount(staffCountDifference);
         setUserCount(todayUserCount);
-        setIncreaseUserCount(yesterdayUserCount);
+        setIncreaseUserCount(userCountDifference);
       } catch (error) {
-        console.error("데이터 가져오기 오류:", error);
+        // 에러 처리
       }
     };
 

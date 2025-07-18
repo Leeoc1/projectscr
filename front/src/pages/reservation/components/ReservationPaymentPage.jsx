@@ -8,7 +8,37 @@ import "../style/ReservationPaymentPage.css";
 
 const ReservationPaymentPage = () => {
   const navigate = useNavigate();
-  const [activeStep, setActiveStep] = useState(null);
+  const [activeStep, setActiveStep] = useState(1);
+  const [coupon, setCoupon] = useState("none");
+  const [gift, setGift] = useState("none");
+
+  // 할인 금액 계산 (할인쿠폰)
+  const getDiscount1 = (coupon) => {
+    switch (coupon) {
+      case "welcome":
+        return 1000;
+      case "student":
+        return 2000;
+      case "senior":
+        return 3000;
+      default:
+        return 0;
+    }
+  };
+
+  // 할인 금액 계산 (관람권/기프트콘)
+  const getDiscount2 = (gift) => {
+    switch (gift) {
+      case "gift1":
+        return 10000;
+      case "gift2":
+        return 5000; // 팝콘+음료 세트 기프트콘
+      case "gift3":
+        return 20000;
+      default:
+        return 0;
+    }
+  };
 
   // finalReservationInfo에서 데이터 가져오기
   const reservationInfo = JSON.parse(
@@ -36,9 +66,7 @@ const ReservationPaymentPage = () => {
   const seats = reservationInfo.selectedSeats
     ? reservationInfo.selectedSeats.join(", ")
     : "좌석 미선택";
-  const price = reservationInfo.totalPrice
-    ? reservationInfo.totalPrice.toLocaleString()
-    : "0";
+  const price = reservationInfo.totalPrice ? reservationInfo.totalPrice : "0";
 
   // 결제 처리
   const handlePay = () => {
@@ -51,6 +79,13 @@ const ReservationPaymentPage = () => {
   const toggleStep = (stepNumber) => {
     setActiveStep(activeStep === stepNumber ? null : stepNumber);
   };
+
+  // 최종 결제 금액
+  // 음수가 되지 않게 0으로 막아둠 그 밑으로 내려가도
+  const finalPrice = Math.max(
+    0,
+    price - getDiscount1(coupon) - getDiscount2(gift)
+  );
 
   return (
     <div className="reservation-payment-page">
@@ -69,7 +104,7 @@ const ReservationPaymentPage = () => {
                   }`}
                   onClick={() => toggleStep(1)}
                 >
-                  STEP 1. 할인쿠폰
+                  할인쿠폰
                 </div>
                 {activeStep === 1 && (
                   <div className="payment-accordion-content">
@@ -79,20 +114,40 @@ const ReservationPaymentPage = () => {
                           type="radio"
                           name="coupon"
                           value="none"
+                          checked={coupon === "none"}
+                          onChange={(e) => setCoupon(e.target.value)}
                           defaultChecked
                         />
                         할인쿠폰 사용 안함
                       </label>
                       <label>
-                        <input type="radio" name="coupon" value="welcome" />
+                        <input
+                          type="radio"
+                          name="coupon"
+                          value="welcome"
+                          checked={coupon === "welcome"}
+                          onChange={(e) => setCoupon(e.target.value)}
+                        />
                         웰컴 쿠폰 (1,000원 할인)
                       </label>
                       <label>
-                        <input type="radio" name="coupon" value="student" />
+                        <input
+                          type="radio"
+                          name="coupon"
+                          value="student"
+                          checked={coupon === "student"}
+                          onChange={(e) => setCoupon(e.target.value)}
+                        />
                         학생 할인 쿠폰 (2,000원 할인)
                       </label>
                       <label>
-                        <input type="radio" name="coupon" value="senior" />
+                        <input
+                          type="radio"
+                          name="coupon"
+                          value="senior"
+                          checked={coupon === "senior"}
+                          onChange={(e) => setCoupon(e.target.value)}
+                        />
                         시니어 할인 쿠폰 (3,000원 할인)
                       </label>
                     </div>
@@ -106,7 +161,7 @@ const ReservationPaymentPage = () => {
                   }`}
                   onClick={() => toggleStep(2)}
                 >
-                  STEP 2. 관람권/기프트콘
+                  관람권/기프트콘
                 </div>
                 {activeStep === 2 && (
                   <div className="payment-accordion-content">
@@ -116,20 +171,40 @@ const ReservationPaymentPage = () => {
                           type="radio"
                           name="gift"
                           value="none"
+                          checked={gift === "none"}
+                          onChange={(e) => setGift(e.target.value)}
                           defaultChecked
                         />
                         관람권/기프트콘 사용 안함
                       </label>
                       <label>
-                        <input type="radio" name="gift" value="gift1" />
+                        <input
+                          type="radio"
+                          name="gift"
+                          value="gift1"
+                          checked={gift === "gift1"}
+                          onChange={(e) => setGift(e.target.value)}
+                        />
                         영화관람권 10,000원
                       </label>
                       <label>
-                        <input type="radio" name="gift" value="gift2" />
+                        <input
+                          type="radio"
+                          name="gift"
+                          value="gift2"
+                          checked={gift === "gift2"}
+                          onChange={(e) => setGift(e.target.value)}
+                        />
                         팝콘+음료 세트 기프트콘
                       </label>
                       <label>
-                        <input type="radio" name="gift" value="gift3" />
+                        <input
+                          type="radio"
+                          name="gift"
+                          value="gift3"
+                          checked={gift === "gift3"}
+                          onChange={(e) => setGift(e.target.value)}
+                        />
                         영화관람권 20,000원
                       </label>
                     </div>
@@ -143,7 +218,7 @@ const ReservationPaymentPage = () => {
                   }`}
                   onClick={() => toggleStep(3)}
                 >
-                  STEP 3. 포인트 및 기타결제 수단
+                  포인트 및 기타결제 수단
                 </div>
                 {activeStep === 3 && (
                   <div className="payment-accordion-content">
@@ -192,7 +267,7 @@ const ReservationPaymentPage = () => {
 
             <div className="payment-final-amount-box">
               <div className="payment-final-label">결제하실 금액</div>
-              <div className="payment-final-amount">{price}원</div>
+              <div className="payment-final-amount">{finalPrice}원</div>
             </div>
 
             <div className="payment-bottom-btns">

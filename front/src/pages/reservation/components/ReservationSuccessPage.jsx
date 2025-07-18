@@ -118,7 +118,6 @@ const ReservationSuccessPage = () => {
           const savedReservationInfo = sessionStorage.getItem(
             "finalReservationInfo"
           );
-
           if (savedReservationInfo) {
             const reservationInfo = JSON.parse(savedReservationInfo);
             // 임시 데이터 구조 생성

@@ -17,8 +17,7 @@ const MovieSelector = () => {
       const filtered = schedule.filter((schedule) => {
         const dateMatch = schedule.startdate === selectedDate;
         const cinemaMatch = schedule.cinemanm === selectedCinemanm;
-        const statusMatch = schedule.screenstatus === "운영중";
-        return dateMatch && cinemaMatch && statusMatch;
+        return dateMatch && cinemaMatch;
       });
 
       // movienm 기준으로 스케줄 그룹화

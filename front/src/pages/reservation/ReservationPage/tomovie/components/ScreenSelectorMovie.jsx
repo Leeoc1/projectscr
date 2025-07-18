@@ -7,38 +7,38 @@ const ScreenSelectorMovie = () => {
   const [selectedStartTime, setSelectedStartTime] = useState(null);
   const [reservedSeatsCount, setReservedSeatsCount] = useState({});
 
-  // 상영 정보 가져오기
-  useEffect(() => {
-    const fetchSchedule = async () => {
-      const movienm = sessionStorage.getItem("movienm");
-      const selectedFullDate = sessionStorage.getItem("selectedFullDate");
-      const selectedTheater = sessionStorage.getItem("cinemanm");
+  // // 상영 정보 가져오기
+  // useEffect(() => {
+  //   const fetchSchedule = async () => {
+  //     const movienm = sessionStorage.getItem("movienm");
+  //     const selectedFullDate = sessionStorage.getItem("selectedFullDate");
+  //     const selectedTheater = sessionStorage.getItem("cinemanm");
 
-      if (!movienm || !selectedFullDate || !selectedTheater) {
-        setMovieSchedule([]);
-        return;
-      }
+  //     if (!movienm || !selectedFullDate || !selectedTheater) {
+  //       setMovieSchedule([]);
+  //       return;
+  //     }
 
-      const selectedSchedule = await getSchedules();
+  //     const selectedSchedule = await getSchedules();
 
-      const filteredSchedules = selectedSchedule.filter((schedule) => {
-        return (
-          schedule.movienm === movienm &&
-          schedule.startdate === selectedFullDate &&
-          schedule.cinemanm === selectedTheater &&
-          schedule.screenstatus === "운영중"
-        );
-      });
+  //     const filteredSchedules = selectedSchedule.filter((schedule) => {
+  //       return (
+  //         schedule.movienm === movienm &&
+  //         schedule.startdate === selectedFullDate &&
+  //         schedule.cinemanm === selectedTheater &&
+  //         schedule.screenstatus === "운영중"
+  //       );
+  //     });
 
-      // 상영 시간순으로 정렬
-      filteredSchedules.sort(
-        (a, b) => new Date(a.starttime) - new Date(b.starttime)
-      );
-      setMovieSchedule(filteredSchedules);
-    };
+  //     // 상영 시간순으로 정렬
+  //     filteredSchedules.sort(
+  //       (a, b) => new Date(a.starttime) - new Date(b.starttime)
+  //     );
+  //     setMovieSchedule(filteredSchedules);
+  //   };
 
-    fetchSchedule();
-  }, []);
+  //   fetchSchedule();
+  // }, []);
 
   // 세션 스토리지 변경 감지
   useEffect(() => {
@@ -55,7 +55,8 @@ const ScreenSelectorMovie = () => {
             return (
               schedule.movienm === movienm &&
               schedule.startdate === selectedFullDate &&
-              schedule.cinemanm === selectedTheater
+              schedule.cinemanm === selectedTheater &&
+              schedule.screenstatus === "운영중"
             );
           });
 

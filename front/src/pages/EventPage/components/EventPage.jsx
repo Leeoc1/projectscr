@@ -38,14 +38,14 @@ const Event = () => {
               </div>
             </section>
 
-            <section className="evws-section">
+            {/* <section className="evws-section">
               <h2 className="evws-title">당첨자 발표</h2>
               <div className="evws-list">
                 {winners.map((winner) => (
                   <WinnerItem key={winner.id} winner={winner} />
                 ))}
               </div>
-            </section>
+            </section> */}
           </div>
         </div>
       </div>

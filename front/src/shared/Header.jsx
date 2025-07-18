@@ -14,7 +14,46 @@ export default function Header() {
     localStorage.getItem("isLoggedIn") === "true"
   );
   const [userid, setUserid] = useState(localStorage.getItem("userid") || "");
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(""); // DB에서 가져올 username
+
+  // 로그인 상태 변화 감지 및 사용자 정보 로드
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const storedIsLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+      const storedUserid = localStorage.getItem("userid") || "";
+
+      setIsLoggedIn(storedIsLoggedIn);
+      setUserid(storedUserid);
+
+      // 로그인 상태이고 userid가 있으면 DB에서 username 조회
+      if (storedIsLoggedIn && storedUserid) {
+        try {
+          const userInfo = await getUserInfo(storedUserid);
+          setUsername(userInfo.username || storedUserid); // username이 없으면 userid 사용
+        } catch (error) {
+          // API 실패 시 localStorage의 username 사용 (카카오 로그인 등)
+          const storedUsername =
+            localStorage.getItem("username") || storedUserid;
+          setUsername(storedUsername);
+        }
+      } else {
+        setUsername("");
+      }
+    };
+
+    checkLoginStatus();
+
+    // localStorage 변화 감지
+    const handleStorageChange = () => {
+      checkLoginStatus();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,55 +64,6 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // 로그인한 사용자의 정보를 가져오는 useEffect
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      if (isLoggedIn && userid) {
-        try {
-          console.log("🔍 사용자 정보 요청 중:", userid);
-          const userInfo = await getUserInfo(userid);
-          console.log("📥 사용자 정보 응답:", userInfo);
-          console.log("📋 응답 키 목록:", Object.keys(userInfo || {}));
-
-          // 다양한 필드명 확인
-          const possibleNameFields = [
-            "username",
-            "name",
-            "userName",
-            "user_name",
-            "displayName",
-          ];
-          let foundName = null;
-
-          for (const field of possibleNameFields) {
-            if (userInfo && userInfo[field]) {
-              foundName = userInfo[field];
-              console.log(`✅ 이름 필드 발견: ${field} = ${foundName}`);
-              break;
-            }
-          }
-
-          if (foundName) {
-            setUsername(foundName);
-            console.log("✅ 사용자 이름 설정 완료:", foundName);
-          } else {
-            console.log("❌ 이름 필드를 찾을 수 없어서 userid 사용:", userid);
-            setUsername(userid);
-          }
-        } catch (error) {
-          console.error("❌ 사용자 정보 조회 실패:", error);
-          console.error("❌ 에러 상세:", error.response?.data || error.message);
-          setUsername(userid); // API 실패 시 userid를 fallback으로 사용
-        }
-      } else {
-        console.log("⚠️ 로그인 상태가 아니거나 userid가 없음");
-        setUsername("");
-      }
-    };
-
-    fetchUserInfo();
-  }, [isLoggedIn, userid]);
 
   const goTheater = () => navigate("/theater");
   const goMovie = () => navigate("/movie");
@@ -88,11 +78,37 @@ export default function Header() {
 
   // 로그아웃 핸들러
   const handleLogout = () => {
+    // 기본 로그인 정보 제거
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("userid");
+    localStorage.removeItem("username");
+
+    // 카카오 로그인 관련 데이터 제거
+    localStorage.removeItem("loginType");
+    sessionStorage.removeItem("loginType");
+
+    // 토스페이먼츠 관련 데이터 제거
+    localStorage.removeItem("@tosspayments/merchant-browser-id");
+    localStorage.removeItem(
+      "@tosspayments/payment-widget-previous-payment-method-id"
+    );
+
+    // 추가 보안을 위해 다른 사용자 관련 데이터도 제거
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("authData");
+
+    // 세션 스토리지 전체 정리
+    sessionStorage.clear();
+
+    // 상태 초기화
     setIsLoggedIn(false);
     setUserid("");
     setUsername("");
+
+    // 홈페이지로 리다이렉트
     navigate("/");
   };
 

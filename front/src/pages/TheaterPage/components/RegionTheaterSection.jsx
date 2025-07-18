@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
 
 const RegionTheaterSection = ({ filteredCinemas }) => {
   const navigate = useNavigate();
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const handleScheduleClick = (cinema) => {
+    // 로그인 상태 체크
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+    if (!isLoggedIn) {
+      // 로그인되지 않은 경우 모달 표시
+      setShowLoginModal(true);
+      return;
+    }
+
+    // 로그인된 경우 기존 로직 실행
     sessionStorage.setItem("cinemacd", cinema.cinemacd);
     sessionStorage.setItem("cinemanm", cinema.cinemanm);
     navigate("/reservation/movie");
@@ -56,6 +68,12 @@ const RegionTheaterSection = ({ filteredCinemas }) => {
           </div>
         ))}
       </div>
+
+      {/* 로그인 필요 모달 */}
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+      />
     </section>
   );
 };

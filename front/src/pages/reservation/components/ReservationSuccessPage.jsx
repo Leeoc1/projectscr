@@ -3,12 +3,106 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../../shared/Header";
 import Footer from "../../../shared/Footer";
 import { getReservation } from "../../../api/reservationApi";
+import { getCurrentMovies } from "../../../api/movieApi";
 import "../style/ReservationSuccessPage.css";
 
 const ReservationSuccessPage = () => {
   const navigate = useNavigate();
   const [reservationData, setReservationData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [movieData, setMovieData] = useState(null);
+
+  // 헬퍼 함수들
+  const getMovieFromSelectedMovie = () => {
+    try {
+      const savedSelectedMovie = sessionStorage.getItem("selectedMovie");
+      if (savedSelectedMovie) {
+        const movieData = JSON.parse(savedSelectedMovie);
+        return movieData.posterurl ? movieData : null;
+      }
+    } catch (error) {
+      // selectedMovie 파싱 실패
+    }
+    return null;
+  };
+
+  const getMovieFromReservationInfo = () => {
+    try {
+      const savedReservationInfo = sessionStorage.getItem(
+        "finalReservationInfo"
+      );
+      if (savedReservationInfo) {
+        const reservationInfo = JSON.parse(savedReservationInfo);
+        return {
+          posterurl: reservationInfo.posterurl,
+          movienm: reservationInfo.movienm,
+          moviecd: reservationInfo.moviecd,
+          genre: reservationInfo.genre,
+          runningtime: reservationInfo.runningtime,
+          isadult: reservationInfo.isadult,
+        };
+      }
+    } catch (error) {
+      // finalReservationInfo 파싱 실패
+    }
+    return null;
+  };
+
+  const findMovieByName = async (movieName) => {
+    try {
+      const currentMovies = await getCurrentMovies();
+      return currentMovies.find((movie) => movie.movienm === movieName);
+    } catch (error) {
+      // 영화 검색 실패
+      return null;
+    }
+  };
+
+  // 영화 정보 로드
+  useEffect(() => {
+    const loadMovieData = async () => {
+      // 1단계: selectedMovie에서 확인
+      let movieData = getMovieFromSelectedMovie();
+      if (movieData) {
+        setMovieData(movieData);
+        return;
+      }
+
+      // 2단계: finalReservationInfo에서 확인
+      movieData = getMovieFromReservationInfo();
+      if (!movieData) {
+        setMovieData(null);
+        return;
+      }
+
+      // 포스터가 있으면 바로 사용
+      if (movieData.posterurl) {
+        setMovieData(movieData);
+        return;
+      }
+
+      // 3단계: 영화명으로 검색
+      if (movieData.movienm) {
+        const foundMovie = await findMovieByName(movieData.movienm);
+        if (foundMovie?.posterurl) {
+          setMovieData({
+            ...movieData,
+            posterurl: foundMovie.posterurl,
+            moviecd: foundMovie.moviecd,
+            genre: foundMovie.genre,
+            runningtime: foundMovie.runningtime,
+            isadult: foundMovie.isadult,
+          });
+          return;
+        }
+      }
+
+      // 최종: 포스터 없이 설정
+      setMovieData(movieData);
+    };
+
+    loadMovieData();
+  }, []);
 
   useEffect(() => {
     const fetchReservationData = async () => {
@@ -17,12 +111,14 @@ const ReservationSuccessPage = () => {
         const data = await getReservation();
 
         if (data && data.length > 0) {
-          setReservationData(data[data.length - 1]);
+          const reservationInfo = data[data.length - 1];
+          setReservationData(reservationInfo);
         } else {
           // API에서 데이터를 가져올 수 없으면 sessionStorage에서 확인
           const savedReservationInfo = sessionStorage.getItem(
             "finalReservationInfo"
           );
+
           if (savedReservationInfo) {
             const reservationInfo = JSON.parse(savedReservationInfo);
             // 임시 데이터 구조 생성
@@ -40,8 +136,7 @@ const ReservationSuccessPage = () => {
           }
         }
       } catch (error) {
-        console.error("예약 정보 조회 중 오류:", error);
-        // 에러 발생 시에도 sessionStorage에서 확인
+        // 예약 정보 조회 실패
         const savedReservationInfo = sessionStorage.getItem(
           "finalReservationInfo"
         );
@@ -180,9 +275,19 @@ const ReservationSuccessPage = () => {
       <div className="payment-container">
         <div className="payment-box">
           <h2 className="payment-done-title">예매가 완료 되었습니다.</h2>
+
           <div className="payment-info-section">
             <div className="payment-movie-poster">
-              <img src="/images/F1_TheMovie.png" alt="영화 포스터" />
+              {movieData?.posterurl ? (
+                <img
+                  src={movieData.posterurl}
+                  alt={movieData.movienm || "영화 포스터"}
+                />
+              ) : (
+                <div className="no-poster-placeholder">
+                  <span>포스터 없음</span>
+                </div>
+              )}
             </div>
             <div className="payment-info-list">
               <div>

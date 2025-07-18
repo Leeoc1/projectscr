@@ -484,3 +484,35 @@
     gap: 0.5rem;
   }
 }
+
+/* 새로 추가된 스타일 */
+.mp-loading {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+.mp-no-reservations {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #6c757d;
+}
+
+.mp-no-reservations p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.mp-movie-cinema {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+}
+
+.mp-movie-amount {
+  color: #e74c3c;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin: 0.5rem 0;
+}

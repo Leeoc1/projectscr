@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCurrentMovies, getUpcomingMovies } from "../../../api/movieApi";
+import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
 import "../styles/Movies.css";
 
 const Movies = () => {
   const [activeTab, setActiveTab] = useState("boxoffice");
   const [currentMovies, setCurrentMovies] = useState([]);
   const [upcomingMoviesData, setUpcomingMoviesData] = useState([]);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const navigate = useNavigate();
 
   const handleReservationClick = (movie) => {
+    // 로그인 상태 체크
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+    if (!isLoggedIn) {
+      // 로그인되지 않은 경우 모달 표시
+      setShowLoginModal(true);
+      return;
+    }
+
+    // 로그인된 경우 기존 로직 실행
     // 홈페이지와 동일한 방식으로 영화 정보를 세션 스토리지에 저장
     sessionStorage.setItem("moviecd", movie.moviecd);
     sessionStorage.setItem("movienm", movie.movienm);
@@ -137,6 +149,12 @@ const Movies = () => {
               </div>
             ))}
       </div>
+
+      {/* 로그인 필요 모달 */}
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+      />
     </div>
   );
 };

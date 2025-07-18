@@ -28,6 +28,11 @@ export const getUserInfo = async (userid) => {
   return await apiRequest("get", `/users/info/${userid}`);
 };
 
+// 사용자별 예약 정보 조회 (users 테이블)
+export const getUserReservations = async (userid) => {
+  return await apiRequest("get", `/users/${userid}/reservations`);
+};
+
 // ========== 직원 관리 API (staff 테이블) ==========
 
 // 직원 목록 조회 (staff 테이블)

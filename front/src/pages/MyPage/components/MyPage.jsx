@@ -1,7 +1,35 @@
 import "../MyPage.css";
 import Header from "../../../shared/Header";
+import { useState, useEffect } from "react";
+import { getUserInfo, getUserReservations } from "../../../api/userApi";
 
 export default function MyPage() {
+  const [userInfo, setUserInfo] = useState(null);
+  const [userReservations, setUserReservations] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userid = localStorage.getItem("userid");
+        if (userid) {
+          // 사용자 정보 조회
+          const userResponse = await getUserInfo(userid);
+          setUserInfo(userResponse);
+
+          // 사용자 예약 정보 조회
+          const reservationsResponse = await getUserReservations(userid);
+          setUserReservations(reservationsResponse);
+        }
+      } catch (error) {
+        console.error("사용자 데이터 조회 오류:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
   return (
     <div>
       <Header />
@@ -15,12 +43,17 @@ export default function MyPage() {
                   className="mp-avatar-icon"
                   fill="currentColor"
                   viewBox="0 0 24 24"
-                >
-                </svg>
+                ></svg>
               </div>
               <div className="mp-profile-info">
                 <h1 className="mp-profile-greeting">안녕하세요!</h1>
-                <p className="mp-profile-name">"사용자"님</p>
+                <p className="mp-profile-name">
+                  {loading
+                    ? "로딩 중..."
+                    : userInfo
+                    ? `"${userInfo.username}"님`
+                    : '"사용자"님'}
+                </p>
                 <p className="mp-profile-link">개인정보설정 &gt;</p>
               </div>
             </div>
@@ -45,34 +78,68 @@ export default function MyPage() {
             </div>
 
             <div className="mp-movie-grid">
-                <div className="mp-movie-card">
-                  <div className="mp-movie-content">
-                    <div className="mp-movie-poster">
-                      <span className="mp-poster-text">
-                        영화
-                        <br />
-                        포스터
-                      </span>
-                    </div>
-                    <div className="mp-movie-details">
-                      <h3 className="mp-movie-title">영화제목</h3>
-                      <p className="mp-movie-screen">
-                        스크린 1
-                      </p>
-                      <p className="mp-movie-datetime">
-                        2025-01-01 12:00 (15세 이상)
-                      </p>
-                      <div className="mp-movie-buttons">
-                        <button
-                          className="mp-btn mp-btn-review"
-                        >
-                          관람평 쓰기
-                        </button>
-                        <button className="mp-btn mp-btn-cancel">취소</button>
+              {loading ? (
+                <div className="mp-loading">예약 정보를 불러오는 중...</div>
+              ) : userReservations.length > 0 ? (
+                userReservations.map((reservation, index) => (
+                  <div
+                    key={reservation.reservationcd || index}
+                    className="mp-movie-card"
+                  >
+                    <div className="mp-movie-content">
+                      <div className="mp-movie-poster">
+                        <span className="mp-poster-text">
+                          {reservation.movienm || "영화"}
+                          <br />
+                          포스터
+                        </span>
+                      </div>
+                      <div className="mp-movie-details">
+                        <h3 className="mp-movie-title">
+                          {reservation.movienm || "영화제목"}
+                        </h3>
+                        <p className="mp-movie-screen">
+                          {reservation.screenname || "스크린 1"}
+                        </p>
+                        <p className="mp-movie-datetime">
+                          {reservation.starttime
+                            ? `${reservation.starttime.split("T")[0]} ${
+                                reservation.starttime
+                                  .split("T")[1]
+                                  ?.substring(0, 5) || ""
+                              }`
+                            : "2025-01-01 12:00"}{" "}
+                          (
+                          {reservation.runningtime
+                            ? `${reservation.runningtime}분`
+                            : "15세 이상"}
+                          )
+                        </p>
+                        <p className="mp-movie-cinema">
+                          {reservation.cinemanm || "CGV"} | 좌석:{" "}
+                          {reservation.seatcd || "A1"}
+                        </p>
+                        <p className="mp-movie-amount">
+                          결제금액:{" "}
+                          {reservation.amount
+                            ? `${reservation.amount.toLocaleString()}원`
+                            : "0원"}
+                        </p>
+                        <div className="mp-movie-buttons">
+                          <button className="mp-btn mp-btn-review">
+                            관람평 쓰기
+                          </button>
+                          <button className="mp-btn mp-btn-cancel">취소</button>
+                        </div>
                       </div>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="mp-no-reservations">
+                  <p>예약 내역이 없습니다.</p>
                 </div>
+              )}
             </div>
           </section>
 
@@ -93,19 +160,13 @@ export default function MyPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr
-                    className="mp-inquiry-row"
-                    >
-                      <td className="mp-inquiry-title">문의제목</td>
-                      <td className="mp-inquiry-date">
-                        2025-01-01
-                      </td>
-                      <td className="mp-inquiry-status">
-                        <span className="mp-status-badge">
-                          Y
-                        </span>
-                      </td>
-                    </tr>
+                  <tr className="mp-inquiry-row">
+                    <td className="mp-inquiry-title">문의제목</td>
+                    <td className="mp-inquiry-date">2025-01-01</td>
+                    <td className="mp-inquiry-status">
+                      <span className="mp-status-badge">Y</span>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -113,9 +174,7 @@ export default function MyPage() {
 
           {/* Account Management Section */}
           <section className="mp-section">
-            <h2 className="mp-section-title">
-              계정관리
-            </h2>
+            <h2 className="mp-section-title">계정관리</h2>
 
             <div className="mp-account-card">
               <div className="mp-account-links">

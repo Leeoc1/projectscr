@@ -11,10 +11,8 @@ const ReservationManagement = () => {
     const fetchReservations = async () => {
       try {
         const data = await getReservation();
-        console.log("예매 관리 데이터:", data);
         setReservationList(data);
       } catch (error) {
-        console.error("예매 데이터 로딩 오류:", error);
         setReservationList([]);
       }
     };
@@ -141,7 +139,6 @@ const ReservationManagement = () => {
           alert("예약 취소 중 오류가 발생했습니다.");
         }
       } catch (error) {
-        console.error("예약 취소 오류:", error);
         alert("예약 취소 중 오류가 발생했습니다.");
       }
     }

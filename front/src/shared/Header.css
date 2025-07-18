@@ -198,8 +198,24 @@
   transition: all 0.3s ease;
 }
 
+.h-mypage-btn {
+  color: #fbbf24;
+  border: 1px solid #fbbf24;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  background: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
 .h-signup-btn:hover {
   color: #fbbf24;
+}
+
+.h-mypage-btn:hover {
+  background-color: #fbbf24;
+  color: #2a2a2a;
 }
 
 .h-mypage-btn:hover {

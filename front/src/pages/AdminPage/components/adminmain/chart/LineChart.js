@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import "../styles/LineChart.css";
 
 // 날짜 포맷 함수
 const formatDate = (dateStr) => {
@@ -40,77 +41,34 @@ const LineChartComponent = ({
     유저수: item.count,
   }));
 
-  console.log("LineChart 데이터:", chartData);
-  console.log("LineChart 데이터 상세:", JSON.stringify(chartData, null, 2));
-
   return (
     <div className="slo-chart-card">
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "10px",
-        }}
-      >
-        <button
-          onClick={onPrevious}
-          style={{
-            background: "#3b82f6",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            padding: "8px 12px",
-            cursor: "pointer",
-            fontSize: "14px",
-          }}
-        >
+      <div className="lc-header">
+        <button onClick={onPrevious} className="lc-nav-button">
           ← 이전
         </button>
 
-        <h3 style={{ margin: 0, flex: 1, textAlign: "center" }}>
-          일별 전체 유저 수 추
-        </h3>
+        <h3 className="lc-title">일별 전체 유저 수 추이</h3>
 
         <button
           onClick={onNext}
-          style={{
-            background: currentChartIndex === 1 ? "#9ca3af" : "#3b82f6",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            padding: "8px 12px",
-            cursor: currentChartIndex === 1 ? "not-allowed" : "pointer",
-            fontSize: "14px",
-          }}
+          className={`lc-nav-button ${
+            currentChartIndex === 1 ? "disabled" : ""
+          }`}
           disabled={currentChartIndex === 1}
         >
           다음 →
         </button>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "10px",
-        }}
-      >
-        <span
-          style={{
-            fontSize: "0.9rem",
-            fontWeight: 400,
-            textAlign: "right",
-            lineHeight: 1.3,
-          }}
-        >
+      <div className="lc-stats-container">
+        <span className="lc-stats-text">
           최대: {Math.max(...chartData.map((d) => d.유저수))}명<br />
           최소: {Math.min(...chartData.map((d) => d.유저수))}명
         </span>
       </div>
 
-      <div className="slo-chart-placeholder" style={{ height: "300px" }}>
+      <div className="slo-chart-placeholder lc-chart-container">
         <ResponsiveContainer width="100%" height="100%">
           <RechartsLineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />

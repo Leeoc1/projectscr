@@ -10,6 +10,7 @@ const Movies = () => {
   const [upcomingMoviesData, setUpcomingMoviesData] = useState([]);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const navigate = useNavigate();
+  const [visibleCount, setVisibleCount] = useState(16);
 
   const handleReservationClick = (movie) => {
     // 로그인 상태 체크
@@ -50,21 +51,29 @@ const Movies = () => {
     const fetchMovies = async () => {
       try {
         const currentData = await getCurrentMovies();
-        const upcomingData = await getUpcomingMovies();
-
-        setCurrentMovies(currentData);
-        setUpcomingMoviesData(upcomingData);
-      } catch (error) {
-        console.error("영화 데이터 로딩 실패:", error);
-      }
+        const adminData = await getMoviesForAdmin();
+        const upcomingData = adminData.currentMovies.filter(
+          (movie) => movie.movieinfo === "E"
+        );
+        const sortedCurrent = currentData
+          .slice()
+          .sort((a, b) => new Date(b.releasedate) - new Date(a.releasedate));
+        const sortedUpcoming = upcomingData
+          .slice()
+          .sort((a, b) => new Date(a.releasedate) - new Date(b.releasedate));
+        setCurrentMovies(sortedCurrent);
+        setUpcomingMoviesData(sortedUpcoming);
+      } catch (error) {}
     };
-
     fetchMovies();
   }, []);
 
-  // 영화 상세 정보 페이지로 이동
   const goMovieDetail = (moviecd) => {
     navigate(`/moviedetail?movieno=${moviecd}`);
+  };
+
+  const handleShowMore = () => {
+    setVisibleCount(currentMovies.length);
   };
 
   return (
@@ -89,7 +98,7 @@ const Movies = () => {
       </div>
       <div className="mvs-grid">
         {activeTab === "boxoffice"
-          ? currentMovies.map((movie) => (
+          ? currentMovies.slice(0, visibleCount).map((movie) => (
               <div className="mvs-card" key={movie.moviecd}>
                 <div className="mvs-poster">
                   <img src={movie.posterurl} alt={movie.movienm} />
@@ -130,12 +139,20 @@ const Movies = () => {
               </div>
             ))
           : upcomingMoviesData.map((movie) => (
-              <div className="mvs-card" key={movie.id}>
+              <div className="mvs-card" key={movie.moviecd}>
                 <div className="mvs-poster">
-                  <img src={movie.poster} alt={movie.title} />
+                  <img
+                    src={movie.posterurl || "/images/movie.jpg"}
+                    alt={movie.movienm}
+                  />
                   <div className="mvs-overlay">
                     <div className="mvs-buttons">
-                      <button className="mvs-btn">상세정보</button>
+                      <button
+                        className="mvs-btn"
+                        onClick={() => goMovieDetail(movie.moviecd)}
+                      >
+                        상세정보
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -155,6 +172,13 @@ const Movies = () => {
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
       />
+      {activeTab === "boxoffice" && currentMovies.length > visibleCount && (
+        <div style={{ textAlign: "center", margin: "2rem 0" }}>
+          <button className="mvs-showmore-btn" onClick={handleShowMore}>
+            더보기
+          </button>
+        </div>
+      )}
     </div>
   );
 };

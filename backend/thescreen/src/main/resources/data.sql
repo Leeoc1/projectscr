@@ -85,7 +85,7 @@ SELECT
     CONCAT(LPAD(n, 12, '0')),
     CONCAT('user', LPAD(FLOOR(1 + (RAND() * 50)), 3, '0')),
     (SELECT schedulecd FROM schedule ORDER BY RAND() LIMIT 1),
-    DATE_ADD('2025-07-03', INTERVAL FLOOR(RAND()*8) DAY)
+    DATE_ADD('2025-07-13', INTERVAL FLOOR(RAND()*13) DAY)
       + INTERVAL FLOOR(RAND()*24) HOUR + INTERVAL FLOOR(RAND()*60) MINUTE,
     IF(RAND() < 0.5, '예약완료', '예약취소'),
     CONCAT(CHAR(65 + FLOOR(RAND()*10)), LPAD(FLOOR(1 + (RAND()*10)), 2, '0')),

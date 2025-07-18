@@ -19,8 +19,6 @@ const ScreenStatus = ({ screen, onStatusChange, onClose }) => {
     onStatusChange(screen, newStatus);
   };
 
-  console.log(screen);
-
   return (
     <div className="scm-popup-overlay" onClick={onClose}>
       <div className="scm-popup-content" onClick={(e) => e.stopPropagation()}>

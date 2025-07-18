@@ -38,5 +38,11 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
     @Query("SELECT MAX(m.releasedate) FROM Movie m")
     LocalDate findMaxReleasedate();
 
+    List<Movie> findByReleasedateBetween(LocalDate start, LocalDate end);
 
+    List<Movie> findByReleasedateAfter(LocalDate date);
+
+    List<Movie> findByReleasedateBefore(LocalDate date);
+
+    List<Movie> findByReleasedate(LocalDate date);
 }

@@ -173,7 +173,7 @@ const MovieChart = () => {
                             : "전체관람가"}
                         </span>
                       </div>
-                      <span className="mcs-movie-rank">{movie.rank}</span>
+                      <span className="mcs-movie-rank">{movie.movierank}</span>
                     </div>
                   </div>
                 </div>

@@ -1,0 +1,94 @@
+.rmp-section {
+  margin-bottom: 4rem;
+}
+
+.rmp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 2rem;
+}
+
+.rmp-card {
+  background-color: #f9f9f9;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rmp-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.rmp-poster {
+  position: relative;
+  aspect-ratio: 2/3;
+  overflow: hidden;
+}
+
+.rmp-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rmp-info {
+  padding: 1rem;
+}
+
+.rmp-title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: black;
+}
+
+.rmp-genre,
+.rmp-rating,
+.rmp-release {
+  font-size: 0.7rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.rmp-rating.rmp-rating-all {
+  color: #229c56;
+  font-weight: 600;
+}
+
+.rmp-rating.rmp-rating-19 {
+  color: #cd1327;
+  font-weight: 600;
+}
+
+.rmp-duration {
+  font-size: 0.7rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .rmp-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+}
+
+.rmp-showmore-btn {
+  border-radius: 0.4rem;
+  -webkit-border-radius: 0.4rem;
+  -moz-border-radius: 0.4rem;
+  -ms-border-radius: 0.4rem;
+  -o-border-radius: 0.4rem;
+  border: 1px solid #000000;
+  background-color: white;
+  color: black;
+  padding: 0.5rem 1rem;
+}
+
+.rmp-showmore-btn:hover {
+  background-color: black;
+  color: white;
+}

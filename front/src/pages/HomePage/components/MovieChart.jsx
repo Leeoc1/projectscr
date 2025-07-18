@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCurrentMovies } from "../../../api/api";
+import { getCurrentMovies } from "../../../api/movieApi";
+import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
 import "../styles/MovieChart.css";
 
 const MovieChart = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [movies, setMovies] = useState([]);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const sliderRef = useRef(null);
   const cardWidth = 180; // 카드 1장 width(px)
   const gap = 20; // 카드 사이 gap(px)
@@ -89,6 +91,16 @@ const MovieChart = () => {
   };
 
   const handleMovieCardClick = (movie) => {
+    // 로그인 상태 체크
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    
+    if (!isLoggedIn) {
+      // 로그인되지 않은 경우 모달 표시
+      setShowLoginModal(true);
+      return;
+    }
+
+    // 로그인된 경우 기존 로직 실행
     // 예매 페이지와 동일한 방식으로 영화 정보를 세션 스토리지에 저장
     sessionStorage.setItem("moviecd", movie.moviecd);
     sessionStorage.setItem("movienm", movie.movienm);
@@ -104,12 +116,6 @@ const MovieChart = () => {
     };
     sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
 
-    console.log(
-      "🎬 홈페이지 영화카드 클릭 - 영화:",
-      movie.movienm,
-      "moviecd:",
-      movie.moviecd
-    );
     navigate("/reservation/place");
   };
 
@@ -178,6 +184,12 @@ const MovieChart = () => {
           </button>
         </div>
       </div>
+      
+      {/* 로그인 필요 모달 */}
+      <LoginRequiredModal 
+        isOpen={showLoginModal} 
+        onClose={() => setShowLoginModal(false)} 
+      />
     </section>
   );
 };

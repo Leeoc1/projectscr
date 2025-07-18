@@ -28,4 +28,7 @@ public interface ReservationViewRepository extends JpaRepository<ReservationView
             "ORDER BY cinemanm ", nativeQuery = true)
     List<Object[]> findTotalSalesByCinema();
 
+    // 사용자별 예약 정보 조회 (최신순 정렬)
+    List<ReservationView> findByUseridOrderByReservationtimeDesc(String userid);
+
 }

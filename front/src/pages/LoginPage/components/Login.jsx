@@ -32,8 +32,6 @@ const Login = () => {
         }
       );
 
-      console.log("응답 데이터:", response.data);
-
       if (response.status === 200) {
         // 로컬스토리지에 로그인 상태 저장
         localStorage.setItem("isLoggedIn", "true");

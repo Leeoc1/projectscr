@@ -1,0 +1,518 @@
+.mp-my-page {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    sans-serif;
+}
+
+/* Profile Section */
+.mp-profile-section {
+  background-color: #000;
+  color: #fff;
+  padding: 3rem 1rem;
+}
+
+.mp-profile-container {
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.mp-profile-card {
+  background-color: #000;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.mp-profile-avatar {
+  width: 5rem;
+  height: 5rem;
+  background-color: #6c757d;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mp-avatar-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #343a40;
+}
+
+.mp-profile-info {
+  flex: 1;
+}
+
+.mp-profile-greeting {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.mp-profile-name {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.mp-profile-link {
+  color: #adb5bd;
+  margin-top: 0.5rem;
+  cursor: pointer;
+}
+
+.mp-profile-link:hover {
+  color: #fff;
+}
+
+/* Main Content */
+.mp-main-content {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Welcome Card */
+.mp-welcome-card {
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.mp-welcome-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mp-welcome-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+.mp-coupon-info {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+/* Section */
+.mp-section {
+  margin-bottom: 3rem;
+}
+
+.mp-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.mp-section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+.mp-more-button {
+  font-size: 0.875rem;
+  color: #6c757d;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mp-more-button:hover {
+  color: #495057;
+}
+
+/* Movie Grid */
+.mp-movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.mp-movie-card {
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+  padding: 1.5rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.mp-movie-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.mp-movie-content {
+  display: flex;
+  gap: 1rem;
+}
+
+.mp-movie-poster {
+  width: 4rem;
+  height: 5rem;
+  background-color: #000;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.mp-poster-text {
+  font-size: 0.75rem;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.mp-movie-details {
+  flex: 1;
+}
+
+.mp-movie-title {
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 0.25rem;
+}
+
+.mp-movie-screen {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-bottom: 0.25rem;
+}
+
+.mp-movie-datetime {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-bottom: 0.75rem;
+}
+
+.mp-movie-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.mp-btn {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.mp-btn-review {
+  background-color: #f8f9fa;
+  color: #495057;
+}
+
+.mp-btn-review:hover {
+  background-color: #e9ecef;
+}
+
+.mp-btn-cancel {
+  background-color: #f8f9fa;
+  color: #495057;
+}
+
+.mp-btn-cancel:hover {
+  background-color: #e9ecef;
+}
+
+/* Special styling for active review button */
+.mp-movie-card:nth-child(2) .mp-btn-review {
+  background-color: #000;
+  color: #fff;
+}
+
+.mp-movie-card:nth-child(2) .mp-btn-review:hover {
+  background-color: #212529;
+}
+
+/* Inquiry Table */
+.mp-inquiry-table-container {
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+}
+
+.mp-inquiry-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mp-inquiry-table thead {
+  background-color: #000;
+  color: #fff;
+}
+
+.mp-inquiry-table th {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.mp-inquiry-table tbody {
+  background-color: #fff;
+}
+
+.mp-inquiry-row {
+  border-bottom: 1px solid #e9ecef;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.mp-inquiry-row:hover {
+  background-color: #f8f9fa;
+}
+
+.mp-inquiry-row:last-child {
+  border-bottom: none;
+}
+
+.mp-inquiry-table td {
+  padding: 1rem 1.5rem;
+  font-size: 0.875rem;
+}
+
+.mp-inquiry-title {
+  color: #212529;
+}
+
+.mp-inquiry-date {
+  color: #6c757d;
+}
+
+.mp-inquiry-status {
+  color: #212529;
+}
+
+.mp-status-badge {
+  background-color: #f8f9fa;
+  color: #212529;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Account Management */
+.mp-account-card {
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+  padding: 1.5rem;
+}
+
+.mp-account-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mp-account-link {
+  color: #495057;
+  text-decoration: none;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f8f9fa;
+  transition: color 0.2s ease;
+}
+
+.mp-account-link:hover {
+  color: #000;
+}
+
+.mp-account-link:last-child {
+  border-bottom: none;
+}
+
+.mp-account-link.mp-withdrawal {
+  color: #dc3545;
+}
+
+.mp-account-link.mp-withdrawal:hover {
+  color: #c82333;
+}
+
+/* Footer */
+.mp-footer {
+  background-color: #212529;
+  color: #fff;
+  padding: 2rem 0;
+  margin-top: 4rem;
+}
+
+.mp-footer-content {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.mp-footer-links {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.mp-footer-link {
+  font-size: 0.875rem;
+  color: #adb5bd;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.mp-footer-link:hover {
+  color: #fff;
+}
+
+.mp-social-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.mp-social-link {
+  color: #6c757d;
+  transition: color 0.2s ease;
+}
+
+.mp-social-link:hover {
+  color: #fff;
+}
+
+.mp-social-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.mp-footer-info {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.mp-footer-text {
+  font-size: 0.75rem;
+  color: #6c757d;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.mp-footer-copyright {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .mp-profile-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .mp-movie-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mp-footer-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .mp-footer-links {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .mp-inquiry-table th,
+  .mp-inquiry-table td {
+    padding: 0.75rem;
+  }
+
+  .mp-inquiry-title {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .mp-main-content {
+    padding: 1rem;
+  }
+
+  .mp-profile-section {
+    padding: 2rem 1rem;
+  }
+
+  .mp-movie-buttons {
+    flex-direction: column;
+  }
+
+  .mp-inquiry-table th,
+  .mp-inquiry-table td {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .mp-footer-links {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* 새로 추가된 스타일 */
+.mp-loading {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+.mp-no-reservations {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #6c757d;
+}
+
+.mp-no-reservations p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.mp-movie-cinema {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+}
+
+.mp-movie-amount {
+  color: #e74c3c;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin: 0.5rem 0;
+}

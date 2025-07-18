@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../../shared/Header";
 import ProgressBar from "./ProgressBar";
 import "../style/ReservationSeatPage.css";
-import { getReservationSeat } from "../../../api/api";
+import { getReservationSeat } from "../../../api/reservationApi";
 
 const ReservationSeatPage = () => {
   const navigate = useNavigate();
@@ -60,7 +60,7 @@ const ReservationSeatPage = () => {
         );
         setReservedSeats(reservedSeatsArray);
       } catch (error) {
-        console.error("예약된 좌석 정보를 가져오는 중 오류:", error);
+        // 예약된 좌석 정보 가져오기 실패
         setReservedSeats([]);
       }
     };
@@ -104,12 +104,27 @@ const ReservationSeatPage = () => {
 
   // 결제 페이지로 이동
   const handleGoToPayment = () => {
+    // selectedMovie에서 포스터 정보 가져오기
+    const savedSelectedMovie = sessionStorage.getItem("selectedMovie");
+    let posterurl = null;
+    
+    if (savedSelectedMovie) {
+      try {
+        const movieData = JSON.parse(savedSelectedMovie);
+        posterurl = movieData.posterurl;
+      } catch (error) {
+        // selectedMovie 파싱 실패
+      }
+    }
+    
     // finalReservationInfo 저장
     sessionStorage.setItem(
       "finalReservationInfo",
       JSON.stringify({
         // selectedMovieTime의 모든 정보
         ...selectedMovieTime,
+        // 영화 포스터 정보 추가
+        posterurl: posterurl,
         // 인원수 정보
         guestCount: guestCount,
         totalGuests: totalGuests,

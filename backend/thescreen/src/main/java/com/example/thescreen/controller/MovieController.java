@@ -4,10 +4,14 @@ import com.example.thescreen.entity.Movie;
 import com.example.thescreen.repository.MovieRepository;
 import com.example.thescreen.service.MovieService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -53,36 +57,34 @@ public class MovieController {
         try {
             // 저장 전 영화 개수
             long beforeCount = movieRepository.count();
-            
-            movieService.saveDailyBoxOffice();
-            
+
+//            movieService.saveDailyBoxOffice();
+
             // 저장 후 영화 개수
             long afterCount = movieRepository.count();
             long addedCount = afterCount - beforeCount;
-            
+
             // 저장 후 업데이트된 영화 목록을 반환
             LocalDate today = LocalDate.now();
             List<Movie> allMovies = movieRepository.findAll();
-            
+
             // 현재 상영작: movieinfo가 'Y' 또는 'N'인 영화들
             List<Movie> currentMovies = allMovies.stream()
                     .filter(movie -> "Y".equals(movie.getMovieinfo()) || "N".equals(movie.getMovieinfo()))
                     .collect(Collectors.toList());
-                    
             // 상영 종료작: movieinfo가 'D'인 영화들
             List<Movie> archivedMovies = allMovies.stream()
                     .filter(movie -> "D".equals(movie.getMovieinfo()))
                     .collect(Collectors.toList());
-            
+
             java.util.Map<String, Object> result = new java.util.HashMap<>();
             result.put("success", true);
-            result.put("message", String.format("박스오피스 데이터 처리 완료! 새로 추가된 영화: %d개 (전체: %d개)", 
+            result.put("message", String.format("박스오피스 데이터 처리 완료! 새로 추가된 영화: %d개 (전체: %d개)",
                                                addedCount, afterCount));
             result.put("addedCount", addedCount);
             result.put("totalCount", afterCount);
             result.put("currentMovies", currentMovies);
             result.put("archivedMovies", archivedMovies);
-            
             return result;
         } catch (Exception e) {
             java.util.Map<String, Object> result = new java.util.HashMap<>();
@@ -99,21 +101,19 @@ public class MovieController {
     public java.util.Map<String, List<Movie>> getMoviesForAdmin() {
         LocalDate today = LocalDate.now();
         List<Movie> allMovies = movieRepository.findAll();
-        
         // 현재 상영작: movieinfo가 'Y' 또는 'N'인 영화들
         List<Movie> currentMovies = allMovies.stream()
                 .filter(movie -> "Y".equals(movie.getMovieinfo()) || "N".equals(movie.getMovieinfo()))
                 .collect(Collectors.toList());
-                
         // 상영 종료작: movieinfo가 'D'인 영화들
         List<Movie> archivedMovies = allMovies.stream()
                 .filter(movie -> "D".equals(movie.getMovieinfo()))
                 .collect(Collectors.toList());
-        
+
         java.util.Map<String, List<Movie>> result = new java.util.HashMap<>();
         result.put("currentMovies", currentMovies);
         result.put("archivedMovies", archivedMovies);
-        
+
         return result;
     }
 
@@ -124,7 +124,6 @@ public class MovieController {
     public Movie updateMovie(@PathVariable String moviecd, @RequestBody Movie updatedMovie) {
         Movie movie = movieRepository.findById(moviecd)
                 .orElseThrow(() -> new RuntimeException("영화를 찾을 수 없습니다: " + moviecd));
-        
         // 수정 가능한 필드들만 업데이트
         if (updatedMovie.getMovienm() != null) {
             movie.setMovienm(updatedMovie.getMovienm());
@@ -150,7 +149,6 @@ public class MovieController {
         if (updatedMovie.getIsadult() != null) {
             movie.setIsadult(updatedMovie.getIsadult());
         }
-        
         return movieRepository.save(movie);
     }
 
@@ -173,12 +171,10 @@ public class MovieController {
     public Movie updateScreeningStatus(@PathVariable String moviecd) {
         Movie movie = movieRepository.findById(moviecd)
                 .orElseThrow(() -> new RuntimeException("영화를 찾을 수 없습니다: " + moviecd));
-        
         // 현재 상태의 반대로 변경
         String currentStatus = movie.getMovieinfo();
         String newStatus = "Y".equals(currentStatus) ? "N" : "Y";
         movie.setMovieinfo(newStatus);
-        
         return movieRepository.save(movie);
     }
 
@@ -194,5 +190,15 @@ public class MovieController {
         movie.setMovieinfo("D");
         
         return movieRepository.save(movie);
+    }
+
+
+
+    @PostMapping("/detail")
+    public ResponseEntity<Optional<Movie>> getMovieDetail(@RequestBody Map<String, Object> params) {
+        String moviecd = (String) params.get("movieno");
+        Optional<Movie> movie = movieRepository.findById(moviecd);
+
+        return new ResponseEntity<>(movie, HttpStatus.OK);
     }
 }

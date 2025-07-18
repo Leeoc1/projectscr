@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getSchedules } from "../../../../../api/api";
+import { getSchedules } from "../../../../../api/cinemaApi";
 
 const MovieSelector = () => {
   const [movieList, setMovieList] = useState({});
@@ -17,7 +17,8 @@ const MovieSelector = () => {
       const filtered = schedule.filter((schedule) => {
         const dateMatch = schedule.startdate === selectedDate;
         const cinemaMatch = schedule.cinemanm === selectedCinemanm;
-        return dateMatch && cinemaMatch;
+        const statusMatch = schedule.screenstatus === "운영중";
+        return dateMatch && cinemaMatch && statusMatch;
       });
 
       // movienm 기준으로 스케줄 그룹화

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useGoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import {
   getGoogleUserInfo,
@@ -10,10 +10,15 @@ import {
 
 const GoogleLoginButton = ({ onLoginAttempt }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
+        console.log("구글 로그인 성공, 사용자 정보 처리 시작...");
+        
         // 기본 사용자 정보 가져오기
         const userInfo = await getGoogleUserInfo(tokenResponse.access_token);
 
@@ -29,26 +34,42 @@ const GoogleLoginButton = ({ onLoginAttempt }) => {
           phoneNumbers: peopleData.phoneNumbers,
         };
 
-        // 백엔드로 사용자 정보 전송
-        await saveGoogleUserToBackend(completeUserInfo);
-        console.log("사용자 정보를 데이터베이스에 저장했습니다.");
+        console.log("구글 사용자 정보:", completeUserInfo);
 
+        // 백엔드로 사용자 정보 전송
+        const savedUser = await saveGoogleUserToBackend(completeUserInfo);
+        console.log("구글 백엔드 응답:", savedUser);
+
+        // 로그인 성공 처리
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userid", savedUser.userid);
+        localStorage.setItem("username", savedUser.username);
+
+        alert("구글 로그인 성공!");
         navigate("/");
       } catch (error) {
         console.error("Google 로그인 처리 실패:", error);
+        alert("구글 로그인 처리 중 오류가 발생했습니다.");
       }
     },
     onError: (error) => {
       console.error("Google 로그인 실패:", error);
+      alert("구글 로그인에 실패했습니다.");
     },
     scope:
       "openid email profile https://www.googleapis.com/auth/user.birthday.read https://www.googleapis.com/auth/user.phonenumbers.read",
   });
 
   const handleClick = () => {
+    console.log("구글 로그인 버튼 클릭");
     if (onLoginAttempt) {
       onLoginAttempt("구글");
     }
+    
+    // 구글 로그인 시작 시 loginType 설정
+    localStorage.setItem("loginType", "google");
+    sessionStorage.setItem("loginType", "google");
+    
     googleLogin();
   };
 

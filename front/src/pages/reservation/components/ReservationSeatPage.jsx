@@ -248,9 +248,6 @@ const ReservationSeatPage = () => {
                 </span>
               </div>
             </div>
-            <div className="total-guests">
-              <strong>총 인원: {totalGuests}명</strong>
-            </div>
           </div>
 
           {/* 좌석 선택 */}

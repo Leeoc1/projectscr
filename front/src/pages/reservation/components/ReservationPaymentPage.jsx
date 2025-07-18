@@ -70,7 +70,14 @@ const ReservationPaymentPage = () => {
 
   // 결제 처리
   const handlePay = () => {
-    // reservationInfo는 이미 finalReservationInfo에 저장되어 있음
+    // 기존 예약 정보 불러오기
+    const info = JSON.parse(
+      sessionStorage.getItem("finalReservationInfo") || "{}"
+    );
+    // 최종 결제 금액을 info에 추가
+    info.finalPrice = finalPrice;
+    // 다시 저장
+    sessionStorage.setItem("finalReservationInfo", JSON.stringify(info));
     // 체크아웃 페이지로 이동
     navigate("/checkout");
   };

@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-<<<<<<<< HEAD:front/src/pages/reservation/ReservationPage/tocinema/components/DateSelector.jsx
 import { WEEKDAYS, getDateArray } from "../../../../../utils/DateUtils";
-========
-import { WEEKDAYS, getDateArray } from "./DateUtils";
->>>>>>>> kby_brunch:수정 파일/DateSelector.jsx
 
 const DateSelector = () => {
   const today = new Date();
@@ -45,17 +41,14 @@ const DateSelector = () => {
       date.getMonth() + 1
     ).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
     sessionStorage.setItem("selectedFullDate", formattedDate);
-<<<<<<<< HEAD:front/src/pages/reservation/ReservationPage/tocinema/components/DateSelector.jsx
     sessionStorage.removeItem("selectedMovieName");
     sessionStorage.removeItem("selectedMovieTime");
-    
-========
->>>>>>>> kby_brunch:수정 파일/DateSelector.jsx
+
     window.dispatchEvent(
       new CustomEvent("sessionStorageChange", {
-        detail: { 
+        detail: {
           selectedFullDate: formattedDate,
-          selectedMovieName: null // 영화 이름도 초기화
+          selectedMovieName: null, // 영화 이름도 초기화
         },
       })
     );

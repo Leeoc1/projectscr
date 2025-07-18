@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCurrentMovies, getUpcomingMovies } from "../../../api/movieApi";
+import { getCurrentMovies, getMoviesForAdmin } from "../../../api/movieApi";
 import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
 import "../styles/Movies.css";
 

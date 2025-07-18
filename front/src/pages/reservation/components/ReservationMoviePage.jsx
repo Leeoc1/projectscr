@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Header from "../../../shared/Header";
 import Footer from "../../../shared/Footer";
-import ReservationMovies from "./components/ReservationMovies";
+import ReservationMovies from "../ReservationPage/components/ReservationMovies";
 import "../style/ReservationMoviePage.css";
 
 const ReservationMoviePage = () => {

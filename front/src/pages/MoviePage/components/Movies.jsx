@@ -3,71 +3,58 @@ import { useNavigate } from "react-router-dom";
 import { getCurrentMovies, getMoviesForAdmin } from "../../../api/movieApi";
 import "../styles/Movies.css";
 
+
 const Movies = () => {
   const [activeTab, setActiveTab] = useState("boxoffice");
   const [currentMovies, setCurrentMovies] = useState([]);
   const [upcomingMoviesData, setUpcomingMoviesData] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(16);
   const navigate = useNavigate();
-
-  const handleReservationClick = (movie) => {
-    // 홈페이지와 동일한 방식으로 영화 정보를 세션 스토리지에 저장
-    sessionStorage.setItem("moviecd", movie.moviecd);
-    sessionStorage.setItem("movienm", movie.movienm);
-
-    // 예매 페이지와 동일한 방식으로 전체 영화 객체도 저장
-    const movieData = {
-      moviecd: movie.moviecd,
-      movienm: movie.movienm,
-      posterurl: movie.posterurl,
-      genre: movie.genre,
-      runningtime: movie.runningtime,
-      isadult: movie.isadult,
-    };
-    sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
-
-    console.log(
-      "🎬 영화카드 클릭 - 영화:",
-      movie.movienm,
-      "moviecd:",
-      movie.moviecd
-    );
-    navigate("/reservation/place");
-  };
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         const currentData = await getCurrentMovies();
         const adminData = await getMoviesForAdmin();
-
-        // 관리자 API에서 상영예정작(movieinfo === "E") 필터링
         const upcomingData = adminData.currentMovies.filter(
           (movie) => movie.movieinfo === "E"
         );
-
-        // releasedate 기준 최신순(내림차순) 정렬
-        const sortedCurrent = currentData.slice().sort((a, b) => {
-          // releasedate가 YYYY-MM-DD 형식이라고 가정
-          return new Date(b.releasedate) - new Date(a.releasedate);
-        });
-
-        const sortedUpcoming = upcomingData.slice().sort((a, b) => {
-          return new Date(a.releasedate) - new Date(b.releasedate); // 개봉예정일 빠른 순
-        });
-
+        const sortedCurrent = currentData.slice().sort(
+          (a, b) => new Date(b.releasedate) - new Date(a.releasedate)
+        );
+        const sortedUpcoming = upcomingData.slice().sort(
+          (a, b) => new Date(a.releasedate) - new Date(b.releasedate)
+        );
         setCurrentMovies(sortedCurrent);
         setUpcomingMoviesData(sortedUpcoming);
-      } catch (error) {
-        console.error("영화 데이터 로딩 실패:", error);
-      }
+      } catch (error) {}
     };
-
     fetchMovies();
   }, []);
 
-  // 영화 상세 정보 페이지로 이동
+  const handleReservationClick = (movie) => {
+    sessionStorage.setItem("moviecd", movie.moviecd);
+    sessionStorage.setItem("movienm", movie.movienm);
+    sessionStorage.setItem(
+      "selectedMovie",
+      JSON.stringify({
+        moviecd: movie.moviecd,
+        movienm: movie.movienm,
+        posterurl: movie.posterurl,
+        genre: movie.genre,
+        runningtime: movie.runningtime,
+        isadult: movie.isadult,
+      })
+    );
+    navigate("/reservation/place");
+  };
+
   const goMovieDetail = (moviecd) => {
     navigate(`/moviedetail?movieno=${moviecd}`);
+  };
+
+  const handleShowMore = () => {
+    setVisibleCount(currentMovies.length);
   };
 
   return (
@@ -92,7 +79,7 @@ const Movies = () => {
       </div>
       <div className="mvs-grid">
         {activeTab === "boxoffice"
-          ? currentMovies.map((movie) => (
+          ? currentMovies.slice(0, visibleCount).map((movie) => (
               <div className="mvs-card" key={movie.moviecd}>
                 <div className="mvs-poster">
                   <img src={movie.posterurl} alt={movie.movienm} />
@@ -116,7 +103,11 @@ const Movies = () => {
                 <div className="mvs-info">
                   <h3 className="mvs-title">{movie.movienm}</h3>
                   <p className="mvs-genre">{movie.genre}</p>
-                  <p className="mvs-rating">
+                  <p
+                    className={`mvs-rating ${
+                      movie.isadult === "Y" ? "mvs-rating-19" : "mvs-rating-all"
+                    }`}
+                  >
                     {movie.isadult === "Y" ? "청소년 관람불가" : "전체 관람가"}
                   </p>
                   <p className="mvs-duration">{movie.runningtime}분</p>
@@ -144,7 +135,11 @@ const Movies = () => {
                 <div className="mvs-info">
                   <h3 className="mvs-title">{movie.movienm}</h3>
                   <p className="mvs-genre">{movie.genre}</p>
-                  <p className="mvs-rating">
+                  <p
+                    className={`mvs-rating ${
+                      movie.isadult === "Y" ? "mvs-rating-19" : "mvs-rating-all"
+                    }`}
+                  >
                     {movie.isadult === "Y" ? "청소년 관람불가" : "전체 관람가"}
                   </p>
                   <p className="mvs-release">
@@ -154,6 +149,13 @@ const Movies = () => {
               </div>
             ))}
       </div>
+      {activeTab === "boxoffice" && currentMovies.length > visibleCount && (
+        <div style={{ textAlign: "center", margin: "2rem 0" }}>
+          <button className="mvs-showmore-btn" onClick={handleShowMore}>
+            더보기
+          </button>
+        </div>
+      )}
     </div>
   );
 };

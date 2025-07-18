@@ -85,7 +85,7 @@ const ScreenSelector = () => {
       movienm: sessionStorage.getItem("selectedMovieName"),
       screenname: schedule.screenname,
       schedulecd: schedule.schedulecd, // 예약 진행을 위해 schedulecd 추가
-      runningtime: schedule.runningtime, // 상영시간 
+      runningtime: schedule.runningtime, // 상영시간
       cinemanm: sessionStorage.getItem("cinemanm"),
     };
     sessionStorage.setItem("selectedMovieTime", JSON.stringify(timeData));
@@ -112,18 +112,20 @@ const ScreenSelector = () => {
     const fetchReservedSeats = async () => {
       const reservations = await getReservationSeat();
       const reservedCounts = {};
-      
-      reservations.forEach(reservation => {
+
+      reservations.forEach((reservation) => {
         const schedulecd = reservation.schedulecd;
-        const seatCount = reservation.seatcd ? reservation.seatcd.split(',').length : 0;
-        
+        const seatCount = reservation.seatcd
+          ? reservation.seatcd.split(",").length
+          : 0;
+
         if (reservedCounts[schedulecd]) {
           reservedCounts[schedulecd] += seatCount;
         } else {
           reservedCounts[schedulecd] = seatCount;
         }
       });
-      
+
       setReservedSeatsCount(reservedCounts);
     };
 
@@ -159,7 +161,8 @@ const ScreenSelector = () => {
                           {schedule.starttime.split(" ")[1]?.substring(0, 5)}
                         </div>
                         <div className="rptm-screen-time-seats">
-                          {reservedSeatsCount[schedule.schedulecd] || 0}/{schedule.allseat}
+                          {schedule.allseat}/
+                          {reservedSeatsCount[schedule.schedulecd] || 0}
                         </div>
                         <div className="rptm-screen-time-screen">
                           {schedule.screenname}

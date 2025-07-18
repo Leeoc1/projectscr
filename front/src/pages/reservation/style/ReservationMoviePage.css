@@ -1,9 +1,9 @@
-.rmp-page {
+.rmpp-page {
   background: #f4f6fa;
   min-height: 100vh;
 }
 
-.rmp-container {
+.rmpp-container {
   max-width: 980px;
   margin: 0 auto;
   background: #fff;
@@ -14,7 +14,7 @@
   margin-bottom: 48px;
 }
 
-.rmp-title {
+.rmpp-title {
   font-size: 2.5rem;
   font-weight: bold;
   color: #333;

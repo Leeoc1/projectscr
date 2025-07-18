@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
+import ReservationMovies from "../ReservationPage/components/ReservationMovies";
 import Header from "../../../shared/Header";
-import Movies from "../../MoviePage/components/Movies";
 import "../style/ReservationMoviePage.css";
 
-const ReservationMoviePage = () => {
+const MoviePage = () => {
   useEffect(() => {
     document.body.classList.add("no-header-padding");
     return () => {
@@ -15,16 +15,15 @@ const ReservationMoviePage = () => {
   }, []);
 
   return (
-    <div className="rmp-page">
+    <div className="rmpp-page">
       <Header />
-      <div>
-        <div className="rmp-container">
-          <h1 className="rmp-title">영화 예매</h1>
-          <Movies />
-        </div>
+      <div className="rmpp-container">
+        <h1 className="rmpp-title">영화 예매</h1>
+        <p className="rmpp-subtitle">원하는 영화를 선택하여 예매하세요.</p>
+        <ReservationMovies />
       </div>
     </div>
   );
 };
 
-export default ReservationMoviePage;
+export default MoviePage;

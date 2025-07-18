@@ -4,6 +4,7 @@ import com.example.thescreen.entity.Movie;
 import com.example.thescreen.entity.MovieView;
 import com.example.thescreen.repository.MovieRepository;
 import com.example.thescreen.repository.MovieViewRepository;
+//import com.example.thescreen.service.FetchMovieService;
 import com.example.thescreen.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ public class MovieController {
     private final MovieRepository movieRepository;
     private final MovieViewRepository movieViewRepository;
     private final MovieService movieService;
+//    private final FetchMovieService fetchMovieService;
 
     /**
      * 애플리케이션 시작 시 자동으로 영화 순위 업데이트
@@ -133,7 +135,7 @@ public class MovieController {
             }
 
             LocalDate today = LocalDate.now();
-            LocalDate fiftyDaysAgo = today.minusDays(50);
+            LocalDate fiftyDaysAgo = today.minusDays(30);
 
             // 2. 오늘 이후 개봉 영화는 'E'로
             List<Movie> upcomingMovies = movieRepository.findByReleasedateAfter(today);

@@ -1,87 +1,86 @@
-.progress-bar {
+.progress-bar-wrapper {
+  box-sizing: border-box;
+}
+
+.progress-bar-wrapper .progress-bar {
   width: 100%;
-  max-width: 1000px;
-  margin: 80px auto 0;
+  max-width: 1080px;
+  background: #fff;
+  padding: 38px 0;
+  border-radius: 10px;
+  border: 1px solid #dee2e6;
+  margin: 90px auto 0 auto;
 }
 
-.card {
-  border: none;
-  background: #ffffff;
+.progress-bar-wrapper .progress-steps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
-.progress-wrapper {
-  margin-bottom: 20px;
+.progress-bar-wrapper .progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+  z-index: 2;
+  margin: 0 50px;
 }
 
-.progress-bar.bg-gradient {
-  background: linear-gradient(
-    90deg,
-    #4dabf7,
-    #0d6efd
-  ); /* 부드러운 그라디언트 */
-  transition: width 0.5s ease-in-out; /* 부드러운 애니메이션 */
-  box-shadow: 0 2px 4px rgba(13, 110, 253, 0.3); /* 그림자 강조 */
+.progress-bar-wrapper .progress-step:first-child {
+  margin-left: 0;
 }
 
-.progress-step {
-  flex: 1;
-  transition: all 0.3s ease;
-  z-index: 1;
+.progress-bar-wrapper .progress-step:last-child {
+  margin-right: 0;
 }
 
-.step-number {
+.progress-bar-wrapper .step-number {
+  width: 58px;
+  height: 58px;
+  border-radius: 10px;
   background: #e9ecef;
   color: #6c757d;
-  font-weight: 600;
-  font-size: 14px;
-  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 24px;
   transition: all 0.3s ease;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -ms-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
 }
 
-.step-title {
+.progress-bar-wrapper .progress-step.completed .step-number::before {
+  font-size: 28px;
+}
+
+.progress-bar-wrapper .progress-step.completed .step-number {
+  background: #ffc107; /* 부트스트랩의 warning */
+  color: white;
+}
+
+.progress-bar-wrapper .progress-step.active .step-number {
+  background: #ffc107;
+  color: white;
+}
+
+.progress-bar-wrapper .step-title {
+  font-size: 16px;
   color: #6c757d;
-  font-weight: 500;
-  max-width: 120px;
-  margin-left: 20px;
-  z-index: 10;
+  font-weight: 400;
+  text-align: center;
+  transition: all 0.3s ease;
 }
 
-.progress-step.active .step-number {
-  background: #198754;
-  color: #fff;
-  transform: scale(1.1);
+.progress-bar-wrapper .progress-step.active .step-title {
+  color: #ffc107;
+  font-weight: 700;
+  font-size: 18px;
 }
 
-.progress-step.active .step-title {
-  color: #198754;
-  font-weight: 600;
-}
-
-.progress-step.completed .step-number {
-  background: #0d6efd;
-  color: #fff;
-}
-
-.progress-step.completed .step-title {
-  color: #0d6efd;
-}
-
-.progress-line {
-  position: absolute;
-  top: 10px;
-  left: 0;
-  height: 4px;
-  background: #0d6efd;
-  /*진행중인색상*/
-  transition: width 0.5s ease-in-out;
-  /*진행바와동기화*/
-  z-index: 0;
-  -webkit-transition: width 0.5s ease-in-out;
-  -moz-transition: width 0.5s ease-in-out;
-  -ms-transition: width 0.5s ease-in-out;
-  -o-transition: width 0.5s ease-in-out;
+.progress-bar-wrapper .progress-step.completed .step-title {
+  color: #ffc107;
+  font-weight: 400;
+  font-size: 16px;
 }

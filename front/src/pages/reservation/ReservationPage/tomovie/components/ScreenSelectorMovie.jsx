@@ -143,9 +143,7 @@ const ScreenSelectorMovie = () => {
 
   return (
     <div className="place-time-list-content">
-      {movieSchedule.length === 0 && (
-        <div>선택한 조건에 맞는 상영 정보가 없습니다.</div>
-      )}
+      {movieSchedule.length === 0 && <div>상영정보가 없습니다.</div>}
       {uniqueScreentypes.length > 0 && (
         <>
           {uniqueScreentypes.map((screentype) => (

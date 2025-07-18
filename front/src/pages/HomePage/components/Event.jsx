@@ -1,8 +1,10 @@
-import { eventsData } from "../../../data/mockData.js";
+import { eventsData } from "../../../data/EventPageData.js";
 import "../styles/Event.css";
-
+import { useNavigate } from "react-router-dom";
 
 const Event = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="et-events-section">
       <div className="et-events-container">
@@ -13,7 +15,15 @@ const Event = () => {
 
         <div className="et-events-grid">
           {eventsData.map((event, index) => (
-            <div key={index} className="et-event-card">
+            <div
+              key={index}
+              className="et-event-card"
+              onClick={() => {
+                navigate("/event");
+                window.scrollTo(0, 0);
+              }}
+              style={{ cursor: "pointer" }}
+            >
               <img
                 src={event.image}
                 alt={event.title}

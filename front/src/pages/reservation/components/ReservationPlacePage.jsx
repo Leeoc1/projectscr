@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../../shared/Header";
-import { getCurrentMovies } from "../../../api/api";
+import Footer from "../../../shared/Footer";
+import { getCurrentMovies } from "../../../api/movieApi";
 import "../style/ReservationPlacePage.css";
 import DateSelectorMovie from "../ReservationPage/tomovie/components/DateSelectorMovie";
 import TheaterSelector from "../ReservationPage/tomovie/components/TheaterSelector";
@@ -127,12 +128,22 @@ const ReservationPlacePage = () => {
                   <p className="selected-movie-genre">
                     상영시간: {movieDetails.runningtime}분
                   </p>
-                  <p className="selected-movie-genre">
-                    관람등급:{" "}
-                    {movieDetails.isadult === "Y"
-                      ? "청소년 관람불가"
-                      : "전체 관람가"}
-                  </p>
+                  <div className="selected-movie-rating">
+                    <span
+                      className={`rpp-age-icon ${
+                        movieDetails.isadult === "Y"
+                          ? "rpp-age-19"
+                          : "rpp-age-all"
+                      }`}
+                    >
+                      {movieDetails.isadult === "Y" ? "19" : "ALL"}
+                    </span>
+                    <span className="rpp-rating-text">
+                      {movieDetails.isadult === "Y"
+                        ? "청소년 관람불가"
+                        : "전체관람가"}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -149,6 +160,7 @@ const ReservationPlacePage = () => {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../../shared/Header";
-import { getReservation } from "../../../api/api";
+import Footer from "../../../shared/Footer";
+import { getReservation } from "../../../api/reservationApi";
 import "../style/ReservationSuccessPage.css";
 
 const ReservationSuccessPage = () => {
@@ -272,6 +273,7 @@ const ReservationSuccessPage = () => {
           </button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

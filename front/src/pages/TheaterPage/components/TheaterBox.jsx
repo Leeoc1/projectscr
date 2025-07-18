@@ -5,7 +5,7 @@ import RegionTheaterSection from "./RegionTheaterSection";
 import SpecialTheaterSection from "./SpecialTheaterSection";
 import TheaterFilter from "./TheaterFilter";
 import { useState, useEffect } from "react";
-import { getCinemas } from "../../../api/api";
+import { getCinemas } from "../../../api/cinemaApi";
 
 
 const TheaterBox = () => {

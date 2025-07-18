@@ -52,7 +52,7 @@
 
 .mvs-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 2rem;
 }
 
@@ -116,19 +116,37 @@
   margin-bottom: 0.25rem;
 }
 
-.mvs-rating.rating-all {
-  color: #229c56;
-  font-weight: 600;
+.mvs-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
-.mvs-rating.rating-12 {
-  color: #dd7430; /* 주황색 - 12세 이상 */
-  font-weight: 600;
+.mvs-age-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 16px;
+  border-radius: 3px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: white;
 }
 
-.mvs-rating.rating-19 {
-  color: #cd1327; /* 보라색 - 19세 이상 */
-  font-weight: 600;
+.mvs-age-19 {
+  background-color: #dc2626;
+  height: 20px;
+}
+
+.mvs-age-all {
+  background-color: #059669;
+  height: 20px;
+}
+
+.mvs-rating-text {
+  font-size: 0.875rem;
+  color: #666;
 }
 
 .mvs-book-btn {

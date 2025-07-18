@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCurrentMovies } from "../../../api/api";
+import { getCurrentMovies } from "../../../api/movieApi";
 import "../styles/MovieChart.css";
 
 const MovieChart = () => {
@@ -125,7 +125,6 @@ const MovieChart = () => {
         <div className="mcs-slider-wrapper">
           <button
             onClick={prevSlide}
-            disabled={currentIndex === 0}
             className="mcs-slider-nav-arrow mcs-slider-nav-prev"
           >
             ‹
@@ -155,11 +154,17 @@ const MovieChart = () => {
                     <p className="mcs-movie-genre">{movie.genre}</p>
                     <div className="mcs-movie-meta">
                       <div className="mcs-movie-rating">
-                        <span>⭐</span>
+                        <span
+                          className={`mcs-age-icon ${
+                            movie.isadult === "Y" ? "mcs-age-19" : "mcs-age-all"
+                          }`}
+                        >
+                          {movie.isadult === "Y" ? "19" : "ALL"}
+                        </span>
                         <span className="mcs-movie-rating-text">
                           {movie.isadult === "Y"
                             ? "청소년 관람불가"
-                            : "전체 관람가"}
+                            : "전체관람가"}
                         </span>
                       </div>
                       <span className="mcs-movie-rank">{movie.rank}</span>
@@ -171,7 +176,6 @@ const MovieChart = () => {
           </div>
           <button
             onClick={nextSlide}
-            disabled={currentIndex === maxIndex}
             className="mcs-slider-nav-arrow mcs-slider-nav-next"
           >
             ›

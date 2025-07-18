@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../../shared/Header";
+import Footer from "../../../shared/Footer";
 import ProgressBar from "./ProgressBar";
 import "../style/ReservationSeatPage.css";
-import { getReservationSeat } from "../../../api/api";
+import { getReservationSeat } from "../../../api/reservationApi";
 
 const ReservationSeatPage = () => {
   const navigate = useNavigate();
@@ -332,6 +333,7 @@ const ReservationSeatPage = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

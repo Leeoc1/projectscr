@@ -1,3 +1,11 @@
+.l-logo-img {
+  width: 300px;
+  object-fit: contain;
+  align-items: center;
+  margin-bottom: -100px;
+  margin-top: -100px; /* 컨텐츠가 이미지 범위를 침범하도록 더 큰 음수 마진 */
+}
+
 .lgs-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #1f2937 0%, #111827 50%, #000000 100%);
@@ -20,7 +28,7 @@
 
 .lgs-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem; /* 기존 2rem에서 1rem으로 줄임 */
 }
 
 .lgs-title {
@@ -33,6 +41,8 @@
 .lgs-subtitle {
   color: #6b7280;
   font-size: 1rem;
+  margin-top: -10px; /* 음수 마진으로 더욱 위로 올리기 */
+  margin-bottom: 30px;
 }
 
 .lgs-form {

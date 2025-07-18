@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { boxofficeMovies, upcomingMovies } from "../../../data/MoviesData.js";
-import { getCurrentMovies, getUpcomingMovies } from "../../../api/api.js";
+import { getCurrentMovies, getUpcomingMovies } from "../../../api/movieApi";
 import "../styles/Movies.css";
 
 const Movies = () => {
@@ -51,6 +50,11 @@ const Movies = () => {
     fetchMovies();
   }, []);
 
+  // 영화 상세 정보 페이지로 이동
+  const goMovieDetail = (moviecd) => {
+    navigate(`/moviedetail?movieno=${moviecd}`);
+  };
+
   return (
     <div className="mvs-section">
       <div className="mvs-tabs">
@@ -79,7 +83,12 @@ const Movies = () => {
                   <img src={movie.posterurl} alt={movie.movienm} />
                   <div className="mvs-overlay">
                     <div className="mvs-buttons">
-                      <button className="mvs-btn">상세정보</button>
+                      <button
+                        className="mvs-btn"
+                        onClick={() => goMovieDetail(movie.moviecd)}
+                      >
+                        상세정보
+                      </button>
                       <button
                         className="mvs-btn"
                         onClick={() => handleReservationClick(movie)}
@@ -92,9 +101,18 @@ const Movies = () => {
                 <div className="mvs-info">
                   <h3 className="mvs-title">{movie.movienm}</h3>
                   <p className="mvs-genre">{movie.genre}</p>
-                  <p className="mvs-rating">
-                    {movie.isadult === "Y" ? "청소년 관람불가" : "전체 관람가"}
-                  </p>
+                  <div className="mvs-rating">
+                    <span
+                      className={`mvs-age-icon ${
+                        movie.isadult === "Y" ? "mvs-age-19" : "mvs-age-all"
+                      }`}
+                    >
+                      {movie.isadult === "Y" ? "19" : "ALL"}
+                    </span>
+                    <span className="mvs-rating-text">
+                      {movie.isadult === "Y" ? "청소년 관람불가" : "전체관람가"}
+                    </span>
+                  </div>
                   <p className="mvs-duration">{movie.runningtime}분</p>
                 </div>
               </div>

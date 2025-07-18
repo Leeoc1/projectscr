@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../../styles/StaffManagement.css";
 import "../../styles/AdminPage.css";
 import "../../styles/Stable.css";
-import { getStaffs } from "../../../../api/api";
+import { getStaffs } from "../../../../api/userApi";
 import StaffUpdatePopup from "./StaffUpdatePopup";
 import AddStaffPopup from "./AddStaffPopup";
 

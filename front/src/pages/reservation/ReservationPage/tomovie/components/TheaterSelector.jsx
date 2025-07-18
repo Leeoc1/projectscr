@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getSchedules } from "../../../../../api/api";
+import { getSchedules } from "../../../../../api/cinemaApi";
 import ScreenSelectorMovie from "./ScreenSelectorMovie";
 
 const TheaterSelector = () => {

@@ -1,4 +1,3 @@
-// SideBarData.js
 export const sidebarItems = [
   {
     id: "dashboard",
@@ -24,11 +23,6 @@ export const sidebarItems = [
     id: "movies",
     label: "영화 관리",
     icon: "🎬",
-  },
-  {
-    id: "screens",
-    label: "상영관 관리",
-    icon: "🎥",
   },
   {
     id: "reservations",

@@ -1,4 +1,3 @@
-// SideBarData.js
 export const sidebarItems = [
   {
     id: "dashboard",

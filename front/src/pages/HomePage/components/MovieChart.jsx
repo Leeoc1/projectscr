@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCurrentMovies } from "../../../api/movieApi";
+import { getTopTenMovies } from "../../../api/movieApi";
 import "../styles/MovieChart.css";
 import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
 
@@ -16,15 +16,13 @@ const MovieChart = () => {
   // API에서 영화 데이터 가져오기
   useEffect(() => {
     const fetchMovies = async () => {
-      const currentMovies = await getCurrentMovies();
-      // 상위 10개 영화만 필터링 (rank 정보가 없으므로 처음 10개)
-      const top10Movies = currentMovies.slice(0, 10).map((movie, index) => ({
-        ...movie,
-        rank: index + 1,
-      }));
-      setMovies(top10Movies);
+      const top10Movies = await getTopTenMovies();
+      // movierank 오름차순 정렬
+      const sorted = [...top10Movies].sort(
+        (a, b) => Number(a.movierank) - Number(b.movierank)
+      );
+      setMovies(sorted);
     };
-
     fetchMovies();
   }, []);
 
@@ -118,6 +116,7 @@ const MovieChart = () => {
 
     navigate("/reservation/place");
   };
+  console.log("MovieChart 렌더링", movies);
 
   return (
     <section className="mcs-section">

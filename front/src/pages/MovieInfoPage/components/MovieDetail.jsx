@@ -39,18 +39,7 @@ export default function MovieDetail() {
     };
     sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
 
-    console.log(
-      "🎬 영화카드 클릭 - 영화:",
-      movieData.movienm,
-      "moviecd:",
-      movieData.moviecd
-    );
     navigate("/reservation/place");
-  };
-
-  const handleSearch = () => {
-    console.log("Search clicked");
-    // TODO: Implement search functionality
   };
 
   return (

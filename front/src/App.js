@@ -1,4 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import MoviePage from "./pages/MoviePage/MoviePage";
 import TheaterPage from "./pages/TheaterPage/TheaterPage";
@@ -21,9 +27,18 @@ import { FailPage } from "./pages/reservation/Payments/Fail";
 import MovieDetail from "./pages/MovieInfoPage/components/MovieDetail";
 import MyPage from "./pages/MyPage/components/MyPage";
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/movie" element={<MoviePage />} />

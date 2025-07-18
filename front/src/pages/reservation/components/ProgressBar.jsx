@@ -1,38 +1,45 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../style/ProgressBar.css";
 
 const ProgressBar = ({
   currentStep = 0,
   steps = ["날짜/극장", "인원/좌석", "결제"],
 }) => {
-  const progressPercentage = (currentStep / (steps.length - 1)) * 100;
+  const navigate = useNavigate();
+
+  const goBack = () => {
+    navigate(-1);
+  };
 
   return (
-    <div className="progress-bar">
-      <div className="card p-4 shadow-sm">
-        <div className="progress-wrapper mb-3"></div>
-        <div className="progress-steps d-flex justify-content-between align-items-center position-relative">
+    <div className="progress-bar-wrapper">
+      <div className="progress-bar">
+        <div className="progress-steps">
           {steps.map((step, idx) => {
-            const stepClass = `progress-step text-center ${
-              idx === currentStep
-                ? "active"
-                : idx < currentStep
-                ? "completed"
-                : ""
-            }`.trim();
+            let stepClass = "progress-step";
+            if (idx === currentStep) {
+              stepClass += " active";
+            } else if (idx < currentStep) {
+              stepClass += " completed";
+            }
+
             return (
-              <div key={step} className={stepClass}>
-                <span className="step-number badge rounded-pill">
-                  {idx + 1}
-                </span>
-                <p className="step-title small">{step}</p>
+              <div
+                key={step}
+                className={stepClass}
+                onClick={() => {
+                  if (idx === currentStep - 1) {
+                    goBack();
+                  }
+                }}
+                style={{ cursor: idx === currentStep - 1 ? "pointer" : "default" }}
+              >
+                <span className="step-number">{idx + 1}</span>
+                <span className="step-title">{step}</span>
               </div>
             );
           })}
-          <div
-            className="progress-line"
-            style={{ width: `${progressPercentage}%` }}
-          ></div>
         </div>
       </div>
     </div>

@@ -145,7 +145,6 @@ export function CheckoutPage() {
                   customerEmail: "customer123@gmail.com",
                   customerName: "전요한",
                   customerMobilePhone: "01012341234",
-                  amount: amount.value,
                 });
               } catch (error) {
                 console.error(error);

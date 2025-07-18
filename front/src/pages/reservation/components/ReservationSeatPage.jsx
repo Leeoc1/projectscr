@@ -27,6 +27,7 @@ const ReservationSeatPage = () => {
   const totalGuests = guestCount.adult + guestCount.child + guestCount.senior;
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [reservedSeats, setReservedSeats] = useState([]);
+  const [manySelectedSeats, setManySelectedSeats] = useState([]);
 
   useEffect(() => {
     setSelectedSeats([]);
@@ -35,6 +36,7 @@ const ReservationSeatPage = () => {
   useEffect(() => {
     const fetchReservedSeats = async () => {
       try {
+        const manySelectedSeats = await getReservationSeat();
         const reservations = await getReservationSeat();
         const currentScheduleReservations = reservations.filter(
           (reservation) =>
@@ -45,6 +47,7 @@ const ReservationSeatPage = () => {
             reservation.seatcd ? reservation.seatcd.split(",") : []
         );
         setReservedSeats(reservedSeatsArray);
+        setManySelectedSeats(manySelectedSeats);
       } catch (error) {
         setReservedSeats([]);
       }
@@ -52,7 +55,16 @@ const ReservationSeatPage = () => {
     fetchReservedSeats();
   }, [selectedMovieTime.schedulecd]);
 
-  console.log("Reserved Seats:", reservedSeats);
+  // 좌석별 갯수 집계 및 출력
+  const allSeats = manySelectedSeats
+    .map((r) => r.seatcd)
+    .filter(Boolean)
+    .flatMap((seatcd) => seatcd.split(","));
+  const seatCount = {};
+  allSeats.forEach((seat) => {
+    seatCount[seat] = (seatCount[seat] || 0) + 1;
+  });
+  console.log("Reserved Seats:", seatCount);
   const totalPrice =
     guestCount.adult * PRICES.adult +
     guestCount.child * PRICES.child +
@@ -186,7 +198,34 @@ const ReservationSeatPage = () => {
             <h2>
               좌석 선택 ({selectedSeats.length}/{totalGuests})
             </h2>
+
             <div className="screen">SCREEN</div>
+            <div className="seat-legend">
+              <div className="legend-item">
+                <span className="legend-color" style={{ color: "red" }}>
+                  ■
+                </span>
+                <span>5명 이상</span>
+              </div>
+              <div className="legend-item">
+                <span className="legend-color" style={{ color: "orange" }}>
+                  ■
+                </span>
+                <span>3-4명</span>
+              </div>
+              <div className="legend-item">
+                <span className="legend-color" style={{ color: "green" }}>
+                  ■
+                </span>
+                <span>1명</span>
+              </div>
+              <div className="legend-item">
+                <span className="legend-color" style={{ color: "black" }}>
+                  ■
+                </span>
+                <span>예약 없음</span>
+              </div>
+            </div>
             <div className="seat-map">
               {seatRows.map((row, rowIndex) => (
                 <div key={row} className="seat-row">
@@ -200,7 +239,9 @@ const ReservationSeatPage = () => {
                     },
                     (_, i) => {
                       const column = i + 1;
-                      const seatId = `${row}${column}`;
+                      const seatId = `${row}${column
+                        .toString()
+                        .padStart(2, "0")}`;
                       const isSelected = selectedSeats.includes(seatId);
                       const isReserved = reservedSeats.includes(seatId);
                       return (
@@ -209,6 +250,15 @@ const ReservationSeatPage = () => {
                           className={`seat ${isSelected ? "selected" : ""} ${
                             isReserved ? "reserved" : ""
                           }`}
+                          style={
+                            seatCount[seatId] >= 5
+                              ? { color: "red" }
+                              : seatCount[seatId] >= 3
+                              ? { color: "orange" }
+                              : seatCount[seatId] === 1
+                              ? { color: "green" }
+                              : { color: "black" }
+                          }
                           onClick={() => handleSeatClick(seatId)}
                           disabled={isReserved}
                         >

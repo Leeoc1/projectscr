@@ -1,22 +1,20 @@
-/* Theater Grid */
+/* thm-theater-grid가 display: grid일 때 드롭다운이 한 줄 전체를 차지하도록 */
 .thm-theater-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 1.5rem;
-  overflow-y: auto;
-  max-height: 650px;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 30px; /* 위아래 20px, 좌우 12px */
 }
 
 /* 카드에 상대 위치 지정 */
 .thm-theater-card {
   position: relative;
   background: white;
-  padding: 1.5rem;
+  padding: 1rem;
   border-radius: 0.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border: 1px solid #e2e8f0;
-  height: 150px;
-  width: 300px;
+  height: 200px;
+  width: 100%;
 }
 
 .thm-theater-card h3 {
@@ -48,7 +46,7 @@
 
 .thm-theater-detail-dropdown {
   grid-column: 1 / -1;
-  width: 92%;
+  width: 100%;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 0 0 8px 8px;
@@ -89,13 +87,6 @@
 
 .thm-theater-detail-screenscroll li:last-child {
   border-bottom: none;
-}
-
-/* thm-theater-grid가 display: grid일 때 드롭다운이 한 줄 전체를 차지하도록 */
-.thm-theater-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
 }
 
 /* 상영관 상태 뱃지 */

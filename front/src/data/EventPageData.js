@@ -1,46 +1,3 @@
-// EventPageData.js
-export const events = [
-  {
-    id: 1,
-    title: "영화 무료 상영 이벤트",
-    description: "매주 토요일 밤 10시 무료 영화 상영",
-    image: "/images/event1.png",
-    category: "상영",
-    date: "2024-01-15"
-  },
-  {
-    id: 2,
-    title: "팝콘 무료 증정",
-    description: "영화 관람 시 팝콘 무료 증정",
-    image: "/images/event2.png",
-    category: "증정",
-    date: "2024-01-20"
-  },
-  {
-    id: 3,
-    title: "학생 할인 이벤트",
-    description: "학생증 제시 시 50% 할인",
-    image: "/images/event3.png",
-    category: "할인",
-    date: "2024-01-25"
-  }
-];
-
-export const winners = [
-  {
-    id: 1,
-    name: "김영화",
-    event: "영화 무료 상영 이벤트",
-    date: "2024-01-10"
-  },
-  {
-    id: 2,
-    name: "이팝콘",
-    event: "팝콘 무료 증정",
-    date: "2024-01-15"
-  }
-]; 
-
 export const eventsData = [
   {
     title: "신작 영화 VIP 시사회",
@@ -50,6 +7,7 @@ export const eventsData = [
     badgeColor: "bg-cinemax-yellow text-black",
     image:
       "https://images.unsplash.com/photo-1573843981267-be1999ff37cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    period: "2025.07.01 ~ 2025.09.30",
   },
   {
     title: "멤버십 가입 혜택",
@@ -59,6 +17,7 @@ export const eventsData = [
     badgeColor: "bg-green-600 text-white",
     image:
       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    period: "2025.07.01 ~ 2025.09.30",
   },
   {
     title: "크리스마스 영화 페스티벌",
@@ -68,6 +27,7 @@ export const eventsData = [
     badgeColor: "bg-cinemax-yellow text-black",
     image:
       "https://images.unsplash.com/photo-1512389142860-9c449e58a543?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    period: "2025.07.01 ~ 2025.09.30",
   },
   {
     title: "학생 할인 혜택",
@@ -77,5 +37,30 @@ export const eventsData = [
     badgeColor: "bg-blue-600 text-white",
     image:
       "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    period: "2025.07.01 ~ 2025.09.30",
+  },
+
+  // 가데이터 1
+  {
+    title: "여름방학 특별 영화제",
+    description:
+      "여름방학을 맞아 가족과 친구들이 함께 즐길 수 있는 특별 영화제를 준비했습니다. 다양한 장르의 인기 영화를 할인된 가격에 만나보세요.",
+    location: "부산점",
+    badgeColor: "bg-cinemax-yellow text-black",
+    image:
+      "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    period: "2025.07.15 ~ 2025.09.30",
+  },
+
+  // 가데이터 2
+  {
+    title: "9월 영화 할인 대축제",
+    description:
+      "9월 한 달간 모든 영화 예매 시 30% 할인! 다양한 이벤트와 경품도 함께 진행됩니다.",
+    location: "전국 지점",
+    badgeColor: "bg-green-600 text-white",
+    image:
+      "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    period: "2025.09.01 ~ 2025.09.30",
   },
 ];

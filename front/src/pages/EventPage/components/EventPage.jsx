@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { events, winners } from "../../../data/EventPageData.js";
+import { eventsData } from "../../../data/EventPageData";
 import Header from "../../../shared/Header";
 import Footer from "../../../shared/Footer";
-import EventFilter from "./EventFilter";
-import EventCard from "./EventCard";
-import WinnerItem from "./WinnerItem";
 import "../styles/EventPage.css";
-import "../styles/EventFilter.css";
 
-const Event = () => {
-  const [filter, setFilter] = useState("전체");
+const categories = ["진행중인 이벤트", "종료된 이벤트", "멤버쉽"];
 
-  const filteredEvents =
-    filter === "전체"
-      ? events
-      : events.filter((event) => event.category === filter);
+const EventPage = () => {
+  const [filter, setFilter] = useState("진행중인 이벤트");
+  // 모든 이벤트 데이터를 표시
+  const filteredEvents = eventsData;
 
   useEffect(() => {
     document.body.classList.add("no-header-padding");
@@ -30,22 +25,43 @@ const Event = () => {
         <div className="evp-main">
           <div className="evp-container">
             <section className="evp-section">
-              <EventFilter filter={filter} setFilter={setFilter} />
+              <div className="evfs-filter">
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    className={`evfs-filter-btn ${
+                      filter === category ? "evfs-active" : ""
+                    }`}
+                    onClick={() => setFilter(category)}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
               <div className="evp-grid">
-                {filteredEvents.map((event) => (
-                  <EventCard key={event.id} event={event} />
+                {filteredEvents.map((event, idx) => (
+                  <div className="evc-card" key={idx}>
+                    <div className="evc-image">
+                      <img src={event.image} alt="이벤트 이미지" />
+                      {event.badge && (
+                        <div className={`evc-badge evc-${event.badge}`}>
+                          {event.badge.toUpperCase()}
+                        </div>
+                      )}
+                    </div>
+                    <div className="evc-content">
+                      <div className="evc-category">{event.category}</div>
+                      <h3 className="evc-title">{event.title}</h3>
+                      <p className="evc-description">{event.description}</p>
+                    </div>
+                    <div className="evc-period">
+                      <span className="evc-period-label">이벤트 기간</span>
+                      <span className="evc-period-date">{event.period}</span>
+                    </div>
+                  </div>
                 ))}
               </div>
             </section>
-
-            {/* <section className="evws-section">
-              <h2 className="evws-title">당첨자 발표</h2>
-              <div className="evws-list">
-                {winners.map((winner) => (
-                  <WinnerItem key={winner.id} winner={winner} />
-                ))}
-              </div>
-            </section> */}
           </div>
         </div>
       </div>
@@ -54,4 +70,4 @@ const Event = () => {
   );
 };
 
-export default Event;
+export default EventPage;

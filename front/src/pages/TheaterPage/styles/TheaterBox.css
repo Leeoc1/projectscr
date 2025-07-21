@@ -1,3 +1,21 @@
+/* 더보기 버튼 영역 스타일 */
+.rts-showmore-wrap {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+/* 영화 탭과 동일한 더보기 버튼 스타일 */
+.mvs-showmore-btn {
+  border-radius: 0.4rem;
+  border: 1px solid #000000;
+  background-color: white;
+  color: black;
+  padding: 0.5rem 1rem;
+}
+.mvs-showmore-btn:hover {
+  background-color: black;
+  color: white;
+}
 .rts-page {
   background-color: white;
   color: black;

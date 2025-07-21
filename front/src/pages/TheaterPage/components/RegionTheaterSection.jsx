@@ -5,6 +5,7 @@ import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
 const RegionTheaterSection = ({ filteredCinemas }) => {
   const navigate = useNavigate();
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(12);
 
   const handleScheduleClick = (cinema) => {
     // 로그인 상태 체크
@@ -34,22 +35,19 @@ const RegionTheaterSection = ({ filteredCinemas }) => {
     navigate("/theater/info", { state });
   };
 
+  const handleShowMore = () => {
+    setVisibleCount((prev) => prev + 12);
+  };
+
   return (
     <section className="rts-section">
       <div className="rts-grid">
-        {filteredCinemas.map((cinema) => (
+        {filteredCinemas.slice(0, visibleCount).map((cinema) => (
           <div key={cinema.cinemacd} className="rts-card">
             <div className="rts-info">
               <h3 className="rts-name">{cinema.cinemanm}</h3>
               <p className="rts-address">{cinema.address}</p>
               <p className="rts-phone">{cinema.tel}</p>
-              {/* <div className="rts-features">
-                {cinema.features.map((feature, index) => (
-                  <span key={index} className="rts-feature-tag">
-                    {feature}
-                  </span>
-                ))}
-              </div> */}
             </div>
             <div className="rts-actions">
               <button
@@ -68,6 +66,14 @@ const RegionTheaterSection = ({ filteredCinemas }) => {
           </div>
         ))}
       </div>
+
+      {filteredCinemas.length > visibleCount && (
+        <div className="rts-showmore-wrap">
+          <button className="mvs-showmore-btn" onClick={handleShowMore}>
+            더보기
+          </button>
+        </div>
+      )}
 
       {/* 로그인 필요 모달 */}
       <LoginRequiredModal

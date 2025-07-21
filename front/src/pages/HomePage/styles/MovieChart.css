@@ -105,6 +105,10 @@
   color: #9ca3af;
   font-size: 0.85rem;
   margin-bottom: 0.5rem;
+  max-width: 148px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mcs-movie-meta {

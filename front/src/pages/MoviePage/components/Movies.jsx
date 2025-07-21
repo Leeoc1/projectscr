@@ -223,7 +223,7 @@ const Movies = ({ activeTab: parentActiveTab, showDetailButton = true }) => {
                 <p className="mvs-release-date">개봉일: {movie.releasedate}</p>
               )}
               {activeTab === "upcoming" ? (
-                <p className="mvs-release">
+                <p className="mvs-release-date">
                   개봉 예정일: {movie.releaseDate || movie.releasedate}
                 </p>
               ) : (

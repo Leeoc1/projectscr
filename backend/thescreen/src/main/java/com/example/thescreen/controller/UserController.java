@@ -52,20 +52,15 @@ public class UserController {
             user.setUsername((String) userData.get("username"));
             user.setEmail((String) userData.get("email"));
             user.setPhone((String) userData.get("phone"));
-            user.setStatus((String) userData.get("status"));
-            
+            user.setReg_date(LocalDate.now());
+            user.setStatus("활성");
+
             // 생년월일 처리
             if (userData.get("birth") != null) {
                 String birthStr = (String) userData.get("birth");
                 user.setBirth(LocalDate.parse(birthStr));
             }
-            
-            // 가입일 처리
-            if (userData.get("reg_date") != null) {
-                String regDateStr = (String) userData.get("reg_date");
-                user.setReg_date(LocalDate.parse(regDateStr));
-            }
-            
+
             // 이미 존재하는 사용자인지 확인
             if (userRepository.existsById(user.getUserid())) {
                 // 기존 사용자 정보 업데이트

@@ -15,7 +15,15 @@ const TheaterBox = () => {
   useEffect(() => {
     const fetchCinemas = async () => {
       const data = await getCinemas();
-      setCinemas(data);
+      // 'CGV 이름'과 'CGV이름'을 동일하게 취급하여 정렬
+      const normalizeCGV = (name) => name.replace(/^CGV\s*/, 'CGV');
+      // 이름을 정규화하여 비교 후 정렬
+      const sorted = data.slice().sort((a, b) => {
+        const nameA = normalizeCGV(a.cinemanm);
+        const nameB = normalizeCGV(b.cinemanm);
+        return nameA.localeCompare(nameB, 'ko');
+      });
+      setCinemas(sorted);
     };
     fetchCinemas();
   }, []);

@@ -72,7 +72,6 @@
 
 .mcs-movie-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 .mcs-movie-poster {
@@ -105,6 +104,10 @@
   color: #9ca3af;
   font-size: 0.85rem;
   margin-bottom: 0.5rem;
+  max-width: 148px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mcs-movie-meta {

@@ -59,7 +59,6 @@ const Notice = () => {
                   <button
                     className="nt-button"
                     onClick={() => handleNoticeClick(notice.noticenum)}
-                    style={{ cursor: "pointer" }}
                   >
                     <span className="nt-question">{notice.noticesub}</span>
                   </button>

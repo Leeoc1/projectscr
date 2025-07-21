@@ -303,12 +303,17 @@
   padding: 0;
 }
 
+.payment-movie-poster {
+  flex-shrink: 0;
+}
+
 .payment-movie-poster img {
   width: 120px;
   height: 170px;
   border-radius: 6px;
   object-fit: cover;
   border: 1px solid #ddd;
+  display: block;
 }
 
 .payment-info-list {

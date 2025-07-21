@@ -3,6 +3,8 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
   gap: 30px; /* 위아래 20px, 좌우 12px */
+  overflow-y: auto;
+  max-height: 650px;
 }
 
 /* 카드에 상대 위치 지정 */

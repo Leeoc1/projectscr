@@ -5,6 +5,7 @@ import GoogleLogin from "./GoogleLogin";
 import KakaoLogin from "./KakaoLogin";
 import NaverLogin from "./NaverLogin";
 import axios from "axios";
+import logoImg from "../../../images/logo_2.png";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -64,7 +65,13 @@ const Login = () => {
     <div className="lgs-page">
       <div className="lgs-container">
         <div className="lgs-header">
-          <h1 className="lgs-title">The SCREEN</h1>
+          <img
+            src={logoImg}
+            alt="logo"
+            className="l-logo-img"
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate("/")}
+          />
           <p className="lgs-subtitle">영화 예매의 새로운 경험</p>
         </div>
 

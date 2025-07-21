@@ -34,7 +34,6 @@ const PieMovieChartComponent = ({
     value: item.totalAmount,
     color: pieColors[idx % pieColors.length],
   }));
-
   const total = pieData.reduce((sum, item) => sum + item.value, 0);
 
   return (

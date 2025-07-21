@@ -8,6 +8,7 @@ import {
 import "../styles/MovieManagement.css";
 import "../styles/AdminPage.css";
 import { useNotification } from "../../../contexts/NotificationContext";
+import { getRating } from "../../../data/MovieInfo";
 
 const MovieManagement = () => {
   const [readyMovies, setReadyMovies] = useState([]);
@@ -92,10 +93,6 @@ const MovieManagement = () => {
     } catch (error) {
       alert("상영 종료에 실패했습니다.");
     }
-  };
-
-  const getRating = (isAdult) => {
-    return isAdult === "Y" ? "청소년 관람불가" : "전체 관람가";
   };
 
   const getScreeningStatus = (movieinfo) => {

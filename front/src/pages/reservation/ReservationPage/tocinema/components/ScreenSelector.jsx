@@ -27,6 +27,7 @@ const ScreenSelector = () => {
           return (
             schedule.movienm === selectedMovieName &&
             schedule.startdate === selectedDate &&
+            schedule.screenstatus === "운영중" &&
             schedule.cinemanm === sessionStorage.getItem("cinemanm")
           );
         });
@@ -161,8 +162,8 @@ const ScreenSelector = () => {
                           {schedule.starttime.split(" ")[1]?.substring(0, 5)}
                         </div>
                         <div className="rptm-screen-time-seats">
-                          {schedule.allseat}/
-                          {reservedSeatsCount[schedule.schedulecd] || 0}
+                          {reservedSeatsCount[schedule.schedulecd] || 0}/
+                          {schedule.allseat}
                         </div>
                         <div className="rptm-screen-time-screen">
                           {schedule.screenname}

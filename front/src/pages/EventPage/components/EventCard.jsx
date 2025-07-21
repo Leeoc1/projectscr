@@ -3,7 +3,7 @@ import "../styles/EventCard.css";
 
 const EventCard = ({ event }) => {
   return (
-    <div className={`evc-card ${event.isFeatured ? "evc-featured" : ""}`}>
+    <div className="evc-card">
       <div className="evc-image">
         <img src={event.image} alt="이벤트 이미지" />
         {event.badge && (

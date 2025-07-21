@@ -1,4 +1,5 @@
-import { api, apiRequest, apiRequestWithErrorHandling } from "./apiUtils";
+import { apiRequest, apiRequestWithErrorHandling } from "./apiUtils";
+
 // ========== 영화 관련 API (movie 테이블) ==========
 
 // 영화 상세 정보 조회
@@ -98,5 +99,19 @@ export const getUpcomingMovies = () =>
 export const getTopTenMovies = async () => {
   const res = await fetch("/movies/top/ten");
   if (!res.ok) throw new Error("TOP 10 영화 데이터를 불러오지 못했습니다.");
+  return await res.json();
+};
+
+// 영화 등록
+export const registerMovie = async () => {
+  const res = await fetch("/api/schedules/generate", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!res.ok) {
+    throw new Error("영화 등록에 실패했습니다.");
+  }
   return await res.json();
 };

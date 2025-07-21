@@ -50,7 +50,8 @@ public class MovieService {
 
             String url = String.format(
                     "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&title=%s&releaseDts=%s&ServiceKey=%s",
-                    encodedTitle, releaseYear, apiKey2);
+                    encodedTitle, releaseYear, apiKey2
+            );
 
             System.out.println("KMDB API URL: " + url);
 
@@ -97,7 +98,8 @@ public class MovieService {
 
             String url = String.format(
                     "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&title=%s&releaseDts=%s&ServiceKey=%s",
-                    encodedTitle, releaseYear, apiKey2);
+                    encodedTitle, releaseYear, apiKey2
+            );
 
             System.out.println("🔗 포스터 검색 URL: " + url);
 
@@ -137,8 +139,7 @@ public class MovieService {
 
     // 제목 유사성 체크 메서드 (간단한 버전)
     private boolean isSimilarTitle(String kobisTitle, String kmdbTitle) {
-        if (kobisTitle == null || kmdbTitle == null)
-            return false;
+        if (kobisTitle == null || kmdbTitle == null) return false;
 
         // HTML 태그 제거
         String cleanKmdbTitle = kmdbTitle.replaceAll("<[^>]*>", "").trim();

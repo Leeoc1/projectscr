@@ -162,12 +162,10 @@
 
 .mcs-slider-nav-arrow {
   position: absolute;
-  top: 37%;
+  top: 45%;
   transform: translateY(-50%);
   background: none;
-  color: #999;
   border: none;
-  font-size: 70px;
   cursor: pointer;
   width: 32px;
   height: 60px;
@@ -177,6 +175,12 @@
   margin: 0;
   padding: 0;
   z-index: 10;
+}
+
+.mcs-slider-nav-img {
+  width: 32px;
+  height: 40px;
+  display: block;
 }
 
 .mcs-slider-nav-arrow.mcs-slider-nav-prev {

@@ -1,13 +1,18 @@
 import "../MyPage.css";
 import Header from "../../../shared/Header";
 import { useState, useEffect } from "react";
+
 import { getUserInfo, getUserReservations } from "../../../api/userApi";
 import { cancelReservation } from "../../../api/reservationApi";
+import MyPageReservationDetail from "./MyPageReservationDetail";
 
-export default function MyPage() {
+const MyPage = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [userReservations, setUserReservations] = useState([]);
   const [loading, setLoading] = useState(true);
+  // 모달 상태 및 상세 데이터 상태
+  const [showModal, setShowModal] = useState(false);
+  const [selectedReservation, setSelectedReservation] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -32,30 +37,31 @@ export default function MyPage() {
     fetchUserData();
   }, []);
 
-  // 예약 취소 처리 함수
-  const handleCancelReservation = async (reservationcd) => {
-    if (!window.confirm("정말로 예약을 취소하시겠습니까?")) {
-      return;
-    }
 
-    try {
-      await cancelReservation(reservationcd, "환불 처리");
-      alert("예약이 성공적으로 취소되었습니다.");
-      
-      // 예약 목록 새로고침
-      const userid = localStorage.getItem("userid");
-      if (userid) {
-        const reservationsResponse = await getUserReservations(userid);
-        setUserReservations(reservationsResponse);
-      }
-    } catch (error) {
-      console.error("예약 취소 오류:", error);
-      alert("예약 취소 중 오류가 발생했습니다. 다시 시도해주세요.");
-    }
+  // 예매 내역 팝업 열기
+  const handleReservationDetails = (reservationcd) => {
+    const reservation = userReservations.find(
+      (r) => r.reservationcd === reservationcd
+    );
+    setSelectedReservation(reservation);
+    setShowModal(true);
   };
+
+  // 모달 닫기
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedReservation(null);
+  };
+
   return (
     <div>
       <Header />
+      {/* 예매내역 모달 */}
+      <MyPageReservationDetail
+        showModal={showModal}
+        selectedReservation={selectedReservation}
+        handleCloseModal={handleCloseModal}
+      />
       <div className="mp-my-page">
         {/* User Profile Section */}
         <section className="mp-profile-section">
@@ -85,14 +91,6 @@ export default function MyPage() {
 
         {/* Main Content */}
         <div className="mp-main-content">
-          {/* Welcome Card */}
-          <div className="mp-welcome-card">
-            <div className="mp-welcome-content">
-              <h2 className="mp-welcome-title">예매내역</h2>
-              <span className="mp-coupon-info">쿠폰함</span>
-            </div>
-          </div>
-
           {/* Movie History Section */}
           <section className="mp-section">
             <div className="mp-section-header">
@@ -121,17 +119,22 @@ export default function MyPage() {
                         <div className="mp-movie-info-row">
                           <div className="mp-movie-left-info">
                             <p className="mp-movie-details-text">
-                              {reservation.screenname || "스크린 1"} | 좌석: {reservation.seatcd || "A1"}
+                              {reservation.screenname || "스크린 1"} | 좌석:{" "}
+                              {reservation.seatcd || "A1"}
                             </p>
                             <p className="mp-movie-datetime">
                               {reservation.starttime
-                                ? `${reservation.starttime.split("T")[0]} ${
+                                ? `${reservation.starttime.split(" ")[0]} ${
                                     reservation.starttime
-                                      .split("T")[1]
+                                      .split(" ")[1]
                                       ?.substring(0, 5) || ""
                                   }`
                                 : "2025-01-01 12:00"}{" "}
-                              ({reservation.runningtime ? `${reservation.runningtime}분` : "15세 이상"})
+                              &nbsp;(
+                              {reservation.runningtime
+                                ? `${reservation.runningtime}분`
+                                : "000분"}
+                              )
                             </p>
                             <p className="mp-movie-cinema">
                               {reservation.cinemanm || "CGV"}
@@ -139,21 +142,30 @@ export default function MyPage() {
                           </div>
                           <div className="mp-movie-bottom-info">
                             <p className="mp-movie-amount">
-                              결제금액: {reservation.amount ? `${reservation.amount.toLocaleString()}원` : "0원"}
+                              결제금액:{" "}
+                              {reservation.amount
+                                ? `${reservation.amount.toLocaleString()}원`
+                                : "0원"}
                             </p>
                             <div className="mp-movie-actions">
                               {reservation.reservationstatus === "환불 처리" ? (
-                                <span className="mp-refund-status">환불 요청</span>
+                                <span className="mp-refund-status">
+                                  환불 요청
+                                </span>
                               ) : (
                                 <>
                                   <button className="mp-btn mp-btn-review">
                                     관람평 쓰기
                                   </button>
-                                  <button 
-                                    className="mp-btn mp-btn-cancel"
-                                    onClick={() => handleCancelReservation(reservation.reservationcd)}
+                                  <button
+                                    className="mp-btn mp-btn-reservation"
+                                    onClick={() =>
+                                      handleReservationDetails(
+                                        reservation.reservationcd
+                                      )
+                                    }
                                   >
-                                    취소
+                                    예매내역
                                   </button>
                                 </>
                               )}
@@ -229,4 +241,6 @@ export default function MyPage() {
       </div>
     </div>
   );
-}
+};
+
+export default MyPage;

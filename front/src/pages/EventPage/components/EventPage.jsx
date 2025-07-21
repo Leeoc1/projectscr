@@ -54,9 +54,11 @@ const EventPage = () => {
                       <h3 className="evc-title">{event.title}</h3>
                       <p className="evc-description">{event.description}</p>
                     </div>
-                    <div className="evc-period">
-                      <span className="evc-period-label">이벤트 기간</span>
-                      <span className="evc-period-date">{event.period}</span>
+                    <div className="evc-period-custom">
+                      <span className="evc-period-status">진행중</span>
+                      <span className="evc-period-date-custom">
+                        {event.period}
+                      </span>
                     </div>
                   </div>
                 ))}

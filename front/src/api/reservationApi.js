@@ -69,3 +69,14 @@ export const getCinemaVolume = () =>
     "Error fetching cinema volume:", 
     []
   );
+
+// 예약 취소 (reservation 테이블)
+export const cancelReservation = (reservationcd, reservationstatus = "환불 처리") =>
+  apiRequestWithErrorHandling(
+    "put", 
+    "/reservation/cancel", 
+    { reservationcd, reservationstatus }, 
+    {}, 
+    "Error canceling reservation:", 
+    null
+  );

@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCurrentMovies } from "../../../api/movieApi";
+import { getTopTenMovies } from "../../../api/movieApi";
 import "../styles/MovieChart.css";
+import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
 
 const MovieChart = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [movies, setMovies] = useState([]);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const sliderRef = useRef(null);
   const cardWidth = 180; // 카드 1장 width(px)
   const gap = 20; // 카드 사이 gap(px)
@@ -14,15 +16,13 @@ const MovieChart = () => {
   // API에서 영화 데이터 가져오기
   useEffect(() => {
     const fetchMovies = async () => {
-      const currentMovies = await getCurrentMovies();
-      // 상위 10개 영화만 필터링 (rank 정보가 없으므로 처음 10개)
-      const top10Movies = currentMovies.slice(0, 10).map((movie, index) => ({
-        ...movie,
-        rank: index + 1,
-      }));
-      setMovies(top10Movies);
+      const top10Movies = await getTopTenMovies();
+      // movierank 오름차순 정렬
+      const sorted = [...top10Movies].sort(
+        (a, b) => Number(a.movierank) - Number(b.movierank)
+      );
+      setMovies(sorted);
     };
-
     fetchMovies();
   }, []);
 
@@ -89,6 +89,16 @@ const MovieChart = () => {
   };
 
   const handleMovieCardClick = (movie) => {
+    // 로그인 상태 체크
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+    if (!isLoggedIn) {
+      // 로그인되지 않은 경우 모달 표시
+      setShowLoginModal(true);
+      return;
+    }
+
+    // 로그인된 경우 기존 로직 실행
     // 예매 페이지와 동일한 방식으로 영화 정보를 세션 스토리지에 저장
     sessionStorage.setItem("moviecd", movie.moviecd);
     sessionStorage.setItem("movienm", movie.movienm);
@@ -104,14 +114,9 @@ const MovieChart = () => {
     };
     sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
 
-    console.log(
-      "🎬 홈페이지 영화카드 클릭 - 영화:",
-      movie.movienm,
-      "moviecd:",
-      movie.moviecd
-    );
     navigate("/reservation/place");
   };
+  console.log("MovieChart 렌더링", movies);
 
   return (
     <section className="mcs-section">
@@ -125,7 +130,6 @@ const MovieChart = () => {
         <div className="mcs-slider-wrapper">
           <button
             onClick={prevSlide}
-            disabled={currentIndex === 0}
             className="mcs-slider-nav-arrow mcs-slider-nav-prev"
           >
             ‹
@@ -155,14 +159,20 @@ const MovieChart = () => {
                     <p className="mcs-movie-genre">{movie.genre}</p>
                     <div className="mcs-movie-meta">
                       <div className="mcs-movie-rating">
-                        <span>⭐</span>
+                        <span
+                          className={`mcs-age-icon ${
+                            movie.isadult === "Y" ? "mcs-age-19" : "mcs-age-all"
+                          }`}
+                        >
+                          {movie.isadult === "Y" ? "19" : "ALL"}
+                        </span>
                         <span className="mcs-movie-rating-text">
                           {movie.isadult === "Y"
                             ? "청소년 관람불가"
-                            : "전체 관람가"}
+                            : "전체관람가"}
                         </span>
                       </div>
-                      <span className="mcs-movie-rank">{movie.rank}</span>
+                      <span className="mcs-movie-rank">{movie.movierank}</span>
                     </div>
                   </div>
                 </div>
@@ -171,13 +181,17 @@ const MovieChart = () => {
           </div>
           <button
             onClick={nextSlide}
-            disabled={currentIndex === maxIndex}
             className="mcs-slider-nav-arrow mcs-slider-nav-next"
           >
             ›
           </button>
         </div>
       </div>
+      {/* 로그인 필요 모달 */}
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+      />
     </section>
   );
 };

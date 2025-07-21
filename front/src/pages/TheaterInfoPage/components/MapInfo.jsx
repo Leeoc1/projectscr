@@ -14,7 +14,7 @@ const MapInfo = ({ cinemanm, tel, address, myState, theaterState }) => {
   const [state, setState] = useState({
     center:
       theaterState.center.lat === 0 && theaterState.center.lng === 0
-        ? { lat: 37.5665, lng: 126.9780 }
+        ? { lat: 37.5665, lng: 126.978 }
         : { lat: theaterState.center.lat, lng: theaterState.center.lng },
   });
 
@@ -39,8 +39,11 @@ const MapInfo = ({ cinemanm, tel, address, myState, theaterState }) => {
         center: { lat: theaterState.center.lat, lng: theaterState.center.lng },
       });
     }
-  }, [theaterState.center.lat, theaterState.center.lng, theaterState.isLoading]);
-
+  }, [
+    theaterState.center.lat,
+    theaterState.center.lng,
+    theaterState.isLoading,
+  ]);
 
   return (
     <div className="mpi-map-wrap">
@@ -60,37 +63,42 @@ const MapInfo = ({ cinemanm, tel, address, myState, theaterState }) => {
       >
         <MapTypeControl position={"TOPRIGHT"} />
         <ZoomControl position={"RIGHT"} />
-        {!myState.isLoading && myState.center.lat !== 0 && myState.center.lng !== 0 && (
-          <MapMarker position={myState.center} />
-        )}
-        {!theaterState.isLoading && theaterState.center.lat !== 0 && theaterState.center.lng !== 0 && (
-          <MapMarker
-            position={theaterState.center}
-            onClick={() => setIsOpen(true)}
-          />
-        )}
-        {isOpen && !theaterState.isLoading && theaterState.center.lat !== 0 && theaterState.center.lng !== 0 && (
-          <CustomOverlayMap position={theaterState.center}>
-            <div className="mpi-wrap">
-              <div className="mpi-info">
-                <div className="mpi-title">
-                  {cinemanm}
-                  <div
-                    className="mpi-close"
-                    onClick={() => setIsOpen(false)}
-                    title="닫기"
-                  ></div>
-                </div>
-                <div className="mpi-body">
-                  <div className="mpi-desc">
-                    <div className="mpi-ellipsis">{address}</div>
-                    <div className="mpi-jibun mpi-ellipsis">{tel}</div>
+        {!myState.isLoading &&
+          myState.center.lat !== 0 &&
+          myState.center.lng !== 0 && <MapMarker position={myState.center} />}
+        {!theaterState.isLoading &&
+          theaterState.center.lat !== 0 &&
+          theaterState.center.lng !== 0 && (
+            <MapMarker
+              position={theaterState.center}
+              onClick={() => setIsOpen(true)}
+            />
+          )}
+        {isOpen &&
+          !theaterState.isLoading &&
+          theaterState.center.lat !== 0 &&
+          theaterState.center.lng !== 0 && (
+            <CustomOverlayMap position={theaterState.center}>
+              <div className="mpi-wrap">
+                <div className="mpi-info">
+                  <div className="mpi-title">
+                    {cinemanm}
+                    <div
+                      className="mpi-close"
+                      onClick={() => setIsOpen(false)}
+                      title="닫기"
+                    ></div>
+                  </div>
+                  <div className="mpi-body">
+                    <div className="mpi-desc">
+                      <div className="mpi-ellipsis">{address}</div>
+                      <div className="mpi-jibun mpi-ellipsis">{tel}</div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </CustomOverlayMap>
-        )}
+            </CustomOverlayMap>
+          )}
       </Map>
       <div
         className="mpi-mystate-button"

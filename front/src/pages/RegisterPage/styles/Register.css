@@ -53,8 +53,9 @@
   margin-bottom: 0.5rem;
 }
 
-.rg-form-group input {
-  width: 95%;
+.rg-form-group input,
+.rg-form-group select {
+  width: 100%;
   padding: 0.75rem;
   border: 2px solid #e5e7eb;
   border-radius: 0.5rem;
@@ -62,7 +63,8 @@
   transition: border-color 0.3s ease;
 }
 
-.rg-form-group input:focus {
+.rg-form-group input:focus,
+.rg-form-group select:focus {
   outline: none;
   border-color: #fbbf24;
 }
@@ -78,13 +80,12 @@
 
 .rg-check-btn,
 .rg-verify-btn {
+  font-size: 0.875rem;
   width: 81px;
   background-color: #6b7280;
   color: white;
   border: none;
-  padding: 0.75rem 1rem;
   border-radius: 0.5rem;
-  font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
   transition: background-color 0.3s ease;
@@ -98,6 +99,19 @@
 .rg-verify-btn:disabled {
   background-color: #10b981;
   cursor: not-allowed;
+}
+
+.rg-birth-container {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.rg-birth-year,
+.rg-birth-month,
+.rg-birth-day {
+  flex: 1 1 0;
+  width: 100%;
 }
 
 .rg-validation-message {
@@ -196,74 +210,74 @@
 
 /* 카카오 동의 페이지 스타일 */
 .rg-consent-content {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .rg-consent-section {
-    margin: 20px 0;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e9ecef;
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
 }
 
 .rg-consent-text {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #495057;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #495057;
 }
 
 .rg-consent-text h3 {
-    color: #212529;
-    margin-bottom: 10px;
+  color: #212529;
+  margin-bottom: 10px;
 }
 
 .rg-consent-text ul {
-    margin: 10px 0;
-    padding-left: 20px;
+  margin: 10px 0;
+  padding-left: 20px;
 }
 
 .rg-consent-text li {
-    margin: 5px 0;
+  margin: 5px 0;
 }
 
 .rg-consent-buttons {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 30px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 30px;
 }
 
 .rg-consent-buttons button {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .rg-consent-buttons .rg-signup-btn {
-    background-color: #007bff;
-    color: white;
+  background-color: #007bff;
+  color: white;
 }
 
 .rg-consent-buttons .rg-signup-btn:hover:not(:disabled) {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 .rg-consent-buttons .rg-signup-btn:disabled {
-    background-color: #6c757d;
-    cursor: not-allowed;
+  background-color: #6c757d;
+  cursor: not-allowed;
 }
 
 .rg-consent-buttons .rg-back-btn {
-    background-color: #6c757d;
-    color: white;
+  background-color: #6c757d;
+  color: white;
 }
 
 .rg-consent-buttons .rg-back-btn:hover {
-    background-color: #545b62;
+  background-color: #545b62;
 }

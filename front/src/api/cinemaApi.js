@@ -5,22 +5,22 @@ import { apiRequest, apiRequestWithErrorHandling } from "./apiUtils";
 // 극장 목록 조회 (Cinema 테이블)
 export const getCinemas = () =>
   apiRequestWithErrorHandling(
-    "get", 
-    "/cinemas", 
-    null, 
-    {}, 
-    "Error fetching cinema:", 
+    "get",
+    "/cinemas",
+    null,
+    {},
+    "Error fetching cinema:",
     []
   );
 
 // 상영관 조회 (screen 테이블)
 export const getScreens = () =>
   apiRequestWithErrorHandling(
-    "get", 
-    "/screens", 
-    null, 
-    {}, 
-    "Error fetching screens:", 
+    "get",
+    "/screens",
+    null,
+    {},
+    "Error fetching screens:",
     []
   );
 
@@ -40,11 +40,11 @@ export const updateScreenStatus = async (screenData) => {
 // 지역 목록 조회 (region 테이블)
 export const getRegions = () =>
   apiRequestWithErrorHandling(
-    "get", 
-    "/regions", 
-    null, 
-    {}, 
-    "Error fetching regions:", 
+    "get",
+    "/regions",
+    null,
+    {},
+    "Error fetching regions:",
     []
   );
 
@@ -53,10 +53,10 @@ export const getRegions = () =>
 // 스케줄 뷰 조회 (schedule_view)
 export const getSchedules = (cinemaCd, date) =>
   apiRequestWithErrorHandling(
-    "get", 
-    "/schedules", 
-    null, 
-    { params: { cinemaCd, date } }, 
-    "Error fetching schedules:", 
+    "get",
+    "/schedules",
+    null,
+    { params: { cinemaCd, date } },
+    "Error fetching schedules:",
     []
   );

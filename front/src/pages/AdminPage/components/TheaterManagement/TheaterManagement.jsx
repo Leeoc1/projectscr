@@ -7,8 +7,7 @@ import {
 import "../../styles/TheaterManagement.css";
 import "../../styles/AdminPage.css";
 import ScreenStatus from "./ScreenStatus";
-
-const CARDS_PER_ROW = 3;
+import TheaterGrid from "./TheaterGrid";
 
 const TheaterManagement = () => {
   const [cinemas, setCinemas] = useState([]);
@@ -39,12 +38,6 @@ const TheaterManagement = () => {
     }
   }, [openDetailIdx, cinemas]);
 
-  // 카드 3개씩 한 줄로 묶기
-  const rows = [];
-  for (let i = 0; i < cinemas.length; i += CARDS_PER_ROW) {
-    rows.push(cinemas.slice(i, i + CARDS_PER_ROW));
-  }
-
   const getStatusClass = (status) => {
     switch (status) {
       case "운영중":
@@ -73,10 +66,8 @@ const TheaterManagement = () => {
               : s
           )
         );
-        console.log("상영관 상태 변경 성공");
       }
     } catch (error) {
-      console.error("상영관 상태 변경 실패:", error);
       // 에러 처리 (알림 등)
     }
 
@@ -94,94 +85,41 @@ const TheaterManagement = () => {
     setSelectedScreen(null);
   };
 
+  // 극장 수정 핸들러
+  const handleEdit = (theater) => {
+    // TODO: 극장 수정 모달 또는 페이지로 이동
+  };
+
+  // 극장 삭제 핸들러
+  const handleDelete = (theater) => {
+    if (window.confirm(`"${theater.cinemanm}"을 삭제하시겠습니까?`)) {
+      // TODO: 극장 삭제 API 호출
+    }
+  };
+
+  // 극장 추가 핸들러
+  const handleAddTheater = () => {
+    // TODO: 극장 추가 모달 또는 페이지로 이동
+  };
+
   return (
     <div className="adp-content">
       <div className="adp-header">
         <h2>극장 관리</h2>
-        <button className="adp-btn-primary">극장 추가</button>
+        <button className="adp-btn-primary" onClick={handleAddTheater}>
+          극장 추가
+        </button>
       </div>
-      <div className="thm-theater-grid-wrapper">
-        <div className="thm-theater-grid">
-          {rows.map((row, rowIdx) => (
-            <React.Fragment key={rowIdx}>
-              {row.map((theater, idx) => (
-                <div className="thm-theater-card" key={theater.cinemacd}>
-                  <h3>{theater.cinemanm}</h3>
-                  <div className="thm-theater-info">
-                    <p>
-                      <strong>주소:</strong> {theater.address}
-                    </p>
-                    <p>
-                      <strong>전화번호:</strong> {theater.tel}
-                    </p>
-                  </div>
-                  <div className="thm-theater-actions">
-                    <button className="adp-btn-edit">수정</button>
-                    <button
-                      className="adp-btn-view"
-                      onClick={() =>
-                        setOpenDetailIdx(
-                          openDetailIdx === rowIdx * CARDS_PER_ROW + idx
-                            ? null
-                            : rowIdx * CARDS_PER_ROW + idx
-                        )
-                      }
-                    >
-                      상세보기
-                    </button>
-                    <button className="adp-btn-delete">삭제</button>
-                  </div>
-                </div>
-              ))}
-              {/* 드롭다운 상세: 해당 줄에서 상세보기 열린 카드 아래에만 표시 */}
-              {openDetailIdx !== null &&
-                openDetailIdx >= rowIdx * CARDS_PER_ROW &&
-                openDetailIdx < (rowIdx + 1) * CARDS_PER_ROW && (
-                  <div className="thm-theater-detail-dropdown">
-                    {/* 지점명, 주소 */}
-                    <div className="thm-theater-detail-header">
-                      <h4>{cinemas[openDetailIdx]?.cinemanm}</h4>
-                      <p>{cinemas[openDetailIdx]?.address}</p>
-                    </div>
-                    {/* 스크롤 섹션: 상영관 리스트 */}
-                    <div className="thm-theater-detail-screenscroll">
-                      <ul>
-                        {screenList.length === 0 ? (
-                          <li>상영관 정보가 없습니다.</li>
-                        ) : (
-                          screenList.map((screen, i) => (
-                            <li key={i} className="thm-screen-list-item">
-                              <div className="thm-screen-list-info">
-                                {/* 상태 뱃지 */}
-                                <div
-                                  className={`thm-screen-status-badge ${getStatusClass(
-                                    screen.screenstatus
-                                  )}`}
-                                >
-                                  {screen.screenstatus}
-                                </div>
-                                <strong>{screen.screenname}</strong> |{" "}
-                                {screen.screentype} | 전체좌석: {screen.allseat}{" "}
-                                | 예약좌석: {screen.reservationseat}
-                              </div>
-                              {/* 점검 버튼 */}
-                              <button
-                                className="adp-btn-edit thm-status-btn"
-                                onClick={() => openStatusPopup(screen)}
-                              >
-                                점검
-                              </button>
-                            </li>
-                          ))
-                        )}
-                      </ul>
-                    </div>
-                  </div>
-                )}
-            </React.Fragment>
-          ))}
-        </div>
-      </div>
+      <TheaterGrid
+        cinemas={cinemas}
+        openDetailIdx={openDetailIdx}
+        setOpenDetailIdx={setOpenDetailIdx}
+        screenList={screenList}
+        onStatusClick={openStatusPopup}
+        getStatusClass={getStatusClass}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
       {showStatusPopup && selectedScreen && (
         <ScreenStatus
           screen={selectedScreen}

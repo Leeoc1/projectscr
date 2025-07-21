@@ -134,3 +134,22 @@
 .btn-secondary:hover {
   background-color: #e0e0e0;
 }
+
+/* 포스터 없음 플레이스홀더 스타일 */
+.no-poster-placeholder {
+  width: 120px;
+  height: 170px;
+  background: #f0f0f0;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.no-poster-placeholder span {
+  text-align: center;
+}

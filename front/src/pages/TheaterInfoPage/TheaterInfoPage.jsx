@@ -10,7 +10,7 @@ const { kakao } = window;
 const TheaterInfoPage = () => {
   const { state } = useLocation();
 
-  // 헤더 관련 설정 
+  // 헤더 관련 설정
   useEffect(() => {
     document.body.classList.add("no-header-padding");
     return () => {
@@ -20,7 +20,7 @@ const TheaterInfoPage = () => {
 
   // 나의 초기 위치
   const [myState, setMyState] = useState({
-    center: { lat: 37.5665, lng: 126.9780 }, // 서울 시청
+    center: { lat: 37.5665, lng: 126.978 }, // 서울 시청
     isLoading: true,
   });
 
@@ -61,18 +61,21 @@ const TheaterInfoPage = () => {
         // 주소 - 좌표 변환 객체 생성
         const geocoder = new kakao.maps.services.Geocoder();
 
-        // 주소에서 첫 번째 부분만 사용 
+        // 주소에서 첫 번째 부분만 사용
         // 서울특별시 강동구 고덕비즈밸리로 51, 3,4층 (고덕동) 통째로 검색하면 제대로 좌표 변환이 안됨
-        const addresscut = state.address.split(",")[0]; 
+        const addresscut = state.address.split(",")[0];
 
         // 주소로 좌표를 검색
         geocoder.addressSearch(`${addresscut}`, function (result, status) {
           // 정상적으로 검색이 완료됐으면
           if (status === kakao.maps.services.Status.OK) {
             const searchResult = result[0];
-            
+
             setTheaterState({
-              center: { lat: parseFloat(searchResult.y), lng: parseFloat(searchResult.x) },
+              center: {
+                lat: parseFloat(searchResult.y),
+                lng: parseFloat(searchResult.x),
+              },
               isLoading: false,
             });
           } else {
@@ -102,11 +105,24 @@ const TheaterInfoPage = () => {
     <div className="tip-page">
       <Header />
       <div className="tip-container">
-        <TheaterInfo cinemacd={state.cinemacd} cinemanm={state.cinemanm} tel={state.tel} address={state.address} myState={myState} theaterState={theaterState} />
+        <TheaterInfo
+          cinemacd={state.cinemacd}
+          cinemanm={state.cinemanm}
+          tel={state.tel}
+          address={state.address}
+          myState={myState}
+          theaterState={theaterState}
+        />
         {!state.address ? (
           <Navigate to="/theater" replace />
         ) : (
-          <MapInfo cinemanm={state.cinemanm} tel={state.tel} address={state.address} myState={myState} theaterState={theaterState} />
+          <MapInfo
+            cinemanm={state.cinemanm}
+            tel={state.tel}
+            address={state.address}
+            myState={myState}
+            theaterState={theaterState}
+          />
         )}
       </div>
     </div>

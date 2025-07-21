@@ -4,6 +4,7 @@ import Header from "../../../shared/Header";
 import { useSearchParams } from "react-router-dom";
 import { getMovieDetail } from "../../../api/movieApi";
 import { useNavigate } from "react-router-dom";
+import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
 
 export default function MovieDetail() {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ export default function MovieDetail() {
   const [searchParams] = useSearchParams();
   const movieno = searchParams.get("movieno");
   const [movie, setMovie] = useState(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     const fetchMovieDetail = async () => {
@@ -24,6 +26,16 @@ export default function MovieDetail() {
   }, [movieno]);
 
   const handleReservationClick = () => {
+    // 로그인 상태 체크
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+    if (!isLoggedIn) {
+      // 로그인되지 않은 경우 모달 표시
+      setShowLoginModal(true);
+      return;
+    }
+
+    // 로그인된 경우 기존 로직 실행
     // 홈페이지와 동일한 방식으로 영화 정보를 세션 스토리지에 저장
     sessionStorage.setItem("moviecd", movie.moviecd);
     sessionStorage.setItem("movienm", movie.movienm);
@@ -40,6 +52,10 @@ export default function MovieDetail() {
     sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
 
     navigate("/reservation/place");
+  };
+
+  const handleSearch = () => {
+    // TODO: Implement search functionality
   };
 
   return (
@@ -136,6 +152,12 @@ export default function MovieDetail() {
           </section>
         </div>
       )}
+
+      {/* 로그인 필요 모달 */}
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+      />
     </div>
   );
 }

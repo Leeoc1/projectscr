@@ -8,12 +8,10 @@ import {
   validatePasswordStrength,
 } from "./RegisterValidation";
 import { isAvailableUserId, registerUser } from "../../../api/userApi";
+import logoImg from "../../../images/logo_2.png";
+import RegisterBirth from "./RegisterBirth";
 
 const Register = () => {
-  // 네이버 로그인 시 회원정보 없을 때 넘어옴
-  const location = useLocation();
-  const naverUserInfo = location.state?.naverUserInfo; // 넘어온 네이버 정보
-
   const navigate = useNavigate(); // useNavigate 훅 사용
   const [formData, setFormData] = useState({
     username: "",
@@ -25,6 +23,12 @@ const Register = () => {
     birthDate: "",
     verificationCode: "",
   });
+
+  // setBirthDate를 useCallback으로 고정
+  const setBirthDate = React.useCallback(
+    (val) => setFormData((f) => ({ ...f, birthDate: val })),
+    []
+  );
 
   const [validationState, setValidationState] = useState({
     usernameChecked: false,
@@ -91,6 +95,7 @@ const Register = () => {
     }
   };
 
+  // 아이디 중복 체크 버튼 클릭 시
   const handleUsernameCheck = async () => {
     if (!formData.username) {
       alert("아이디를 입력해주세요.");
@@ -105,7 +110,7 @@ const Register = () => {
     try {
       const response = await isAvailableUserId(formData.username);
 
-      if (response) {
+      if (response.available) {
         // 사용가능한 아이디
         setValidationState({
           ...validationState,
@@ -219,7 +224,13 @@ const Register = () => {
     <div className="rg-signup-page">
       <div className="rg-signup-container">
         <div className="rg-signup-header">
-          <h1 className="rg-signup-title">CineMax</h1>
+          <img
+            src={logoImg}
+            alt="logo"
+            className="l-logo-img"
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate("/")}
+          />
           <p className="rg-signup-subtitle">회원가입</p>
         </div>
 
@@ -240,13 +251,9 @@ const Register = () => {
 
             <div className="rg-form-group">
               <label htmlFor="birthDate">생년월일</label>
-              <input
-                type="date"
-                id="birthDate"
-                name="birthDate"
-                value={formData.birthDate}
-                onChange={handleInputChange}
-                required
+              <RegisterBirth
+                birthDate={formData.birthDate}
+                setBirthDate={setBirthDate}
               />
             </div>
 

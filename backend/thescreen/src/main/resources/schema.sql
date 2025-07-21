@@ -124,4 +124,3 @@ FROM
 review r
 LEFT JOIN users u ON r.userid = u.userid
 LEFT JOIN movie m ON r.moviecd = m.moviecd;
-

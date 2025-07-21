@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { events, winners } from "../../../data/EventPageData.js";
 import Header from "../../../shared/Header";
+import Footer from "../../../shared/Footer";
 import EventFilter from "./EventFilter";
 import EventCard from "./EventCard";
 import WinnerItem from "./WinnerItem";
@@ -48,6 +49,7 @@ const Event = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

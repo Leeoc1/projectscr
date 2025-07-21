@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../style/TheaterInfo.css";
 
-const TheaterInfo = ({ cinemacd, cinemanm, tel, address, myState, theaterState }) => {
+const TheaterInfo = ({
+  cinemacd,
+  cinemanm,
+  tel,
+  address,
+  myState,
+  theaterState,
+}) => {
   const navigate = useNavigate();
 
   // 예매하기 버튼 클릭시 예매페이지로 이동(영화 선택)
@@ -19,7 +26,6 @@ const TheaterInfo = ({ cinemacd, cinemanm, tel, address, myState, theaterState }
       "_blank"
     );
   };
-
 
   return (
     <div>

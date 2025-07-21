@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../../shared/Header";
+import Footer from "../../../shared/Footer";
 import { saveReservation } from "../../../api/reservationApi";
 import ProgressBar from "./ProgressBar";
 import "../style/ReservationPaymentPage.css";
@@ -65,13 +66,18 @@ const ReservationPaymentPage = () => {
   const seats = reservationInfo.selectedSeats
     ? reservationInfo.selectedSeats.join(", ")
     : "좌석 미선택";
-  const price = reservationInfo.totalPrice
-    ? reservationInfo.totalPrice
-    : "0";
+  const price = reservationInfo.totalPrice ? reservationInfo.totalPrice : "0";
 
   // 결제 처리
   const handlePay = () => {
-    // reservationInfo는 이미 finalReservationInfo에 저장되어 있음
+    // 기존 예약 정보 불러오기
+    const info = JSON.parse(
+      sessionStorage.getItem("finalReservationInfo") || "{}"
+    );
+    // 최종 결제 금액을 info에 추가
+    info.finalPrice = finalPrice;
+    // 다시 저장
+    sessionStorage.setItem("finalReservationInfo", JSON.stringify(info));
     // 체크아웃 페이지로 이동
     navigate("/checkout");
   };
@@ -81,9 +87,12 @@ const ReservationPaymentPage = () => {
     setActiveStep(activeStep === stepNumber ? null : stepNumber);
   };
 
-  // 최종 결제 금액 
-  // 음수가 되지 않게 0으로 막아둠 그 밑으로 내려가도 
-  const finalPrice = Math.max(0, price - getDiscount1(coupon) - getDiscount2(gift));
+  // 최종 결제 금액
+  // 음수가 되지 않게 0으로 막아둠 그 밑으로 내려가도
+  const finalPrice = Math.max(
+    0,
+    price - getDiscount1(coupon) - getDiscount2(gift)
+  );
 
   return (
     <div className="reservation-payment-page">
@@ -279,6 +288,7 @@ const ReservationPaymentPage = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

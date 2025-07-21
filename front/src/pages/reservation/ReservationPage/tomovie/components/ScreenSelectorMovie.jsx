@@ -143,9 +143,7 @@ const ScreenSelectorMovie = () => {
 
   return (
     <div className="place-time-list-content">
-      {movieSchedule.length === 0 && (
-        <div>선택한 조건에 맞는 상영 정보가 없습니다.</div>
-      )}
+      {movieSchedule.length === 0 && <div>상영정보가 없습니다.</div>}
       {uniqueScreentypes.length > 0 && (
         <>
           {uniqueScreentypes.map((screentype) => (
@@ -168,8 +166,8 @@ const ScreenSelectorMovie = () => {
                         {schedule.starttime.split(" ")[1]?.substring(0, 5)}
                       </div>
                       <div className="place-screen-time-seats">
-                        {reservedSeatsCount[schedule.schedulecd] || 0}/
-                        {schedule.allseat}
+                        {schedule.allseat}/
+                        {reservedSeatsCount[schedule.schedulecd] || 0}
                       </div>
                       <div className="place-screen-time-screen">
                         {schedule.screenname}

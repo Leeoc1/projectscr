@@ -98,10 +98,13 @@ export function SuccessPage() {
             sessionStorage.getItem("finalReservationInfo") || "{}"
           );
           const paymentcd = sessionStorage.getItem("paymentcd");
+          const userid = localStorage.getItem("userid"); // userid 가져오기
+
           await saveReservation({
             schedulecd: reservationInfo.schedulecd,
             seatcd: reservationInfo.selectedSeats,
             paymentcd: paymentcd, // 결제코드도 함께 전송
+            userid: userid, // userid 추가 ✅
           });
         } catch (error) {
           console.error("예약 저장 중 오류:", error);

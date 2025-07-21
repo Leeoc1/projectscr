@@ -11,6 +11,7 @@ import TabNavigation from "./TabNavigation";
 import ReviewForm from "./ReviewForm";
 import "../styles/NoticePage.css";
 import Header from "../../../shared/Header";
+import Footer from "../../../shared/Footer";
 
 const NoticePage = () => {
   const [notices, setNotices] = useState([]);
@@ -211,6 +212,7 @@ const NoticePage = () => {
           </div>
         </div>
       )}
+      <Footer />
     </div>
   );
 };

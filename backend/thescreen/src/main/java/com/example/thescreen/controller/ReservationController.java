@@ -1,7 +1,9 @@
 package com.example.thescreen.controller;
 
 import com.example.thescreen.entity.Reservation;
+import com.example.thescreen.entity.User;
 import com.example.thescreen.repository.ReservationRepository;
+import com.example.thescreen.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +19,12 @@ import java.util.Map;
 public class ReservationController {
 
     private ReservationRepository reservationRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    public ReservationController(ReservationRepository reservationRepository) {
+    public ReservationController(ReservationRepository reservationRepository, UserRepository userRepository) {
         this.reservationRepository = reservationRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/seat")
@@ -57,8 +61,17 @@ public class ReservationController {
 
             reservation.setReservationtime(LocalDateTime.now());
             reservation.setReservationstatus("예약완료");
-            // userid는 현재 로그인한 사용자 정보에서 가져와야 함 (임시로 null)
-            reservation.setUser(null);
+            
+            // userid 설정 - 요청 데이터에서 가져오기
+            String userid = (String) requestData.get("userid");
+            if (userid != null && !userid.trim().isEmpty()) {
+                // User 엔티티 조회 후 설정
+                User user = userRepository.findByUserid(userid).orElse(null);
+                reservation.setUser(user);
+            } else {
+                reservation.setUser(null);
+            }
+            
             // paymentcd는 결제 완료 후 설정 (임시로 null)
             Object paymentcdObj = requestData.get("paymentcd");
             if (paymentcdObj != null) {

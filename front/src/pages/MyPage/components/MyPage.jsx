@@ -37,7 +37,6 @@ const MyPage = () => {
     fetchUserData();
   }, []);
 
-
   // 예매 내역 팝업 열기
   const handleReservationDetails = (reservationcd) => {
     const reservation = userReservations.find(
@@ -61,6 +60,7 @@ const MyPage = () => {
         showModal={showModal}
         selectedReservation={selectedReservation}
         handleCloseModal={handleCloseModal}
+        setUserReservations={setUserReservations}
       />
       <div className="mp-my-page">
         {/* User Profile Section */}
@@ -84,6 +84,7 @@ const MyPage = () => {
                     : '"사용자"님'}
                 </p>
                 <p className="mp-profile-link">개인정보설정 &gt;</p>
+                <p className="mp-profile-link">쿠폰함 &gt;</p>
               </div>
             </div>
           </div>
@@ -141,34 +142,35 @@ const MyPage = () => {
                             </p>
                           </div>
                           <div className="mp-movie-bottom-info">
-                            <p className="mp-movie-amount">
-                              결제금액:{" "}
-                              {reservation.amount
-                                ? `${reservation.amount.toLocaleString()}원`
-                                : "0원"}
-                            </p>
+                            {reservation.reservationstatus === "예약완료" ? (
+                              <p className="mp-movie-amount">
+                                결제금액:{" "}
+                                {reservation.amount
+                                  ? `${reservation.amount.toLocaleString()}원`
+                                  : "0원"}
+                              </p>
+                            ) : (
+                              <p className="mp-movie-amount">
+                                {reservation.reservationstatus}
+                              </p>
+                            )}
+
                             <div className="mp-movie-actions">
-                              {reservation.reservationstatus === "환불 처리" ? (
-                                <span className="mp-refund-status">
-                                  환불 요청
-                                </span>
-                              ) : (
-                                <>
-                                  <button className="mp-btn mp-btn-review">
-                                    관람평 쓰기
-                                  </button>
-                                  <button
-                                    className="mp-btn mp-btn-reservation"
-                                    onClick={() =>
-                                      handleReservationDetails(
-                                        reservation.reservationcd
-                                      )
-                                    }
-                                  >
-                                    예매내역
-                                  </button>
-                                </>
+                              {reservation.reservationstatus === "예약완료" && (
+                                <button className="mp-btn mp-btn-review">
+                                  관람평 쓰기
+                                </button>
                               )}
+                              <button
+                                className="mp-btn mp-btn-reservation"
+                                onClick={() =>
+                                  handleReservationDetails(
+                                    reservation.reservationcd
+                                  )
+                                }
+                              >
+                                예매내역
+                              </button>
                             </div>
                           </div>
                         </div>

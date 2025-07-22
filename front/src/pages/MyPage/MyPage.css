@@ -51,6 +51,7 @@
   font-size: 1rem;
   color: #212529;
 }
+
 .mp-my-page {
   min-height: 100vh;
   background-color: #f8f9fa;
@@ -114,6 +115,7 @@
 .mp-profile-link {
   color: #adb5bd;
   margin-top: 0.5rem;
+  margin-bottom: 0;
   cursor: pointer;
 }
 
@@ -350,23 +352,30 @@
   white-space: nowrap;
 }
 
-.mp-btn-reservation,
 .mp-btn-review {
   background-color: #fbbf24;
 }
 
-.mp-btn-reservation:hover,
 .mp-btn-review:hover {
   background-color: #f59e0b;
 }
 
+.mp-btn-reservation {
+  background-color: #d9dadb;
+}
+
+.mp-btn-reservation:hover {
+  background-color: #b8bcbe;
+}
+
 .mp-btn-cancel {
-  background-color: #f8f9fa;
+  margin-top: 1rem;
+  background-color: #d9dadb;
   color: #495057;
 }
 
 .mp-btn-cancel:hover {
-  background-color: #e9ecef;
+  background-color: #b8bcbe;
 }
 
 .mp-refund-status {

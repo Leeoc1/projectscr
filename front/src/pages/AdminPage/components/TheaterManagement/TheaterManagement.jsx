@@ -8,6 +8,7 @@ import "../../styles/TheaterManagement.css";
 import "../../styles/AdminPage.css";
 import ScreenStatus from "./ScreenStatus";
 import TheaterGrid from "./TheaterGrid";
+import { scheduleData } from "../../../../api/cinemaApi";
 
 const TheaterManagement = () => {
   const [cinemas, setCinemas] = useState([]);
@@ -98,8 +99,15 @@ const TheaterManagement = () => {
   };
 
   // 극장 추가 핸들러
-  const handleAddTheater = () => {
-    // TODO: 극장 추가 모달 또는 페이지로 이동
+  const handleAddTheater = async () => {
+    try {
+      const result = await scheduleData();
+      console.log("스케줄 데이터 등록 완료:", result);
+      alert("스케줄이 성공적으로 등록되었습니다.");
+    } catch (error) {
+      console.error("스케줄 데이터 등록 실패:", error);
+      alert("스케줄 등록에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
   return (
@@ -107,7 +115,7 @@ const TheaterManagement = () => {
       <div className="adp-header">
         <h2>극장 관리</h2>
         <button className="adp-btn-primary" onClick={handleAddTheater}>
-          극장 추가
+          스케줄 자동 등록
         </button>
       </div>
       <TheaterGrid

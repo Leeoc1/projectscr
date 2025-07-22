@@ -1,8 +1,10 @@
 package com.example.thescreen.controller;
 
 import com.example.thescreen.entity.Movie;
+import com.example.thescreen.entity.MovieSchedule;
 import com.example.thescreen.entity.MovieView;
 import com.example.thescreen.repository.MovieRepository;
+import com.example.thescreen.repository.MovieScheduleRepository;
 import com.example.thescreen.repository.MovieViewRepository;
 //import com.example.thescreen.service.FetchMovieService;
 import com.example.thescreen.service.MovieService;
@@ -28,6 +30,7 @@ public class MovieController {
     private final MovieViewRepository movieViewRepository;
     private final MovieService movieService;
 //    private final FetchMovieService fetchMovieService;
+    private final MovieScheduleRepository movieScheduleRepository;
 
     /**
      * 애플리케이션 시작 시 자동으로 영화 순위 업데이트
@@ -54,18 +57,20 @@ public class MovieController {
      * ✅ 2) 현재 상영작 조회 (상영 중인 영화만)
      */
     @GetMapping("/current")
-    public List<Movie> getCurrentMovies() {
+    public List<MovieSchedule> getCurrentMovies() {
         LocalDate today = LocalDate.now();
-        return movieRepository.findCurrentScreeningMovies(today);
+//        return movieRepository.findCurrentScreeningMovies(today);
+        return movieScheduleRepository.findCurrentScreeningMovies(today);
     }
 
     /**
      * ✅ 3) 상영 예정작 조회 (상영 중인 영화만)
      */
     @GetMapping("/upcoming")
-    public List<Movie> getUpcomingMovies() {
+    public List<MovieSchedule> getUpcomingMovies() {
         LocalDate today = LocalDate.now();
-        return movieRepository.findUpcomingScreeningMovies(today);
+//        return movieRepository.findUpcomingScreeningMovies(today);
+        return movieScheduleRepository.findUpcomingScreeningMovies(today);
     }
 
     /**
@@ -286,7 +291,8 @@ public class MovieController {
 
     // 박스오피스 TOP 10 (순위 기반)
     @GetMapping("/top/ten")
-    public List<MovieView> getTopTenMovies() {
-        return movieViewRepository.findMoviesWithRank();
+    public List<MovieSchedule> getTopTenMovies() {
+//        return movieViewRepository.findMoviesWithRank();
+        return movieScheduleRepository.findMoviesWithRank();
     }
 }

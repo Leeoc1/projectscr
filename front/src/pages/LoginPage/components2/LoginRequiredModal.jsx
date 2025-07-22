@@ -31,10 +31,10 @@ const LoginRequiredModal = ({ isOpen, onClose }) => {
         
         <div className="lrm-content">
           <p className="lrm-message">
-            영화 예매 서비스를 이용하시려면 로그인이 필요합니다.
+           서비스를 이용하시려면 로그인이 필요합니다.
           </p>
           <p className="lrm-submessage">
-            로그인 후 다양한 영화를 예매해보세요!
+            로그인 후 다양한 서비스를 이용해보세요!
           </p>
         </div>
 

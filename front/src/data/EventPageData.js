@@ -57,4 +57,96 @@ export const eventsData = [
     image: "/images/cinemascreen2.jpg", // 9월 할인 대축제 - 영화관 스크린
     period: "2025.09.01 ~ 2025.09.30",
   },
+
+  // 종료된 이벤트 가데이터
+  {
+    title: "봄맞이 로맨스 영화 페스티벌",
+    description:
+      "벚꽃이 피는 계절에 어울리는 감동적인 로맨스 영화들을 특별가로 만나보는 이벤트였습니다. 커플 할인 혜택도 함께 제공되었습니다.",
+    location: "강남점",
+    badgeColor: "end",
+    image: "/images/event1.png",
+    period: "2025.03.01 ~ 2025.04.30",
+    category: "종료된 이벤트",
+    badge: "end",
+  },
+  {
+    title: "어린이날 가족 영화관",
+    description:
+      "온 가족이 함께 즐길 수 있는 애니메이션과 가족 영화를 할인된 가격으로 관람할 수 있었던 특별한 어린이날 이벤트였습니다.",
+    location: "부산점",
+    badgeColor: "end",
+    image: "/images/event2.png",
+    period: "2025.05.01 ~ 2025.05.31",
+    category: "종료된 이벤트",
+    badge: "end",
+  },
+  {
+    title: "여름 블록버스터 미리보기",
+    description:
+      "여름 시즌 대작 영화들을 개봉 전에 미리 감상할 수 있었던 VIP 전용 미리보기 이벤트였습니다. 감독과의 대화 시간도 포함되었습니다.",
+    location: "홍대점",
+    badgeColor: "end",
+    image: "/images/event3.png",
+    period: "2025.06.01 ~ 2025.06.30",
+    category: "종료된 이벤트",
+    badge: "end",
+  },
+  {
+    title: "신학기 학생 특가 이벤트",
+    description:
+      "새 학기를 맞은 학생들을 위한 특별 할인 이벤트였습니다. 학생증 제시 시 모든 영화 50% 할인 혜택이 제공되었습니다.",
+    location: "전국 지점",
+    badgeColor: "end",
+    image: "/images/movie.jpg",
+    period: "2025.02.15 ~ 2025.03.15",
+    category: "종료된 이벤트",
+    badge: "end",
+  },
+
+  // 멤버쉽 이벤트 가데이터
+  {
+    title: "골드 멤버십 VIP 혜택",
+    description:
+      "골드 멤버십 가입 시 매월 무료 영화 관람권 2매와 함께 팝콘, 음료 무료 쿠폰을 제공합니다. 전용 라운지 이용 가능합니다.",
+    location: "전국 지점",
+    badgeColor: "membership",
+    image: "/images/event1.png",
+    period: "상시 진행",
+    category: "멤버쉽",
+    badge: "membership",
+  },
+  {
+    title: "플래티넘 멤버십 특별 혜택",
+    description:
+      "최상위 멤버십으로 무제한 영화 관람, 프리미엄 좌석 우선 예약, 신작 영화 사전 관람 등 최고급 혜택을 누려보세요.",
+    location: "전국 지점",
+    badgeColor: "membership",
+    image: "/images/event2.png",
+    period: "상시 진행",
+    category: "멤버쉽",
+    badge: "membership",
+  },
+  {
+    title: "패밀리 멤버십 할인 혜택",
+    description:
+      "가족 단위 멤버십으로 최대 4인까지 할인 혜택을 받을 수 있습니다. 어린이 영화 무료 관람과 가족 이벤트 우선 참여 기회를 제공합니다.",
+    location: "전국 지점",
+    badgeColor: "membership",
+    image: "/images/event3.png",
+    period: "상시 진행",
+    category: "멤버쉽",
+    badge: "membership",
+  },
+  {
+    title: "영 멤버십 청년 할인",
+    description:
+      "만 19-29세 청년들을 위한 특별 멤버십입니다. 모든 영화 40% 할인과 청년 전용 이벤트, 스낵바 할인 혜택을 받아보세요.",
+    location: "전국 지점",
+    badgeColor: "membership",
+    image: "/images/movie.jpg",
+    period: "상시 진행",
+    category: "멤버쉽",
+    badge: "membership",
+  },
 ];

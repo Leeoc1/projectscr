@@ -7,6 +7,16 @@ export const getMovieDetail = async (moviecd) => {
   return await apiRequest("post", "/movies/detail", { movieno: moviecd });
 };
 
+// 찜 상태 및 카운트 조회
+export const getWishlistStatus = async (userid, moviecd) => {
+  return await apiRequest("get", `/api/wishlist/status?userid=${userid}&moviecd=${moviecd}`);
+};
+
+// 찜 추가/해제 토글
+export const toggleWishlist = async (userid, moviecd) => {
+  return await apiRequest("post", `/api/wishlist/toggle?userid=${userid}&moviecd=${moviecd}`);
+};
+
 // 관리자용 KOBIS 영화 데이터 가져오기 (movie 테이블에 저장)
 export const fetchMoviesFromKobis = () =>
   apiRequestWithErrorHandling(

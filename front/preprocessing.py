@@ -153,7 +153,7 @@ df = pd.read_csv('./front/cgv_data.csv', encoding='utf-8')
 # mask = df['name'].str.contains('CGV', na=False)
 # df = df[mask]
 
-# df['name'] = df['name'].str.replace('CGV', '더스크린', regex=False)
+df['name'] = df['name'].str.replace('CGV', '더스크린', regex=False)
 
 df.to_csv('./front/cgv_data.csv', index=False, encoding='utf-8')
 

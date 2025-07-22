@@ -26,9 +26,9 @@ export default function MovieDetail() {
         
         // 영화 정보를 받아온 후 찜 상태도 조회
         const userid = localStorage.getItem("userid");
-        if (userid) {
+        if (userid && data.moviecd) {
           try {
-            const wishlistData = await getWishlistStatus(userid, movieno);
+            const wishlistData = await getWishlistStatus(userid, data.moviecd);
             setWishlistCount(wishlistData.count);
             setIsWished(wishlistData.wished);
           } catch (error) {
@@ -88,7 +88,7 @@ export default function MovieDetail() {
     
     try {
       // 찜 상태 토글 API 호출
-      const result = await toggleWishlist(userid, movieno);
+      const result = await toggleWishlist(userid, movie.moviecd);
       // 상태 업데이트
       setIsWished(result.wished);
       setWishlistCount(result.count);

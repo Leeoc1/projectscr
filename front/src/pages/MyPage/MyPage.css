@@ -368,6 +368,15 @@
   background-color: #b8bcbe;
 }
 
+.mp-btn-remove-wishlist {
+  background-color: #dc3545;
+  color: white;
+}
+
+.mp-btn-remove-wishlist:hover {
+  background-color: #c82333;
+}
+
 .mp-btn-cancel {
   margin-top: 1rem;
   background-color: #d9dadb;

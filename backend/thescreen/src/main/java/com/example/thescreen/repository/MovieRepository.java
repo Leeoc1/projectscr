@@ -11,6 +11,9 @@ import java.util.List;
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, String> {
 
+    // moviecd로 영화 조회
+    Movie findByMoviecd(String moviecd);
+
     // moviecd, movienm 추출
     List<MovieCdNmList> findAllBy();
 

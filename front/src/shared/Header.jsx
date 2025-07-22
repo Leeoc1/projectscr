@@ -139,9 +139,11 @@ export default function Header() {
 
           {/* User Actions */}
           <div className="h-user-actions">
-            <button className="h-admin-btn" onClick={goAdmin}>
-              admin
-            </button>
+            {isLoggedIn && userid === "master001" && (
+              <button className="h-manager-btn" onClick={goAdmin}>
+                관리페이지
+              </button>
+            )}
             {isLoggedIn ? (
               <>
                 <div className="h-user-profile" onClick={goMyPage}>
@@ -152,6 +154,9 @@ export default function Header() {
                   />
                   <span className="h-username">{username || userid}님</span>
                 </div>
+                <button className="h-logout-btn" onClick={goNotice}>
+                  공지사항
+                </button>
                 <button className="h-logout-btn" onClick={handleLogout}>
                   로그아웃
                 </button>

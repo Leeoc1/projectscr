@@ -60,3 +60,36 @@ export const getSchedules = (cinemaCd, date) =>
     "Error fetching schedules:",
     []
   );
+
+export const registerMovie = async (moviecd, screencds) => {
+  if (!moviecd || !screencds || screencds.length === 0) {
+    throw new Error("영화와 상영관을 선택하세요.");
+  }
+
+  const formData = new FormData();
+  formData.append("moviecd", moviecd);
+  screencds.forEach((screencd) => formData.append("screencds", screencd));
+
+  const res = await fetch("/api/schedules/generate", {
+    method: "POST",
+    body: formData,
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.message || "스케줄 생성에 실패했습니다.");
+  }
+
+  return data;
+};
+
+export const scheduleData = async () => {
+  apiRequestWithErrorHandling(
+    "post",
+    "/api/schedules/generate-dummy",
+    null,
+    {},
+    "Error generating dummy schedule:",
+    []
+  );
+};

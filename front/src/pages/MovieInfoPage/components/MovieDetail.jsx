@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../styles/MovieDetail.css";
 import Header from "../../../shared/Header";
 import { useSearchParams } from "react-router-dom";
-import { getMovieDetail } from "../../../api/movieApi";
+import { getMovieDetail, getWishlistStatus, toggleWishlist } from "../../../api/movieApi";
 import { useNavigate } from "react-router-dom";
 import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
 
@@ -13,12 +13,28 @@ export default function MovieDetail() {
   const movieno = searchParams.get("movieno");
   const [movie, setMovie] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  
+  // 찜 관련 상태
+  const [wishlistCount, setWishlistCount] = useState(0);
+  const [isWished, setIsWished] = useState(false);
 
   useEffect(() => {
     const fetchMovieDetail = async () => {
       if (movieno) {
         const data = await getMovieDetail(movieno);
         setMovie(data);
+        
+        // 영화 정보를 받아온 후 찜 상태도 조회
+        const userid = localStorage.getItem("userid");
+        if (userid) {
+          try {
+            const wishlistData = await getWishlistStatus(userid, movieno);
+            setWishlistCount(wishlistData.count);
+            setIsWished(wishlistData.wished);
+          } catch (error) {
+            console.error("Error fetching wishlist status:", error);
+          }
+        }
       }
     };
 
@@ -52,6 +68,33 @@ export default function MovieDetail() {
     sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
 
     navigate("/reservation/place");
+  };
+
+  // 찜 버튼 클릭 핸들러
+  const handleWishlistClick = async () => {
+    // 로그인 상태 체크
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    
+    if (!isLoggedIn) {
+      setShowLoginModal(true);
+      return;
+    }
+    
+    const userid = localStorage.getItem("userid");
+    if (!userid) {
+      setShowLoginModal(true);
+      return;
+    }
+    
+    try {
+      // 찜 상태 토글 API 호출
+      const result = await toggleWishlist(userid, movieno);
+      // 상태 업데이트
+      setIsWished(result.wished);
+      setWishlistCount(result.count);
+    } catch (error) {
+      console.error("Error toggling wishlist:", error);
+    }
   };
 
   const handleSearch = () => {
@@ -130,12 +173,25 @@ export default function MovieDetail() {
                     </div>
                   </div>
 
-                  <button
-                    className="mvd-booking-button"
-                    onClick={handleReservationClick}
-                  >
-                    예매하기
-                  </button>
+                  {/* 찜 버튼과 예매 버튼 */}
+                  <div className="mvd-wishlist-section">
+                    <div className="mvd-wishlist-container">
+                      <button
+                        className={`mvd-wishlist-heart-button ${isWished ? 'wished' : ''}`}
+                        onClick={handleWishlistClick}
+                      >
+                        {isWished ? '♥' : '♡'}
+                      </button>
+                      <span className="mvd-wishlist-count">{wishlistCount}</span>
+                    </div>
+                    
+                    <button
+                      className="mvd-booking-button"
+                      onClick={handleReservationClick}
+                    >
+                      예매하기
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

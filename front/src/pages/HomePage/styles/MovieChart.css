@@ -72,7 +72,6 @@
 
 .mcs-movie-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 .mcs-movie-poster {
@@ -105,6 +104,10 @@
   color: #9ca3af;
   font-size: 0.85rem;
   margin-bottom: 0.5rem;
+  max-width: 148px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mcs-movie-meta {
@@ -162,12 +165,10 @@
 
 .mcs-slider-nav-arrow {
   position: absolute;
-  top: 37%;
+  top: 45%;
   transform: translateY(-50%);
   background: none;
-  color: #999;
   border: none;
-  font-size: 70px;
   cursor: pointer;
   width: 32px;
   height: 60px;
@@ -177,6 +178,12 @@
   margin: 0;
   padding: 0;
   z-index: 10;
+}
+
+.mcs-slider-nav-img {
+  width: 32px;
+  height: 40px;
+  display: block;
 }
 
 .mcs-slider-nav-arrow.mcs-slider-nav-prev {

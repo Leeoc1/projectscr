@@ -53,8 +53,9 @@
   margin-bottom: 0.5rem;
 }
 
-.rg-form-group input {
-  width: 95%;
+.rg-form-group input,
+.rg-form-group select {
+  width: 100%;
   padding: 0.75rem;
   border: 2px solid #e5e7eb;
   border-radius: 0.5rem;
@@ -62,7 +63,8 @@
   transition: border-color 0.3s ease;
 }
 
-.rg-form-group input:focus {
+.rg-form-group input:focus,
+.rg-form-group select:focus {
   outline: none;
   border-color: #fbbf24;
 }
@@ -78,13 +80,12 @@
 
 .rg-check-btn,
 .rg-verify-btn {
+  font-size: 0.875rem;
   width: 81px;
   background-color: #6b7280;
   color: white;
   border: none;
-  padding: 0.75rem 1rem;
   border-radius: 0.5rem;
-  font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
   transition: background-color 0.3s ease;
@@ -98,6 +99,19 @@
 .rg-verify-btn:disabled {
   background-color: #10b981;
   cursor: not-allowed;
+}
+
+.rg-birth-container {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.rg-birth-year,
+.rg-birth-month,
+.rg-birth-day {
+  flex: 1 1 0;
+  width: 100%;
 }
 
 .rg-validation-message {

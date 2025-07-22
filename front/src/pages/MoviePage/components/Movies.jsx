@@ -8,7 +8,7 @@ import {
 import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
 import "../styles/Movies.css";
 
-const Movies = ({ activeTab: parentActiveTab }) => {
+const Movies = ({ activeTab: parentActiveTab, showDetailButton = true }) => {
   const [activeTab, setActiveTab] = useState(parentActiveTab || "boxoffice");
   const [currentMovies, setCurrentMovies] = useState([]);
   const [upcomingMoviesData, setUpcomingMoviesData] = useState([]);
@@ -16,6 +16,7 @@ const Movies = ({ activeTab: parentActiveTab }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const navigate = useNavigate();
   const [visibleCount, setVisibleCount] = useState(16);
+  const [searchKeyword, setSearchKeyword] = useState(""); // 검색 박스 상태 실시간 관리
 
   // 부모에서 전달받은 activeTab이 변경될 때 로컬 상태 업데이트
   useEffect(() => {
@@ -96,11 +97,22 @@ const Movies = ({ activeTab: parentActiveTab }) => {
     setVisibleCount(currentMovies.length);
   };
 
-  // 각 탭에 맞는 영화 목록을 반환하는 함수
+  // 각 탭에 맞는 영화 목록을 반환하는 함수 (검색어 필터링 포함)
   const getMoviesByTab = () => {
+    // 검색어가 있을 경우, 공백 제거 후 부분 일치로 필터링
+    const filterByKeyword = (movies) => {
+      if (!searchKeyword.trim()) return movies;
+      const keyword = searchKeyword.replace(/\s/g, "").toLowerCase();
+      return movies.filter((movie) => {
+        const title = (movie.movienm || movie.title || "")
+          .replace(/\s/g, "")
+          .toLowerCase();
+        return title.includes(keyword);
+      });
+    };
+
     switch (activeTab) {
-      case "boxoffice":
-        // 박스오피스 1-10위는 순위대로, 그 이후는 최신순으로 정렬
+      case "boxoffice": {
         const topTenMovieCodes = topTenMovies.map((movie) => movie.moviecd);
         const topTenFromCurrent = currentMovies.filter((movie) =>
           topTenMovieCodes.includes(movie.moviecd)
@@ -108,8 +120,6 @@ const Movies = ({ activeTab: parentActiveTab }) => {
         const otherMovies = currentMovies.filter(
           (movie) => !topTenMovieCodes.includes(movie.moviecd)
         );
-
-        // TOP 10을 박스오피스 순위대로 정렬
         const sortedTopTen = topTenFromCurrent.sort((a, b) => {
           const rankA =
             topTenMovies.find((tm) => tm.moviecd === a.moviecd)?.movierank ||
@@ -119,27 +129,64 @@ const Movies = ({ activeTab: parentActiveTab }) => {
             999;
           return Number(rankA) - Number(rankB);
         });
-
-        // 나머지는 최신순 (개봉일 기준 내림차순)
         const sortedOthers = otherMovies.sort(
           (a, b) => new Date(b.releasedate) - new Date(a.releasedate)
         );
-
-        return [...sortedTopTen, ...sortedOthers].slice(0, visibleCount);
+        return filterByKeyword([...sortedTopTen, ...sortedOthers]).slice(
+          0,
+          visibleCount
+        );
+      }
       case "latest":
-        // 최신 개봉순으로 정렬 (개봉일 기준 내림차순)
-        return [...currentMovies]
-          .sort((a, b) => new Date(b.releasedate) - new Date(a.releasedate))
-          .slice(0, visibleCount);
+        return filterByKeyword(
+          [...currentMovies].sort(
+            (a, b) => new Date(b.releasedate) - new Date(a.releasedate)
+          )
+        ).slice(0, visibleCount);
       case "upcoming":
-        return upcomingMoviesData;
+        return filterByKeyword(upcomingMoviesData);
       default:
-        return currentMovies.slice(0, visibleCount);
+        return filterByKeyword(currentMovies.slice(0, visibleCount));
     }
   };
 
   return (
     <div className="mvs-section">
+      {/* 검색박스: 오른쪽 상단에 배치 */}
+      <div className="mvs-searchbox-wrap">
+        <div className="mvs-searchbox-container">
+          <input
+            type="text"
+            placeholder="영화 제목 검색"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+            className="mvs-searchbox-input"
+          />
+          <span className="mvs-searchbox-icon">
+            {/* SVG 돋보기 아이콘 */}
+            <svg
+              className="mvs-searchbox-svg"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="9"
+                cy="9"
+                r="7"
+                className="mvs-searchbox-svg-circle"
+              />
+              <line
+                x1="15.2"
+                y1="15.2"
+                x2="18"
+                y2="18"
+                className="mvs-searchbox-svg-line"
+              />
+            </svg>
+          </span>
+        </div>
+      </div>
       <div className="mvs-grid">
         {getMoviesByTab().map((movie) => (
           <div className="mvs-card" key={movie.moviecd}>
@@ -150,12 +197,14 @@ const Movies = ({ activeTab: parentActiveTab }) => {
               />
               <div className="mvs-overlay">
                 <div className="mvs-buttons">
-                  <button
-                    className="mvs-btn"
-                    onClick={() => goMovieDetail(movie.moviecd)}
-                  >
-                    상세정보
-                  </button>
+                  {showDetailButton && (
+                    <button
+                      className="mvs-btn"
+                      onClick={() => goMovieDetail(movie.moviecd)}
+                    >
+                      상세정보
+                    </button>
+                  )}
                   {activeTab !== "upcoming" && (
                     <button
                       className="mvs-btn"
@@ -170,8 +219,11 @@ const Movies = ({ activeTab: parentActiveTab }) => {
             <div className="mvs-info">
               <h3 className="mvs-title">{movie.movienm || movie.title}</h3>
               <p className="mvs-genre">{movie.genre}</p>
+              {activeTab === "latest" && (
+                <p className="mvs-release-date">개봉일: {movie.releasedate}</p>
+              )}
               {activeTab === "upcoming" ? (
-                <p className="mvs-release">
+                <p className="mvs-release-date">
                   개봉 예정일: {movie.releaseDate || movie.releasedate}
                 </p>
               ) : (

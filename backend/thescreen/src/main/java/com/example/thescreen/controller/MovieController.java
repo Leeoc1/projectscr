@@ -301,14 +301,16 @@ public class MovieController {
             response.put("isadult", movie.getIsadult());
             response.put("movieinfo", movie.getMovieinfo());
             
-            // 누적관객수 정보 추가 (MovieRank 테이블에서 조회)
+            // 누적관객수와 영화 순위 정보 추가 (MovieRank 테이블에서 조회)
             try {
-                String sql = "SELECT audiacc FROM movierank WHERE movierankcd = ?";
-                Long audiAcc = jdbcTemplate.queryForObject(sql, new Object[]{moviecd}, Long.class);
-                response.put("audiacc", audiAcc);
+                String sql = "SELECT audiacc, movierank FROM movierank WHERE movierankcd = ?";
+                Map<String, Object> rankData = jdbcTemplate.queryForMap(sql, moviecd);
+                response.put("audiacc", rankData.get("audiacc"));
+                response.put("movierank", rankData.get("movierank"));
             } catch (Exception e) {
-                // MovieRank에 해당 영화가 없는 경우 0으로 설정
+                // MovieRank에 해당 영화가 없는 경우 기본값으로 설정
                 response.put("audiacc", 0L);
+                response.put("movierank", null);
             }
         }
         

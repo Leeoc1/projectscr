@@ -164,10 +164,6 @@ export default function MovieDetail() {
 
                   <div className="mvd-movie-booking-info">
                     <div className="mvd-booking-info-item">
-                      <span className="mvd-booking-info-label">실관람평</span>
-                      <span className="mvd-booking-info-value">9.8</span>
-                    </div>
-                    <div className="mvd-booking-info-item">
                       <span className="mvd-booking-info-label">예매율</span>
                       <span className="mvd-booking-info-value">
                         {movie.movierank

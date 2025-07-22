@@ -125,3 +125,10 @@ FROM
 review r
 LEFT JOIN users u ON r.userid = u.userid
 LEFT JOIN movie m ON r.moviecd = m.moviecd;
+
+
+CREATE OR REPLACE VIEW schedule_movies AS
+SELECT DISTINCT m.*, r.movierankcd, r.movierank, r.rankchange
+FROM movie m
+INNER JOIN schedule s ON m.moviecd = s.moviecd
+LEFT JOIN movierank r ON m.movienm = r.moviename;

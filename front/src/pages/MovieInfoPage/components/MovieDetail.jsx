@@ -27,7 +27,6 @@ export default function MovieDetail() {
       if (movieno) {
         const data = await getMovieDetail(movieno);
         setMovie(data);
-
         // 영화 정보를 받아온 후 찜 상태도 조회
         const userid = localStorage.getItem("userid");
         if (userid) {
@@ -78,18 +77,15 @@ export default function MovieDetail() {
   const handleWishlistClick = async () => {
     // 로그인 상태 체크
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-
     if (!isLoggedIn) {
       setShowLoginModal(true);
       return;
     }
-
     const userid = localStorage.getItem("userid");
     if (!userid) {
       setShowLoginModal(true);
       return;
     }
-
     try {
       // 찜 상태 토글 API 호출
       const result = await toggleWishlist(userid, movieno);

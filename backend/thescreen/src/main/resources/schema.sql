@@ -37,7 +37,8 @@ CREATE TABLE movierank (
     movierankcd VARCHAR(30) PRIMARY KEY, -- PK값, 자동 증가
     moviename VARCHAR(255) NOT NULL, -- 영화 이름, 최대 255자
     movierank INT NOT NULL, -- 영화 랭크, 정수형
-    rankchange INT DEFAULT 0 -- 전날 대비 랭크 증감량, 기본값 0
+    rankchange INT DEFAULT 0, -- 전날 대비 랭크 증감량, 기본값 0
+    audiacc BIGINT DEFAULT 0 -- 누적관객수, 기본값 0
 );
 
 --reservation의 seatnum을 seatcd로 바꾸고 string로 바꾸기 이것도 툴에서 실행

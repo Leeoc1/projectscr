@@ -148,6 +148,7 @@ INSERT IGNORE INTO users (
     '활성',
     CURRENT_DATE
 );
+
 CREATE TEMPORARY TABLE temp_numbers (n INT);
 INSERT INTO temp_numbers (n)
 SELECT a.N + 1
@@ -185,3 +186,4 @@ SELECT
     ELT(FLOOR(1 + (RAND() * 5)), '지점 관리', '고객 응대', '매표', '상영관 관리', '매점 판매'),
     ELT(FLOOR(1 + (RAND() * 2)), '근무중', '휴가')
 FROM temp_numbers;
+

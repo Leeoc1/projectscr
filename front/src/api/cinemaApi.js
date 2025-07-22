@@ -82,3 +82,14 @@ export const registerMovie = async (moviecd, screencds) => {
 
   return data;
 };
+
+export const scheduleData = async () => {
+  apiRequestWithErrorHandling(
+    "post",
+    "/api/schedules/generate-dummy",
+    null,
+    {},
+    "Error generating dummy schedule:",
+    []
+  );
+};

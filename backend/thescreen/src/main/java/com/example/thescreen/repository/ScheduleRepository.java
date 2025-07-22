@@ -98,4 +98,9 @@ public interface ScheduleRepository extends JpaRepository<Schedule, String> {
             @Param("screencd") String screencd,
             @Param("starttime") LocalDateTime starttime,
             @Param("endtime") LocalDateTime endtime);
+
+    boolean existsByStartdate(LocalDate date);
+    boolean existsByMoviecd(String moviecd);
+    boolean existsById(String schedulecd);
+    List<Schedule> findByScreencdAndStartdateBetween(String screencd, LocalDate start, LocalDate end);
 }

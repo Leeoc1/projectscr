@@ -14,7 +14,7 @@ const Event = () => {
         </div>
 
         <div className="et-events-grid">
-          {eventsData.map((event, index) => (
+          {eventsData.slice(0, 4).map((event, index) => (
             <div
               key={index}
               className="et-event-card"
@@ -37,7 +37,7 @@ const Event = () => {
                 <h3 className="et-event-title">{event.title}</h3>
                 <p className="et-event-description">{event.description}</p>
                 <div className="et-event-footer">
-                  <span className={`et-event-badge ${event.badgeColor}`}>
+                  <span className="et-event-badge" style={{ color: "white" }}>
                     {event.location}
                   </span>
                   <a href="#" className="et-event-link">

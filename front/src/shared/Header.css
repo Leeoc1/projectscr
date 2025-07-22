@@ -17,7 +17,6 @@
 .h-header-container {
   max-width: 980px;
   margin: 0 auto;
-  padding: 0 1rem;
 }
 
 .h-header-content {
@@ -230,7 +229,6 @@
 .h-nav-bottom-container {
   max-width: 980px;
   margin: 0 auto;
-  padding: 0 1rem;
 }
 
 .h-nav-bottom-content {

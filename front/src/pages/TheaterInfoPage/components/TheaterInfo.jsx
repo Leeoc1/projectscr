@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../style/TheaterInfo.css";
+import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
 
 const TheaterInfo = ({
   cinemacd,
@@ -11,9 +12,20 @@ const TheaterInfo = ({
   theaterState,
 }) => {
   const navigate = useNavigate();
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   // 예매하기 버튼 클릭시 예매페이지로 이동(영화 선택)
   const handleReservationClick = () => {
+    // 로그인 상태 체크
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+    if (!isLoggedIn) {
+      // 로그인되지 않은 경우 모달 표시
+      setShowLoginModal(true);
+      return;
+    }
+
+    // 로그인된 경우 기존 로직 실행
     sessionStorage.setItem("cinemacd", cinemacd);
     sessionStorage.setItem("cinemanm", cinemanm);
     navigate("/reservation/movie");
@@ -44,6 +56,11 @@ const TheaterInfo = ({
       <button className="ti-findroad-button" onClick={handleFindRoadClick}>
         <strong>길찾기</strong>
       </button>
+
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+      />
     </div>
   );
 };

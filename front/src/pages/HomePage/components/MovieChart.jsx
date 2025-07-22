@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from "react";
+import ArrowLeft from "../assets/arrow-left.svg";
+import ArrowRight from "../assets/arrow-right.svg";
 import { useNavigate } from "react-router-dom";
 import { getTopTenMovies } from "../../../api/movieApi";
 import "../styles/MovieChart.css";
@@ -131,8 +133,9 @@ const MovieChart = () => {
           <button
             onClick={prevSlide}
             className="mcs-slider-nav-arrow mcs-slider-nav-prev"
+            aria-label="이전"
           >
-            ‹
+            <img src={ArrowLeft} alt="이전" className="mcs-slider-nav-img" />
           </button>
           <div className="mcs-slider-container">
             <div
@@ -182,8 +185,9 @@ const MovieChart = () => {
           <button
             onClick={nextSlide}
             className="mcs-slider-nav-arrow mcs-slider-nav-next"
+            aria-label="다음"
           >
-            ›
+            <img src={ArrowRight} alt="다음" className="mcs-slider-nav-img" />
           </button>
         </div>
       </div>

@@ -4,7 +4,7 @@ import numpy as np
 
 # # cp949로 저장 (덮어쓰기)
 
-df = pd.read_csv('cinema_data.csv', encoding='utf-8')
+df = pd.read_csv('./front/cgv_data.csv', encoding='utf-8')
 # try:
 #     df = pd.read_csv('front/cinema_data.csv', encoding='cp949')
 # except UnicodeDecodeError:
@@ -150,9 +150,12 @@ df = pd.read_csv('cinema_data.csv', encoding='utf-8')
 
 # UTF-8로 덮어써서 저장
 
-mask = df['name'].str.contains('CGV', na=False)
-df = df[mask]
-df.to_csv('cgv_data.csv', index=False, encoding='utf-8')
+# mask = df['name'].str.contains('CGV', na=False)
+# df = df[mask]
+
+# df['name'] = df['name'].str.replace('CGV', '더스크린', regex=False)
+
+df.to_csv('./front/cgv_data.csv', index=False, encoding='utf-8')
 
 # # screen 컬럼의 결측치 개수 출력
 # print('screen 결측치 개수:', df['screen'].isna().sum())

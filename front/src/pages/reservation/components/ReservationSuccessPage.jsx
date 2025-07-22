@@ -354,7 +354,12 @@ const ReservationSuccessPage = () => {
             </div>
           </div>
           <div className="payment-btn-area">
-            <button className="payment-confirm-btn">예매확인/취소</button>
+            <button
+              className="payment-confirm-btn"
+              onClick={() => navigate("/mypage")}
+            >
+              예매확인/취소
+            </button>
           </div>
           <div className="payment-notice">
             <b>예매 유의사항</b>

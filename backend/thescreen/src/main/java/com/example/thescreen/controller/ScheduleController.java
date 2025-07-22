@@ -4,11 +4,11 @@ import com.example.thescreen.entity.Movie;
 import com.example.thescreen.entity.Schedule;
 import com.example.thescreen.repository.MovieRepository;
 import com.example.thescreen.repository.ScheduleRepository;
+import com.example.thescreen.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -25,12 +25,14 @@ public class ScheduleController {
     @Autowired
     private MovieRepository movieRepository;
 
+    @Autowired
+    private ScheduleService scheduleService;
+
     @PostMapping("/generate")
     public ResponseEntity<Map<String, Object>> generateSchedules(
             @RequestParam String moviecd,
             @RequestParam List<String> screencds) {
         try {
-            // 입력 검증
             if (moviecd == null || moviecd.isEmpty() || screencds == null || screencds.isEmpty()) {
                 Map<String, Object> result = new HashMap<>();
                 result.put("success", false);
@@ -38,7 +40,6 @@ public class ScheduleController {
                 return ResponseEntity.badRequest().body(result);
             }
 
-            // 영화 러닝타임 조회
             Optional<Movie> movieOpt = movieRepository.findById(moviecd);
             if (!movieOpt.isPresent()) {
                 Map<String, Object> result = new HashMap<>();
@@ -54,7 +55,6 @@ public class ScheduleController {
                 return ResponseEntity.badRequest().body(result);
             }
 
-            // 스케줄 생성
             final int NUM_SCHEDULES = 5;
             int baseIndex = (int) (System.currentTimeMillis() % 100000);
             Map<String, Integer> failedSchedules = new HashMap<>();
@@ -65,22 +65,18 @@ public class ScheduleController {
                 scheduleRepository.createTempNums();
 
                 try {
-                    // 기존 스케줄 조회
                     List<Schedule> existingSchedules = scheduleRepository.findByScreencd(screencd);
                     scheduleRepository.insertOrUpdateSchedules(baseIndex, moviecd, screencd, runningtime, NUM_SCHEDULES);
                     createdForScreen = NUM_SCHEDULES;
 
-                    // 생성된 스케줄 조회
                     List<Schedule> updatedSchedules = scheduleRepository.findByScreencd(screencd);
                     if (updatedSchedules.size() >= NUM_SCHEDULES) {
-                        // 가장 최근 생성된 5개 스케줄을 기준으로 확인
                         for (int i = 0; i < NUM_SCHEDULES; i++) {
                             Schedule schedule = updatedSchedules.get(updatedSchedules.size() - NUM_SCHEDULES + i);
-                            LocalDateTime startTime = schedule.getStarttime(); // Schedule 엔티티의 starttime getter
+                            LocalDateTime startTime = schedule.getStarttime();
                             LocalDateTime endTime = startTime.plusMinutes(runningtime);
                             if (scheduleRepository.countOverlappingSchedules(screencd, startTime.toLocalDate(), startTime, endTime) > 0) {
                                 System.out.println("겹침 발견: screencd=" + screencd + ", startTime=" + startTime + ", endTime=" + endTime);
-                                // 롤백 로직 추가 필요
                             }
                         }
                     }
@@ -93,7 +89,6 @@ public class ScheduleController {
                 baseIndex += NUM_SCHEDULES;
             }
 
-            // 결과 반환
             Map<String, Object> result = new HashMap<>();
             if (failedSchedules.isEmpty()) {
                 result.put("success", true);
@@ -117,6 +112,22 @@ public class ScheduleController {
             result.put("success", false);
             result.put("message", "스케줄 생성/업데이트 실패: " + e.getMessage());
             return ResponseEntity.status(500).body(result);
+        }
+    }
+
+    @PostMapping("/generate-dummy")
+    public ResponseEntity<Map<String, Object>> generateDummySchedules() {
+        try {
+            String result = scheduleService.generateDummySchedules();
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", result);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", "가데이터 생성 실패: " + e.getMessage());
+            return ResponseEntity.status(500).body(response);
         }
     }
 }

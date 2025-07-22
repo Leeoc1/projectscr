@@ -6,13 +6,20 @@ import { getUserInfo, getUserReservations } from "../../../api/userApi";
 import { cancelReservation } from "../../../api/reservationApi";
 import MyPageReservationDetail from "./MyPageReservationDetail";
 
+import { getUserWishlist, toggleWishlist } from "../../../api/movieApi";
+import { useNavigate } from "react-router-dom";
+
 const MyPage = () => {
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
   const [userReservations, setUserReservations] = useState([]);
   const [loading, setLoading] = useState(true);
   // 모달 상태 및 상세 데이터 상태
   const [showModal, setShowModal] = useState(false);
   const [selectedReservation, setSelectedReservation] = useState(null);
+
+  // 찜한 영화 목록 상태
+  const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -26,6 +33,10 @@ const MyPage = () => {
           // 사용자 예약 정보 조회
           const reservationsResponse = await getUserReservations(userid);
           setUserReservations(reservationsResponse);
+
+          // 찜한 영화 목록 조회
+          const wishlistResponse = await getUserWishlist(userid);
+          setWishlist(wishlistResponse);
         }
       } catch (error) {
         console.error("사용자 데이터 조회 오류:", error);
@@ -50,6 +61,37 @@ const MyPage = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedReservation(null);
+  };
+
+  // 찜 해제 핸들러
+  const handleRemoveFromWishlist = async (moviecd) => {
+    try {
+      const userid = localStorage.getItem("userid");
+      if (userid) {
+        await toggleWishlist(userid, moviecd);
+        // 찜 목록에서 해당 영화 제거
+        setWishlist((prev) => prev.filter((wish) => wish.moviecd !== moviecd));
+      }
+    } catch (error) {
+      console.error("찜 해제 오류:", error);
+    }
+  };
+
+  // 예매하기 핸들러
+  const handleReservationFromWishlist = (movie) => {
+    // 세션 스토리지에 영화 정보 저장
+    sessionStorage.setItem("moviecd", movie.moviecd);
+    sessionStorage.setItem("movienm", movie.movienm);
+
+    const movieData = {
+      moviecd: movie.moviecd,
+      movienm: movie.movienm,
+      posterurl: movie.posterurl,
+    };
+    sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
+
+    // 예매 페이지로 이동
+    navigate("/reservation/place");
   };
 
   return (
@@ -181,6 +223,64 @@ const MyPage = () => {
               ) : (
                 <div className="mp-no-reservations">
                   <p>예약 내역이 없습니다.</p>
+                </div>
+              )}
+            </div>
+          </section>
+
+          {/* 찜한 영화 목록 섹션 */}
+          <section className="mp-section">
+            <div className="mp-section-header">
+              <h2 className="mp-section-title">내가 찜한 영화</h2>
+            </div>
+            <div className="mp-movie-list">
+              {loading ? (
+                <div className="mp-loading">찜한 영화를 불러오는 중...</div>
+              ) : wishlist.length > 0 ? (
+                wishlist.map((wish, idx) => (
+                  <div key={wish.moviecd || idx} className="mp-movie-item">
+                    <div className="mp-movie-poster-small">
+                      {wish.posterurl ? (
+                        <img
+                          src={wish.posterurl}
+                          alt={wish.movienm}
+                          style={{
+                            width: "60px",
+                            height: "90px",
+                            objectFit: "cover",
+                            borderRadius: "8px",
+                          }}
+                        />
+                      ) : (
+                        <span className="mp-poster-text-small">No Image</span>
+                      )}
+                    </div>
+                    <div className="mp-movie-info">
+                      <div className="mp-movie-main-info">
+                        <h3 className="mp-movie-title">{wish.movienm}</h3>
+                        <div className="mp-movie-actions">
+                          <button
+                            className="mp-btn mp-btn-reservation"
+                            onClick={() => handleReservationFromWishlist(wish)}
+                          >
+                            예매하기
+                          </button>
+                          <button
+                            className="mp-btn mp-btn-remove-wishlist"
+                            onClick={() =>
+                              handleRemoveFromWishlist(wish.moviecd)
+                            }
+                          >
+                            찜 해제
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="mp-no-reservations">
+                  <p>찜한 영화가 없습니다.</p>
                 </div>
               )}
             </div>

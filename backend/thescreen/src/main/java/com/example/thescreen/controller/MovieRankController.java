@@ -34,6 +34,7 @@ public class MovieRankController {
         rank.setMoviename(rs.getString("moviename"));
         rank.setMovierank(rs.getInt("movierank"));
         rank.setRankchange(rs.getInt("rankchange"));
+        rank.setAudiacc(rs.getLong("audiacc")); // 누적관객수 추가
         return rank;
     }
 }

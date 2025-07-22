@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import "../styles/MovieDetail.css";
 import Header from "../../../shared/Header";
 import { useSearchParams } from "react-router-dom";
-import { getMovieDetail, getWishlistStatus, toggleWishlist } from "../../../api/movieApi";
+import {
+  getMovieDetail,
+  getWishlistStatus,
+  toggleWishlist,
+} from "../../../api/movieApi";
 import { useNavigate } from "react-router-dom";
 import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
 
@@ -13,7 +17,7 @@ export default function MovieDetail() {
   const movieno = searchParams.get("movieno");
   const [movie, setMovie] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  
+
   // 찜 관련 상태
   const [wishlistCount, setWishlistCount] = useState(0);
   const [isWished, setIsWished] = useState(false);
@@ -23,12 +27,11 @@ export default function MovieDetail() {
       if (movieno) {
         const data = await getMovieDetail(movieno);
         setMovie(data);
-        
         // 영화 정보를 받아온 후 찜 상태도 조회
         const userid = localStorage.getItem("userid");
-        if (userid) {
+        if (userid && data.moviecd) {
           try {
-            const wishlistData = await getWishlistStatus(userid, movieno);
+            const wishlistData = await getWishlistStatus(userid, data.moviecd);
             setWishlistCount(wishlistData.count);
             setIsWished(wishlistData.wished);
           } catch (error) {
@@ -74,21 +77,18 @@ export default function MovieDetail() {
   const handleWishlistClick = async () => {
     // 로그인 상태 체크
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    
     if (!isLoggedIn) {
       setShowLoginModal(true);
       return;
     }
-    
     const userid = localStorage.getItem("userid");
     if (!userid) {
       setShowLoginModal(true);
       return;
     }
-    
     try {
       // 찜 상태 토글 API 호출
-      const result = await toggleWishlist(userid, movieno);
+      const result = await toggleWishlist(userid, movie.moviecd);
       // 상태 업데이트
       setIsWished(result.wished);
       setWishlistCount(result.count);
@@ -160,16 +160,20 @@ export default function MovieDetail() {
 
                   <div className="mvd-movie-booking-info">
                     <div className="mvd-booking-info-item">
-                      <span className="mvd-booking-info-label">실관람평</span>
-                      <span className="mvd-booking-info-value">9.8</span>
-                    </div>
-                    <div className="mvd-booking-info-item">
                       <span className="mvd-booking-info-label">예매율</span>
-                      <span className="mvd-booking-info-value">2위</span>
+                      <span className="mvd-booking-info-value">
+                        {movie.movierank
+                          ? `${movie.movierank}위`
+                          : "순위 정보 없음"}
+                      </span>
                     </div>
                     <div className="mvd-booking-info-item">
                       <span className="mvd-booking-info-label">누적관객수</span>
-                      <span className="mvd-booking-info-value">1,23명</span>
+                      <span className="mvd-booking-info-value">
+                        {movie.audiacc
+                          ? movie.audiacc.toLocaleString() + "명"
+                          : "정보 없음"}
+                      </span>
                     </div>
                   </div>
 
@@ -177,14 +181,18 @@ export default function MovieDetail() {
                   <div className="mvd-wishlist-section">
                     <div className="mvd-wishlist-container">
                       <button
-                        className={`mvd-wishlist-heart-button ${isWished ? 'wished' : ''}`}
+                        className={`mvd-wishlist-heart-button ${
+                          isWished ? "wished" : ""
+                        }`}
                         onClick={handleWishlistClick}
                       >
-                        {isWished ? '♥' : '♡'}
+                        {isWished ? "♥" : "♡"}
                       </button>
-                      <span className="mvd-wishlist-count">{wishlistCount}</span>
+                      <span className="mvd-wishlist-count">
+                        {wishlistCount}
+                      </span>
                     </div>
-                    
+
                     <button
                       className="mvd-booking-button"
                       onClick={handleReservationClick}

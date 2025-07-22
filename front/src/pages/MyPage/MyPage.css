@@ -5,7 +5,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,7 +18,7 @@
   padding: 2rem;
   min-width: 320px;
   max-width: 90vw;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -366,6 +366,15 @@
 
 .mp-btn-reservation:hover {
   background-color: #b8bcbe;
+}
+
+.mp-btn-remove-wishlist {
+  background-color: #dc3545;
+  color: white;
+}
+
+.mp-btn-remove-wishlist:hover {
+  background-color: #c82333;
 }
 
 .mp-btn-cancel {

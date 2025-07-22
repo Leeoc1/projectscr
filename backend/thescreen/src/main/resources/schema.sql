@@ -37,7 +37,8 @@ CREATE TABLE movierank (
     movierankcd VARCHAR(30) PRIMARY KEY, -- PK값, 자동 증가
     moviename VARCHAR(255) NOT NULL, -- 영화 이름, 최대 255자
     movierank INT NOT NULL, -- 영화 랭크, 정수형
-    rankchange INT DEFAULT 0 -- 전날 대비 랭크 증감량, 기본값 0
+    rankchange INT DEFAULT 0, -- 전날 대비 랭크 증감량, 기본값 0
+    audiacc BIGINT DEFAULT 0 -- 누적관객수, 기본값 0
 );
 
 --reservation의 seatnum을 seatcd로 바꾸고 string로 바꾸기 이것도 툴에서 실행
@@ -124,3 +125,10 @@ FROM
 review r
 LEFT JOIN users u ON r.userid = u.userid
 LEFT JOIN movie m ON r.moviecd = m.moviecd;
+
+
+CREATE OR REPLACE VIEW schedule_movies AS
+SELECT DISTINCT m.*, r.movierankcd, r.movierank, r.rankchange
+FROM movie m
+INNER JOIN schedule s ON m.moviecd = s.moviecd
+LEFT JOIN movierank r ON m.movienm = r.moviename;

@@ -17,6 +17,11 @@ export const toggleWishlist = async (userid, moviecd) => {
   return await apiRequest("post", `/api/wishlist/toggle?userid=${userid}&moviecd=${moviecd}`);
 };
 
+// 내가 찜한 영화 목록 조회
+export const getUserWishlist = async (userid) => {
+  return await apiRequest("get", `/api/wishlist/list?userid=${userid}`);
+};
+
 // 관리자용 KOBIS 영화 데이터 가져오기 (movie 테이블에 저장)
 export const fetchMoviesFromKobis = () =>
   apiRequestWithErrorHandling(

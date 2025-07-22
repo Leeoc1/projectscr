@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.util.List;
+
 import com.example.thescreen.service.WishListService;
 
 @RestController
@@ -40,5 +42,12 @@ public class WishListController {
         result.put("wished", newWishedStatus);
         result.put("count", count);
         return ResponseEntity.ok(result);
+    }
+
+    // 내가 찜한 영화 목록 반환
+    @GetMapping("/list")
+    public ResponseEntity<List<Map<String, Object>>> getUserWishlist(@RequestParam String userid) {
+        List<Map<String, Object>> wishList = wishListService.findWishedMovieInfoByUser(userid);
+        return ResponseEntity.ok(wishList);
     }
 }

@@ -148,6 +148,7 @@ INSERT IGNORE INTO users (
     '활성',
     CURRENT_DATE
 );
+
 CREATE TEMPORARY TABLE temp_numbers (n INT);
 INSERT INTO temp_numbers (n)
 SELECT a.N + 1

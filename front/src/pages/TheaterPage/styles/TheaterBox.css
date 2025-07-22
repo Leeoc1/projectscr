@@ -1,3 +1,50 @@
+/* 영화 탭이랑 동일한 검색 스타일 (필요 시 클래스네임 수정)*/
+.mvs-searchbox-svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+.mvs-searchbox-svg-circle {
+  stroke: #888;
+  stroke-width: 2;
+}
+.mvs-searchbox-svg-line {
+  stroke: #888;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.mvs-searchbox-wrap {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.mvs-searchbox-container {
+  position: relative;
+  width: 220px;
+}
+
+.mvs-searchbox-input {
+  padding: 0.5rem 2.5rem 0.5rem 1rem;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+.mvs-searchbox-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #888;
+  display: flex;
+  align-items: center;
+}
+
 /* 더보기 버튼 영역 스타일 */
 .rts-showmore-wrap {
   text-align: center;

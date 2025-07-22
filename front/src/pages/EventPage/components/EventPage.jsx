@@ -8,8 +8,13 @@ const categories = ["진행중인 이벤트", "종료된 이벤트", "멤버쉽"
 
 const EventPage = () => {
   const [filter, setFilter] = useState("진행중인 이벤트");
-  // 모든 이벤트 데이터를 표시
-  const filteredEvents = eventsData;
+  // 카테고리별로 이벤트 필터링
+  const filteredEvents = eventsData.filter((event) => {
+    if (filter === "진행중인 이벤트") {
+      return !event.category || event.category === "진행중인 이벤트";
+    }
+    return event.category === filter;
+  });
 
   useEffect(() => {
     document.body.classList.add("no-header-padding");
@@ -43,19 +48,30 @@ const EventPage = () => {
                   <div className="evc-card" key={idx}>
                     <div className="evc-image">
                       <img src={event.image} alt="이벤트 이미지" />
-                      {event.badge && (
-                        <div className={`evc-badge evc-${event.badge}`}>
-                          {event.badge.toUpperCase()}
-                        </div>
-                      )}
                     </div>
                     <div className="evc-content">
-                      <div className="evc-category">{event.category}</div>
+                      <div className="evc-category">
+                        {event.category || "진행중인 이벤트"}
+                      </div>
                       <h3 className="evc-title">{event.title}</h3>
                       <p className="evc-description">{event.description}</p>
                     </div>
                     <div className="evc-period-custom">
-                      <span className="evc-period-status">진행중</span>
+                      <span
+                        className={`evc-period-status ${
+                          event.badge === "end"
+                            ? "evc-status-end"
+                            : event.badge === "membership"
+                            ? "evc-status-membership"
+                            : "evc-status-active"
+                        }`}
+                      >
+                        {event.badge === "end"
+                          ? "종료됨"
+                          : event.badge === "membership"
+                          ? "멤버십"
+                          : "진행중"}
+                      </span>
                       <span className="evc-period-date-custom">
                         {event.period}
                       </span>

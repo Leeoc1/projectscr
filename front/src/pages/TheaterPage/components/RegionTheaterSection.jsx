@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
 
-const RegionTheaterSection = ({ filteredCinemas }) => {
+const RegionTheaterSection = ({ getMoviesByTab }) => {
   const navigate = useNavigate();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [visibleCount, setVisibleCount] = useState(12);
@@ -42,7 +42,7 @@ const RegionTheaterSection = ({ filteredCinemas }) => {
   return (
     <section className="rts-section">
       <div className="rts-grid">
-        {filteredCinemas.slice(0, visibleCount).map((cinema) => (
+        {getMoviesByTab().map((cinema) => (
           <div key={cinema.cinemacd} className="rts-card">
             <div className="rts-info">
               <h3 className="rts-name">{cinema.cinemanm}</h3>
@@ -67,7 +67,7 @@ const RegionTheaterSection = ({ filteredCinemas }) => {
         ))}
       </div>
 
-      {filteredCinemas.length > visibleCount && (
+      {getMoviesByTab().length > visibleCount && (
         <div className="rts-showmore-wrap">
           <button className="mvs-showmore-btn" onClick={handleShowMore}>
             더보기

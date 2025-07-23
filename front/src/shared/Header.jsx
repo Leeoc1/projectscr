@@ -155,7 +155,7 @@ export default function Header() {
                   <span className="h-username">{username || userid}님</span>
                 </div>
                 <button className="h-logout-btn" onClick={goNotice}>
-                  공지사항
+                  고객센터
                 </button>
                 <button className="h-logout-btn" onClick={handleLogout}>
                   로그아웃

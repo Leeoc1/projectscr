@@ -1,8 +1,6 @@
 import Header from "../../../shared/Header";
 import "../styles/TheaterBox.css";
-import "../styles/SpecialTheaterSection.css";
 import RegionTheaterSection from "./RegionTheaterSection";
-import SpecialTheaterSection from "./SpecialTheaterSection";
 import TheaterFilter from "./TheaterFilter";
 import { useState, useEffect } from "react";
 import { getCinemas } from "../../../api/cinemaApi";
@@ -38,6 +36,11 @@ const TheaterBox = () => {
         return address.includes(keyword);
       });
     };
+
+    // 즐겨찾기는 RegionTheaterSection에서 처리하므로 전체 영화관 목록 반환
+    if (selectedRegion === "favorite") {
+      return filterByKeyword(cinemas);
+    }
 
     const filteredCinemas =
       selectedRegion === "00"
@@ -92,8 +95,10 @@ const TheaterBox = () => {
                 </span>
               </div>
             </div>
-            <RegionTheaterSection getMoviesByTab={getMoviesByTab} />
-            <SpecialTheaterSection />
+            <RegionTheaterSection
+              getMoviesByTab={getMoviesByTab}
+              selectedRegion={selectedRegion}
+            />
           </div>
         </div>
       </div>

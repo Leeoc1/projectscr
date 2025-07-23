@@ -15,6 +15,11 @@ public class UserService {
     public LoginResult login(String userid, String userpw) {
         return userRepository.findByUserid(userid)
                 .map(user -> {
+                    // 탈퇴한 사용자인지 확인
+                    if ("탈퇴".equals(user.getStatus())) {
+                        return LoginResult.WITHDRAWN;
+                    }
+                    // 비밀번호 확인
                     if (user.getUserpw().equals(userpw)) {
                         return LoginResult.SUCCESS;
                     } else {

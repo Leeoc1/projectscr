@@ -3,9 +3,13 @@ import Header from "../../../shared/Header";
 import Footer from "../../../shared/Footer";
 import { useState, useEffect } from "react";
 
-import { getUserInfo, getUserReservations } from "../../../api/userApi";
-import { getUserWishlist } from "../../../api/movieApi";
-
+import {
+  getUserInfo,
+  getUserReservations,
+  deleteUser,
+  logoutUser,
+} from "../../../api/userApi";
+import { cancelReservation } from "../../../api/reservationApi";
 import MyPageReservationDetail from "./MyPageReservationDetail";
 import MyPageHistory from "./MyPageHistory";
 import MyPageReservation from "./MyPageReservation";
@@ -14,7 +18,11 @@ import MyPageInquiry from "./MyPageInquiry";
 
 import MyAccount from "./MyAccount";
 
+import { getUserWishlist, toggleWishlist } from "../../../api/movieApi";
+import { useNavigate } from "react-router-dom";
+
 const MyPage = () => {
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
   const [userReservations, setUserReservations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +33,10 @@ const MyPage = () => {
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   // 찜한 영화 목록 상태
   const [wishlist, setWishlist] = useState([]);
+
+  // 회원탈퇴 모달 상태
+  const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
+  const [withdrawalText, setWithdrawalText] = useState("");
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -68,6 +80,74 @@ const MyPage = () => {
     setSelectedReservation(null);
   };
 
+  // 회원탈퇴 모달 열기
+  const handleWithdrawalClick = () => {
+    setShowWithdrawalModal(true);
+    setWithdrawalText("");
+  };
+
+  // 회원탈퇴 모달 닫기
+  const handleWithdrawalCancel = () => {
+    setShowWithdrawalModal(false);
+    setWithdrawalText("");
+  };
+
+  // 회원탈퇴 처리
+  const handleWithdrawalConfirm = async () => {
+    if (withdrawalText !== "탈퇴합니다") {
+      alert("'탈퇴합니다'를 정확히 입력해주세요.");
+      return;
+    }
+
+    try {
+      const userid = localStorage.getItem("userid");
+      console.log("회원탈퇴 처리 시작 - userid:", userid);
+
+      if (userid) {
+        console.log("DELETE 요청 전송 중...");
+        const response = await deleteUser(userid);
+        console.log("회원탈퇴 응답:", response);
+
+        // 자동 로그아웃 처리
+        const logoutSuccess = logoutUser();
+        if (logoutSuccess) {
+          console.log("자동 로그아웃 처리 완료");
+        }
+
+        // 회원탈퇴 모달 닫기
+        setShowWithdrawalModal(false);
+        setWithdrawalText("");
+
+        alert("회원탈퇴가 완료되었습니다. 로그아웃됩니다.");
+
+        // 홈페이지로 이동
+        navigate("/");
+
+        // 페이지 새로고침으로 완전한 상태 초기화
+        window.location.reload();
+      } else {
+        console.error("userid가 없습니다.");
+        alert("로그인 정보를 찾을 수 없습니다.");
+      }
+    } catch (error) {
+      console.error("회원탈퇴 오류:", error);
+      console.error("에러 응답:", error.response);
+      console.error("에러 상태 코드:", error.response?.status);
+      console.error("에러 메시지:", error.response?.data || error.message);
+
+      if (error.response?.status === 404) {
+        alert(
+          "사용자를 찾을 수 없습니다. 이미 탈퇴되었거나 존재하지 않는 계정입니다."
+        );
+      } else {
+        alert(
+          `회원탈퇴 중 오류가 발생했습니다: ${
+            error.response?.data?.error || error.message
+          }`
+        );
+      }
+    }
+  };
   // 히스토리 모달 열기/닫기
   const handleOpenHistoryModal = () => setShowHistoryModal(true);
   const handleCloseHistoryModal = () => setShowHistoryModal(false);
@@ -132,9 +212,6 @@ const MyPage = () => {
             <div className="mp-account-card">
               <div className="mp-account-links">
                 <a href="#" className="mp-account-link">
-                  개인정보수정
-                </a>
-                <a href="#" className="mp-account-link">
                   서비스 이용약관
                 </a>
                 <a href="#" className="mp-account-link">
@@ -143,13 +220,75 @@ const MyPage = () => {
                 <a href="#" className="mp-account-link">
                   개인정보 처리방침
                 </a>
-                <a href="#" className="mp-account-link mp-withdrawal">
+                <button
+                  className="mp-account-link mp-withdrawal"
+                  onClick={handleWithdrawalClick}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    padding: 0,
+                    cursor: "pointer",
+                    textAlign: "left",
+                    width: "100%",
+                  }}
+                >
                   회원탈퇴
-                </a>
+                </button>
               </div>
             </div>
           </section>
         </div>
+
+        {/* 회원탈퇴 모달 */}
+        {showWithdrawalModal && (
+          <div className="mp-modal-overlay">
+            <div className="mp-withdrawal-modal">
+              <div className="mp-modal-header">
+                <h3>회원탈퇴</h3>
+                <button
+                  className="mp-modal-close"
+                  onClick={handleWithdrawalCancel}
+                >
+                  ×
+                </button>
+              </div>
+              <div className="mp-modal-content">
+                <p className="mp-withdrawal-warning">
+                  정말로 회원탈퇴를 하시겠습니까?
+                </p>
+                <p className="mp-withdrawal-info">
+                  회원탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다.
+                </p>
+                <p className="mp-withdrawal-confirm-text">
+                  탈퇴를 원하시면 아래에 <strong>'탈퇴합니다'</strong>를
+                  입력해주세요.
+                </p>
+                <input
+                  type="text"
+                  className="mp-withdrawal-input"
+                  value={withdrawalText}
+                  onChange={(e) => setWithdrawalText(e.target.value)}
+                  placeholder="탈퇴합니다"
+                />
+              </div>
+              <div className="mp-modal-footer">
+                <button
+                  className="mp-btn mp-btn-cancel"
+                  onClick={handleWithdrawalCancel}
+                >
+                  취소
+                </button>
+                <button
+                  className="mp-btn mp-btn-withdrawal-confirm"
+                  onClick={handleWithdrawalConfirm}
+                  disabled={withdrawalText !== "탈퇴합니다"}
+                >
+                  탈퇴하기
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       <Footer />
     </div>

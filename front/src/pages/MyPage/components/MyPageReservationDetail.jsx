@@ -8,6 +8,30 @@ const MyPageReservationDetail = ({
   handleCloseModal,
   setUserReservations,
 }) => {
+  // 상영 종료 시간 계산 함수
+  const getMovieEndTime = (starttime, runningtime) => {
+    if (!starttime || !runningtime) return null;
+
+    const startDate = new Date(starttime);
+    const endDate = new Date(startDate.getTime() + runningtime * 60 * 1000);
+    return endDate;
+  };
+
+  // 예매취소 가능 여부 확인
+  const canCancelReservation = () => {
+    if (selectedReservation.reservationstatus !== "예약완료") return false;
+
+    const movieEndTime = getMovieEndTime(
+      selectedReservation.starttime,
+      selectedReservation.runningtime
+    );
+
+    if (!movieEndTime) return true; // 시간 정보가 없으면 취소 가능
+
+    const now = new Date();
+    return movieEndTime > now; // 상영 종료 시간이 현재 시간보다 이후면 취소 가능
+  };
+
   // 예약 취소 처리 함수
   const handleCancelReservation = async (reservationcd) => {
     if (!window.confirm("정말로 예약을 취소하시겠습니까?")) {
@@ -36,13 +60,10 @@ const MyPageReservationDetail = ({
   return (
     <div>
       {showModal && selectedReservation && (
-        <div
-          className="mp-modal-overlay"
-          onClick={handleCloseModal}
-        >
+        <div className="mp-modal-overlay" onClick={handleCloseModal}>
           <div
             className="mp-modal-content"
-            onClick={e => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
             <button className="mp-modal-close" onClick={handleCloseModal}>
               &times;
@@ -99,7 +120,7 @@ const MyPageReservationDetail = ({
               <b>상태:</b> {selectedReservation.reservationstatus}
             </div>
 
-            {selectedReservation.reservationstatus == "예약완료" && (
+            {canCancelReservation() && (
               <button
                 className="mp-btn mp-btn-cancel"
                 onClick={() =>

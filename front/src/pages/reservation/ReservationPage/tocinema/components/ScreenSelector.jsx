@@ -162,8 +162,9 @@ const ScreenSelector = () => {
                           {schedule.starttime.split(" ")[1]?.substring(0, 5)}
                         </div>
                         <div className="rptm-screen-time-seats">
-                          {reservedSeatsCount[schedule.schedulecd] || 0}/
-                          {schedule.allseat}
+                          {schedule.allseat}/
+                          {schedule.allseat -
+                            (reservedSeatsCount[schedule.schedulecd] || 0)}
                         </div>
                         <div className="rptm-screen-time-screen">
                           {schedule.screenname}

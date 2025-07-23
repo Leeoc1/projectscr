@@ -33,6 +33,58 @@ export const getUserReservations = async (userid) => {
   return await apiRequest("get", `/users/${userid}/reservations`);
 };
 
+// 회원탈퇴 (users 테이블)
+export const deleteUser = async (userid) => {
+  console.log("회원탈퇴 API 호출 시작 - userid:", userid);
+  try {
+    const result = await apiRequest("delete", `/users/${userid}`);
+    console.log("회원탈퇴 API 성공:", result);
+    return result;
+  } catch (error) {
+    console.error("회원탈퇴 API 실패:", error);
+    console.error("요청 URL:", `/users/${userid}`);
+    console.error("에러 상세:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+// 로그아웃 처리 (클라이언트 사이드)
+export const logoutUser = () => {
+  console.log("로그아웃 처리 시작");
+  try {
+    // 기본 로그인 정보 제거
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userid");
+    localStorage.removeItem("username");
+
+    // 카카오 로그인 관련 데이터 제거
+    localStorage.removeItem("loginType");
+    sessionStorage.removeItem("loginType");
+
+    // 토스페이먼츠 관련 데이터 제거
+    localStorage.removeItem("@tosspayments/merchant-browser-id");
+    localStorage.removeItem(
+      "@tosspayments/payment-widget-previous-payment-method-id"
+    );
+
+    // 추가 보안을 위해 다른 사용자 관련 데이터도 제거
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("authData");
+
+    // 세션 스토리지 전체 정리
+    sessionStorage.clear();
+
+    console.log("로그아웃 처리 완료");
+    return true;
+  } catch (error) {
+    console.error("로그아웃 처리 중 오류:", error);
+    return false;
+  }
+};
+
 // ========== 직원 관리 API (staff 테이블) ==========
 
 // 직원 목록 조회 (staff 테이블)

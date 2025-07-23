@@ -93,3 +93,42 @@ export const scheduleData = async () => {
     []
   );
 };
+
+export const getmycinema = async (userid) => {
+  return await apiRequestWithErrorHandling(
+    "get",
+    "/mycinema",
+    null,
+    {
+      params: { userid },
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    },
+    "Error fetching mycinema:",
+    []
+  );
+};
+
+export const updateMyCinema = async (userid, cinemacd) => {
+  return await apiRequestWithErrorHandling(
+    "post",
+    "/mycinema",
+    { userid, cinemacd },
+    { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } },
+    "Error updating mycinema:",
+    null
+  );
+};
+
+export const deleteMyCinema = async (userid, cinemacd) => {
+  return await apiRequestWithErrorHandling(
+    "delete",
+    "/mycinema",
+    null,
+    {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      params: { userid, cinemacd },
+    },
+    "Error deleting mycinema:",
+    null
+  );
+};

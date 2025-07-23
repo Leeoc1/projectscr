@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
 
@@ -6,6 +6,11 @@ const RegionTheaterSection = ({ getMoviesByTab }) => {
   const navigate = useNavigate();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [visibleCount, setVisibleCount] = useState(12);
+
+  // 극장 데이터가 변경될 때마다 visibleCount 초기화
+  useEffect(() => {
+    setVisibleCount(12);
+  }, [getMoviesByTab]);
 
   const handleScheduleClick = (cinema) => {
     // 로그인 상태 체크
@@ -39,10 +44,13 @@ const RegionTheaterSection = ({ getMoviesByTab }) => {
     setVisibleCount((prev) => prev + 12);
   };
 
+  const cinemaseData = getMoviesByTab();
+  const visibleCinemas = cinemaseData.slice(0, visibleCount);
+
   return (
     <section className="rts-section">
       <div className="rts-grid">
-        {getMoviesByTab().map((cinema) => (
+        {visibleCinemas.map((cinema) => (
           <div key={cinema.cinemacd} className="rts-card">
             <div className="rts-info">
               <h3 className="rts-name">{cinema.cinemanm}</h3>
@@ -67,7 +75,7 @@ const RegionTheaterSection = ({ getMoviesByTab }) => {
         ))}
       </div>
 
-      {getMoviesByTab().length > visibleCount && (
+      {cinemaseData.length > visibleCount && (
         <div className="rts-showmore-wrap">
           <button className="mvs-showmore-btn" onClick={handleShowMore}>
             더보기

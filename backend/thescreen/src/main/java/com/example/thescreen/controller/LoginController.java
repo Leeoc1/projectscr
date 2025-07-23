@@ -28,6 +28,9 @@ public class LoginController {
             case INVALID_PASSWORD:
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body("비밀번호가 일치하지 않습니다.");
+            case WITHDRAWN:
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("탈퇴한 회원입니다. 로그인할 수 없습니다.");
             case NOT_FOUND:
             default:
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)

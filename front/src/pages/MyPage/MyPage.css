@@ -815,13 +815,13 @@
     min-width: 320px;
     margin: 1rem;
   }
-  
+
   .mp-modal-header,
   .mp-modal-content,
   .mp-modal-footer {
     padding: 1rem;
   }
-  
+
   .mp-modal-footer {
     flex-direction: column;
   }

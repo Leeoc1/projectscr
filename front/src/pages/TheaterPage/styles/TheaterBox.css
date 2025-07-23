@@ -241,3 +241,19 @@
     flex-direction: column;
   }
 }
+
+.rts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.rts-star {
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+.rts-star:hover {
+  cursor: pointer;
+}

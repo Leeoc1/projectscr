@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  fetchAllNotices,
-  fetchAllFaqs,
-} from "../../../api/userApi";
+import { fetchAllNotices, fetchAllFaqs } from "../../../api/userApi";
 import Pagination from "./Pagination";
 import NoticeItem from "./NoticeItem";
 import TabNavigation from "./TabNavigation";
@@ -60,7 +57,7 @@ const NoticePage = () => {
     setActiveTab(tab);
     setCurrentPage(1);
     setOpenedFaqIndex(null); // 탭 변경 시 열린 FAQ 닫기
-    
+
     // URL 변경
     if (tab === "faq") {
       navigate("/notice/faq");

@@ -118,6 +118,7 @@ const MovieChart = () => {
 
     navigate("/reservation/place");
   };
+  console.log("MovieChart 렌더링", movies);
 
   // 상세정보 페이지로 이동
   const handleMovieDetailClick = (movie, e) => {

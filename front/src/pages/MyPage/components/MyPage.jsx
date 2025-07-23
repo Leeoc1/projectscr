@@ -3,7 +3,12 @@ import Header from "../../../shared/Header";
 import Footer from "../../../shared/Footer";
 import { useState, useEffect } from "react";
 
-import { getUserInfo, getUserReservations, deleteUser, logoutUser } from "../../../api/userApi";
+import {
+  getUserInfo,
+  getUserReservations,
+  deleteUser,
+  logoutUser,
+} from "../../../api/userApi";
 import { cancelReservation } from "../../../api/reservationApi";
 import MyPageReservationDetail from "./MyPageReservationDetail";
 
@@ -121,27 +126,27 @@ const MyPage = () => {
     try {
       const userid = localStorage.getItem("userid");
       console.log("회원탈퇴 처리 시작 - userid:", userid);
-      
+
       if (userid) {
         console.log("DELETE 요청 전송 중...");
         const response = await deleteUser(userid);
         console.log("회원탈퇴 응답:", response);
-        
+
         // 자동 로그아웃 처리
         const logoutSuccess = logoutUser();
         if (logoutSuccess) {
           console.log("자동 로그아웃 처리 완료");
         }
-        
+
         // 회원탈퇴 모달 닫기
         setShowWithdrawalModal(false);
         setWithdrawalText("");
-        
+
         alert("회원탈퇴가 완료되었습니다. 로그아웃됩니다.");
-        
+
         // 홈페이지로 이동
         navigate("/");
-        
+
         // 페이지 새로고침으로 완전한 상태 초기화
         window.location.reload();
       } else {
@@ -153,11 +158,17 @@ const MyPage = () => {
       console.error("에러 응답:", error.response);
       console.error("에러 상태 코드:", error.response?.status);
       console.error("에러 메시지:", error.response?.data || error.message);
-      
+
       if (error.response?.status === 404) {
-        alert("사용자를 찾을 수 없습니다. 이미 탈퇴되었거나 존재하지 않는 계정입니다.");
+        alert(
+          "사용자를 찾을 수 없습니다. 이미 탈퇴되었거나 존재하지 않는 계정입니다."
+        );
       } else {
-        alert(`회원탈퇴 중 오류가 발생했습니다: ${error.response?.data?.error || error.message}`);
+        alert(
+          `회원탈퇴 중 오류가 발생했습니다: ${
+            error.response?.data?.error || error.message
+          }`
+        );
       }
     }
   };
@@ -398,16 +409,16 @@ const MyPage = () => {
                 <a href="#" className="mp-account-link">
                   개인정보 처리방침
                 </a>
-                <button 
+                <button
                   className="mp-account-link mp-withdrawal"
                   onClick={handleWithdrawalClick}
-                  style={{ 
-                    background: 'none', 
-                    border: 'none', 
-                    padding: 0, 
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    width: '100%'
+                  style={{
+                    background: "none",
+                    border: "none",
+                    padding: 0,
+                    cursor: "pointer",
+                    textAlign: "left",
+                    width: "100%",
                   }}
                 >
                   회원탈퇴
@@ -423,7 +434,7 @@ const MyPage = () => {
             <div className="mp-withdrawal-modal">
               <div className="mp-modal-header">
                 <h3>회원탈퇴</h3>
-                <button 
+                <button
                   className="mp-modal-close"
                   onClick={handleWithdrawalCancel}
                 >
@@ -438,7 +449,8 @@ const MyPage = () => {
                   회원탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다.
                 </p>
                 <p className="mp-withdrawal-confirm-text">
-                  탈퇴를 원하시면 아래에 <strong>'탈퇴합니다'</strong>를 입력해주세요.
+                  탈퇴를 원하시면 아래에 <strong>'탈퇴합니다'</strong>를
+                  입력해주세요.
                 </p>
                 <input
                   type="text"
@@ -449,13 +461,13 @@ const MyPage = () => {
                 />
               </div>
               <div className="mp-modal-footer">
-                <button 
+                <button
                   className="mp-btn mp-btn-cancel"
                   onClick={handleWithdrawalCancel}
                 >
                   취소
                 </button>
-                <button 
+                <button
                   className="mp-btn mp-btn-withdrawal-confirm"
                   onClick={handleWithdrawalConfirm}
                   disabled={withdrawalText !== "탈퇴합니다"}

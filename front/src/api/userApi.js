@@ -76,7 +76,7 @@ export const logoutUser = () => {
 
     // 세션 스토리지 전체 정리
     sessionStorage.clear();
-    
+
     console.log("로그아웃 처리 완료");
     return true;
   } catch (error) {

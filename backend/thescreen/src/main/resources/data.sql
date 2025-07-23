@@ -141,7 +141,7 @@ INSERT IGNORE INTO users (
 ) VALUES (
     'master001',
     'pass_001',
-    '관리자',
+    '김관리',
     'master1@example.com',
     '01011112222',
     '1995-05-01',

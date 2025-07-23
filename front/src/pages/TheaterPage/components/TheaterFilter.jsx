@@ -39,7 +39,7 @@ const TheaterFilter = ({ selectedRegion, setSelectedRegion }) => {
           }`}
           onClick={() => setSelectedRegion("favorite")}
         >
-          내가 좋아하는 극장
+          즐겨찾는 극장
         </button>
       </div>
     </div>

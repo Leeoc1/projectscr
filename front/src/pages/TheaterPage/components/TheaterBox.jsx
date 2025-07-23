@@ -1,8 +1,6 @@
 import Header from "../../../shared/Header";
 import "../styles/TheaterBox.css";
-import "../styles/SpecialTheaterSection.css";
 import RegionTheaterSection from "./RegionTheaterSection";
-import SpecialTheaterSection from "./SpecialTheaterSection";
 import TheaterFilter from "./TheaterFilter";
 import { useState, useEffect } from "react";
 import { getCinemas } from "../../../api/cinemaApi";
@@ -101,7 +99,6 @@ const TheaterBox = () => {
               getMoviesByTab={getMoviesByTab}
               selectedRegion={selectedRegion}
             />
-            <SpecialTheaterSection />
           </div>
         </div>
       </div>

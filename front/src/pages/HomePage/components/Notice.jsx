@@ -7,7 +7,6 @@ const Notice = () => {
   const navigate = useNavigate();
   const [notices, setNotices] = useState([]);
   const [faqs, setFaqs] = useState([]);
-  const [openedFaq, setOpenedFaq] = useState(null);
 
   useEffect(() => {
     fetchAllNotices().then(setNotices);
@@ -83,21 +82,12 @@ const Notice = () => {
                 <div
                   key={index}
                   className="nt-faq-item"
-                  onClick={() =>
-                    setOpenedFaq(openedFaq === index ? null : index)
-                  }
+                  onClick={() => goNotice("faq")}
                   style={{ cursor: "pointer" }}
                 >
                   <button className="nt-button">
                     <span className="nt-question">{faq.faqsub}</span>
                   </button>
-                  <div
-                    className={`nt-faq-answer-block${
-                      openedFaq === index && faq.faqcontents ? " open" : ""
-                    }`}
-                  >
-                    <div className="nt-answer-content">{faq.faqcontents}</div>
-                  </div>
                 </div>
               ))}
             </div>

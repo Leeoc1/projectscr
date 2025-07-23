@@ -49,6 +49,9 @@ const MyPageReservationDetail = ({
             </button>
             <h2 className="mp-modal-title">예매 상세 내역</h2>
             <div className="mp-modal-row">
+              <b>예매번호:</b> {selectedReservation.reservationcd}
+            </div>
+            <div className="mp-modal-row">
               <b>영화명:</b> {selectedReservation.movienm}
             </div>
             <div className="mp-modal-row">

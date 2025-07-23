@@ -156,8 +156,8 @@ const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
                     className={`rts-star ${
                       starFills[cinema.cinemacd] === "#fbbf24" ? "active" : ""
                     }`}
-                    width="20"
-                    height="20"
+                    width="30"
+                    height="30"
                     viewBox="0 0 24 24"
                     onClick={() => handleStarClick(cinema)}
                   >

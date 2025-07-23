@@ -39,6 +39,11 @@ const TheaterBox = () => {
       });
     };
 
+    // 즐겨찾기는 RegionTheaterSection에서 처리하므로 전체 영화관 목록 반환
+    if (selectedRegion === "favorite") {
+      return filterByKeyword(cinemas);
+    }
+
     const filteredCinemas =
       selectedRegion === "00"
         ? cinemas
@@ -92,7 +97,10 @@ const TheaterBox = () => {
                 </span>
               </div>
             </div>
-            <RegionTheaterSection getMoviesByTab={getMoviesByTab} />
+            <RegionTheaterSection
+              getMoviesByTab={getMoviesByTab}
+              selectedRegion={selectedRegion}
+            />
             <SpecialTheaterSection />
           </div>
         </div>

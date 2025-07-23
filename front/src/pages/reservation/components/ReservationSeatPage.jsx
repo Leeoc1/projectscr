@@ -202,12 +202,7 @@ const ReservationSeatPage = () => {
 
             <div className="screen">SCREEN</div>
             <div className="seat-legend">
-              <div className="legend-item">
-                <span className="legend-color" style={{ color: "red" }}>
-                  ■
-                </span>
-                <span>5명 이상</span>
-              </div>
+              <div className="legend-item"></div>
             </div>
             <div className="seat-map">
               {seatRows.map((row, rowIndex) => (
@@ -233,11 +228,6 @@ const ReservationSeatPage = () => {
                           className={`seat ${isSelected ? "selected" : ""} ${
                             isReserved ? "reserved" : ""
                           }`}
-                          style={
-                            seatCount[seatId] >= 5
-                              ? { color: "red" }
-                              : { color: "black" }
-                          }
                           onClick={() => handleSeatClick(seatId)}
                           disabled={isReserved}
                         >

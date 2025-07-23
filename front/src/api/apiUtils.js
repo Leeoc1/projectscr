@@ -12,7 +12,14 @@ export const api = axios.create({
 // 공통 API 호출 래퍼 함수
 export const apiRequest = async (method, url, data = null, config = {}) => {
   try {
-    const response = await api[method](url, data, config);
+    let response;
+    if (method === "delete" || method === "get") {
+      // DELETE와 GET은 data 대신 config만 전달
+      response = await api[method](url, config);
+    } else {
+      // POST, PUT 등은 data와 config 모두 전달
+      response = await api[method](url, data, config);
+    }
     return response.data;
   } catch (error) {
     throw error;
@@ -21,8 +28,7 @@ export const apiRequest = async (method, url, data = null, config = {}) => {
 
 // Promise 체이닝 방식 API 호출 래퍼
 export const apiRequestPromise = (method, url, data = null, config = {}) => {
-  return api[method](url, data, config)
-    .then((response) => response.data);
+  return api[method](url, data, config).then((response) => response.data);
 };
 
 // 공통 에러 처리 함수
@@ -32,8 +38,24 @@ export const handleApiError = (error, defaultReturn = []) => {
 };
 
 // 에러 처리가 포함된 Promise 체이닝 래퍼
-export const apiRequestWithErrorHandling = (method, url, data = null, config = {}, errorMessage = "API 요청 실패", defaultReturn = []) => {
-  return api[method](url, data, config)
+export const apiRequestWithErrorHandling = (
+  method,
+  url,
+  data = null,
+  config = {},
+  errorMessage = "API 요청 실패",
+  defaultReturn = []
+) => {
+  let requestPromise;
+  if (method === "delete" || method === "get") {
+    // DELETE와 GET은 data 대신 config만 전달
+    requestPromise = api[method](url, config);
+  } else {
+    // POST, PUT 등은 data와 config 모두 전달
+    requestPromise = api[method](url, data, config);
+  }
+
+  return requestPromise
     .then((response) => response.data)
     .catch((error) => {
       console.error(errorMessage, error);

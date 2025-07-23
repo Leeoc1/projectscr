@@ -49,10 +49,21 @@ public class MovieRankService {
                 String name = movie.get("movieNm").asText();         // 영화 제목
                 int rank = movie.get("rank").asInt();                // 순위
                 int rankInten = movie.get("rankInten").asInt();      // 전일 대비 순위 변화
+                
+                // 누적관객수 추가 (audiAcc 필드)
+                long audiAcc = 0;
+                if (movie.has("audiAcc") && !movie.get("audiAcc").isNull()) {
+                    try {
+                        audiAcc = Long.parseLong(movie.get("audiAcc").asText().replace(",", ""));
+                    } catch (NumberFormatException e) {
+                        System.out.println("누적관객수 파싱 오류: " + movie.get("audiAcc").asText());
+                        audiAcc = 0;
+                    }
+                }
 
                 jdbcTemplate.update(
-                        "INSERT INTO movierank (movierankcd, moviename, movierank, rankchange) VALUES (?, ?, ?, ?)",
-                        code, name, rank, rankInten
+                        "INSERT INTO movierank (movierankcd, moviename, movierank, rankchange, audiacc) VALUES (?, ?, ?, ?, ?)",
+                        code, name, rank, rankInten, audiAcc
                 );
             }
 

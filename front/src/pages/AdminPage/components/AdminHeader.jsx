@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { getUserInfo } from "../../../api/userApi";
 import "../styles/AdminHeader.css";
 import "../styles/AdminPage.css";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +11,19 @@ const AdminHeader = () => {
   const [showNotificationDropdown, setShowNotificationDropdown] =
     useState(false);
   const dropdownRef = useRef(null);
+  const [adminName, setAdminName] = useState("");
+  // 관리자 이름을 DB에서 가져오기
+  useEffect(() => {
+    const fetchAdminName = async () => {
+      try {
+        const adminInfo = await getUserInfo("master001");
+        setAdminName(adminInfo.username || "관리자");
+      } catch (e) {
+        setAdminName("관리자");
+      }
+    };
+    fetchAdminName();
+  }, []);
 
   const goHome = () => {
     navigate("/");
@@ -83,8 +97,24 @@ const AdminHeader = () => {
             </div>
           )}
         </div>
-        <span>관리자: 김관리</span>
-        <button className="adp-btn-logout">로그아웃</button>
+        <span>관리자: {adminName}</span>
+        <button
+          className="adp-btn-logout"
+          onClick={() => {
+            // 기본 로그인 정보 제거
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("userid");
+            localStorage.removeItem("username");
+
+            // 세션 스토리지 전체 정리
+            sessionStorage.clear();
+
+            // 홈페이지로 이동
+            navigate("/");
+          }}
+        >
+          로그아웃
+        </button>
       </div>
     </div>
   );

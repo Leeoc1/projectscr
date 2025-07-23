@@ -118,6 +118,39 @@ const MovieChart = () => {
 
     navigate("/reservation/place");
   };
+
+  // 상세정보 페이지로 이동
+  const handleMovieDetailClick = (movie, e) => {
+    e.stopPropagation(); // 부모 클릭 이벤트 방지
+    navigate(`/moviedetail?movieno=${movie.moviecd}`);
+  };
+
+  // 예매하기 버튼 클릭
+  const handleReservationClick = (movie, e) => {
+    e.stopPropagation(); // 부모 클릭 이벤트 방지
+
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    if (!isLoggedIn) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    // 영화 정보를 세션 스토리지에 저장
+    sessionStorage.setItem("moviecd", movie.moviecd);
+    sessionStorage.setItem("movienm", movie.movienm);
+
+    const movieData = {
+      moviecd: movie.moviecd,
+      movienm: movie.movienm,
+      posterurl: movie.posterurl,
+      genre: movie.genre,
+      runningtime: movie.runningtime,
+      isadult: movie.isadult,
+    };
+    sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
+
+    navigate("/reservation/place");
+  };
   console.log("MovieChart 렌더링", movies);
 
   return (
@@ -147,16 +180,30 @@ const MovieChart = () => {
               onMouseLeave={handleMouseUp}
             >
               {movies.map((movie) => (
-                <div
-                  key={movie.moviecd}
-                  className="mcs-movie-card"
-                  onClick={() => handleMovieCardClick(movie)}
-                >
-                  <img
-                    src={movie.posterurl}
-                    alt={movie.movienm}
-                    className="mcs-movie-poster"
-                  />
+                <div key={movie.moviecd} className="mcs-movie-card">
+                  <div className="mcs-poster-container">
+                    <img
+                      src={movie.posterurl}
+                      alt={movie.movienm}
+                      className="mcs-movie-poster"
+                    />
+                    <div className="mcs-overlay">
+                      <div className="mcs-buttons">
+                        <button
+                          className="mcs-btn"
+                          onClick={(e) => handleMovieDetailClick(movie, e)}
+                        >
+                          상세정보
+                        </button>
+                        <button
+                          className="mcs-btn"
+                          onClick={(e) => handleReservationClick(movie, e)}
+                        >
+                          예매하기
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                   <div className="mcs-movie-info">
                     <h3 className="mcs-movie-title">{movie.movienm}</h3>
                     <p className="mcs-movie-genre">{movie.genre}</p>

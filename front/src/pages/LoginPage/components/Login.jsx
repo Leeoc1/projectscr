@@ -40,18 +40,11 @@ const Login = () => {
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userid", formData.userid);
 
-        alert(response.data); // 로그인 성공
         navigate("/"); // 메인으로 이동
       }
     } catch (error) {
       if (error.response) {
-        if (error.response.status === 401) {
-          alert("비밀번호가 틀렸습니다.");
-        } else if (error.response.status === 404) {
-          alert("아이디가 존재하지 않습니다.");
-        } else {
-          alert("알 수 없는 오류가 발생했습니다.");
-        }
+        alert("아이디 혹은 비밀번호가 일치하지 않습니다.........");
       } else {
         console.error("네트워크 오류:", error);
       }

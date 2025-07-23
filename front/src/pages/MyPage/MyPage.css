@@ -444,7 +444,6 @@
 }
 
 .mp-btn-cancel {
-  margin-top: 1rem;
   background-color: #d9dadb;
   color: #495057;
 }
@@ -785,6 +784,8 @@
 
 .mp-modal-content {
   padding: 2rem;
+  width: 750px;
+  justify-content: center;
 }
 
 .mp-withdrawal-warning {

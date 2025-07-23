@@ -99,7 +99,6 @@ const TheaterBox = () => {
               getMoviesByTab={getMoviesByTab}
               selectedRegion={selectedRegion}
             />
-            <SpecialTheaterSection />
           </div>
         </div>
       </div>

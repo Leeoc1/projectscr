@@ -10,7 +10,7 @@ import ScreenSelectorMovie from "./ScreenSelectorMovie";
 const TheaterSelector = () => {
   const [availableRegions, setAvailableRegions] = useState([]);
   const [regionsData, setRegionsData] = useState([]); // 전체 regions 데이터 저장
-  const [selectedRegion, setSelectedRegion] = useState("내가 좋아하는 극장"); // 기본값을 즐겨찾기로 설정
+  const [selectedRegion, setSelectedRegion] = useState("즐겨찾는 극장"); // 기본값을 즐겨찾기로 설정
   const [availableTheaters, setAvailableTheaters] = useState([]);
   const [selectedTheater, setSelectedTheater] = useState(null);
 
@@ -49,7 +49,7 @@ const TheaterSelector = () => {
     const handleSessionStorageChange = (event) => {
       if (event.detail.selectedFullDate) {
         // 날짜가 변경되면 지역을 즐겨찾기로 리셋하고 상영관 선택 초기화
-        setSelectedRegion("내가 좋아하는 극장");
+        setSelectedRegion("즐겨찾는 극장");
         setSelectedTheater(null);
         // 즐겨찾기 극장 다시 로드
         loadFavoriteTheaters();
@@ -82,16 +82,16 @@ const TheaterSelector = () => {
         );
         console.log("Region names:", regionNames); // 디버깅용
 
-        // "내가 좋아하는 극장"을 맨 위에 추가
-        const regionsWithFavorite = ["내가 좋아하는 극장", ...regionNames];
+        // "즐겨찾는 극장"을 맨 위에 추가
+        const regionsWithFavorite = ["즐겨찾는 극장", ...regionNames];
         setAvailableRegions(regionsWithFavorite);
       } else {
         console.error("Regions is not an array:", regions);
-        setAvailableRegions(["내가 좋아하는 극장"]);
+        setAvailableRegions(["즐겨찾는 극장"]);
       }
     } catch (error) {
       console.error("Error fetching regions:", error);
-      setAvailableRegions(["내가 좋아하는 극장"]);
+      setAvailableRegions(["즐겨찾는 극장"]);
     }
   };
 
@@ -118,8 +118,8 @@ const TheaterSelector = () => {
     }
 
     try {
-      // "내가 좋아하는 극장" 처리
-      if (region === "내가 좋아하는 극장") {
+      // "즐겨찾는 극장" 처리
+      if (region === "즐겨찾는 극장") {
         const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
         if (!isLoggedIn) {
           alert("로그인이 필요합니다.");

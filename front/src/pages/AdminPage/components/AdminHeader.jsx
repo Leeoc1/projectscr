@@ -49,7 +49,7 @@ const AdminHeader = () => {
   return (
     <div className="adp-top-bar">
       <div className="adp-logo" onClick={goHome}>
-        <h1>시네맥스 관리자</h1>
+        <h1>더 스크린 관리자</h1>
       </div>
       <div className="adp-user-info">
         <div className="adp-notification-container" ref={dropdownRef}>

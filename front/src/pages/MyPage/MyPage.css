@@ -5,7 +5,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,7 +18,7 @@
   padding: 2rem;
   min-width: 320px;
   max-width: 90vw;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -695,4 +695,134 @@
   font-weight: 600;
   font-size: 0.95rem;
   margin: 0.5rem 0;
+}
+
+/* 회원탈퇴 모달 스타일 */
+.mp-withdrawal-modal {
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 0;
+  min-width: 400px;
+  max-width: 90vw;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.mp-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.mp-modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+.mp-modal-content {
+  padding: 2rem;
+}
+
+.mp-withdrawal-warning {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #dc3545;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.mp-withdrawal-info {
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.mp-withdrawal-confirm-text {
+  color: #495057;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.mp-withdrawal-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #dee2e6;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  transition: border-color 0.2s;
+}
+
+.mp-withdrawal-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.mp-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.mp-btn-cancel {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.2s;
+}
+
+.mp-btn-cancel:hover {
+  background: #5a6268;
+}
+
+.mp-btn-withdrawal-confirm {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.2s;
+}
+
+.mp-btn-withdrawal-confirm:hover:not(:disabled) {
+  background: #c82333;
+}
+
+.mp-btn-withdrawal-confirm:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 480px) {
+  .mp-withdrawal-modal {
+    min-width: 320px;
+    margin: 1rem;
+  }
+  
+  .mp-modal-header,
+  .mp-modal-content,
+  .mp-modal-footer {
+    padding: 1rem;
+  }
+  
+  .mp-modal-footer {
+    flex-direction: column;
+  }
 }

@@ -113,4 +113,28 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    // 회원탈퇴 API - 상태를 '탈퇴'로 변경
+    @DeleteMapping("/{userid}")
+    public ResponseEntity<Map<String, String>> withdrawUser(@PathVariable String userid) {
+        try {
+            System.out.println("회원탈퇴 요청 받음 - userid: " + userid);
+            User user = userRepository.findById(userid).orElse(null);
+            if (user != null) {
+                // 실제 삭제 대신 상태를 '탈퇴'로 변경
+                user.setStatus("탈퇴");
+                userRepository.save(user);
+                System.out.println("회원탈퇴 완료 - userid: " + userid);
+                return ResponseEntity.ok(Map.of("message", "회원탈퇴가 완료되었습니다."));
+            } else {
+                System.out.println("사용자를 찾을 수 없음 - userid: " + userid);
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            System.err.println("회원탈퇴 오류: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "회원탈퇴 중 오류가 발생했습니다."));
+        }
+    }
 }

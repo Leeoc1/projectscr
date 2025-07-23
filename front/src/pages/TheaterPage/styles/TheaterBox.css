@@ -64,8 +64,6 @@
   color: white;
 }
 .rts-page {
-  background-color: white;
-  color: black;
   min-height: 100vh;
 }
 
@@ -240,4 +238,23 @@
   .rts-actions {
     flex-direction: column;
   }
+}
+
+.rts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.rts-star {
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.6);
+  color: white;
+}
+
+.rts-star:hover {
+  cursor: pointer;
 }

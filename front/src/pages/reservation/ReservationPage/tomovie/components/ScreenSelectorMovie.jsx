@@ -167,7 +167,8 @@ const ScreenSelectorMovie = () => {
                       </div>
                       <div className="place-screen-time-seats">
                         {schedule.allseat}/
-                        {reservedSeatsCount[schedule.schedulecd] || 0}
+                        {schedule.allseat -
+                          (reservedSeatsCount[schedule.schedulecd] || 0)}
                       </div>
                       <div className="place-screen-time-screen">
                         {schedule.screenname}

@@ -1,18 +1,30 @@
 import "../MyPage.css";
 import Header from "../../../shared/Header";
+import Footer from "../../../shared/Footer";
 import { useState, useEffect } from "react";
 
 import { getUserInfo, getUserReservations } from "../../../api/userApi";
-import { cancelReservation } from "../../../api/reservationApi";
+import { getUserWishlist } from "../../../api/movieApi";
+
 import MyPageReservationDetail from "./MyPageReservationDetail";
+import MyPageHistory from "./MyPageHistory";
+import MyPageReservation from "./MyPageReservation";
+import MyPageLike from "./MyPageLike";
+import MyPageInquiry from "./MyPageInquiry";
+
+import MyAccount from "./MyAccount";
 
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [userReservations, setUserReservations] = useState([]);
   const [loading, setLoading] = useState(true);
-  // 모달 상태 및 상세 데이터 상태
+  // 예매내역 상세 모달
   const [showModal, setShowModal] = useState(false);
   const [selectedReservation, setSelectedReservation] = useState(null);
+  // 히스토리 모달 (더보기)
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+  // 찜한 영화 목록 상태
+  const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -26,6 +38,10 @@ const MyPage = () => {
           // 사용자 예약 정보 조회
           const reservationsResponse = await getUserReservations(userid);
           setUserReservations(reservationsResponse);
+
+          // 찜한 영화 목록 조회
+          const wishlistResponse = await getUserWishlist(userid);
+          setWishlist(wishlistResponse);
         }
       } catch (error) {
         console.error("사용자 데이터 조회 오류:", error);
@@ -37,7 +53,7 @@ const MyPage = () => {
     fetchUserData();
   }, []);
 
-  // 예매 내역 팝업 열기
+  // 예매 내역 상세 팝업 열기
   const handleReservationDetails = (reservationcd) => {
     const reservation = userReservations.find(
       (r) => r.reservationcd === reservationcd
@@ -46,174 +62,68 @@ const MyPage = () => {
     setShowModal(true);
   };
 
-  // 모달 닫기
+  // 상세 모달 닫기
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedReservation(null);
   };
 
+  // 히스토리 모달 열기/닫기
+  const handleOpenHistoryModal = () => setShowHistoryModal(true);
+  const handleCloseHistoryModal = () => setShowHistoryModal(false);
+
   return (
     <div>
       <Header />
-      {/* 예매내역 모달 */}
-      <MyPageReservationDetail
-        showModal={showModal}
-        selectedReservation={selectedReservation}
-        handleCloseModal={handleCloseModal}
-        setUserReservations={setUserReservations}
-      />
       <div className="mp-my-page">
         {/* User Profile Section */}
-        <section className="mp-profile-section">
-          <div className="mp-profile-container">
-            <div className="mp-profile-card">
-              <div className="mp-profile-avatar">
-                <svg
-                  className="mp-avatar-icon"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                ></svg>
-              </div>
-              <div className="mp-profile-info">
-                <h1 className="mp-profile-greeting">안녕하세요!</h1>
-                <p className="mp-profile-name">
-                  {loading
-                    ? "로딩 중..."
-                    : userInfo
-                    ? `"${userInfo.username}"님`
-                    : '"사용자"님'}
-                </p>
-                <p className="mp-profile-link">개인정보설정 &gt;</p>
-                <p className="mp-profile-link">쿠폰함 &gt;</p>
-              </div>
-            </div>
-          </div>
-        </section>
+        <MyAccount loading={loading} userInfo={userInfo} />
 
         {/* Main Content */}
         <div className="mp-main-content">
-          {/* Movie History Section */}
+          {/* 영화 예매 내역 Section */}
           <section className="mp-section">
             <div className="mp-section-header">
-              <h2 className="mp-section-title">히스토리</h2>
+              <h2 className="mp-section-title">예매내역</h2>
+              <button
+                className="mp-more-button"
+                onClick={handleOpenHistoryModal}
+              >
+                히스토리
+              </button>
             </div>
-
-            <div className="mp-movie-list">
-              {loading ? (
-                <div className="mp-loading">예약 정보를 불러오는 중...</div>
-              ) : userReservations.length > 0 ? (
-                userReservations.map((reservation, index) => (
-                  <div
-                    key={reservation.reservationcd || index}
-                    className="mp-movie-item"
-                  >
-                    <div className="mp-movie-poster-small">
-                      <span className="mp-poster-text-small">
-                        {reservation.movienm || "영화"}
-                      </span>
-                    </div>
-                    <div className="mp-movie-info">
-                      <div className="mp-movie-main-info">
-                        <h3 className="mp-movie-title">
-                          {reservation.movienm || "영화제목"}
-                        </h3>
-                        <div className="mp-movie-info-row">
-                          <div className="mp-movie-left-info">
-                            <p className="mp-movie-details-text">
-                              {reservation.screenname || "스크린 1"} | 좌석:{" "}
-                              {reservation.seatcd || "A1"}
-                            </p>
-                            <p className="mp-movie-datetime">
-                              {reservation.starttime
-                                ? `${reservation.starttime.split(" ")[0]} ${
-                                    reservation.starttime
-                                      .split(" ")[1]
-                                      ?.substring(0, 5) || ""
-                                  }`
-                                : "2025-01-01 12:00"}{" "}
-                              &nbsp;(
-                              {reservation.runningtime
-                                ? `${reservation.runningtime}분`
-                                : "000분"}
-                              )
-                            </p>
-                            <p className="mp-movie-cinema">
-                              {reservation.cinemanm || "CGV"}
-                            </p>
-                          </div>
-                          <div className="mp-movie-bottom-info">
-                            {reservation.reservationstatus === "예약완료" ? (
-                              <p className="mp-movie-amount">
-                                결제금액:{" "}
-                                {reservation.amount
-                                  ? `${reservation.amount.toLocaleString()}원`
-                                  : "0원"}
-                              </p>
-                            ) : (
-                              <p className="mp-movie-amount">
-                                {reservation.reservationstatus}
-                              </p>
-                            )}
-
-                            <div className="mp-movie-actions">
-                              {reservation.reservationstatus === "예약완료" && (
-                                <button className="mp-btn mp-btn-review">
-                                  관람평 쓰기
-                                </button>
-                              )}
-                              <button
-                                className="mp-btn mp-btn-reservation"
-                                onClick={() =>
-                                  handleReservationDetails(
-                                    reservation.reservationcd
-                                  )
-                                }
-                              >
-                                예매내역
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="mp-no-reservations">
-                  <p>예약 내역이 없습니다.</p>
-                </div>
-              )}
-            </div>
+            {/* 예매 상세 내역 모달 */}
+            <MyPageReservationDetail
+              showModal={showModal}
+              selectedReservation={selectedReservation}
+              handleCloseModal={handleCloseModal}
+              setUserReservations={setUserReservations}
+            />
+            {/* 히스토리 모달 */}
+            <MyPageHistory
+              showHistoryModal={showHistoryModal}
+              loading={loading}
+              userReservations={userReservations}
+              handleCloseHistoryModal={handleCloseHistoryModal}
+              handleReservationDetails={handleReservationDetails}
+            />
+            {/* 예매 내역 테이블 */}
+            <MyPageReservation
+              loading={loading}
+              userReservations={userReservations}
+              handleReservationDetails={handleReservationDetails}
+            />
           </section>
+
+          {/* 찜한 영화 목록 섹션 */}
+          <MyPageLike
+            loading={loading}
+            wishlist={wishlist}
+            setWishlist={setWishlist}
+          />
 
           {/* Inquiry History Section */}
-          <section className="mp-section">
-            <div className="mp-section-header">
-              <h2 className="mp-section-title">문의내역</h2>
-              <button className="mp-more-button">더보기</button>
-            </div>
-
-            <div className="mp-inquiry-table-container">
-              <table className="mp-inquiry-table">
-                <thead>
-                  <tr>
-                    <th>제목</th>
-                    <th>문의일자</th>
-                    <th>답변여부</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="mp-inquiry-row">
-                    <td className="mp-inquiry-title">문의제목</td>
-                    <td className="mp-inquiry-date">2025-01-01</td>
-                    <td className="mp-inquiry-status">
-                      <span className="mp-status-badge">Y</span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
+          <MyPageInquiry />
 
           {/* Account Management Section */}
           <section className="mp-section">
@@ -241,6 +151,7 @@ const MyPage = () => {
           </section>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -141,13 +141,14 @@ INSERT IGNORE INTO users (
 ) VALUES (
     'master001',
     'pass_001',
-    '관리자',
+    '김관리',
     'master1@example.com',
     '01011112222',
     '1995-05-01',
     '활성',
     CURRENT_DATE
 );
+
 CREATE TEMPORARY TABLE temp_numbers (n INT);
 INSERT INTO temp_numbers (n)
 SELECT a.N + 1

@@ -5,7 +5,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,7 +18,7 @@
   padding: 2rem;
   min-width: 320px;
   max-width: 90vw;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -188,10 +188,75 @@
   color: #495057;
 }
 
+/* 예매내역 Table */
+.mp-reservation-table-container {
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+}
+
+.mp-reservation-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mp-reservation-table thead {
+  background-color: #000;
+  color: #fff;
+}
+
+.mp-reservation-table th {
+  padding: 1rem 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.mp-reservation-table tbody {
+  background-color: #fff;
+}
+
+.mp-reservation-row {
+  border-bottom: 1px solid #e9ecef;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.mp-reservation-row:hover {
+  background-color: #f8f9fa;
+}
+
+.mp-reservation-row:last-child {
+  border-bottom: none;
+}
+
+.mp-reservation-table td {
+  padding: 1rem 1.5rem;
+  font-size: 0.875rem;
+}
+
+.mp-reservation-title {
+  color: #212529;
+  text-align: left;
+}
+
+.mp-reservation-date {
+  color: #6c757d;
+  text-align: center;
+}
+
+.mp-reservation-status {
+  color: #212529;
+  text-align: center;
+}
+
 /* Movie List */
 .mp-movie-list {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 1rem;
   max-height: 400px;
   overflow-y: auto;
@@ -227,6 +292,7 @@
   gap: 1.2rem;
   transition: box-shadow 0.2s ease;
   height: auto;
+  width: calc(50% - 0.5rem);
   cursor: pointer;
 }
 
@@ -368,6 +434,15 @@
   background-color: #b8bcbe;
 }
 
+.mp-btn-remove-wishlist {
+  background-color: #dc3545;
+  color: white;
+}
+
+.mp-btn-remove-wishlist:hover {
+  background-color: #c82333;
+}
+
 .mp-btn-cancel {
   margin-top: 1rem;
   background-color: #d9dadb;
@@ -422,7 +497,6 @@
 
 .mp-inquiry-table th {
   padding: 1rem 1.5rem;
-  text-align: left;
   font-size: 0.875rem;
   font-weight: 500;
 }
@@ -679,11 +753,4 @@
   color: #666;
   font-size: 0.9rem;
   margin: 0.25rem 0;
-}
-
-.mp-movie-amount {
-  color: #e74c3c;
-  font-weight: 600;
-  font-size: 0.95rem;
-  margin: 0.5rem 0;
 }

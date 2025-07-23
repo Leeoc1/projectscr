@@ -11,10 +11,13 @@ import com.example.thescreen.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.annotation.PostConstruct;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -29,6 +32,7 @@ public class MovieController {
     private final MovieRepository movieRepository;
     private final MovieViewRepository movieViewRepository;
     private final MovieService movieService;
+    private final JdbcTemplate jdbcTemplate;
 //    private final FetchMovieService fetchMovieService;
     private final MovieScheduleRepository movieScheduleRepository;
 
@@ -282,11 +286,40 @@ public class MovieController {
     }
 
     @PostMapping("/detail")
-    public ResponseEntity<Optional<Movie>> getMovieDetail(@RequestBody Map<String, Object> params) {
+    public ResponseEntity<Map<String, Object>> getMovieDetail(@RequestBody Map<String, Object> params) {
         String moviecd = (String) params.get("movieno");
-        Optional<Movie> movie = movieRepository.findById(moviecd);
-
-        return new ResponseEntity<>(movie, HttpStatus.OK);
+        Optional<Movie> movieOpt = movieRepository.findById(moviecd);
+        
+        Map<String, Object> response = new HashMap<>();
+        
+        if (movieOpt.isPresent()) {
+            Movie movie = movieOpt.get();
+            response.put("moviecd", movie.getMoviecd());
+            response.put("movienm", movie.getMovienm());
+            response.put("genre", movie.getGenre());
+            response.put("director", movie.getDirector());
+            response.put("actors", movie.getActors());
+            response.put("description", movie.getDescription());
+            response.put("posterurl", movie.getPosterurl());
+            response.put("releasedate", movie.getReleasedate());
+            response.put("runningtime", movie.getRunningtime());
+            response.put("isadult", movie.getIsadult());
+            response.put("movieinfo", movie.getMovieinfo());
+            
+            // 누적관객수와 영화 순위 정보 추가 (MovieRank 테이블에서 조회)
+            try {
+                String sql = "SELECT audiacc, movierank FROM movierank WHERE movierankcd = ?";
+                Map<String, Object> rankData = jdbcTemplate.queryForMap(sql, moviecd);
+                response.put("audiacc", rankData.get("audiacc"));
+                response.put("movierank", rankData.get("movierank"));
+            } catch (Exception e) {
+                // MovieRank에 해당 영화가 없는 경우 기본값으로 설정
+                response.put("audiacc", 0L);
+                response.put("movierank", null);
+            }
+        }
+        
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 박스오피스 TOP 10 (순위 기반)

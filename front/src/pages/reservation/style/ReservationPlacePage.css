@@ -71,6 +71,38 @@
   margin: 0;
 }
 
+.selected-movie-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 4px 0 0 0;
+}
+
+.rpp-age-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 20px;
+  border-radius: 3px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: white;
+}
+
+.rpp-age-19 {
+  background-color: #dc2626;
+}
+
+.rpp-age-all {
+  background-color: #059669;
+}
+
+.rpp-rating-text {
+  font-size: 16px;
+  color: #666;
+}
+
 /* 영화가 선택되지 않았을 때 표시되는 메시지 */
 .no-movie-selected {
   display: flex;
@@ -335,6 +367,7 @@
   gap: 20px;
   position: relative;
   min-height: 600px;
+  align-items: stretch;
 }
 
 .region-section {
@@ -343,7 +376,7 @@
 }
 
 .theater-section {
-  min-width: 0;
+  width: 282px;
   flex: 0 0 auto;
   position: relative;
 }
@@ -357,6 +390,9 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  min-height: inherit;
+  position: relative;
 }
 
 .theater-section::before,
@@ -416,6 +452,8 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
+  overflow-y: auto;
+  max-height: 600px;
 }
 
 .theater-item {

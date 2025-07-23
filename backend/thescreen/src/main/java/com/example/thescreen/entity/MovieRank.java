@@ -24,4 +24,7 @@ public class MovieRank {
 
     @Column
     private Integer rankchange;
+
+    @Column
+    private Long audiacc; // 누적관객수 추가
 }

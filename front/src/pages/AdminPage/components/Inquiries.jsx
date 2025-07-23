@@ -1,5 +1,4 @@
 import React from "react";
-import { InquiriesData } from "../../../data/UserData.js";
 import "../styles/Inquiries.css";
 import "../styles/AdminPage.css";
 
@@ -47,7 +46,7 @@ const Inquiries = () => {
             <th>작업</th>
           </tr>
         </thead>
-        <tbody>
+        {/* <tbody>
           {InquiriesData.map((inquiry) => (
             <tr key={inquiry.inquiryId}>
               <td>{inquiry.inquiryId}</td>
@@ -76,7 +75,7 @@ const Inquiries = () => {
               </td>
             </tr>
           ))}
-        </tbody>
+        </tbody> */}
       </table>
     </div>
   </div>

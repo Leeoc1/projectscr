@@ -16,7 +16,7 @@
 --    AND CAST(SUBSTRING(s.screencd FROM 4) AS INTEGER) <= 10;
 
 create or replace view schedule_view as
-select s.schedulecd, s.startdate, s.starttime, m.movienm, m.runningscreen, m.runningtime, sc.screenname, sc.screentype, sc.allseat, sc.reservationseat, c.cinemanm, r.regionnm
+select s.schedulecd, s.startdate, s.starttime, m.movienm, m.runningscreen, m.runningtime, sc.screenname, sc.screenstatus, sc.screentype, sc.allseat, sc.reservationseat, c.cinemanm, r.regionnm
 from
     schedule s
     inner join movie m on s.moviecd = m.moviecd
@@ -37,7 +37,8 @@ CREATE TABLE movierank (
     movierankcd VARCHAR(30) PRIMARY KEY, -- PK값, 자동 증가
     moviename VARCHAR(255) NOT NULL, -- 영화 이름, 최대 255자
     movierank INT NOT NULL, -- 영화 랭크, 정수형
-    rankchange INT DEFAULT 0 -- 전날 대비 랭크 증감량, 기본값 0
+    rankchange INT DEFAULT 0, -- 전날 대비 랭크 증감량, 기본값 0
+    audiacc BIGINT DEFAULT 0 -- 누적관객수, 기본값 0
 );
 
 --reservation의 seatnum을 seatcd로 바꾸고 string로 바꾸기 이것도 툴에서 실행
@@ -80,3 +81,54 @@ CREATE TABLE movierank (
 
 --유저 테이블에 데이터가 있으면 아래 쿼리문 먼저 실행하고 해야 합니다
 --DELETE FROM users;
+--ALTER TABLE users ADD COLUMN reg_date;
+
+--유저 테이블에 데이터가 있으면 아래 쿼리문 먼저 실행하고 해야 합니다
+--DELETE FROM users;
+
+create or replace view screen_view as
+select s.screencd, s.allseat, s.cinemacd, s.reservationseat, s.screenname, s.screenstatus, s.screentype, c.cinemanm, rg.regioncd, rg.regionnm
+from
+    screen s
+    inner join cinema c on s.cinemacd = c.cinemacd
+    inner join region rg on rg.regioncd = c.regioncd;
+
+
+CREATE OR REPLACE VIEW view_movie_with_rank AS
+SELECT
+    m.moviecd,
+    m.movienm,
+    m.description,
+    m.genre,
+    m.director,
+    m.actors,
+    m.runningtime,
+    m.releasedate,
+    m.posterurl,
+    m.runningscreen,
+    m.movieinfo,
+    m.isadult,
+    r.movierankcd,
+    r.movierank,
+    r.rankchange
+FROM movie m
+LEFT JOIN movierank r ON m.movienm = r.moviename;
+
+CREATE OR REPLACE VIEW review_view AS
+SELECT
+r.reviewnum,               -- 리뷰 번호
+u.userid,                  -- 유저 ID
+m.movienm,                 -- 영화 이름
+r.rating,                  -- 평점
+r.likes                    -- 추천(좋아요)
+FROM
+review r
+LEFT JOIN users u ON r.userid = u.userid
+LEFT JOIN movie m ON r.moviecd = m.moviecd;
+
+
+CREATE OR REPLACE VIEW schedule_movies AS
+SELECT DISTINCT m.*, r.movierankcd, r.movierank, r.rankchange
+FROM movie m
+INNER JOIN schedule s ON m.moviecd = s.moviecd
+LEFT JOIN movierank r ON m.movienm = r.moviename;

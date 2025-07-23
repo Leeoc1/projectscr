@@ -117,13 +117,13 @@
     cursor: pointer;
 }
 
-.mpi-mystate-button.active {
-    background: #3396ff;
-}
-
 .mpi-mystate-button > img {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
     padding: 8px;
+}
+
+.mpi-mystate-button:active {
+  background: #3396ff;
 }

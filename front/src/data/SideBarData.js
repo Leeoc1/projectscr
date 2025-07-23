@@ -26,11 +26,6 @@ export const sidebarItems = [
     icon: "🎬",
   },
   {
-    id: "screens",
-    label: "상영관 관리",
-    icon: "🎥",
-  },
-  {
     id: "reservations",
     label: "예매 관리",
     icon: "🎫",

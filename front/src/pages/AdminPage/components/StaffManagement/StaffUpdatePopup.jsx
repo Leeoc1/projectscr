@@ -1,5 +1,5 @@
 import React from "react";
-import { updateStaff, getStaffs } from "../../../../api/api";
+import { updateStaff, getStaffs } from "../../../../api/userApi";
 
 const StaffUpdatePopup = ({
   selectedStaff,

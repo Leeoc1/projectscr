@@ -1,25 +1,42 @@
 import { useState, useRef, useEffect } from "react";
-// import { getCurrentMovies } from "../../../api/api";
-// 이거 api로 바꿔야 함
-import { boxofficeMovies } from "../../../data/MoviesData";
+import ArrowLeft from "../assets/arrow-left.svg";
+import ArrowRight from "../assets/arrow-right.svg";
+import { useNavigate } from "react-router-dom";
+import { getTopTenMovies } from "../../../api/movieApi";
 import "../styles/MovieChart.css";
+import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
 
 const MovieChart = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [movies, setMovies] = useState([]);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const sliderRef = useRef(null);
   const cardWidth = 180; // 카드 1장 width(px)
   const gap = 20; // 카드 사이 gap(px)
   const visibleCards = 5;
-  const filteredMovies = boxofficeMovies
-    .filter((movie) => movie.rank <= 10)
-    .sort((a, b) => a.rank - b.rank);
-  const totalCards = filteredMovies.length;
+
+  // API에서 영화 데이터 가져오기
+  useEffect(() => {
+    const fetchMovies = async () => {
+      const top10Movies = await getTopTenMovies();
+      // movierank 오름차순 정렬
+      const sorted = [...top10Movies].sort(
+        (a, b) => Number(a.movierank) - Number(b.movierank)
+      );
+      setMovies(sorted);
+    };
+    fetchMovies();
+  }, []);
+
+  const totalCards = movies.length;
   const maxIndex = Math.ceil(totalCards / visibleCards) - 1;
 
   // Mouse drag state
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+
+  const navigate = useNavigate();
 
   const updateSlider = () => {
     if (sliderRef.current) {
@@ -73,6 +90,70 @@ const MovieChart = () => {
     setIsDragging(false);
   };
 
+  const handleMovieCardClick = (movie) => {
+    // 로그인 상태 체크
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+    if (!isLoggedIn) {
+      // 로그인되지 않은 경우 모달 표시
+      setShowLoginModal(true);
+      return;
+    }
+
+    // 로그인된 경우 기존 로직 실행
+    // 예매 페이지와 동일한 방식으로 영화 정보를 세션 스토리지에 저장
+    sessionStorage.setItem("moviecd", movie.moviecd);
+    sessionStorage.setItem("movienm", movie.movienm);
+
+    // 예매 페이지와 동일한 방식으로 전체 영화 객체도 저장
+    const movieData = {
+      moviecd: movie.moviecd,
+      movienm: movie.movienm,
+      posterurl: movie.posterurl,
+      genre: movie.genre,
+      runningtime: movie.runningtime,
+      isadult: movie.isadult,
+    };
+    sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
+
+    navigate("/reservation/place");
+  };
+  console.log("MovieChart 렌더링", movies);
+
+  // 상세정보 페이지로 이동
+  const handleMovieDetailClick = (movie, e) => {
+    e.stopPropagation(); // 부모 클릭 이벤트 방지
+    navigate(`/moviedetail?movieno=${movie.moviecd}`);
+  };
+
+  // 예매하기 버튼 클릭
+  const handleReservationClick = (movie, e) => {
+    e.stopPropagation(); // 부모 클릭 이벤트 방지
+
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    if (!isLoggedIn) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    // 영화 정보를 세션 스토리지에 저장
+    sessionStorage.setItem("moviecd", movie.moviecd);
+    sessionStorage.setItem("movienm", movie.movienm);
+
+    const movieData = {
+      moviecd: movie.moviecd,
+      movienm: movie.movienm,
+      posterurl: movie.posterurl,
+      genre: movie.genre,
+      runningtime: movie.runningtime,
+      isadult: movie.isadult,
+    };
+    sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
+
+    navigate("/reservation/place");
+  };
+  console.log("MovieChart 렌더링", movies);
+
   return (
     <section className="mcs-section">
       <div className="mcs-container">
@@ -85,10 +166,10 @@ const MovieChart = () => {
         <div className="mcs-slider-wrapper">
           <button
             onClick={prevSlide}
-            disabled={currentIndex === 0}
             className="mcs-slider-nav-arrow mcs-slider-nav-prev"
+            aria-label="이전"
           >
-            ‹
+            <img src={ArrowLeft} alt="이전" className="mcs-slider-nav-img" />
           </button>
           <div className="mcs-slider-container">
             <div
@@ -99,24 +180,50 @@ const MovieChart = () => {
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
             >
-              {filteredMovies.map((movie) => (
-                <div key={movie.id} className="mcs-movie-card">
-                  <img
-                    src={movie.poster}
-                    alt={movie.title}
-                    className="mcs-movie-poster"
-                  />
+              {movies.map((movie) => (
+                <div key={movie.moviecd} className="mcs-movie-card">
+                  <div className="mcs-poster-container">
+                    <img
+                      src={movie.posterurl}
+                      alt={movie.movienm}
+                      className="mcs-movie-poster"
+                    />
+                    <div className="mcs-overlay">
+                      <div className="mcs-buttons">
+                        <button
+                          className="mcs-btn"
+                          onClick={(e) => handleMovieDetailClick(movie, e)}
+                        >
+                          상세정보
+                        </button>
+                        <button
+                          className="mcs-btn"
+                          onClick={(e) => handleReservationClick(movie, e)}
+                        >
+                          예매하기
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                   <div className="mcs-movie-info">
-                    <h3 className="mcs-movie-title">{movie.title}</h3>
+                    <h3 className="mcs-movie-title">{movie.movienm}</h3>
                     <p className="mcs-movie-genre">{movie.genre}</p>
                     <div className="mcs-movie-meta">
                       <div className="mcs-movie-rating">
-                        <span>⭐</span>
+                        <span
+                          className={`mcs-age-icon ${
+                            movie.isadult === "Y" ? "mcs-age-19" : "mcs-age-all"
+                          }`}
+                        >
+                          {movie.isadult === "Y" ? "19" : "ALL"}
+                        </span>
                         <span className="mcs-movie-rating-text">
-                          {movie.rating}
+                          {movie.isadult === "Y"
+                            ? "청소년 관람불가"
+                            : "전체관람가"}
                         </span>
                       </div>
-                      <span className="mcs-movie-rank">{movie.rank}</span>
+                      <span className="mcs-movie-rank">{movie.movierank}</span>
                     </div>
                   </div>
                 </div>
@@ -125,13 +232,18 @@ const MovieChart = () => {
           </div>
           <button
             onClick={nextSlide}
-            disabled={currentIndex === maxIndex}
             className="mcs-slider-nav-arrow mcs-slider-nav-next"
+            aria-label="다음"
           >
-            ›
+            <img src={ArrowRight} alt="다음" className="mcs-slider-nav-img" />
           </button>
         </div>
       </div>
+      {/* 로그인 필요 모달 */}
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+      />
     </section>
   );
 };

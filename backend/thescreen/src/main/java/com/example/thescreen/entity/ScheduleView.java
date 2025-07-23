@@ -19,6 +19,7 @@ public class ScheduleView {
     private String runningscreen;
     private Integer runningtime;
     private String screenname;
+    private String screenstatus;
     private String screentype;
     private Integer allseat;
     private Integer reservationseat;

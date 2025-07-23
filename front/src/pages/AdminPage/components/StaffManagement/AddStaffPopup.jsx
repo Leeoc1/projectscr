@@ -1,5 +1,5 @@
 import React from "react";
-import { addStaff, getStaffs } from "../../../../api/api";
+import { addStaff, getStaffs } from "../../../../api/userApi";
 
 const AddStaffPopup = ({
   setIsAddPopupOpen,

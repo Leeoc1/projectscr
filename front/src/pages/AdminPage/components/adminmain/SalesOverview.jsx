@@ -6,7 +6,6 @@ import StatCard from "./StatCard";
 import ChartSection from "./ChartSection";
 import { useNavigate } from "react-router-dom";
 
-
 const SalesOverview = () => {
   const {
     totalVolume,
@@ -25,21 +24,18 @@ const SalesOverview = () => {
 
   const handleSalesPage = () => {
     navigate("/admin/sales");
-  }
-
-  console.log(totalVolume);
+  };
 
   return (
     <div className="adp-content">
       <div className="adp-header">
         <h2>매출 현황</h2>
-
       </div>
 
       <div className="slo-stats-grid">
         <StatCard
           title="오늘 매출"
-          value={`₩ ${totalVolume.toLocaleString('ko-KR')}`}
+          value={`₩ ${totalVolume.toLocaleString("ko-KR")}`}
           change={`${increaseVolume}%`}
           isNegative={increaseVolume < 0}
           onClick={handleSalesPage}
@@ -52,7 +48,9 @@ const SalesOverview = () => {
         />
         <StatCard
           title="평균 객단가"
-          value={`₩ ${(Math.round(averagePrice / 100) * 100).toLocaleString('ko-KR')}`}
+          value={`₩ ${(Math.round(averagePrice / 100) * 100).toLocaleString(
+            "ko-KR"
+          )}`}
           change={`${increaseAveragePrice}%`}
           isNegative={increaseAveragePrice < 0}
         />

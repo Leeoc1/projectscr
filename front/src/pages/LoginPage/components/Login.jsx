@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
+import GoogleLogin from "./GoogleLogin";
+import KakaoLogin from "./KakaoLogin";
+import NaverLogin from "./NaverLogin";
+import axios from "axios";
+import logoImg from "../../../images/logo_2.png";
 
 const Login = () => {
-  const navigate = useNavigate(); // useNavigate 훅 사용
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: "",
-    password: "",
+    userid: "",
+    userpw: "",
   });
 
   const handleInputChange = (e) => {
@@ -16,37 +21,62 @@ const Login = () => {
     });
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // 로그인 로직 (백엔드 구현 없이 버튼만)
-    console.log("로그인 시도:", formData);
-    // 성공 시 홈으로 이동
-    navigate("/");
-  };
 
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/login",
+        {
+          userid: formData.userid,
+          userpw: formData.userpw,
+        }
+      );
+
+      console.log("응답 데이터:", response.data);
+
+      if (response.status === 200) {
+        // 로컬스토리지에 로그인 상태 저장
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userid", formData.userid);
+
+        navigate("/"); // 메인으로 이동
+      }
+    } catch (error) {
+      if (error.response) {
+        alert("아이디 혹은 비밀번호가 일치하지 않습니다.........");
+      } else {
+        console.error("네트워크 오류:", error);
+      }
+    }
+  };
   const handleSocialLogin = (provider) => {
     console.log(`${provider} 로그인 시도`);
-    // 소셜 로그인 로직 (백엔드 구현 없이 버튼만)
-    navigate("/");
   };
 
   return (
     <div className="lgs-page">
       <div className="lgs-container">
         <div className="lgs-header">
-          <h1 className="lgs-title">The SCREEN</h1>
+          <img
+            src={logoImg}
+            alt="logo"
+            className="l-logo-img"
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate("/")}
+          />
           <p className="lgs-subtitle">영화 예매의 새로운 경험</p>
         </div>
 
         <div className="lgs-form-container">
           <form className="lgs-form" onSubmit={handleLogin}>
             <div className="lgs-form-group">
-              <label htmlFor="username">아이디</label>
+              <label htmlFor="userid">아이디</label>
               <input
                 type="text"
-                id="username"
-                name="username"
-                value={formData.username}
+                id="userid"
+                name="userid"
+                value={formData.userid}
                 onChange={handleInputChange}
                 placeholder="아이디를 입력하세요"
                 required
@@ -54,12 +84,12 @@ const Login = () => {
             </div>
 
             <div className="lgs-form-group">
-              <label htmlFor="password">비밀번호</label>
+              <label htmlFor="userpw">비밀번호</label>
               <input
                 type="password"
-                id="password"
-                name="password"
-                value={formData.password}
+                id="userpw"
+                name="userpw"
+                value={formData.userpw}
                 onChange={handleInputChange}
                 placeholder="비밀번호를 입력하세요"
                 required
@@ -86,29 +116,12 @@ const Login = () => {
           </div>
 
           <div className="lgs-social-login">
-            <button
-              className="lgs-social-btn lgs-kakao"
-              onClick={() => handleSocialLogin("카카오")}
-            >
-              <span className="lgs-social-icon">K</span>
-              카카오로 로그인
-            </button>
+            <KakaoLogin />
 
-            <button
-              className="lgs-social-btn lgs-naver"
-              onClick={() => handleSocialLogin("네이버")}
-            >
-              <span className="lgs-social-icon">N</span>
-              네이버로 로그인
-            </button>
+            {/* 네이버 로그인 컴포넌트 */}
+            <NaverLogin />
 
-            <button
-              className="lgs-social-btn lgs-google"
-              onClick={() => handleSocialLogin("구글")}
-            >
-              <span className="lgs-social-icon">G</span>
-              구글로 로그인
-            </button>
+            <GoogleLogin onLoginAttempt={handleSocialLogin} />
           </div>
 
           <div className="lgs-signup-link">
@@ -116,7 +129,7 @@ const Login = () => {
               아직 회원이 아니신가요?
               <button
                 className="lgs-link-btn"
-                onClick={() => navigate("/signup")}
+                onClick={() => navigate("/register")}
               >
                 회원가입
               </button>

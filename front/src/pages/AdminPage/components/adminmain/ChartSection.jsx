@@ -6,7 +6,7 @@ import {
   getReservation,
 } from "../../../../api/api";
 import BarChart from "./chart/BarChart";
-import LineChartComponent from "./chart/LineChart";
+import LineChart from "./chart/LineChart";
 import PieChartComponent from "./chart/PieChart";
 import PieMovieChartComponent from "./chart/PieMovieChart";
 
@@ -33,11 +33,6 @@ const ChartSection = () => {
           getAllUsers(),
           getReservation(),
         ]);
-
-        console.log("그래프용 totalVolumeData:", totalVolumeData);
-        console.log("cinemaVolumeData:", cinemaVolumeData);
-        console.log("전체 유저 데이터:", allUsersData);
-        console.log("예약 데이터:", reservationData);
 
         setTotalVolume(totalVolumeData);
         setCinemaVolume(cinemaVolumeData);
@@ -67,7 +62,6 @@ const ChartSection = () => {
           });
         }
 
-        console.log("날짜별 전체 유저 수:", dailyCounts);
         setDailyUserCount(dailyCounts);
 
         // 영화별 매출 계산
@@ -90,10 +84,9 @@ const ChartSection = () => {
           .sort((a, b) => b.totalAmount - a.totalAmount)
           .slice(0, 10);
 
-        console.log("영화별 매출 데이터:", movieVolumeData);
         setMovieVolume(movieVolumeData);
       } catch (error) {
-        console.error("데이터 가져오기 오류:", error);
+        // 에러 처리
       }
     };
 
@@ -130,7 +123,7 @@ const ChartSection = () => {
         );
       case 1:
         return (
-          <LineChartComponent
+          <LineChart
             data={dailyUserCount}
             onPrevious={handlePrevious}
             onNext={handleNext}
@@ -181,38 +174,6 @@ const ChartSection = () => {
         );
     }
   };
-
-  // 파이차트 데이터 (상위 6개)
-  const pieColors = [
-    "#3b82f6",
-    "#10b981",
-    "#f59e0b",
-    "#ef4444",
-    "#a21caf",
-    "#6366f1",
-  ];
-  const sortedCinema = [...cinemaVolume]
-    .sort((a, b) => b.totalAmount - a.totalAmount)
-    .slice(0, 6);
-  const totalPie = sortedCinema.reduce((sum, cur) => sum + cur.totalAmount, 0);
-  let prevPercent = 0;
-  const pieSlices = sortedCinema.map((item, idx) => {
-    const percent = totalPie > 0 ? (item.totalAmount / totalPie) * 100 : 0;
-    const start = prevPercent;
-    const end = prevPercent + percent;
-    prevPercent = end;
-    return {
-      color: pieColors[idx % pieColors.length],
-      start,
-      end,
-      label: item.cinemaName,
-      amount: item.totalAmount,
-      percent: percent,
-    };
-  });
-  const pieGradient = pieSlices
-    .map((slice) => `${slice.color} ${slice.start}% ${slice.end}%`)
-    .join(", ");
 
   return (
     <div className="slo-charts-section">

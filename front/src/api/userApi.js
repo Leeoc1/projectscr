@@ -281,3 +281,15 @@ export const fetchAllReviews = () => {
     []
   );
 };
+
+export const kakaoTemplate = (reservationId) => {
+  const accessToken = localStorage.getItem("kakao_access_token");
+  return apiRequestWithErrorHandling(
+    "post",
+    "login/api/send-reservation-message",
+    { reservationId, accessToken },
+    {},
+    "카카오 템플릿 조회 실패:",
+    []
+  );
+};

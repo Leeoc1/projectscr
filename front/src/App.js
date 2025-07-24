@@ -70,14 +70,24 @@ function ReservationProtectedRoute({ children, requiredStep }) {
       }
       break;
       
+    case 'theater-first':
+      // /reservation/movie는 극장 선택이 먼저 되어야 접근 가능 (theater → movie 플로우)
+      const theaterCinemacd = sessionStorage.getItem("cinemacd");
+      const theaterCinemanm = sessionStorage.getItem("cinemanm");
+      
+      if (!theaterCinemacd || !theaterCinemanm) {
+        return <Navigate to="/theater" replace />;
+      }
+      break;
+      
     case 'seat':
       // /reservation/seat은 극장과 시간 선택이 되어야 접근 가능
-      const cinemanm = sessionStorage.getItem("cinemanm");
+      const seatCinemanm = sessionStorage.getItem("cinemanm");
       const selectedMovieTime = sessionStorage.getItem("selectedMovieTime");
       const selectedFullDate = sessionStorage.getItem("selectedFullDate");
       
       // 핵심적인 정보만 체크: 상영관, 상영시간, 날짜
-      if (!cinemanm || !selectedMovieTime || !selectedFullDate) {
+      if (!seatCinemanm || !selectedMovieTime || !selectedFullDate) {
         return <Navigate to="/movie" replace />;
       }
       break;
@@ -217,7 +227,7 @@ function App() {
         <Route
           path="/reservation/movie"
           element={
-            <ReservationProtectedRoute requiredStep="place">
+            <ReservationProtectedRoute requiredStep="theater-first">
               <ReservationPlaceToMoviePage />
             </ReservationProtectedRoute>
           }

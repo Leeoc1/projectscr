@@ -47,6 +47,12 @@ function ProtectedRoute({ children }) {
   return children;
 }
 
+// 관리자 페이지 보호 컴포넌트 (모든 접근 차단)
+function AdminProtectedRoute({ children }) {
+  // 관리자 페이지는 모든 사용자(로그인/비로그인 무관)에게 접근 차단
+  return <Navigate to="/" replace />;
+}
+
 // 예약 플로우 보호 컴포넌트
 function ReservationProtectedRoute({ children, requiredStep }) {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -205,16 +211,86 @@ function App() {
         />
 
         {/* 관리자 페이지 라우팅 */}
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/admin/dashboard" element={<AdminPage />} />
-        <Route path="/admin/staff" element={<AdminPage />} />
-        <Route path="/admin/users" element={<AdminPage />} />
-        <Route path="/admin/theaters" element={<AdminPage />} />
-        <Route path="/admin/movies" element={<AdminPage />} />
-        <Route path="/admin/screens" element={<AdminPage />} />
-        <Route path="/admin/reservations" element={<AdminPage />} />
-        <Route path="/admin/inquiries" element={<AdminPage />} />
-        <Route path="/admin/events" element={<AdminPage />} />
+        <Route 
+          path="/admin" 
+          element={
+            <AdminProtectedRoute>
+              <AdminPage />
+            </AdminProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/dashboard" 
+          element={
+            <AdminProtectedRoute>
+              <AdminPage />
+            </AdminProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/staff" 
+          element={
+            <AdminProtectedRoute>
+              <AdminPage />
+            </AdminProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/users" 
+          element={
+            <AdminProtectedRoute>
+              <AdminPage />
+            </AdminProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/theaters" 
+          element={
+            <AdminProtectedRoute>
+              <AdminPage />
+            </AdminProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/movies" 
+          element={
+            <AdminProtectedRoute>
+              <AdminPage />
+            </AdminProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/screens" 
+          element={
+            <AdminProtectedRoute>
+              <AdminPage />
+            </AdminProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/reservations" 
+          element={
+            <AdminProtectedRoute>
+              <AdminPage />
+            </AdminProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/inquiries" 
+          element={
+            <AdminProtectedRoute>
+              <AdminPage />
+            </AdminProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/events" 
+          element={
+            <AdminProtectedRoute>
+              <AdminPage />
+            </AdminProtectedRoute>
+          } 
+        />
 
         <Route 
           path="/reservation/place" 

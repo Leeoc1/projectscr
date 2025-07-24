@@ -147,6 +147,7 @@ const MyPage = () => {
       }
     }
   };
+
   // 히스토리 모달 열기/닫기
   const handleOpenHistoryModal = () => setShowHistoryModal(true);
   const handleCloseHistoryModal = () => setShowHistoryModal(false);
@@ -156,7 +157,7 @@ const MyPage = () => {
       <Header />
       <div className="mp-my-page">
         {/* User Profile Section */}
-        <MyAccount loading={loading} userInfo={userInfo} />
+        <MyAccount loading={loading} userInfo={userInfo} currentPage={0} />
 
         {/* Main Content */}
         <div className="mp-main-content">

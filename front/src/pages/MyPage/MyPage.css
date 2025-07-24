@@ -18,6 +18,8 @@
   padding: 2rem;
   min-width: 320px;
   max-width: 90vw;
+  width: 750px;
+  justify-content: center;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   position: relative;
   display: flex;
@@ -128,33 +130,6 @@
   max-width: 64rem;
   margin: 0 auto;
   padding: 2rem 1rem;
-}
-
-/* Welcome Card */
-.mp-welcome-card {
-  background-color: #fff;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e9ecef;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.mp-welcome-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.mp-welcome-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #212529;
-}
-
-.mp-coupon-info {
-  font-size: 0.875rem;
-  color: #6c757d;
 }
 
 /* Section */
@@ -382,13 +357,6 @@
   margin-top: auto;
 }
 
-.mp-movie-cinema {
-  font-size: 0.8rem;
-  color: #6c757d;
-  line-height: 1.2;
-  margin: 0;
-}
-
 .mp-movie-amount {
   font-size: 0.8rem;
   color: #495057;
@@ -441,38 +409,6 @@
 
 .mp-btn-remove-wishlist:hover {
   background-color: #c82333;
-}
-
-.mp-btn-cancel {
-  background-color: #d9dadb;
-  color: #495057;
-}
-
-.mp-btn-cancel:hover {
-  background-color: #b8bcbe;
-}
-
-.mp-refund-status {
-  padding: 0.4rem 0.8rem;
-  border-radius: 0.25rem;
-  font-size: 0.8rem;
-  font-weight: 500;
-  text-align: center;
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-  cursor: default;
-  white-space: nowrap;
-}
-
-/* Special styling for active review button */
-.mp-movie-card:nth-child(2) .mp-btn-review {
-  background-color: #000;
-  color: #fff;
-}
-
-.mp-movie-card:nth-child(2) .mp-btn-review:hover {
-  background-color: #212529;
 }
 
 /* Inquiry Table */
@@ -583,79 +519,6 @@
   color: #c82333;
 }
 
-/* Footer */
-.mp-footer {
-  background-color: #212529;
-  color: #fff;
-  padding: 2rem 0;
-  margin-top: 4rem;
-}
-
-.mp-footer-content {
-  max-width: 64rem;
-  margin: 0 auto;
-  padding: 0 1rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1.5rem;
-}
-
-.mp-footer-links {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.mp-footer-link {
-  font-size: 0.875rem;
-  color: #adb5bd;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.mp-footer-link:hover {
-  color: #fff;
-}
-
-.mp-social-links {
-  display: flex;
-  gap: 1rem;
-}
-
-.mp-social-link {
-  color: #6c757d;
-  transition: color 0.2s ease;
-}
-
-.mp-social-link:hover {
-  color: #fff;
-}
-
-.mp-social-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-.mp-footer-info {
-  max-width: 64rem;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.mp-footer-text {
-  font-size: 0.75rem;
-  color: #6c757d;
-  line-height: 1.5;
-  margin-bottom: 0.5rem;
-}
-
-.mp-footer-copyright {
-  font-size: 0.75rem;
-  color: #6c757d;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
   .mp-profile-card {
@@ -752,6 +615,7 @@
   color: #666;
   font-size: 0.9rem;
   margin: 0.25rem 0;
+  line-height: 1.2;
 }
 
 /* 회원탈퇴 모달 스타일 */
@@ -780,12 +644,6 @@
   font-size: 1.25rem;
   font-weight: 600;
   color: #212529;
-}
-
-.mp-modal-content {
-  padding: 2rem;
-  width: 750px;
-  justify-content: center;
 }
 
 .mp-withdrawal-warning {
@@ -868,6 +726,20 @@
   opacity: 0.6;
 }
 
+.mp-modal-details-container {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.mp-modal-left-section {
+  flex: 1;
+}
+
+.mp-modal-right-section {
+  flex: 1;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 480px) {
   .mp-withdrawal-modal {
@@ -884,4 +756,50 @@
   .mp-modal-footer {
     flex-direction: column;
   }
+
+  .mp-modal-details-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+/* 페이지네이션 스타일 */
+.mp-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 5px;
+}
+
+.mp-page-btn {
+  padding: 8px 12px;
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
+  color: #333;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.mp-page-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.mp-page-active {
+  background-color: #ffc107 !important;
+  color: white !important;
+  border-color: #ffc107 !important;
+}
+
+.mp-page-nav:disabled {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.mp-page-nav:disabled:hover {
+  background-color: #f8f9fa;
 }

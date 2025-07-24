@@ -1,6 +1,6 @@
 import React from "react";
 import { cancelReservation } from "../../../api/reservationApi";
-import { getUserInfo, getUserReservations } from "../../../api/userApi";
+import { getUserReservations } from "../../../api/userApi";
 
 const MyPageReservationDetail = ({
   showModal,
@@ -69,55 +69,62 @@ const MyPageReservationDetail = ({
               &times;
             </button>
             <h2 className="mp-modal-title">예매 상세 내역</h2>
-            <div className="mp-modal-row">
-              <b>예매번호:</b> {selectedReservation.reservationcd}
-            </div>
-            <div className="mp-modal-row">
-              <b>영화명:</b> {selectedReservation.movienm}
-            </div>
-            <div className="mp-modal-row">
-              <b>상영관:</b> {selectedReservation.screenname}
-            </div>
-            <div className="mp-modal-row">
-              <b>좌석:</b> {selectedReservation.seatcd}
-            </div>
-            <div className="mp-modal-row">
-              <b>상영일시:</b>{" "}
-              {selectedReservation.starttime
-                ? `${
-                    selectedReservation.starttime.split(" ")[0]
-                  } ${selectedReservation.starttime
-                    .split(" ")[1]
-                    ?.substring(0, 5)}`
-                : ""}
-            </div>
-            <div className="mp-modal-row">
-              <b>상영시간:</b> {selectedReservation.runningtime}분
-            </div>
-            <div className="mp-modal-row">
-              <b>극장:</b> {selectedReservation.cinemanm}
-            </div>
-            <div className="mp-modal-row">
-              <b>결제금액:</b>{" "}
-              {selectedReservation.amount
-                ? `${selectedReservation.amount.toLocaleString()}원`
-                : "0원"}
-            </div>
-            <div className="mp-modal-row">
-              <b>결제방법:</b> {selectedReservation.paymentmethod}
-            </div>
-            <div className="mp-modal-row">
-              <b>결제일시:</b>{" "}
-              {selectedReservation.reservationtime
-                ? `${
-                    selectedReservation.reservationtime.split("T")[0]
-                  } ${selectedReservation.reservationtime
-                    .split("T")[1]
-                    ?.substring(0, 5)}`
-                : ""}
-            </div>
-            <div className="mp-modal-row">
-              <b>상태:</b> {selectedReservation.reservationstatus}
+            <div className="mp-modal-details-container">
+              <div className="mp-modal-left-section">
+                <div className="mp-modal-row">
+                  <b>예매번호:</b> {selectedReservation.reservationcd}
+                </div>
+                <div className="mp-modal-row">
+                  <b>영화명:</b> {selectedReservation.movienm}
+                </div>
+                <div className="mp-modal-row">
+                  <b>상영관:</b> {selectedReservation.screenname}
+                </div>
+                <div className="mp-modal-row">
+                  <b>좌석:</b> {selectedReservation.seatcd}
+                </div>
+                <div className="mp-modal-row">
+                  <b>상영일시:</b>{" "}
+                  {selectedReservation.starttime
+                    ? `${
+                        selectedReservation.starttime.split(" ")[0]
+                      } ${selectedReservation.starttime
+                        .split(" ")[1]
+                        ?.substring(0, 5)}`
+                    : ""}
+                </div>
+                <div className="mp-modal-row">
+                  <b>상영시간:</b> {selectedReservation.runningtime}분
+                </div>
+                <div className="mp-modal-row">
+                  <b>극장:</b> {selectedReservation.cinemanm}
+                </div>
+              </div>
+
+              <div className="mp-modal-right-section">
+                <div className="mp-modal-row">
+                  <b>결제금액:</b>{" "}
+                  {selectedReservation.amount
+                    ? `${selectedReservation.amount.toLocaleString()}원`
+                    : "0원"}
+                </div>
+                <div className="mp-modal-row">
+                  <b>결제방법:</b> {selectedReservation.paymentmethod}
+                </div>
+                <div className="mp-modal-row">
+                  <b>결제일시:</b>{" "}
+                  {selectedReservation.reservationtime
+                    ? `${
+                        selectedReservation.reservationtime.split("T")[0]
+                      } ${selectedReservation.reservationtime
+                        .split("T")[1]
+                        ?.substring(0, 5)}`
+                    : ""}
+                </div>
+                <div className="mp-modal-row">
+                  <b>상태:</b> {selectedReservation.reservationstatus}
+                </div>
+              </div>
             </div>
 
             {canCancelReservation() && (

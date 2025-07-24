@@ -148,15 +148,6 @@ const ReservationManagement = () => {
     <div className="adp-content">
       <div className="adp-header">
         <h2>예매 관리</h2>
-        <div className="rsm-filter-section">
-          <select>
-            <option>전체</option>
-            <option>예약 완료</option>
-            <option>취소 요청</option>
-            <option>환불 완료</option>
-          </select>
-          <input type="date" />
-        </div>
       </div>
 
       <div className="rsm-reservation-tabs">

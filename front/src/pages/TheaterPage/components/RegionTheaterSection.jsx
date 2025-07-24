@@ -1,35 +1,59 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
+import {
+  getmycinema,
+  updateMyCinema,
+  deleteMyCinema,
+} from "../../../api/cinemaApi";
 
-const RegionTheaterSection = ({ getMoviesByTab }) => {
+const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
   const navigate = useNavigate();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [visibleCount, setVisibleCount] = useState(12);
+  const [starFills, setStarFills] = useState({}); // 각 영화관의 별 색상 상태
+  const [favoriteCinemas, setFavoriteCinemas] = useState([]); // 즐겨찾기 영화관 목록
 
-  // 극장 데이터가 변경될 때마다 visibleCount 초기화
+  // 초기 즐겨찾기 상태 로드
   useEffect(() => {
-    setVisibleCount(12);
-  }, [getMoviesByTab]);
+    const fetchFavorites = async () => {
+      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+      if (!isLoggedIn) return;
+
+      const userid = localStorage.getItem("userid");
+      console.log("Fetching favorites for userid:", userid);
+
+      try {
+        const favorites = await getmycinema(userid);
+        console.log("Fetched favorites:", favorites);
+
+        const starFillsData = favorites.reduce((acc, item) => {
+          acc[item.cinemacd] = "#fbbf24"; // DB에 있으면 노란색
+          return acc;
+        }, {});
+        console.log("starFillsData:", starFillsData);
+
+        setStarFills(starFillsData);
+        setFavoriteCinemas(favorites); // 즐겨찾기 영화관 목록 저장
+        console.log("Set favoriteCinemas:", favorites);
+      } catch (error) {
+        console.error("Failed to fetch favorites:", error);
+      }
+    };
+    fetchFavorites();
+  }, []);
 
   const handleScheduleClick = (cinema) => {
-    // 로그인 상태 체크
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-
     if (!isLoggedIn) {
-      // 로그인되지 않은 경우 모달 표시
       setShowLoginModal(true);
       return;
     }
-
-    // 로그인된 경우 기존 로직 실행
     sessionStorage.setItem("cinemacd", cinema.cinemacd);
     sessionStorage.setItem("cinemanm", cinema.cinemanm);
     navigate("/reservation/movie");
   };
 
-  // 길찾기 클릭시 극장 상세 페이지로 이동
-  // state로 전달
   const handleMapClick = (cinema) => {
     const state = {
       cinemacd: cinema.cinemacd,
@@ -44,38 +68,127 @@ const RegionTheaterSection = ({ getMoviesByTab }) => {
     setVisibleCount((prev) => prev + 12);
   };
 
-  const cinemaseData = getMoviesByTab();
-  const visibleCinemas = cinemaseData.slice(0, visibleCount);
+  const handleStarClick = async (cinema) => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    if (!isLoggedIn) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    const userid = localStorage.getItem("userid");
+    const cinemacd = cinema.cinemacd;
+    const isFavorite = starFills[cinemacd] === "#fbbf24";
+
+    try {
+      if (isFavorite) {
+        // 별이 노란색 -> 검정색 (즐겨찾기 삭제)
+        await deleteMyCinema(userid, cinemacd);
+        setStarFills((prev) => ({
+          ...prev,
+          [cinemacd]: "currentColor",
+        }));
+        // 즐겨찾기 목록에서도 제거
+        setFavoriteCinemas((prev) =>
+          prev.filter((item) => item.cinemacd !== cinemacd)
+        );
+      } else {
+        // 별이 검정색 -> 노란색 (즐겨찾기 추가)
+        await updateMyCinema(userid, cinemacd);
+        setStarFills((prev) => ({
+          ...prev,
+          [cinemacd]: "#fbbf24",
+        }));
+        // 즐겨찾기 목록에 추가
+        setFavoriteCinemas((prev) => [...prev, { cinemacd, userid }]);
+      }
+    } catch (error) {
+      console.error("Failed to update/delete favorite:", error);
+      alert("즐겨찾기 업데이트에 실패했습니다.");
+    }
+  };
+
+  // 즐겨찾기 필터링 함수
+  const getFilteredCinemas = () => {
+    console.log("selectedRegion:", selectedRegion);
+    console.log("favoriteCinemas:", favoriteCinemas);
+
+    if (selectedRegion === "favorite") {
+      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+      console.log("isLoggedIn:", isLoggedIn);
+
+      if (!isLoggedIn) {
+        return []; // 로그인하지 않았으면 빈 배열 반환
+      }
+
+      const allCinemas = getMoviesByTab();
+      console.log("allCinemas:", allCinemas);
+
+      const favoriteCinemaCds = favoriteCinemas.map((item) => item.cinemacd);
+      console.log("favoriteCinemaCds:", favoriteCinemaCds);
+
+      const filteredResult = allCinemas.filter((cinema) =>
+        favoriteCinemaCds.includes(cinema.cinemacd)
+      );
+      console.log("filteredResult:", filteredResult);
+
+      return filteredResult;
+    }
+    return getMoviesByTab();
+  };
 
   return (
     <section className="rts-section">
       <div className="rts-grid">
-        {visibleCinemas.map((cinema) => (
-          <div key={cinema.cinemacd} className="rts-card">
-            <div className="rts-info">
-              <h3 className="rts-name">{cinema.cinemanm}</h3>
-              <p className="rts-address">{cinema.address}</p>
-              <p className="rts-phone">{cinema.tel}</p>
+        {selectedRegion === "favorite" &&
+          localStorage.getItem("isLoggedIn") !== "true" && (
+            <div className="rts-login-message">
+              로그인 후 즐겨찾기 극장을 확인할 수 있습니다.
             </div>
-            <div className="rts-actions">
-              <button
-                className="rts-btn primary"
-                onClick={() => handleScheduleClick(cinema)}
-              >
-                상영시간표
-              </button>
-              <button
-                className="rts-btn secondary"
-                onClick={() => handleMapClick(cinema)}
-              >
-                길찾기
-              </button>
+          )}
+        {getFilteredCinemas()
+          .slice(0, visibleCount)
+          .map((cinema) => (
+            <div key={cinema.cinemacd} className="rts-card">
+              <div className="rts-info">
+                <div className="rts-header">
+                  <h3 className="rts-name">{cinema.cinemanm}</h3>
+                  <svg
+                    className={`rts-star ${
+                      starFills[cinema.cinemacd] === "#fbbf24" ? "active" : ""
+                    }`}
+                    width="30"
+                    height="30"
+                    viewBox="0 0 24 24"
+                    onClick={() => handleStarClick(cinema)}
+                  >
+                    <path
+                      d="M12 2 L15 9 L22 9 L16 14 L18 21 L12 17 L6 21 L8 14 L2 9 L9 9 Z"
+                      fill={starFills[cinema.cinemacd] || "currentColor"}
+                    />
+                  </svg>
+                </div>
+                <p className="rts-address">{cinema.address}</p>
+                <p className="rts-phone">{cinema.tel}</p>
+              </div>
+              <div className="rts-actions">
+                <button
+                  className="rts-btn primary"
+                  onClick={() => handleScheduleClick(cinema)}
+                >
+                  상영시간표
+                </button>
+                <button
+                  className="rts-btn secondary"
+                  onClick={() => handleMapClick(cinema)}
+                >
+                  길찾기
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
 
-      {cinemaseData.length > visibleCount && (
+      {getFilteredCinemas().length > visibleCount && (
         <div className="rts-showmore-wrap">
           <button className="mvs-showmore-btn" onClick={handleShowMore}>
             더보기
@@ -83,7 +196,6 @@ const RegionTheaterSection = ({ getMoviesByTab }) => {
         </div>
       )}
 
-      {/* 로그인 필요 모달 */}
       <LoginRequiredModal
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}

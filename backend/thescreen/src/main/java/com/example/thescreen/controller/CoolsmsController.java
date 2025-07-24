@@ -3,6 +3,7 @@ package com.example.thescreen.controller;
 import com.example.thescreen.service.CoolsmsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import lombok.Data;
 
 @RestController
 @RequestMapping("/sms")
@@ -31,35 +32,13 @@ public class CoolsmsController {
     }
 }
 
+@Data
 class SmsDto {
     private String phoneNumber;
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 }
 
+@Data
 class CertificateDto {
     private String phoneNumber;
     private String certificateNum;
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getCertificateNum() {
-        return certificateNum;
-    }
-
-    public void setCertificateNum(String certificateNum) {
-        this.certificateNum = certificateNum;
-    }
 }

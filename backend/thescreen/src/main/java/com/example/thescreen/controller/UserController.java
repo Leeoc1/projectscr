@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RestController
 @RequestMapping("/users")
@@ -24,6 +24,9 @@ public class UserController {
 
     @Autowired
     private ReservationViewRepository reservationViewRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/list")
     public List<User> getUsersApi() {
@@ -48,7 +51,8 @@ public class UserController {
         try {
             User user = new User();
             user.setUserid((String) userData.get("userid"));
-            user.setUserpw((String) userData.get("userpw"));
+            // 비밀번호 해시 적용
+            user.setUserpw(passwordEncoder.encode((String) userData.get("userpw")));
             user.setUsername((String) userData.get("username"));
             user.setEmail((String) userData.get("email"));
             user.setPhone((String) userData.get("phone"));

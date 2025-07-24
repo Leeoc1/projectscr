@@ -18,6 +18,7 @@
     <orderEntry type="library" name="Gradle: com.opencsv:opencsv:5.9" level="project" />
     <orderEntry type="library" name="Gradle: net.nurigo:sdk:4.3.2" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-data-redis:3.5.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-security:3.5.3" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-json:3.5.3" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter:3.5.3" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-tomcat:3.5.3" level="project" />
@@ -35,6 +36,9 @@
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-collections4:4.4" level="project" />
     <orderEntry type="library" name="Gradle: io.lettuce:lettuce-core:6.6.0.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.data:spring-data-redis:3.5.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.security:spring-security-web:6.5.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.security:spring-security-config:6.5.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-aop:6.2.8" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.module:jackson-module-parameter-names:2.19.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.19.1" level="project" />
@@ -49,7 +53,6 @@
     <orderEntry type="library" name="Gradle: org.apache.tomcat.embed:tomcat-embed-core:10.1.42" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.tomcat.embed:tomcat-embed-el:10.1.42" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-context:6.2.8" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework:spring-aop:6.2.8" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-beans:6.2.8" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-expression:6.2.8" level="project" />
     <orderEntry type="library" name="Gradle: io.micrometer:micrometer-observation:1.15.1" level="project" />
@@ -75,6 +78,7 @@
     <orderEntry type="library" name="Gradle: org.springframework.data:spring-data-keyvalue:3.5.1" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-context-support:6.2.8" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-oxm:6.2.8" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.security:spring-security-core:6.5.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.19.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.19.1" level="project" />
     <orderEntry type="library" name="Gradle: ch.qos.logback:logback-classic:1.5.18" level="project" />
@@ -90,6 +94,7 @@
     <orderEntry type="library" name="Gradle: io.netty:netty-resolver:4.1.122.Final" level="project" />
     <orderEntry type="library" name="Gradle: io.netty:netty-buffer:4.1.122.Final" level="project" />
     <orderEntry type="library" name="Gradle: org.reactivestreams:reactive-streams:1.0.4" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.security:spring-security-crypto:6.5.1" level="project" />
     <orderEntry type="library" name="Gradle: ch.qos.logback:logback-core:1.5.18" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-api:2.24.3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.mariadb.jdbc:mariadb-java-client:3.3.3" level="project" />

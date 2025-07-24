@@ -47,10 +47,17 @@ function ProtectedRoute({ children }) {
   return children;
 }
 
-// 관리자 페이지 보호 컴포넌트 (모든 접근 차단)
+// 관리자 페이지 보호 컴포넌트 (관리자 계정만 접근 가능)
 function AdminProtectedRoute({ children }) {
-  // 관리자 페이지는 모든 사용자(로그인/비로그인 무관)에게 접근 차단
-  return <Navigate to="/" replace />;
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const userid = localStorage.getItem("userid");
+  
+  // 로그인하지 않았거나 관리자 계정이 아니면 홈으로 리다이렉트
+  if (!isLoggedIn || userid !== "master001") {
+    return <Navigate to="/" replace />;
+  }
+  
+  return children;
 }
 
 // 예약 플로우 보호 컴포넌트
@@ -162,6 +169,12 @@ function ReservationProtectedRoute({ children, requiredStep }) {
       }
       try {
         const successInfo = JSON.parse(reservationSuccessInfo);
+        // 예매 완료 후에는 reservationCompleted 플래그로만 접근 허용
+        if (successInfo.reservationCompleted) {
+          // 예매 완료된 상태면 접근 허용
+          break;
+        }
+        // 기존 검증 로직 (예매 진행 중인 경우)
         if (
           !successInfo.movienm ||
           !successInfo.cinemanm ||

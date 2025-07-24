@@ -12,6 +12,40 @@ export function SuccessPage() {
   });
   const [showResponseData, setShowResponseData] = useState(false);
 
+  // 뒤로가기 방지 및 보안 처리 (토스 결제 성공 페이지)
+  useEffect(() => {
+    // 결제 성공 페이지에서 뒤로가기 방지
+    const handlePopState = (event) => {
+      window.history.pushState(null, "", window.location.href);
+      if (window.confirm("결제가 완료되었습니다. 홈페이지로 이동하시겠습니까?")) {
+        navigate("/", { replace: true });
+      }
+    };
+
+    // 히스토리 조작으로 뒤로가기 차단
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", handlePopState);
+
+    // 민감한 결제 정보 3초 후 정리
+    const timeoutId = setTimeout(() => {
+      // 결제 관련 민감한 정보 제거
+      sessionStorage.removeItem("paymentResponseData");
+      const keysToRemove = [
+        "selectedMovieTime",
+        "selectedSeats", 
+        "guestCount",
+        "totalGuests",
+        "finalPrice"
+      ];
+      keysToRemove.forEach(key => sessionStorage.removeItem(key));
+    }, 3000);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+      clearTimeout(timeoutId);
+    };
+  }, [navigate]);
+
   // 페이지 로드 시 body 백그라운드 설정
   useEffect(() => {
     document.body.style.backgroundColor = "#e8f3ff";

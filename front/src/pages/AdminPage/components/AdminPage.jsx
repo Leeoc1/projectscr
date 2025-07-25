@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import SalesOverview from "./adminmain/SalesOverview";
 import StaffManagement from "./StaffManagement/StaffManagement";
@@ -11,11 +11,34 @@ import AdminSidebar from "./AdminSideBar";
 import AdminHeader from "./AdminHeader";
 import TheaterManagement from "./TheaterManagement/TheaterManagement";
 import { NotificationProvider } from "../../../contexts/NotificationContext";
+import { getAdminToken } from "../../../api/adminApi";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("sales");
   const navigate = useNavigate();
   const location = useLocation();
+
+  // 관리자 토큰 발급
+  useEffect(() => {
+    const fetchToken = async () => {
+      const userid = localStorage.getItem("userid") || "master001";
+      try {
+        console.log("토큰 발급 시도 중...", userid);
+        const token = await getAdminToken(userid);
+        localStorage.setItem("adminToken", token);
+        console.log("관리자 토큰 저장 완료:", token);
+      } catch (e) {
+        console.error("관리자 토큰 발급 실패:", e);
+        console.error("에러 상세:", e.response?.data);
+        alert(`관리자 인증 토큰 발급 실패: ${e.message}`);
+        navigate("/");
+      }
+    };
+
+    // 토큰 발급
+    fetchToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigate]);
 
   // URL에서 탭 정보 추출
   useEffect(() => {

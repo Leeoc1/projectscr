@@ -18,7 +18,7 @@ export const validatePasswordLength = (password) => {
 export const validatePasswordStrength = (password) => {
     // /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/ 특수기호 범위 어떻게? << 얘도 있음 
 
-    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]+$/;
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_,.?":{}|<>])[a-zA-Z0-9!@#$%^&*()_,.?":{}|<>]+$/;
 
     return passwordRegex.test(password);
 }

@@ -70,7 +70,7 @@ export default function MovieDetail() {
     };
     sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
 
-    navigate("/reservation/place");
+    navigate(`/reservation/movie/${movie.moviecd}`);
   };
 
   // 찜 버튼 클릭 핸들러

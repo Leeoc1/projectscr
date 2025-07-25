@@ -1,9 +1,6 @@
 package com.example.thescreen.chatbot;
 
-import com.example.thescreen.entity.Cinema;
-import com.example.thescreen.entity.Faq;
-import com.example.thescreen.entity.Notice;
-import com.example.thescreen.entity.MovieView;
+import com.example.thescreen.entity.*;
 import com.example.thescreen.repository.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,15 +18,18 @@ public class ChatBotController {
     private final ReservationViewRepository reservationViewRepository;
     private final NoticeRepository noticeRepository;
     private final MovieViewRepository movieViewRepository;
-    private final CinemaRepository  cinemaRepository;
+    private final CinemaRepository cinemaRepository;
+    private final ScheduleViewRepository scheduleViewRepository;
 
     public ChatBotController(FaqRepository faqRepository, ReservationViewRepository reservationViewRepository,
-                             NoticeRepository noticeRepository, MovieViewRepository movieViewRepository, CinemaRepository cinemaRepository) {
+            NoticeRepository noticeRepository, MovieViewRepository movieViewRepository,
+            CinemaRepository cinemaRepository, ScheduleViewRepository scheduleViewRepository) {
         this.faqRepository = faqRepository;
         this.reservationViewRepository = reservationViewRepository;
         this.noticeRepository = noticeRepository;
         this.movieViewRepository = movieViewRepository;
         this.cinemaRepository = cinemaRepository;
+        this.scheduleViewRepository = scheduleViewRepository;
     }
 
     @GetMapping("/ask")
@@ -41,6 +41,7 @@ public class ChatBotController {
         List<Faq> allFaqs = faqRepository.findAll();
         List<Notice> allNotice = noticeRepository.findAll();
         List<MovieView> allMovies = movieViewRepository.findAll();
+        List<ScheduleView> allSchedules = scheduleViewRepository.findAll();
 
         String cleanQuestion = question.trim().toLowerCase();
 
@@ -136,9 +137,34 @@ public class ChatBotController {
                     "movieinfo", movie.getDescription(),
                     "releasedate", releaseDateStr,
                     "runningtime", movie.getRunningtime(),
-                    "moviecd", movie.getMoviecd()
-            ));
+                    "moviecd", movie.getMoviecd()));
             logResponse(startTime, response.toString(), "영화 기본 검색");
+            return response;
+        }
+
+        // 지역별 극장 검색 (주소에서 지역명 포함 여부 확인)
+        List<Cinema> regionCinemas = cinemaRepository.findByAddressContainingIgnoreCase(cleanQuestion);
+        if (!regionCinemas.isEmpty()) {
+            List<Map<String, String>> cinemaList = regionCinemas.stream()
+                    .limit(10) // 최대 10개까지 제한
+                    .map(cinema -> Map.of(
+                            "name", cinema.getCinemanm(),
+                            "address", cinema.getAddress() != null ? cinema.getAddress() : "주소 정보 없음",
+                            "cinemacd", String.valueOf(cinema.getCinemacd())))
+                    .collect(Collectors.toList());
+
+            response.put("type", "suggestion");
+            response.put("data", Map.of("cinemas", cinemaList));
+            logResponse(startTime, response.toString(), "지역별 극장 검색");
+            return response;
+        }
+
+        // 상영관별 영화 검색 (극장명 검색보다 먼저)
+        List<String> movieNames = scheduleViewRepository.findDistinctMovieNamesByCinemanm(cleanQuestion);
+        if (!movieNames.isEmpty()) {
+            response.put("type", "cinemamovies");
+            response.put("data", Map.of("cinemamovies", movieNames));
+            logResponse(startTime, response.toString(), "상영관별 영화 검색");
             return response;
         }
 
@@ -152,8 +178,7 @@ public class ChatBotController {
                     "cinemaaddress", cinema.getAddress() != null ? cinema.getAddress() : "주소 정보 없음",
                     "cinemastatus", cinema.getStatus() != null ? cinema.getStatus() : "상태 정보 없음",
                     "cinematel", cinema.getTel() != null ? cinema.getTel() : "전화번호 정보 없음",
-                    "cinemacd", String.valueOf(cinema.getCinemacd())
-            ));
+                    "cinemacd", String.valueOf(cinema.getCinemacd())));
             logResponse(startTime, response.toString(), "극장 기본 검색");
             return response;
         }
@@ -173,7 +198,8 @@ public class ChatBotController {
             }
             if (questionWords.length > 0 && (double) matchCount / questionWords.length >= 0.5) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String releaseDateStr = movie.getReleasedate() != null ? dateFormat.format(movie.getReleasedate()) : "미공개";
+                String releaseDateStr = movie.getReleasedate() != null ? dateFormat.format(movie.getReleasedate())
+                        : "미공개";
                 response.put("type", "movie");
                 response.put("data", Map.of(
                         "name", movie.getMovienm(),
@@ -181,8 +207,7 @@ public class ChatBotController {
                         "movieinfo", movie.getMovieinfo(),
                         "releasedate", releaseDateStr,
                         "runningtime", movie.getRunningtime(),
-                        "moviecd", movie.getMoviecd()
-                ));
+                        "moviecd", movie.getMoviecd()));
                 logResponse(startTime, response.toString(), "영화 단어 매칭");
                 return response;
             }
@@ -221,6 +246,7 @@ public class ChatBotController {
     private void logResponse(long startTime, String response, String searchType) {
         long endTime = System.currentTimeMillis();
         long processingTime = endTime - startTime;
-        System.out.println("Search Type: " + searchType + ", Processing Time: " + processingTime + "ms, Response: " + response);
+        System.out.println(
+                "Search Type: " + searchType + ", Processing Time: " + processingTime + "ms, Response: " + response);
     }
 }

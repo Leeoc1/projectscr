@@ -12,5 +12,8 @@ public interface CinemaRepository extends JpaRepository<Cinema, String> {
     boolean existsByCinemanm(String cinmanm);
 
     Optional<Cinema> findByCinemanm(String cinemanm);
+
     List<Cinema> findByCinemanmContainingIgnoreCase(String cinemanm);
+
+    List<Cinema> findByAddressContainingIgnoreCase(String address);
 }

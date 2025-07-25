@@ -70,7 +70,7 @@ FROM (
      (
          SELECT 0 AS N UNION SELECT 1 UNION SELECT 2
      ) c
-WHERE (a.N + b.N * 10 + c.N * 100 + 1) <= 300;
+WHERE (a.N + b.N * 10 + c.N * 100 + 1) <= 1000;
 
 INSERT IGNORE INTO reservation (
     reservationcd,

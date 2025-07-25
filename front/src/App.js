@@ -67,9 +67,12 @@ function App() {
         <Route path="/admin/inquiries" element={<AdminPage />} />
         <Route path="/admin/events" element={<AdminPage />} />
 
-        <Route path="/reservation/place" element={<ReservationPlacePage />} />
         <Route
-          path="/reservation/movie"
+          path="/reservation/place/:moviecd"
+          element={<ReservationPlacePage />}
+        />
+        <Route
+          path="/reservation/theater/:theatercd"
           element={<ReservationPlaceToMoviePage />}
         />
         <Route path="/reservation/seat" element={<ReservationSeatPage />} />

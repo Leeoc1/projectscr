@@ -4,8 +4,9 @@ import Footer from "../../shared/Footer";
 import ImageSlide from "./components/ImageSlide";
 import MovieChart from "./components/MovieChart";
 import Event from "./components/Event";
-import "./styles/HomePage.css";
 import Notice from "./components/Notice";
+import "./styles/HomePage.css";
+import ChatBot from "./components/ChatBot";
 
 const HomePage = () => {
   return (
@@ -15,6 +16,7 @@ const HomePage = () => {
       <MovieChart />
       <Event />
       <Notice />
+      <ChatBot />
       <Footer />
     </div>
   );

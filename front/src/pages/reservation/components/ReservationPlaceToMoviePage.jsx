@@ -1,24 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Header from "../../../shared/Header";
 import "../style/ReservationPlaceToMovie.css";
 import DateSelector from "../ReservationPage/tocinema/components/DateSelector";
 import MovieSelector from "../ReservationPage/tocinema/components/MovieSelector";
-import ScreenSelector from "../ReservationPage/tocinema/components/ScreenSelector";  
+import ScreenSelector from "../ReservationPage/tocinema/components/ScreenSelector";
 import ProgressBar from "./ProgressBar";
 
 const ReservationPlaceToMoviePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { theatercd } = useParams(); // URL에서 theatercd 매개변수 가져오기
 
   // 임의 데이터
   const selectedRegion = location.state?.selectedRegion || "서울";
   const selectedBranch = location.state?.selectedBranch || "가양";
 
-  // 영화 시간 초기화
+  // 영화 시간 초기화 및 극장 코드 저장
   useEffect(() => {
     sessionStorage.removeItem("selectedMovieTime");
-  }, []);
+
+    // theatercd가 있으면 세션스토리지에 저장
+    if (theatercd) {
+      sessionStorage.setItem("theatercd", theatercd);
+      console.log("극장 코드 저장됨:", theatercd);
+    }
+  }, [theatercd]);
 
   // 날짜 상태
   const today = new Date();
@@ -72,7 +79,8 @@ const ReservationPlaceToMoviePage = () => {
 
       if (cinemacd) sessionStorage.setItem("cinemacd", cinemacd);
       if (cinemanm) sessionStorage.setItem("cinemanm", cinemanm);
-      if (selectedMovieTime) sessionStorage.setItem("selectedMovieTime", selectedMovieTime);
+      if (selectedMovieTime)
+        sessionStorage.setItem("selectedMovieTime", selectedMovieTime);
     };
   }, []);
 
@@ -106,10 +114,7 @@ const ReservationPlaceToMoviePage = () => {
 
       {/* 좌석 선택 버튼 */}
       {isReadyToSeat && (
-        <button
-          className="reservation-seat-btn-fixed"
-          onClick={handleGoToSeat}
-        >
+        <button className="reservation-seat-btn-fixed" onClick={handleGoToSeat}>
           좌석 선택
         </button>
       )}

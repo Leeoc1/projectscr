@@ -19,6 +19,9 @@ public class MovieView {
     @Column(name = "genre", length = 255)
     private String genre; // varchar(255)
 
+    @Column(name = "description", columnDefinition = "text")
+    private String description;
+
     @Column(name = "director", length = 50)
     private String director; // varchar(50)
 

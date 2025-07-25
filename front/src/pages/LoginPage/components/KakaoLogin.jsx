@@ -37,6 +37,11 @@ const KakaoLogin = () => {
     const loginType =
       localStorage.getItem("loginType") || sessionStorage.getItem("loginType");
 
+    // 카카오 로그인이 아닌 경우 early return으로 처리 차단
+    if (loginType !== "kakao") {
+      return;
+    }
+
     // 카카오 로그인인지 확인 - code가 있거나 kakao_login 파라미터가 있으면 카카오 로그인으로 처리
     if (
       code &&

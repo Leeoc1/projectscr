@@ -6,37 +6,42 @@ import com.example.thescreen.service.NaverLoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@RequestMapping("/naver")
 @RestController
 public class NaverLoginController {
 
     private final NaverLoginService naverLoginService;
     private final UserRepository userRepository;
 
-    @PostMapping("/login/naver")
+    @PostMapping("/login")
     public ResponseEntity<?> getNaverLoginUrl() {
         try {
             String loginUrl = naverLoginService.getNaverLogin();
-            Map<String, String> reponse = new HashMap<>();
-            reponse.put("loginUrl", loginUrl);
-            return ResponseEntity.ok(reponse);
+            Map<String, String> response = new HashMap<>();
+            response.put("loginUrl", loginUrl);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("네이버 로그인 URL 생성 실패");
         }
     }
 
-    @PostMapping("/login/naver/callback")
+    @GetMapping("/login/callback")
     public ResponseEntity<?> naverCallback(@RequestParam(required = false) String code,
             @RequestParam(required = false) String state,
             @RequestParam(required = false) String error) throws Exception {
+
+                // 디버깅 로그 추가
+    System.out.println("=== 네이버 콜백 처리 시작 ===");
+    System.out.println("code: " + code);
+    System.out.println("state: " + state);
+    System.out.println("error: " + error);
 
         if ("access_denied".equals(error)) {
             // 동의 거부 시

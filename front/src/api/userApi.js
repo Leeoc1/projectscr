@@ -247,7 +247,7 @@ export const kakaoCallback = async (code) => {
 // 네이버 로그인 URL 가져오기 (외부 네이버 API)
 export const naverLogin = async () => {
   try {
-    const response = await apiRequest("post", "/login/naver");
+    const response = await apiRequest("post", "/naver/login");
     return response;
   } catch (error) {
     console.error("네이버 로그인 URL 가져오기 실패:", error);
@@ -259,8 +259,8 @@ export const naverLogin = async () => {
 export const naverLoginCallback = async (code, state) => {
   try {
     const response = await apiRequest(
-      "post",
-      `/login/naver/callback?code=${code}&state=${state}`
+      "get",
+      `/naver/login/callback?code=${code}&state=${state}`
     );
     return response;
   } catch (error) {

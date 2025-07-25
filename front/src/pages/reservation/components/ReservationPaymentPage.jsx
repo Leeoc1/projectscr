@@ -9,10 +9,8 @@ import "../style/ReservationPaymentPage.css";
 
 const ReservationPaymentPage = () => {
   const navigate = useNavigate();
-  const [activeStep, setActiveStep] = useState(1);
   const [selectedCoupon, setSelectedCoupon] = useState(null);
   const [userCoupons, setUserCoupons] = useState([]);
-  const [gift, setGift] = useState("none");
   const [isLoading, setIsLoading] = useState(true);
 
   // 뒤로가기 방지 및 세션 보안 처리
@@ -115,19 +113,7 @@ const ReservationPaymentPage = () => {
     return selectedCoupon ? selectedCoupon.discount : 0;
   };
 
-  // 할인 금액 계산 (관람권/기프트콘)
-  const getDiscount2 = (gift) => {
-    switch (gift) {
-      case "gift1":
-        return 10000;
-      case "gift2":
-        return 5000; // 팝콘+음료 세트 기프트콘
-      case "gift3":
-        return 20000;
-      default:
-        return 0;
-    }
-  };
+  // 할인 금액 계산 함수들 제거 - 기프트콘 관련 제거
 
   // finalReservationInfo에서 데이터 가져오기
   const reservationInfo = JSON.parse(
@@ -193,16 +179,13 @@ const ReservationPaymentPage = () => {
     }
   };
 
-  // 아코디언 토글 함수
-  const toggleStep = (stepNumber) => {
-    setActiveStep(activeStep === stepNumber ? null : stepNumber);
-  };
+  // 아코디언 토글 함수 제거 - 더 이상 필요 없음
 
   // 최종 결제 금액
   // 음수가 되지 않게 0으로 막아둠 그 밑으로 내려가도
   const finalPrice = Math.max(
     0,
-    price - getCouponDiscount() - getDiscount2(gift)
+    price - getCouponDiscount()
   );
 
   return (
@@ -215,173 +198,57 @@ const ReservationPaymentPage = () => {
           <div className="payment-title">결제</div>
           <div className="payment-container">
             <div className="payment-accordion">
-              <div className="payment-accordion-item">
-                <div
-                  className={`payment-accordion-title ${
-                    activeStep === 1 ? "active" : ""
-                  }`}
-                  onClick={() => toggleStep(1)}
-                >
-                  할인쿠폰 ({userCoupons.length}개 보유)
-                </div>
-                {activeStep === 1 && (
-                  <div className="payment-accordion-content">
-                    <div className="coupon-options">
-                      {isLoading ? (
-                        <div>쿠폰 목록을 불러오는 중...</div>
-                      ) : (
-                        <>
-                          <label>
-                            <input
-                              type="radio"
-                              name="coupon"
-                              value="none"
-                              checked={selectedCoupon === null}
-                              onChange={() => setSelectedCoupon(null)}
-                            />
-                            할인쿠폰 사용 안함
-                          </label>
-                          {userCoupons.length === 0 ? (
-                            <div className="no-coupons">사용 가능한 쿠폰이 없습니다.</div>
-                          ) : (
-                            userCoupons.map((coupon) => (
-                              <label key={coupon.couponnum} className="coupon-item">
-                                <div className="coupon-radio-container">
-                                  <input
-                                    type="radio"
-                                    name="coupon"
-                                    value={coupon.couponnum}
-                                    checked={selectedCoupon?.couponnum === coupon.couponnum}
-                                    onChange={() => setSelectedCoupon(coupon)}
-                                  />
-                                </div>
-                                <div className="coupon-info">
-                                  <div className="coupon-name">{coupon.couponname}</div>
-                                  <div className="coupon-discount-info">
-                                    {coupon.discount.toLocaleString()}원 할인
-                                  </div>
-                                  <div className="coupon-expire">
-                                    만료일: {new Date(coupon.couponexpiredate).toLocaleDateString()}
-                                  </div>
-                                </div>
-                              </label>
-                            ))
-                          )}
-                        </>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className="payment-accordion-item">
-                <div
-                  className={`payment-accordion-title ${
-                    activeStep === 2 ? "active" : ""
-                  }`}
-                  onClick={() => toggleStep(2)}
-                >
-                  관람권/기프트콘
-                </div>
-                {activeStep === 2 && (
-                  <div className="payment-accordion-content">
-                    <div className="gift-options">
+              <div className="coupon-section">
+                <h3>할인쿠폰 ({userCoupons.length}개 보유)</h3>
+                <div className="coupon-options">
+                  {isLoading ? (
+                    <div>쿠폰 목록을 불러오는 중...</div>
+                  ) : (
+                    <>
                       <label>
                         <input
                           type="radio"
-                          name="gift"
+                          name="coupon"
                           value="none"
-                          checked={gift === "none"}
-                          onChange={(e) => setGift(e.target.value)}
-                          defaultChecked
+                          checked={selectedCoupon === null}
+                          onChange={() => setSelectedCoupon(null)}
                         />
-                        관람권/기프트콘 사용 안함
+                        할인쿠폰 사용 안함
                       </label>
-                      <label>
-                        <input
-                          type="radio"
-                          name="gift"
-                          value="gift1"
-                          checked={gift === "gift1"}
-                          onChange={(e) => setGift(e.target.value)}
-                        />
-                        영화관람권 10,000원
-                      </label>
-                      <label>
-                        <input
-                          type="radio"
-                          name="gift"
-                          value="gift2"
-                          checked={gift === "gift2"}
-                          onChange={(e) => setGift(e.target.value)}
-                        />
-                        팝콘+음료 세트 기프트콘
-                      </label>
-                      <label>
-                        <input
-                          type="radio"
-                          name="gift"
-                          value="gift3"
-                          checked={gift === "gift3"}
-                          onChange={(e) => setGift(e.target.value)}
-                        />
-                        영화관람권 20,000원
-                      </label>
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className="payment-accordion-item">
-                <div
-                  className={`payment-accordion-title ${
-                    activeStep === 3 ? "active" : ""
-                  }`}
-                  onClick={() => toggleStep(3)}
-                >
-                  포인트 및 기타결제 수단
+                      {userCoupons.length === 0 ? (
+                        <div className="no-coupons">사용 가능한 쿠폰이 없습니다.</div>
+                      ) : (
+                        userCoupons.map((coupon) => (
+                          <label key={coupon.couponnum} className="coupon-item">
+                            <div className="coupon-radio-container">
+                              <input
+                                type="radio"
+                                name="coupon"
+                                value={coupon.couponnum}
+                                checked={selectedCoupon?.couponnum === coupon.couponnum}
+                                onChange={() => setSelectedCoupon(coupon)}
+                              />
+                            </div>
+                            <div className="coupon-info">
+                              <div className="coupon-left-info">
+                                <div className="coupon-name">{coupon.couponname}</div>
+                                <div className="coupon-discount-info">
+                                  {coupon.discount.toLocaleString()}원 할인
+                                </div>
+                              </div>
+                              <div className="coupon-expire">
+                                만료일: {new Date(coupon.couponexpiredate).toLocaleDateString()}
+                              </div>
+                            </div>
+                          </label>
+                        ))
+                      )}
+                    </>
+                  )}
                 </div>
-                {activeStep === 3 && (
-                  <div className="payment-accordion-content">
-                    <div className="point-options">
-                      <div className="point-input">
-                        <label>포인트 사용:</label>
-                        <input
-                          type="number"
-                          placeholder="사용할 포인트 입력"
-                          min="0"
-                        />
-                        <span>보유 포인트: 5,000P</span>
-                      </div>
-                      <div className="other-payment">
-                        <label>
-                          <input
-                            type="radio"
-                            name="otherPayment"
-                            value="none"
-                            defaultChecked
-                          />
-                          기타결제 수단 사용 안함
-                        </label>
-                        <label>
-                          <input
-                            type="radio"
-                            name="otherPayment"
-                            value="mobile"
-                          />
-                          모바일 결제
-                        </label>
-                        <label>
-                          <input
-                            type="radio"
-                            name="otherPayment"
-                            value="transfer"
-                          />
-                          계좌이체
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
+
+
             </div>
 
             <div className="payment-final-amount-box">
@@ -392,14 +259,8 @@ const ReservationPaymentPage = () => {
                 </div>
                 {selectedCoupon && (
                   <div className="payment-discount-item">
-                    <span>쿠폰 할인 ({selectedCoupon.couponname}): </span>
+                    <span>쿠폰 할인: </span>
                     <span className="discount-amount">-{selectedCoupon.discount.toLocaleString()}원</span>
-                  </div>
-                )}
-                {getDiscount2(gift) > 0 && (
-                  <div className="payment-discount-item">
-                    <span>기프트콘 할인: </span>
-                    <span className="discount-amount">-{getDiscount2(gift).toLocaleString()}원</span>
                   </div>
                 )}
                 <div className="payment-divider"></div>

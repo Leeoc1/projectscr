@@ -9,7 +9,6 @@ import {
   deleteUser,
   logoutUser,
 } from "../../../api/userApi";
-import { cancelReservation } from "../../../api/reservationApi";
 import MyPageReservationDetail from "./MyPageReservationDetail";
 import MyPageHistory from "./MyPageHistory";
 import MyPageReservation from "./MyPageReservation";
@@ -18,7 +17,7 @@ import MyPageInquiry from "./MyPageInquiry";
 
 import MyAccount from "./MyAccount";
 
-import { getUserWishlist, toggleWishlist } from "../../../api/movieApi";
+import { getUserWishlist } from "../../../api/movieApi";
 import { useNavigate } from "react-router-dom";
 
 const MyPage = () => {
@@ -157,7 +156,7 @@ const MyPage = () => {
       <Header />
       <div className="mp-my-page">
         {/* User Profile Section */}
-        <MyAccount loading={loading} userInfo={userInfo} />
+        <MyAccount loading={loading} userInfo={userInfo} currentPage={0} />
 
         {/* Main Content */}
         <div className="mp-main-content">
@@ -169,7 +168,7 @@ const MyPage = () => {
                 className="mp-more-button"
                 onClick={handleOpenHistoryModal}
               >
-                히스토리
+                히스토리 보기
               </button>
             </div>
             {/* 예매 상세 내역 모달 */}

@@ -26,6 +26,7 @@ import { SuccessPage } from "./pages/reservation/Payments/Success";
 import { FailPage } from "./pages/reservation/Payments/Fail";
 import MovieDetail from "./pages/MovieInfoPage/components/MovieDetail";
 import MyPage from "./pages/MyPage/components/MyPage";
+import MyInfo from "./pages/MyPage/components/MyInfo";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -54,6 +55,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/theater/info" element={<TheaterInfoPage />} />
         <Route path="/mypage" element={<MyPage />} />
+        <Route path="/mypage/myinfo" element={<MyInfo />} />
 
         {/* 관리자 페이지 라우팅 */}
         <Route path="/admin" element={<AdminPage />} />

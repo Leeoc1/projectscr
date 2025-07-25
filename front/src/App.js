@@ -226,6 +226,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/theater/info" element={<TheaterInfoPage />} />
+        <Route path="/mypage/myinfo" element={<MyInfo />} />
         <Route
           path="/mypage"
           element={

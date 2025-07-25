@@ -23,3 +23,4 @@ public class RedisUtil {
         redisTemplate.delete(key);
     }
 }
+

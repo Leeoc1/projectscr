@@ -1,7 +1,20 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../MyPage.css";
 
-const MyAccount = ({ loading, userInfo }) => {
+const MyAccount = ({ loading, userInfo, currentPage }) => {
+  const navigate = useNavigate();
+
+  // 개인정보수정 페이지로 넘기기
+  const handleGoToMyInfo = () => {
+    navigate("/mypage/myinfo", { state: { userInfo } });
+  };
+
+  // 마이페이지로 돌아가기
+  const handleGoToMyPage = () => {
+    navigate("/mypage");
+  };
+
   return (
     <section className="mp-profile-section">
       <div className="mp-profile-container">
@@ -22,7 +35,16 @@ const MyAccount = ({ loading, userInfo }) => {
                 ? `"${userInfo.username}"님`
                 : '"사용자"님'}
             </p>
-            <p className="mp-profile-link">개인정보설정 &gt;</p>
+            {currentPage === 0 ? (
+              <p className="mp-profile-link" onClick={handleGoToMyInfo}>
+                개인정보설정 &gt;
+              </p>
+            ) : (
+              <p className="mp-profile-link" onClick={handleGoToMyPage}>
+                마이페이지 &gt;
+              </p>
+            )}
+
             <p className="mp-profile-link">쿠폰함 &gt;</p>
           </div>
         </div>

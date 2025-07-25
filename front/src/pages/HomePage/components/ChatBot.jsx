@@ -205,7 +205,7 @@ const ChatBot = () => {
         />
       </div>
       <div className={`chatbot-container ${isChatbotOpen ? "open" : ""}`}>
-        <div className="chatbot-header">The Movie 챗봇</div>
+        <div className="chatbot-header">The Screen 챗봇</div>
         <div className="chatbot-messages">
           {messages.map(renderMessage)}
           <div ref={messagesEndRef} />

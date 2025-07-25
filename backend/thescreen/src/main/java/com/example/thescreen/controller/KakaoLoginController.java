@@ -1,7 +1,11 @@
 package com.example.thescreen.controller;
 
+import com.example.thescreen.entity.ReservationView;
 import com.example.thescreen.entity.User;
+import com.example.thescreen.repository.ReservationViewRepository;
 import com.example.thescreen.repository.UserRepository;
+import com.example.thescreen.service.KaKaoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
@@ -10,13 +14,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/login")
 public class KakaoLoginController {
+    @Autowired
+    private KaKaoService kaKaoService;
 
     @Value("${kakao.client.id}")
     private String clientId;
@@ -28,17 +37,22 @@ public class KakaoLoginController {
     private String redirectUri;
 
     private final UserRepository userRepository;
+    private final ReservationViewRepository reservationViewRepository;
+    private final Map<String, String> userAccessTokens = new HashMap<>();
 
-    public KakaoLoginController(UserRepository userRepository) {
+    public KakaoLoginController(UserRepository userRepository, ReservationViewRepository reservationViewRepository) {
         this.userRepository = userRepository;
+        this.reservationViewRepository = reservationViewRepository;
     }
 
     @PostMapping("/kakao")
-    public Map<String, String> kakaoLogin(@RequestParam(value = "prompt", required = false) String prompt) {
+    public Map<String, String> kakaoLogin(@RequestParam(value = "prompt", required = false) String prompt,
+            @RequestParam(value = "scope", required = false) String scope) {
+        String scopeParam = (scope != null) ? scope : "profile_nickname,talk_message";
         String authorizationUrl = "https://kauth.kakao.com/oauth/authorize?response_type=code" +
                 "&client_id=" + clientId +
                 "&redirect_uri=" + redirectUri +
-                "&scope=profile_nickname";
+                "&scope=" + scopeParam;
         if (prompt != null) {
             authorizationUrl += "&prompt=" + prompt;
         }
@@ -74,22 +88,29 @@ public class KakaoLoginController {
             userInfoHeaders.set("Authorization", "Bearer " + accessToken);
             HttpEntity<String> userInfoRequest = new HttpEntity<>(userInfoHeaders);
 
-            ResponseEntity<Map> userInfoResponse = restTemplate.exchange(userInfoUrl, HttpMethod.GET, userInfoRequest, Map.class);
+            ResponseEntity<Map> userInfoResponse = restTemplate.exchange(userInfoUrl, HttpMethod.GET, userInfoRequest,
+                    Map.class);
             Map<String, Object> userInfo = userInfoResponse.getBody();
 
             // 3. 사용자 정보 처리
             String userId = String.valueOf(userInfo.get("id"));
             String nickname = (String) ((Map<?, ?>) userInfo.get("properties")).get("nickname");
+            // 액세스 토큰 저장
+
+            userAccessTokens.put(userId, accessToken);
 
             // 4. 데이터베이스 확인
             if (userRepository.existsByUserid(userId)) {
                 // 기존 사용자: 로그인 처리
                 HttpHeaders headers = new HttpHeaders();
-                headers.add("Location", "http://localhost:3000/login?kakao_login=success&userid=" + userId + "&username=" + nickname);
+                String encodedNickname = URLEncoder.encode(nickname, StandardCharsets.UTF_8);
+                String encodedAccessToken = URLEncoder.encode(accessToken, StandardCharsets.UTF_8);
+                headers.add("Location", "http://localhost:3000/login?kakao_login=success&userid=" + userId
+                        + "&username=" + encodedNickname + "&access_token=" + encodedAccessToken);
                 return new ResponseEntity<>(headers, HttpStatus.FOUND);
             } else {
                 // 신규 사용자: 회원가입 처리
-                return registerUser(userId, nickname);
+                return registerUser(userId, nickname, accessToken);
             }
         } catch (HttpClientErrorException e) {
             Map<String, Object> errorResponse = new HashMap<>();
@@ -98,7 +119,7 @@ public class KakaoLoginController {
         }
     }
 
-    private ResponseEntity<?> registerUser(String userId, String nickname) {
+    private ResponseEntity<?> registerUser(String userId, String nickname, String accessToken) {
         // 신규 사용자 등록
         User newUser = new User();
         newUser.setUserid(userId);
@@ -111,9 +132,60 @@ public class KakaoLoginController {
         newUser.setReg_date(LocalDate.now());
         userRepository.save(newUser);
 
+        // 신규 사용자의 액세스 토큰도 저장
+        userAccessTokens.put(userId, accessToken);
+        System.out.println("신규 사용자 액세스 토큰 저장: " + userId);
+
+        String encodingName = URLEncoder.encode(nickname, StandardCharsets.UTF_8);
+        String encodedAccessToken = URLEncoder.encode(accessToken, StandardCharsets.UTF_8);
         // 홈페이지로 리다이렉트 (사용자 정보 포함)
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "http://localhost:3000/login?kakao_login=success&userid=" + userId + "&username=" + nickname);
+        headers.add("Location",
+                "http://localhost:3000/login?kakao_login=success&userid=" + userId + "&username=" + encodingName
+                        + "&access_token=" + encodedAccessToken);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    }
+
+    // 카카오 메시지 템플릿
+    @PostMapping("api/send-reservation-message")
+    public ResponseEntity<String> sendReservationMessage(@RequestBody Map<String, Object> request) {
+        System.out.println("=== 카카오 메시지 전송 요청 ===");
+        System.out.println("Request: " + request);
+
+        try {
+            // 요청 데이터 검증
+            if (request == null || request.get("reservationId") == null) {
+                System.out.println("ERROR: reservationId가 없습니다.");
+                return ResponseEntity.badRequest().body("reservationId가 필요합니다.");
+            }
+
+            String reservationId = request.get("reservationId").toString();
+            System.out.println("예약 ID: " + reservationId);
+
+            // 액세스 토큰을 요청에서 가져오기
+            String accessToken = (String) request.get("accessToken");
+            if (accessToken == null || accessToken.trim().isEmpty()) {
+                System.out.println("ERROR: 액세스 토큰이 요청에 포함되지 않았습니다.");
+                return ResponseEntity.badRequest().body("카카오 로그인이 필요합니다. 액세스 토큰이 없습니다.");
+            }
+
+            // ReservationView 조회
+            Optional<ReservationView> reservationOpt = reservationViewRepository.findById(reservationId);
+            if (!reservationOpt.isPresent()) {
+                System.out.println("ERROR: 예약 정보를 찾을 수 없습니다. ID: " + reservationId);
+                return ResponseEntity.badRequest().body("예약 정보를 찾을 수 없습니다.");
+            }
+
+            ReservationView reservationView = reservationOpt.get();
+            System.out.println("액세스 토큰 찾음: " + accessToken.substring(0, 10) + "...");
+
+            String result = kaKaoService.sendKakaoMessage(reservationView, accessToken);
+            System.out.println("메시지 전송 결과: " + result);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            System.out.println("ERROR: 메시지 전송 실패");
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("메시지 전송 실패: " + e.getMessage());
+        }
     }
 }

@@ -14,9 +14,7 @@ import MyPageHistory from "./MyPageHistory";
 import MyPageReservation from "./MyPageReservation";
 import MyPageLike from "./MyPageLike";
 import MyPageInquiry from "./MyPageInquiry";
-
 import MyAccount from "./MyAccount";
-
 import { getUserWishlist } from "../../../api/movieApi";
 import { useNavigate } from "react-router-dom";
 
@@ -147,7 +145,6 @@ const MyPage = () => {
       }
     }
   };
-
   // 히스토리 모달 열기/닫기
   const handleOpenHistoryModal = () => setShowHistoryModal(true);
   const handleCloseHistoryModal = () => setShowHistoryModal(false);

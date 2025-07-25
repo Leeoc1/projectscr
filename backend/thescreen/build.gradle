@@ -35,6 +35,14 @@ dependencies {
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 	// csv
 	implementation 'com.opencsv:opencsv:5.9'
+	// coolsms 휴대폰 인증 메세지
+	implementation 'net.nurigo:sdk:4.3.2'
+	// Redis 의존성
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// 보안
+	// 스프링 시큐리티
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {

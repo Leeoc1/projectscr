@@ -35,17 +35,26 @@ export const getUserReservations = async (userid) => {
 
 // 개인정보수정 시 비밀번호 확인 (users 테이블)
 export const checkPassword = async (userid, userpw) => {
-  return await apiRequest("post", "/users/pwcheck", { userid: userid, userpw: userpw});
+  return await apiRequest("post", "/users/pwcheck", {
+    userid: userid,
+    userpw: userpw,
+  });
 };
 
 // 비밀번호 변경 (users 테이블)
 export const updatePassword = async (userid, userpw) => {
-  return await apiRequest("put", `/users/${userid}/update/password`, { userid: userid, userpw: userpw });
+  return await apiRequest("put", `/users/${userid}/update/password`, {
+    userid: userid,
+    userpw: userpw,
+  });
 };
 
 // 개인정보 수정 (users 테이블)
 export const updateUserInfo = async (userid, userData) => {
-  return await apiRequest("put", `/users/${userid}/update/userinfo`, { userid: userid, ...userData });
+  return await apiRequest("put", `/users/${userid}/update/userinfo`, {
+    userid: userid,
+    ...userData,
+  });
 };
 
 // 회원탈퇴 (users 테이블)
@@ -293,6 +302,18 @@ export const fetchAllReviews = () => {
     null,
     {},
     "리뷰 목록 조회 실패:",
+    []
+  );
+};
+
+export const kakaoTemplate = (reservationId) => {
+  const accessToken = localStorage.getItem("kakao_access_token");
+  return apiRequestWithErrorHandling(
+    "post",
+    "login/api/send-reservation-message",
+    { reservationId, accessToken },
+    {},
+    "카카오 템플릿 조회 실패:",
     []
   );
 };

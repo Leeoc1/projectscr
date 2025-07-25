@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../../shared/Header";
 import Footer from "../../../shared/Footer";
@@ -11,6 +11,40 @@ const ReservationPaymentPage = () => {
   const [activeStep, setActiveStep] = useState(1);
   const [coupon, setCoupon] = useState("none");
   const [gift, setGift] = useState("none");
+
+  // 뒤로가기 방지 및 세션 보안 처리
+  useEffect(() => {
+    // 결제 페이지에서 뒤로가기 방지
+    const handlePopState = (event) => {
+      event.preventDefault();
+      
+      if (window.confirm("결제를 취소하고 영화 선택 페이지로 이동하시겠습니까? 현재까지의 선택 정보가 초기화됩니다.")) {
+        // 사용자가 확인했을 때만 세션 정리하고 이동
+        sessionStorage.clear();
+        navigate("/movie", { replace: true });
+      } else {
+        // 취소했을 때는 현재 페이지에 그대로 있도록 히스토리 조작
+        window.history.pushState(null, "", window.location.href);
+      }
+    };
+
+    // 히스토리 조작으로 뒤로가기 차단
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", handlePopState);
+
+    // 페이지 새로고침 방지
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = "결제 중에 페이지를 새로고침하면 결제 정보가 사라집니다.";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [navigate]);
 
   // 할인 금액 계산 (할인쿠폰)
   const getDiscount1 = (coupon) => {

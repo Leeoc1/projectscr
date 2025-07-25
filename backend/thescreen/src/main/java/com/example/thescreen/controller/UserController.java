@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import java.util.Optional;
 
 
 @RestController
@@ -24,6 +26,9 @@ public class UserController {
 
     @Autowired
     private ReservationViewRepository reservationViewRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/list")
     public List<User> getUsersApi() {
@@ -48,7 +53,8 @@ public class UserController {
         try {
             User user = new User();
             user.setUserid((String) userData.get("userid"));
-            user.setUserpw((String) userData.get("userpw"));
+            // 비밀번호 해시 적용
+            user.setUserpw(passwordEncoder.encode((String) userData.get("userpw")));
             user.setUsername((String) userData.get("username"));
             user.setEmail((String) userData.get("email"));
             user.setPhone((String) userData.get("phone"));
@@ -135,6 +141,95 @@ public class UserController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "회원탈퇴 중 오류가 발생했습니다."));
+        }
+    }
+
+    @PostMapping("/pwcheck")
+    public ResponseEntity<Map<String, Object>> checkUserpw(@RequestBody Map<String, String> request) {
+        try {
+            String userid = request.get("userid");
+            String userpw = request.get("userpw");
+
+            // 사용자 조회
+            User user = userRepository.findById(userid).orElse(null);
+
+            if (user != null) {
+                // 사용자가 존재하는 경우, 비밀번호 비교
+                if (user.getUserpw().equals(userpw)) {
+                    // 비밀번호가 일치하는 경우
+                    return ResponseEntity.ok(Map.of("success", true, "message", "비밀번호가 일치합니다."));
+                } else  {
+                    // 비밀번호가 일치하지 않는 경우
+                    return ResponseEntity.ok(Map.of(
+                        "success", false,
+                        "message", "비밀번호가 일치하지 않습니다."
+                    ));
+                } 
+            } else {
+                // 사용자가 존재하지 않는 경우
+                return ResponseEntity.ok(Map.of("success", false, "message", "존재하지 않는 사용자입니다."
+                ));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "비밀번호 확인 중 오류가 발생했습니다."));    
+        }
+    }
+
+    @PutMapping ("/{userid}/update/password")
+    public ResponseEntity<Map<String, Object>> updatePassword(@RequestBody Map<String, String> request) {
+        try {
+            String userid = request.get("userid");
+            String userpw = request.get("userpw");
+
+            // 사용자 조회
+            User user = userRepository.findById(userid).orElse(null);
+
+            if (user != null) {
+                user.setUserpw(userpw);
+                userRepository.save(user); // 데이터베이스에 저장
+                return ResponseEntity.ok(Map.of("success", true, "message", "비밀번호가 변경되었습니다."));
+            } else {
+                // 사용자가 존재하지 않는 경우
+                return ResponseEntity.ok(Map.of("success", false, "message", "존재하지 않는 사용자입니다."
+                ));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "비밀번호 변경 중 오류가 발생했습니다."));
+        }
+    }
+
+    @PutMapping ("/{userid}/update/userinfo")
+    public ResponseEntity<Map<String, Object>> updateUserinfo(@RequestBody Map<String, String> request) {
+        try {
+            String userid = request.get("userid");
+
+            // 사용자 조회
+            User user = userRepository.findById(userid).orElse(null);
+
+            if (user != null) {
+                String username = request.get("username");
+                String email = request.get("email");
+                String phone = request.get("phone");
+                
+                // null 체크 후 설정
+                if (username != null && email != null && phone != null) {
+                    user.setUsername(username);
+                    user.setEmail(email);
+                    user.setPhone(phone);
+
+                    userRepository.save(user); // 데이터베이스에 저장
+                    return ResponseEntity.ok(Map.of("success", true, "message", "사용자 정보가 업데이트되었습니다."));
+                } else {
+                    return ResponseEntity.ok(Map.of("success", false, "message", "모든 필드를 입력해야 합니다."));
+                }
+            } else {
+                return ResponseEntity.ok(Map.of("success", false, "message", "존재하지 않는 사용자입니다."));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "사용자 정보 업데이트 중 오류가 발생했습니다."));
         }
     }
 }

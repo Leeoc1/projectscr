@@ -12,7 +12,11 @@ const KakaoLogin = () => {
       localStorage.setItem("loginType", "kakao");
       sessionStorage.setItem("loginType", "kakao");
 
-      const response = await kakaoLogin({ prompt: "login" });
+      // talk_message 권한을 포함한 스코프 요청
+      const response = await kakaoLogin({
+        prompt: "login",
+        scope: "profile_nickname,talk_message",
+      });
 
       if (response && response.redirectUrl) {
         window.location.href = response.redirectUrl; // 백엔드에서 받은 URL로 리다이렉트
@@ -89,6 +93,7 @@ const KakaoLogin = () => {
       // 백엔드에서 처리 완료 후 리다이렉트된 경우
       const userid = urlParams.get("userid");
       const username = urlParams.get("username");
+      const accessToken = urlParams.get("access_token");
 
       if (userid) {
         // 로컬스토리지에 로그인 상태 저장
@@ -96,7 +101,14 @@ const KakaoLogin = () => {
         localStorage.setItem("userid", userid);
 
         if (username) {
-          localStorage.setItem("username", username);
+          const decodedUsername = decodeURIComponent(username);
+          localStorage.setItem("username", decodedUsername);
+        }
+
+        if (accessToken) {
+          const decodedAccessToken = decodeURIComponent(accessToken);
+          localStorage.setItem("kakao_access_token", decodedAccessToken);
+          console.log("카카오 액세스 토큰 저장됨");
         }
 
         // URL 파라미터 제거 후 홈으로 이동

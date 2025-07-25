@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import "../styles/Register.css";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   validateUsernameLength,
   validateUsernameFormat,
@@ -8,11 +7,13 @@ import {
   validatePasswordStrength,
 } from "./RegisterValidation";
 import { isAvailableUserId, registerUser } from "../../../api/userApi";
-import logoImg from "../../../images/logo_2.png";
+import SmsAuthForm from "./SmsAuthForm";
 import RegisterBirth from "./RegisterBirth";
+import logoImg from "../../../images/logo_2.png";
+import "../styles/Register.css";
 
 const Register = () => {
-  const navigate = useNavigate(); // useNavigate 훅 사용
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -24,12 +25,6 @@ const Register = () => {
     verificationCode: "",
   });
 
-  // setBirthDate를 useCallback으로 고정
-  const setBirthDate = React.useCallback(
-    (val) => setFormData((f) => ({ ...f, birthDate: val })),
-    []
-  );
-
   const [validationState, setValidationState] = useState({
     usernameChecked: false,
     usernameAvailable: false,
@@ -39,13 +34,17 @@ const Register = () => {
     verificationSent: false,
   });
 
+  const setBirthDate = React.useCallback(
+    (val) => setFormData((f) => ({ ...f, birthDate: val })),
+    []
+  );
+
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
 
-    // 아이디 입력 시 중복 체크 상태 초기화
     if (e.target.name === "username") {
       setValidationState({
         ...validationState,
@@ -55,47 +54,30 @@ const Register = () => {
     }
   };
 
-  // 아이디 필드에서 포커스 벗어날 때 유효성 검사
   const validateUsernameBlur = () => {
     if (formData.username) {
       const lengthValid = validateUsernameLength(formData.username);
       const formatValid = validateUsernameFormat(formData.username);
 
-      if (!lengthValid || !formatValid) {
-        setValidationState({
-          ...validationState,
-          usernameError: true,
-        });
-      } else {
-        setValidationState({
-          ...validationState,
-          usernameError: false,
-        });
-      }
+      setValidationState({
+        ...validationState,
+        usernameError: !lengthValid || !formatValid,
+      });
     }
   };
 
-  // 비밀번호 필드에서 포커스 벗어날 때 유효성 검사
   const validatePasswordBlur = () => {
     if (formData.password) {
       const lengthValid = validatePasswordLength(formData.password);
       const strengthValid = validatePasswordStrength(formData.password);
 
-      if (!lengthValid || !strengthValid) {
-        setValidationState({
-          ...validationState,
-          passwordError: true,
-        });
-      } else {
-        setValidationState({
-          ...validationState,
-          passwordError: false,
-        });
-      }
+      setValidationState({
+        ...validationState,
+        passwordError: !lengthValid || !strengthValid,
+      });
     }
   };
 
-  // 아이디 중복 체크 버튼 클릭 시
   const handleUsernameCheck = async () => {
     if (!formData.username) {
       alert("아이디를 입력해주세요.");
@@ -109,73 +91,25 @@ const Register = () => {
 
     try {
       const response = await isAvailableUserId(formData.username);
-
-      if (response.available) {
-        // 사용가능한 아이디
-        setValidationState({
-          ...validationState,
-          usernameChecked: true,
-          usernameAvailable: true,
-        });
-        alert("사용 가능한 아이디입니다.");
-      } else {
-        // 사용불가능한 아이디
-        setValidationState({
-          ...validationState,
-          usernameChecked: true,
-          usernameAvailable: false,
-        });
-        alert("이미 사용 중인 아이디입니다.");
-      }
-    } catch (error) {
-      console.error("아이디 중복 체크 오류:", error);
-    }
-  };
-
-  const handlePhoneVerification = () => {
-    if (!formData.phone) {
-      alert("전화번호를 입력해주세요.");
-      return;
-    }
-
-    // 전화번호 인증 코드 발송 로직 (백엔드 구현 없이 버튼만)
-    console.log("인증번호 발송:", formData.phone);
-
-    setValidationState({
-      ...validationState,
-      verificationSent: true,
-    });
-
-    alert("인증번호가 발송되었습니다.");
-  };
-
-  const handleVerificationCodeCheck = () => {
-    if (!formData.verificationCode) {
-      alert("인증번호를 입력해주세요.");
-      return;
-    }
-
-    // 인증번호 확인 로직 (백엔드 구현 없이 버튼만)
-    console.log("인증번호 확인:", formData.verificationCode);
-
-    // 시뮬레이션: 1234가 맞는 코드라고 가정
-    const isValid = formData.verificationCode === "1234";
-
-    if (isValid) {
       setValidationState({
         ...validationState,
-        phoneVerified: true,
+        usernameChecked: true,
+        usernameAvailable: response.available,
       });
-      alert("전화번호 인증이 완료되었습니다.");
-    } else {
-      alert("인증번호가 일치하지 않습니다.");
+      alert(
+        response.available
+          ? "사용 가능한 아이디입니다."
+          : "이미 사용 중인 아이디입니다."
+      );
+    } catch (error) {
+      console.error("아이디 중복 체크 오류:", error);
+      alert("아이디 중복 체크에 실패했습니다.");
     }
   };
 
   const handleSignup = async (e) => {
     e.preventDefault();
 
-    // 유효성 검사
     if (!validationState.usernameAvailable) {
       alert("아이디 중복 확인을 해주세요.");
       return;
@@ -196,7 +130,6 @@ const Register = () => {
       return;
     }
 
-    // 회원가입 요청
     try {
       const userData = {
         userid: formData.username,
@@ -310,12 +243,12 @@ const Register = () => {
                 placeholder="비밀번호를 입력하세요"
                 required
               />
+              {validationState.passwordError && (
+                <p className="rg-validation-message rg-error">
+                  비밀번호는 8~20자 영문, 숫자, 특수문자만 가능합니다.
+                </p>
+              )}
             </div>
-            {validationState.passwordError && (
-              <p className="rg-validation-message rg-error">
-                비밀번호는 8~20자 영문, 숫자, 특수문자만 가능합니다.
-              </p>
-            )}
 
             <div className="rg-form-group">
               <input
@@ -342,51 +275,12 @@ const Register = () => {
               />
             </div>
 
-            <div className="rg-form-group">
-              <label htmlFor="phone">전화번호</label>
-              <div className="rg-input-with-button">
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  placeholder="전화번호를 입력하세요"
-                  required
-                />
-                <button
-                  type="button"
-                  className="rg-verify-btn"
-                  onClick={handlePhoneVerification}
-                  disabled={validationState.phoneVerified}
-                >
-                  {validationState.phoneVerified ? "인증완료" : "인증하기"}
-                </button>
-              </div>
-            </div>
-
-            {validationState.verificationSent &&
-              !validationState.phoneVerified && (
-                <div className="rg-form-group">
-                  <div className="rg-input-with-button">
-                    <input
-                      type="text"
-                      id="verificationCode"
-                      name="verificationCode"
-                      value={formData.verificationCode}
-                      onChange={handleInputChange}
-                      placeholder="인증번호를 입력하세요 (1234)"
-                    />
-                    <button
-                      type="button"
-                      className="rg-check-btn"
-                      onClick={handleVerificationCodeCheck}
-                    >
-                      확인
-                    </button>
-                  </div>
-                </div>
-              )}
+            <SmsAuthForm
+              formData={formData}
+              setFormData={setFormData}
+              validationState={validationState}
+              setValidationState={setValidationState}
+            />
 
             <button type="submit" className="rg-signup-btn">
               회원가입

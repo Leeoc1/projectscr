@@ -28,6 +28,30 @@ const ReservationSeatPage = () => {
   const totalGuests = guestCount.adult + guestCount.child + guestCount.senior;
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [reservedSeats, setReservedSeats] = useState([]);
+
+  // 좌석 선택 페이지에서 뒤로가기 시 세션 정리
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (window.confirm("좌석 선택을 취소하고 이전 단계로 돌아가시겠습니까? 선택한 좌석 정보가 사라집니다.")) {
+        // 좌석 관련 정보만 정리
+        sessionStorage.removeItem("selectedSeats");
+        sessionStorage.removeItem("guestCount");
+        sessionStorage.removeItem("totalGuests");
+        sessionStorage.removeItem("finalReservationInfo");
+        // 이전 페이지로 정상 이동 허용
+        window.history.back();
+      } else {
+        // 취소했을 때는 현재 페이지 유지
+        window.history.pushState(null, "", window.location.href);
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
   const [manySelectedSeats, setManySelectedSeats] = useState([]);
 
   useEffect(() => {

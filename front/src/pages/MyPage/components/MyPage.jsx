@@ -9,15 +9,12 @@ import {
   deleteUser,
   logoutUser,
 } from "../../../api/userApi";
-import { cancelReservation } from "../../../api/reservationApi";
 import MyPageReservationDetail from "./MyPageReservationDetail";
 import MyPageHistory from "./MyPageHistory";
 import MyPageReservation from "./MyPageReservation";
 import MyPageLike from "./MyPageLike";
 import MyPageInquiry from "./MyPageInquiry";
-
 import MyAccount from "./MyAccount";
-
 import { getUserWishlist } from "../../../api/movieApi";
 import { useNavigate } from "react-router-dom";
 

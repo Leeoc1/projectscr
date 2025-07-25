@@ -5,6 +5,7 @@ import Footer from "../../../shared/Footer";
 import { getReservation } from "../../../api/reservationApi";
 import { getCurrentMovies } from "../../../api/movieApi";
 import "../style/ReservationSuccessPage.css";
+import KaKapTemplate from "../KaKapTemplate";
 
 const ReservationSuccessPage = () => {
   const navigate = useNavigate();
@@ -445,6 +446,7 @@ const ReservationSuccessPage = () => {
           </button>
         </div>
       </div>
+      <KaKapTemplate reservationId={reservationData.reservationcd} />
       <Footer />
     </div>
   );

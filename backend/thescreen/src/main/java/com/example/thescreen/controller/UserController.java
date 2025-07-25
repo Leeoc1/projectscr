@@ -4,6 +4,7 @@ import com.example.thescreen.entity.ReservationView;
 import com.example.thescreen.entity.User;
 import com.example.thescreen.repository.UserRepository;
 import com.example.thescreen.repository.ReservationViewRepository;
+import com.example.thescreen.service.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,9 @@ public class UserController {
 
     @Autowired
     private ReservationViewRepository reservationViewRepository;
+
+    @Autowired
+    private CouponService couponService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -81,8 +85,14 @@ public class UserController {
                     return userRepository.save(existingUser);
                 }
             }
+            
             // 새 사용자 등록
-            return userRepository.save(user);
+            User savedUser = userRepository.save(user);
+            
+            // 회원가입 성공 시 환영 쿠폰 발급
+            couponService.issueWelcomeCoupon(savedUser.getUserid());
+            
+            return savedUser;
         } catch (Exception e) {
             System.err.println("사용자 등록 오류: " + e.getMessage());
             e.printStackTrace();

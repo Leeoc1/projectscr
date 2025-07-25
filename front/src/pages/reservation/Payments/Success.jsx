@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { saveReservation, savePayment } from "../../../api/reservationApi";
+import { useCoupon as applyCoupon } from "../../../api/couponApi";
 
 const SuccessPage = () => {
   const navigate = useNavigate();
@@ -110,6 +111,31 @@ const SuccessPage = () => {
           );
           const paymentcd = sessionStorage.getItem("paymentcd");
           const userid = localStorage.getItem("userid");
+
+          // 쿠폰 사용 처리는 이미 결제 시점에서 완료되었으므로 여기서는 하지 않음
+          if (
+            reservationInfo.usedCoupon &&
+            !reservationInfo.couponAlreadyUsed
+          ) {
+            console.log(
+              "쿠폰이 아직 사용되지 않았습니다. 사용 처리를 진행합니다."
+            );
+            try {
+              await applyCoupon(userid, reservationInfo.usedCoupon.couponnum);
+              console.log(
+                "쿠폰 사용 처리 완료:",
+                reservationInfo.usedCoupon.couponname
+              );
+            } catch (couponError) {
+              console.error("쿠폰 사용 처리 중 오류:", couponError);
+              // 쿠폰 사용 실패해도 예약은 계속 진행
+            }
+          } else if (reservationInfo.usedCoupon) {
+            console.log(
+              "쿠폰은 이미 사용 처리되었습니다:",
+              reservationInfo.usedCoupon.couponname
+            );
+          }
 
           await saveReservation({
             schedulecd: reservationInfo.schedulecd,

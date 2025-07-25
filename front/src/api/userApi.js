@@ -52,17 +52,20 @@ export const checkPassword = async (userid, userpw) => {
 
 // 비밀번호 변경 (users 테이블)
 export const updatePassword = async (userid, userpw) => {
-  return await apiRequest("put", `/users/${userid}/update/password`, {
-    userid: userid,
-    userpw: userpw,
+  return await apiRequest(`/users/${userid}/update/password`, {
+    method: "PUT",
+    body: {
+      userid: userid,
+      userpw: userpw,
+    },
   });
 };
 
 // 개인정보 수정 (users 테이블)
 export const updateUserInfo = async (userid, userData) => {
-  return await apiRequest("put", `/users/${userid}/update/userinfo`, {
-    userid: userid,
-    ...userData,
+  return await apiRequest(`/users/${userid}/update/userinfo`, {
+    method: "PUT",
+    body: userData,
   });
 };
 

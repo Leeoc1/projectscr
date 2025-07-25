@@ -1,0 +1,77 @@
+.isc-section {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.6) 0%,
+    #000000 10%,
+    #000000 90%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  min-height: 400px;
+  margin-top: 49px; /* 네비게이션 바와의 간격을 위한 여백 */
+}
+
+.isc-overlay {
+  display: none; /* 완전히 비활성화 */
+}
+
+.isc-container {
+  max-width: 980px;
+  width: 100%; /* 전체 너비 사용 */
+  height: 100%; /* section의 전체 높이 사용 */
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 0; /* 바깥 패딩 제거 */
+}
+
+.isc-nav-arrow {
+  display: none; /* 완전히 비활성화 */
+}
+
+.isc-nav-arrow:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.isc-nav-prev {
+  left: 50rem;
+}
+
+.isc-nav-next {
+  right: 50rem;
+}
+
+.isc-dots {
+  display: none; /* 완전히 비활성화 */
+}
+
+.isc-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.isc-dot.isc-active {
+  background-color: #fbbf24;
+  transform: scale(1.2);
+}
+
+.isc-background {
+  display: none; /* 완전히 비활성화 */
+}
+
+@media (min-width: 768px) {
+  .isc-section {
+    height: 31.25rem;
+  }
+
+  .isc-title {
+    font-size: 3.75rem;
+  }
+
+  .isc-description {
+    font-size: 1.25rem;
+  }
+}

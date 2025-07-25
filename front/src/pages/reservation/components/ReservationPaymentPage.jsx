@@ -1,0 +1,330 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "../../../shared/Header";
+import Footer from "../../../shared/Footer";
+import { saveReservation } from "../../../api/reservationApi";
+import ProgressBar from "./ProgressBar";
+import "../style/ReservationPaymentPage.css";
+
+const ReservationPaymentPage = () => {
+  const navigate = useNavigate();
+  const [activeStep, setActiveStep] = useState(1);
+  const [coupon, setCoupon] = useState("none");
+  const [gift, setGift] = useState("none");
+
+  // 뒤로가기 방지 및 세션 보안 처리
+  useEffect(() => {
+    // 결제 페이지에서 뒤로가기 방지
+    const handlePopState = (event) => {
+      event.preventDefault();
+      
+      if (window.confirm("결제를 취소하고 영화 선택 페이지로 이동하시겠습니까? 현재까지의 선택 정보가 초기화됩니다.")) {
+        // 사용자가 확인했을 때만 세션 정리하고 이동
+        sessionStorage.clear();
+        navigate("/movie", { replace: true });
+      } else {
+        // 취소했을 때는 현재 페이지에 그대로 있도록 히스토리 조작
+        window.history.pushState(null, "", window.location.href);
+      }
+    };
+
+    // 히스토리 조작으로 뒤로가기 차단
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", handlePopState);
+
+    // 페이지 새로고침 방지
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = "결제 중에 페이지를 새로고침하면 결제 정보가 사라집니다.";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [navigate]);
+
+  // 할인 금액 계산 (할인쿠폰)
+  const getDiscount1 = (coupon) => {
+    switch (coupon) {
+      case "welcome":
+        return 1000;
+      case "student":
+        return 2000;
+      case "senior":
+        return 3000;
+      default:
+        return 0;
+    }
+  };
+
+  // 할인 금액 계산 (관람권/기프트콘)
+  const getDiscount2 = (gift) => {
+    switch (gift) {
+      case "gift1":
+        return 10000;
+      case "gift2":
+        return 5000; // 팝콘+음료 세트 기프트콘
+      case "gift3":
+        return 20000;
+      default:
+        return 0;
+    }
+  };
+
+  // finalReservationInfo에서 데이터 가져오기
+  const reservationInfo = JSON.parse(
+    sessionStorage.getItem("finalReservationInfo") || "{}"
+  );
+
+  // 필수 데이터가 없으면 좌석 선택 페이지로 이동
+  if (!reservationInfo.selectedSeats || !reservationInfo.guestCount) {
+    navigate("/reservation/seat");
+    return null;
+  }
+
+  // 관람 인원 합계
+  const totalGuests = reservationInfo.totalGuests || 0;
+
+  // 예매 정보 추출
+  const movieTitle = reservationInfo.movienm || "영화 미선택";
+  const theater = reservationInfo.cinemanm || "극장 미선택";
+  const date = reservationInfo.starttime
+    ? new Date(reservationInfo.starttime).toLocaleDateString()
+    : "날짜 미선택";
+  const time = reservationInfo.starttime
+    ? reservationInfo.starttime.substring(11, 16)
+    : "시간 미선택";
+  const seats = reservationInfo.selectedSeats
+    ? reservationInfo.selectedSeats.join(", ")
+    : "좌석 미선택";
+  const price = reservationInfo.totalPrice ? reservationInfo.totalPrice : "0";
+
+  // 결제 처리
+  const handlePay = () => {
+    // 기존 예약 정보 불러오기
+    const info = JSON.parse(
+      sessionStorage.getItem("finalReservationInfo") || "{}"
+    );
+    // 최종 결제 금액을 info에 추가
+    info.finalPrice = finalPrice;
+    // 다시 저장
+    sessionStorage.setItem("finalReservationInfo", JSON.stringify(info));
+    // 체크아웃 페이지로 이동
+    navigate("/checkout");
+  };
+
+  // 아코디언 토글 함수
+  const toggleStep = (stepNumber) => {
+    setActiveStep(activeStep === stepNumber ? null : stepNumber);
+  };
+
+  // 최종 결제 금액
+  // 음수가 되지 않게 0으로 막아둠 그 밑으로 내려가도
+  const finalPrice = Math.max(
+    0,
+    price - getDiscount1(coupon) - getDiscount2(gift)
+  );
+
+  return (
+    <div className="reservation-payment-page">
+      <Header isOtherPage={true} isScrolled={true} />
+      <div className="reservation-payment-content">
+        <div className="reservation-payment-container">
+          {/* 진행바 */}
+          <ProgressBar currentStep={2} />
+          <div className="payment-title">결제</div>
+          <div className="payment-container">
+            <div className="payment-accordion">
+              <div className="payment-accordion-item">
+                <div
+                  className={`payment-accordion-title ${
+                    activeStep === 1 ? "active" : ""
+                  }`}
+                  onClick={() => toggleStep(1)}
+                >
+                  할인쿠폰
+                </div>
+                {activeStep === 1 && (
+                  <div className="payment-accordion-content">
+                    <div className="coupon-options">
+                      <label>
+                        <input
+                          type="radio"
+                          name="coupon"
+                          value="none"
+                          checked={coupon === "none"}
+                          onChange={(e) => setCoupon(e.target.value)}
+                          defaultChecked
+                        />
+                        할인쿠폰 사용 안함
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          name="coupon"
+                          value="welcome"
+                          checked={coupon === "welcome"}
+                          onChange={(e) => setCoupon(e.target.value)}
+                        />
+                        웰컴 쿠폰 (1,000원 할인)
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          name="coupon"
+                          value="student"
+                          checked={coupon === "student"}
+                          onChange={(e) => setCoupon(e.target.value)}
+                        />
+                        학생 할인 쿠폰 (2,000원 할인)
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          name="coupon"
+                          value="senior"
+                          checked={coupon === "senior"}
+                          onChange={(e) => setCoupon(e.target.value)}
+                        />
+                        시니어 할인 쿠폰 (3,000원 할인)
+                      </label>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="payment-accordion-item">
+                <div
+                  className={`payment-accordion-title ${
+                    activeStep === 2 ? "active" : ""
+                  }`}
+                  onClick={() => toggleStep(2)}
+                >
+                  관람권/기프트콘
+                </div>
+                {activeStep === 2 && (
+                  <div className="payment-accordion-content">
+                    <div className="gift-options">
+                      <label>
+                        <input
+                          type="radio"
+                          name="gift"
+                          value="none"
+                          checked={gift === "none"}
+                          onChange={(e) => setGift(e.target.value)}
+                          defaultChecked
+                        />
+                        관람권/기프트콘 사용 안함
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          name="gift"
+                          value="gift1"
+                          checked={gift === "gift1"}
+                          onChange={(e) => setGift(e.target.value)}
+                        />
+                        영화관람권 10,000원
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          name="gift"
+                          value="gift2"
+                          checked={gift === "gift2"}
+                          onChange={(e) => setGift(e.target.value)}
+                        />
+                        팝콘+음료 세트 기프트콘
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          name="gift"
+                          value="gift3"
+                          checked={gift === "gift3"}
+                          onChange={(e) => setGift(e.target.value)}
+                        />
+                        영화관람권 20,000원
+                      </label>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="payment-accordion-item">
+                <div
+                  className={`payment-accordion-title ${
+                    activeStep === 3 ? "active" : ""
+                  }`}
+                  onClick={() => toggleStep(3)}
+                >
+                  포인트 및 기타결제 수단
+                </div>
+                {activeStep === 3 && (
+                  <div className="payment-accordion-content">
+                    <div className="point-options">
+                      <div className="point-input">
+                        <label>포인트 사용:</label>
+                        <input
+                          type="number"
+                          placeholder="사용할 포인트 입력"
+                          min="0"
+                        />
+                        <span>보유 포인트: 5,000P</span>
+                      </div>
+                      <div className="other-payment">
+                        <label>
+                          <input
+                            type="radio"
+                            name="otherPayment"
+                            value="none"
+                            defaultChecked
+                          />
+                          기타결제 수단 사용 안함
+                        </label>
+                        <label>
+                          <input
+                            type="radio"
+                            name="otherPayment"
+                            value="mobile"
+                          />
+                          모바일 결제
+                        </label>
+                        <label>
+                          <input
+                            type="radio"
+                            name="otherPayment"
+                            value="transfer"
+                          />
+                          계좌이체
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="payment-final-amount-box">
+              <div className="payment-final-label">결제하실 금액</div>
+              <div className="payment-final-amount">{finalPrice}원</div>
+            </div>
+
+            <div className="payment-bottom-btns">
+              <button className="payment-back-btn" onClick={() => navigate(-1)}>
+                돌아가기
+              </button>
+              <button className="payment-main-btn" onClick={handlePay}>
+                결제하기
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+};
+
+export default ReservationPaymentPage;

@@ -21,6 +21,7 @@ const ChatBot = () => {
 
   const createMovieMessage = (data) => {
     const { name, genre, movieinfo, releasedate, runningtime, moviecd } = data;
+    console.log("createMovieMessage - moviecd:", moviecd, "data:", data);
     return {
       text: `영화: ${name}\n장르: ${genre}\n줄거리: ${movieinfo}\n개봉일: ${releasedate}\n러닝타임: ${runningtime}분`,
       isBot: true,
@@ -42,10 +43,12 @@ const ChatBot = () => {
   };
 
   const createCinemaMessage = (data) => {
-    const { cinemaname, cinemaaddress, cinemastatus, cinematel } = data;
+    const { cinemaname, cinemaaddress, cinemastatus, cinematel, cinemacd } =
+      data;
     return {
       text: `극장: ${cinemaname}\n주소: ${cinemaaddress}\n상태: ${cinemastatus}\n전화번호: ${cinematel}`,
       isBot: true,
+      cinemacd: cinemacd,
     };
   };
 
@@ -101,9 +104,12 @@ const ChatBot = () => {
         }
       );
       const data = await response.json();
+      console.log("서버 응답:", data);
       const botMessage = getBotMessage(data);
+      console.log("생성된 봇 메시지:", botMessage);
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
+      console.error("API 호출 오류:", error);
       setMessages((prev) => [
         ...prev,
         {
@@ -121,34 +127,69 @@ const ChatBot = () => {
   };
 
   // 메시지 렌더링 함수
-  const renderMessage = (msg, index) => (
-    <div
-      key={index}
-      className={`message ${msg.isBot ? "bot-message" : "user-message"}`}
-    >
-      {msg.text.split("\n").map((line, i) => (
-        <div key={i}>{line}</div>
-      ))}
-      {msg.moviecd && (
-        <Link
-          to={`/reservation/place/${msg.moviecd}`}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2 inline-block"
-        >
-          예매하기
-        </Link>
-      )}
-      {(msg.cinemacd || (msg.isBot && msg.text.includes("극장:"))) && (
-        <Link
-          to={
-            msg.cinemacd ? `/reservation/theater/${msg.cinemacd}` : `/theater`
-          }
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-2 inline-block ml-2"
-        >
-          극장 선택
-        </Link>
-      )}
-    </div>
-  );
+  const renderMessage = (msg, index) => {
+    // 디버깅을 위한 로그
+    if (msg.moviecd) {
+      console.log(`Message ${index} moviecd:`, msg.moviecd);
+    }
+
+    return (
+      <div
+        key={index}
+        className={`message ${msg.isBot ? "bot-message" : "user-message"}`}
+      >
+        {msg.text.split("\n").map((line, i) => (
+          <div key={i}>{line}</div>
+        ))}
+        {msg.moviecd && (
+          <Link
+            to={`/reservation/movie/${msg.moviecd}`}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2 inline-block"
+            onClick={() => {
+              // 영화 정보를 세션스토리지에 저장
+              console.log("예매하기 버튼 클릭, moviecd:", msg.moviecd);
+              sessionStorage.setItem("moviecd", msg.moviecd);
+
+              // 영화 이름 추출 (메시지에서)
+              const movieNameMatch = msg.text.match(/영화: (.+)/);
+              if (movieNameMatch) {
+                const movieName = movieNameMatch[1];
+                sessionStorage.setItem("movienm", movieName);
+                console.log("영화명 저장:", movieName);
+              }
+            }}
+          >
+            예매하기
+          </Link>
+        )}
+        {(msg.cinemacd || (msg.isBot && msg.text.includes("극장:"))) && (
+          <Link
+            to={
+              msg.cinemacd ? `/reservation/theater/${msg.cinemacd}` : `/theater`
+            }
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-2 inline-block ml-2"
+            onClick={() => {
+              // 극장 정보를 세션스토리지에 저장
+              if (msg.cinemacd) {
+                console.log("극장 선택 버튼 클릭, cinemacd:", msg.cinemacd);
+                sessionStorage.setItem("cinemacd", msg.cinemacd);
+
+                // 극장 이름 추출 (메시지에서)
+                const cinemaNameMatch = msg.text.match(/극장: (.+)/);
+                if (cinemaNameMatch) {
+                  const cinemaName = cinemaNameMatch[1];
+                  sessionStorage.setItem("cinemanm", cinemaName);
+                  console.log("극장명 저장:", cinemaName);
+                }
+              }
+            }}
+          >
+            극장 선택
+          </Link>
+        )}
+      </div>
+    );
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

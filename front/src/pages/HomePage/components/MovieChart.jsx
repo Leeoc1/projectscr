@@ -90,36 +90,6 @@ const MovieChart = () => {
     setIsDragging(false);
   };
 
-  const handleMovieCardClick = (movie) => {
-    // 로그인 상태 체크
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-
-    if (!isLoggedIn) {
-      // 로그인되지 않은 경우 모달 표시
-      setShowLoginModal(true);
-      return;
-    }
-
-    // 로그인된 경우 기존 로직 실행
-    // 예매 페이지와 동일한 방식으로 영화 정보를 세션 스토리지에 저장
-    sessionStorage.setItem("moviecd", movie.moviecd);
-    sessionStorage.setItem("movienm", movie.movienm);
-
-    // 예매 페이지와 동일한 방식으로 전체 영화 객체도 저장
-    const movieData = {
-      moviecd: movie.moviecd,
-      movienm: movie.movienm,
-      posterurl: movie.posterurl,
-      genre: movie.genre,
-      runningtime: movie.runningtime,
-      isadult: movie.isadult,
-    };
-    sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
-
-    navigate("/reservation/place");
-  };
-  console.log("MovieChart 렌더링", movies);
-
   // 상세정보 페이지로 이동
   const handleMovieDetailClick = (movie, e) => {
     e.stopPropagation(); // 부모 클릭 이벤트 방지
@@ -150,7 +120,7 @@ const MovieChart = () => {
     };
     sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
 
-    navigate("/reservation/place");
+    navigate(`/reservation/movie/${movie.moviecd}`);
   };
   console.log("MovieChart 렌더링", movies);
 

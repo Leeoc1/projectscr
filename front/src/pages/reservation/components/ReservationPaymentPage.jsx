@@ -3,14 +3,17 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../../shared/Header";
 import Footer from "../../../shared/Footer";
 import { saveReservation } from "../../../api/reservationApi";
+import { getUserCoupons, useCoupon as applyCoupon } from "../../../api/couponApi";
 import ProgressBar from "./ProgressBar";
 import "../style/ReservationPaymentPage.css";
 
 const ReservationPaymentPage = () => {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(1);
-  const [coupon, setCoupon] = useState("none");
+  const [selectedCoupon, setSelectedCoupon] = useState(null);
+  const [userCoupons, setUserCoupons] = useState([]);
   const [gift, setGift] = useState("none");
+  const [isLoading, setIsLoading] = useState(true);
 
   // 뒤로가기 방지 및 세션 보안 처리
   useEffect(() => {
@@ -46,18 +49,70 @@ const ReservationPaymentPage = () => {
     };
   }, [navigate]);
 
-  // 할인 금액 계산 (할인쿠폰)
-  const getDiscount1 = (coupon) => {
-    switch (coupon) {
-      case "welcome":
-        return 1000;
-      case "student":
-        return 2000;
-      case "senior":
-        return 3000;
-      default:
-        return 0;
+  // 사용자 쿠폰 목록 로드
+  const loadUserCoupons = async () => {
+    try {
+      // localStorage에서 userid 가져오기 (sessionStorage가 아님!)
+      const userid = localStorage.getItem("userid");
+      console.log("=== 쿠폰 로드 디버깅 ===");
+      console.log("1. userid from localStorage:", userid);
+      
+      if (userid) {
+        console.log("2. API 호출 시작...");
+        const coupons = await getUserCoupons(userid);
+        console.log("3. API 응답 원본 데이터:", coupons);
+        console.log("4. 쿠폰 개수:", coupons ? coupons.length : 0);
+        
+        if (coupons && coupons.length > 0) {
+          console.log("5. 첫 번째 쿠폰 상세:", coupons[0]);
+        }
+        
+        // 사용 가능한 쿠폰만 필터링 (만료되지 않고, 사용되지 않은 쿠폰)
+        const availableCoupons = coupons.filter(coupon => {
+          const isActive = coupon.couponstatus;
+          const isNotExpired = new Date(coupon.couponexpiredate) > new Date();
+          console.log(`쿠폰 ${coupon.couponname} - 활성: ${isActive}, 만료되지않음: ${isNotExpired}`);
+          return isActive && isNotExpired;
+        });
+        
+        console.log("6. 필터링된 사용 가능한 쿠폰:", availableCoupons);
+        console.log("7. 사용 가능한 쿠폰 개수:", availableCoupons.length);
+        
+        setUserCoupons(availableCoupons);
+        
+        // 현재 선택된 쿠폰이 더 이상 사용 가능한 목록에 없다면 선택 해제
+        if (selectedCoupon && !availableCoupons.find(c => c.couponnum === selectedCoupon.couponnum)) {
+          setSelectedCoupon(null);
+        }
+      } else {
+        console.log("userid가 없습니다! 로그인이 필요합니다.");
+      }
+    } catch (error) {
+      console.error("쿠폰 목록 로드 실패:", error);
+      console.error("에러 상세:", error.message);
+      console.error("에러 스택:", error.stack);
+      setUserCoupons([]);
+    } finally {
+      setIsLoading(false);
+      console.log("=== 쿠폰 로드 완료 ===");
     }
+  };
+
+  // 사용자 쿠폰 목록 로드 useEffect
+  useEffect(() => {
+    // 브라우저 저장소 전체 확인
+    console.log("=== 브라우저 저장소 확인 ===");
+    console.log("localStorage 전체:", {...localStorage});
+    console.log("sessionStorage 전체:", {...sessionStorage});
+    console.log("localStorage.userid:", localStorage.getItem("userid"));
+    console.log("sessionStorage.userid:", sessionStorage.getItem("userid"));
+    
+    loadUserCoupons();
+  }, []);
+
+  // 쿠폰 할인 금액 계산
+  const getCouponDiscount = () => {
+    return selectedCoupon ? selectedCoupon.discount : 0;
   };
 
   // 할인 금액 계산 (관람권/기프트콘)
@@ -103,17 +158,39 @@ const ReservationPaymentPage = () => {
   const price = reservationInfo.totalPrice ? reservationInfo.totalPrice : "0";
 
   // 결제 처리
-  const handlePay = () => {
-    // 기존 예약 정보 불러오기
-    const info = JSON.parse(
-      sessionStorage.getItem("finalReservationInfo") || "{}"
-    );
-    // 최종 결제 금액을 info에 추가
-    info.finalPrice = finalPrice;
-    // 다시 저장
-    sessionStorage.setItem("finalReservationInfo", JSON.stringify(info));
-    // 체크아웃 페이지로 이동
-    navigate("/checkout");
+  const handlePay = async () => {
+    try {
+      // 쿠폰 사용 처리 (결제 시작 시점)
+      if (selectedCoupon) {
+        const userid = localStorage.getItem("userid"); // sessionStorage -> localStorage 수정
+        if (userid) {
+          try {
+            await applyCoupon(userid, selectedCoupon.couponnum);
+            console.log("쿠폰 사용 처리 완료:", selectedCoupon.couponname);
+          } catch (couponError) {
+            console.error("쿠폰 사용 처리 중 오류:", couponError);
+            alert("쿠폰 사용 중 오류가 발생했습니다. 다시 시도해주세요.");
+            return; // 쿠폰 사용 실패 시 결제 중단
+          }
+        }
+      }
+
+      // 기존 예약 정보 불러오기
+      const info = JSON.parse(
+        sessionStorage.getItem("finalReservationInfo") || "{}"
+      );
+      // 최종 결제 금액과 사용된 쿠폰 정보를 info에 추가
+      info.finalPrice = finalPrice;
+      info.usedCoupon = selectedCoupon;
+      info.couponAlreadyUsed = selectedCoupon ? true : false; // 쿠폰이 이미 사용되었음을 표시
+      // 다시 저장
+      sessionStorage.setItem("finalReservationInfo", JSON.stringify(info));
+      // 체크아웃 페이지로 이동
+      navigate("/checkout");
+    } catch (error) {
+      console.error("결제 처리 중 오류:", error);
+      alert("결제 처리 중 오류가 발생했습니다.");
+    }
   };
 
   // 아코디언 토글 함수
@@ -125,7 +202,7 @@ const ReservationPaymentPage = () => {
   // 음수가 되지 않게 0으로 막아둠 그 밑으로 내려가도
   const finalPrice = Math.max(
     0,
-    price - getDiscount1(coupon) - getDiscount2(gift)
+    price - getCouponDiscount() - getDiscount2(gift)
   );
 
   return (
@@ -145,52 +222,53 @@ const ReservationPaymentPage = () => {
                   }`}
                   onClick={() => toggleStep(1)}
                 >
-                  할인쿠폰
+                  할인쿠폰 ({userCoupons.length}개 보유)
                 </div>
                 {activeStep === 1 && (
                   <div className="payment-accordion-content">
                     <div className="coupon-options">
-                      <label>
-                        <input
-                          type="radio"
-                          name="coupon"
-                          value="none"
-                          checked={coupon === "none"}
-                          onChange={(e) => setCoupon(e.target.value)}
-                          defaultChecked
-                        />
-                        할인쿠폰 사용 안함
-                      </label>
-                      <label>
-                        <input
-                          type="radio"
-                          name="coupon"
-                          value="welcome"
-                          checked={coupon === "welcome"}
-                          onChange={(e) => setCoupon(e.target.value)}
-                        />
-                        웰컴 쿠폰 (1,000원 할인)
-                      </label>
-                      <label>
-                        <input
-                          type="radio"
-                          name="coupon"
-                          value="student"
-                          checked={coupon === "student"}
-                          onChange={(e) => setCoupon(e.target.value)}
-                        />
-                        학생 할인 쿠폰 (2,000원 할인)
-                      </label>
-                      <label>
-                        <input
-                          type="radio"
-                          name="coupon"
-                          value="senior"
-                          checked={coupon === "senior"}
-                          onChange={(e) => setCoupon(e.target.value)}
-                        />
-                        시니어 할인 쿠폰 (3,000원 할인)
-                      </label>
+                      {isLoading ? (
+                        <div>쿠폰 목록을 불러오는 중...</div>
+                      ) : (
+                        <>
+                          <label>
+                            <input
+                              type="radio"
+                              name="coupon"
+                              value="none"
+                              checked={selectedCoupon === null}
+                              onChange={() => setSelectedCoupon(null)}
+                            />
+                            할인쿠폰 사용 안함
+                          </label>
+                          {userCoupons.length === 0 ? (
+                            <div className="no-coupons">사용 가능한 쿠폰이 없습니다.</div>
+                          ) : (
+                            userCoupons.map((coupon) => (
+                              <label key={coupon.couponnum} className="coupon-item">
+                                <div className="coupon-radio-container">
+                                  <input
+                                    type="radio"
+                                    name="coupon"
+                                    value={coupon.couponnum}
+                                    checked={selectedCoupon?.couponnum === coupon.couponnum}
+                                    onChange={() => setSelectedCoupon(coupon)}
+                                  />
+                                </div>
+                                <div className="coupon-info">
+                                  <div className="coupon-name">{coupon.couponname}</div>
+                                  <div className="coupon-discount-info">
+                                    {coupon.discount.toLocaleString()}원 할인
+                                  </div>
+                                  <div className="coupon-expire">
+                                    만료일: {new Date(coupon.couponexpiredate).toLocaleDateString()}
+                                  </div>
+                                </div>
+                              </label>
+                            ))
+                          )}
+                        </>
+                      )}
                     </div>
                   </div>
                 )}
@@ -307,8 +385,27 @@ const ReservationPaymentPage = () => {
             </div>
 
             <div className="payment-final-amount-box">
+              <div className="payment-summary">
+                <div className="payment-original-price">
+                  <span>원래 금액: </span>
+                  <span>{price.toLocaleString()}원</span>
+                </div>
+                {selectedCoupon && (
+                  <div className="payment-discount-item">
+                    <span>쿠폰 할인 ({selectedCoupon.couponname}): </span>
+                    <span className="discount-amount">-{selectedCoupon.discount.toLocaleString()}원</span>
+                  </div>
+                )}
+                {getDiscount2(gift) > 0 && (
+                  <div className="payment-discount-item">
+                    <span>기프트콘 할인: </span>
+                    <span className="discount-amount">-{getDiscount2(gift).toLocaleString()}원</span>
+                  </div>
+                )}
+                <div className="payment-divider"></div>
+              </div>
               <div className="payment-final-label">결제하실 금액</div>
-              <div className="payment-final-amount">{finalPrice}원</div>
+              <div className="payment-final-amount">{finalPrice.toLocaleString()}원</div>
             </div>
 
             <div className="payment-bottom-btns">

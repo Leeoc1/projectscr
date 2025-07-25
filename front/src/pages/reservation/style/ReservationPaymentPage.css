@@ -168,16 +168,113 @@
 .gift-options label,
 .point-options label {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   cursor: pointer;
-  padding: 8px 0;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  flex-direction: column;
 }
 
 .coupon-options input[type="radio"],
 .gift-options input[type="radio"],
 .point-options input[type="radio"] {
-  margin: 0;
+  margin-right: 8px;
+  margin-top: 2px;
+}
+
+.coupon-expire {
+  font-size: 0.85rem;
+  color: #666;
+  margin-left: 24px;
+  margin-top: 4px;
+}
+
+.no-coupons {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+/* 개선된 쿠폰 아이템 스타일 */
+.coupon-item {
+  display: flex !important;
+  align-items: flex-start !important;
+  padding: 15px !important;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #fafafa;
+}
+
+.coupon-item:hover {
+  background-color: #f0f8ff;
+  border-color: #007bff;
+}
+
+.coupon-item:has(input:checked) {
+  background-color: #e7f3ff;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.coupon-radio-container {
+  margin-right: 12px;
+  margin-top: 2px;
+}
+
+.coupon-info {
+  flex: 1;
+}
+
+.coupon-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.coupon-discount-info {
+  color: #e74c3c;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 5px;
+}
+
+.coupon-expire {
+  font-size: 0.85rem !important;
+  color: #666 !important;
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* 결제 요약 스타일 */
+.payment-summary {
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+}
+
+.payment-original-price,
+.payment-discount-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 0 10px;
+}
+
+.discount-amount {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.payment-divider {
+  height: 1px;
+  background-color: #ddd;
+  margin: 10px 0;
 }
 
 /* 포인트 입력 스타일 */

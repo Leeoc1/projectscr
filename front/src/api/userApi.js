@@ -15,12 +15,18 @@ export const getAllUsers = () =>
 
 // 사용자 ID 중복 확인 (users 테이블)
 export const isAvailableUserId = async (userid) => {
-  return await apiRequest("/users/idcheck", { method: "POST", body: { userid: userid } });
+  return await apiRequest("/users/idcheck", {
+    method: "POST",
+    body: { userid: userid },
+  });
 };
 
 // 사용자 회원가입 (users 테이블)
 export const registerUser = async (userData) => {
-  return await apiRequest("/users/register", { method: "POST", body: userData });
+  return await apiRequest("/users/register", {
+    method: "POST",
+    body: userData,
+  });
 };
 
 // 사용자 정보 조회 (users 테이블)
@@ -40,37 +46,7 @@ export const checkPassword = async (userid, userpw) => {
     body: {
       userid: userid,
       userpw: userpw,
-    }
-  });
-};
-
-// 비밀번호 변경 (users 테이블)
-export const updatePassword = async (userid, userpw) => {
-  return await apiRequest(`/users/${userid}/update/password`, {
-    method: "PUT",
-    body: {
-      userid: userid,
-      userpw: userpw,
-    }
-  });
-};
-
-// 개인정보 수정 (users 테이블)
-export const updateUserInfo = async (userid, userData) => {
-  return await apiRequest(`/users/${userid}/update/userinfo`, {
-    method: "PUT",
-    body: {
-      userid: userid,
-      ...userData,
-    }
-  });
-};
-
-// 개인정보수정 시 비밀번호 확인 (users 테이블)
-export const checkPassword = async (userid, userpw) => {
-  return await apiRequest("post", "/users/pwcheck", {
-    userid: userid,
-    userpw: userpw,
+    },
   });
 };
 

@@ -32,11 +32,7 @@ const ReservationSeatPage = () => {
   // 좌석 선택 페이지에서 뒤로가기 시 세션 정리
   useEffect(() => {
     const handlePopState = (event) => {
-      if (
-        window.confirm(
-          "좌석 선택을 취소하고 이전 단계로 돌아가시겠습니까? 선택한 좌석 정보가 사라집니다."
-        )
-      ) {
+      if (window.confirm("좌석 선택을 취소하고 이전 단계로 돌아가시겠습니까? 선택한 좌석 정보가 사라집니다.")) {
         // 좌석 관련 정보만 정리
         sessionStorage.removeItem("selectedSeats");
         sessionStorage.removeItem("guestCount");

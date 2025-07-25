@@ -4,7 +4,7 @@ import Header from "../../../shared/Header";
 import "../style/ReservationPlaceToMovie.css";
 import DateSelector from "../ReservationPage/tocinema/components/DateSelector";
 import MovieSelector from "../ReservationPage/tocinema/components/MovieSelector";
-import ScreenSelector from "../ReservationPage/tocinema/components/ScreenSelector";
+import ScreenSelector from "../ReservationPage/tocinema/components/ScreenSelector";  
 import ProgressBar from "./ProgressBar";
 
 const ReservationPlaceToMoviePage = () => {
@@ -72,8 +72,7 @@ const ReservationPlaceToMoviePage = () => {
 
       if (cinemacd) sessionStorage.setItem("cinemacd", cinemacd);
       if (cinemanm) sessionStorage.setItem("cinemanm", cinemanm);
-      if (selectedMovieTime)
-        sessionStorage.setItem("selectedMovieTime", selectedMovieTime);
+      if (selectedMovieTime) sessionStorage.setItem("selectedMovieTime", selectedMovieTime);
     };
   }, []);
 
@@ -107,7 +106,10 @@ const ReservationPlaceToMoviePage = () => {
 
       {/* 좌석 선택 버튼 */}
       {isReadyToSeat && (
-        <button className="reservation-seat-btn-fixed" onClick={handleGoToSeat}>
+        <button
+          className="reservation-seat-btn-fixed"
+          onClick={handleGoToSeat}
+        >
           좌석 선택
         </button>
       )}

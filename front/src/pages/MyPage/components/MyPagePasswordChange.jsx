@@ -42,6 +42,11 @@ const MyPagePasswordChange = ({
       alert("새 비밀번호를 입력해주세요.");
       return;
     }
+    
+    if (passwordForm.currentPassword === passwordForm.newPassword) {
+      alert("현재 비밀번호와 새 비밀번호가 동일합니다. 다른 비밀번호를 입력해주세요.");
+      return;
+    }
 
     if (passwordForm.newPassword) {
       const lengthValid = validatePasswordLength(passwordForm.newPassword);

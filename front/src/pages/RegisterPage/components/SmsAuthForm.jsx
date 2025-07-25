@@ -14,7 +14,10 @@ function SmsAuthForm({
 
   // 전화번호 입력 처리
   const handlePhoneChange = (e) => {
-    setFormData({ ...formData, phone: e.target.value });
+    const value = e.target.value;
+    // 숫자만 허용
+    const numbersOnly = value.replace(/[^0-9]/g, "");
+    setFormData({ ...formData, phone: numbersOnly });
     setMessage("");
   };
 
@@ -100,6 +103,9 @@ function SmsAuthForm({
             value={formData.phone}
             onChange={handlePhoneChange}
             placeholder="전화번호를 - 없이 입력하세요"
+            maxLength="11"
+            inputMode="numeric"
+            pattern="[0-9]*"
             required
             disabled={validationState.phoneVerified}
           />

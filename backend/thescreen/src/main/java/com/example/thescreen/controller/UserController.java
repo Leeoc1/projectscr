@@ -154,8 +154,8 @@ public class UserController {
             User user = userRepository.findById(userid).orElse(null);
 
             if (user != null) {
-                // 사용자가 존재하는 경우, 비밀번호 비교
-                if (user.getUserpw().equals(userpw)) {
+                // 사용자가 존재하는 경우, 비밀번호 해시 비교
+                if (passwordEncoder.matches(userpw, user.getUserpw())) {
                     // 비밀번호가 일치하는 경우
                     return ResponseEntity.ok(Map.of("success", true, "message", "비밀번호가 일치합니다."));
                 } else  {
@@ -164,11 +164,10 @@ public class UserController {
                         "success", false,
                         "message", "비밀번호가 일치하지 않습니다."
                     ));
-                } 
+                }
             } else {
                 // 사용자가 존재하지 않는 경우
-                return ResponseEntity.ok(Map.of("success", false, "message", "존재하지 않는 사용자입니다."
-                ));
+                return ResponseEntity.ok(Map.of("success", false, "message", "존재하지 않는 사용자입니다."));
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -186,7 +185,7 @@ public class UserController {
             User user = userRepository.findById(userid).orElse(null);
 
             if (user != null) {
-                user.setUserpw(userpw);
+                user.setUserpw(passwordEncoder.encode(userpw));
                 userRepository.save(user); // 데이터베이스에 저장
                 return ResponseEntity.ok(Map.of("success", true, "message", "비밀번호가 변경되었습니다."));
             } else {

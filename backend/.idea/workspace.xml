@@ -4,7 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7929261-1ad1-4007-9ae7-86e384453840" name="변경" comment="" />
+    <list default="true" id="a7929261-1ad1-4007-9ae7-86e384453840" name="변경" comment="">
+      <change afterPath="$PROJECT_DIR$/../front/src/pages/MyPage/components/MyPageTelChange.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/thescreen.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/thescreen.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/thescreen.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/thescreen.test.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thescreen/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/thescreen/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thescreen/src/main/java/com/example/thescreen/controller/CoolsmsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/thescreen/src/main/java/com/example/thescreen/controller/CoolsmsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thescreen/src/main/java/com/example/thescreen/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/thescreen/src/main/java/com/example/thescreen/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/api/userApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/api/userApi.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/pages/MyPage/MyPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/pages/MyPage/MyPage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/pages/MyPage/components/MyInfo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/pages/MyPage/components/MyInfo.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/pages/MyPage/components/MyPagePasswordChange.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/pages/MyPage/components/MyPagePasswordChange.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/pages/RegisterPage/components/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/pages/RegisterPage/components/Register.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/pages/RegisterPage/components/SmsAuthForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/pages/RegisterPage/components/SmsAuthForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/pages/reservation/Payments/Success.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/pages/reservation/Payments/Success.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/pages/reservation/ReservationPage/tocinema/components/ScreenSelector.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/pages/reservation/ReservationPage/tocinema/components/ScreenSelector.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/pages/reservation/ReservationPage/tomovie/components/ScreenSelectorMovie.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/pages/reservation/ReservationPage/tomovie/components/ScreenSelectorMovie.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/pages/reservation/components/ReservationPaymentPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/pages/reservation/components/ReservationPaymentPage.jsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,7 +38,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "git-widget-placeholder": "jyj__brunch"
+    "git-widget-placeholder": "lch__brunch 병합 중"
   }
 }]]></component>
   <component name="TaskManager">

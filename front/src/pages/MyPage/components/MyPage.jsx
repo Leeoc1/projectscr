@@ -9,6 +9,7 @@ import {
   deleteUser,
   logoutUser,
 } from "../../../api/userApi";
+import { cancelReservation } from "../../../api/reservationApi";
 import MyPageReservationDetail from "./MyPageReservationDetail";
 import MyPageHistory from "./MyPageHistory";
 import MyPageReservation from "./MyPageReservation";

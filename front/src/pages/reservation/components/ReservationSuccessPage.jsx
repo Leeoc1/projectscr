@@ -12,6 +12,69 @@ const ReservationSuccessPage = () => {
   const [loading, setLoading] = useState(true);
   const [movieData, setMovieData] = useState(null);
 
+  // 뒤로가기 방지 및 보안 처리
+  useEffect(() => {
+    // 히스토리 항목을 현재 페이지로 대체하여 뒤로가기 방지
+    window.history.pushState(null, "", window.location.href);
+    
+    // 뒤로가기 시도 시 홈으로 리다이렉트
+    const handlePopState = (event) => {
+      window.history.pushState(null, "", window.location.href);
+      // 사용자에게 확인 메시지 표시 후 홈으로 이동
+      if (window.confirm("예매가 완료되었습니다. 홈페이지로 이동하시겠습니까?")) {
+        navigate("/", { replace: true });
+      }
+    };
+
+    // 브라우저 뒤로가기 감지
+    window.addEventListener("popstate", handlePopState);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [navigate]);
+
+  // 페이지 로드 후 민감한 세션 정보 정리
+  useEffect(() => {
+    const cleanupSensitiveData = () => {
+      // 예매 완료 후 필요없는 민감한 정보들 삭제
+      const keysToRemove = [
+        "selectedMovieTime",
+        "selectedSeats", 
+        "guestCount",
+        "totalGuests",
+        "finalPrice"
+      ];
+      
+      keysToRemove.forEach(key => {
+        sessionStorage.removeItem(key);
+      });
+
+      // finalReservationInfo에서 민감한 정보만 제거하고 필요한 정보만 유지
+      try {
+        const finalInfo = sessionStorage.getItem("finalReservationInfo");
+        if (finalInfo) {
+          const parsed = JSON.parse(finalInfo);
+          // 영화 정보와 예매 완료 표시만 유지
+          const cleanedInfo = {
+            movienm: parsed.movienm,
+            cinemanm: parsed.cinemanm,
+            reservationCompleted: true // 예매 완료 플래그
+          };
+          sessionStorage.setItem("finalReservationInfo", JSON.stringify(cleanedInfo));
+        }
+      } catch (error) {
+        console.error("세션 정리 중 오류:", error);
+      }
+    };
+
+    // 3초 후 정리 (사용자가 페이지 내용을 볼 시간 제공)
+    const timeoutId = setTimeout(cleanupSensitiveData, 3000);
+    
+    return () => clearTimeout(timeoutId);
+  }, []);
+
   // 헬퍼 함수들
   const getMovieFromSelectedMovie = () => {
     try {

@@ -70,7 +70,7 @@ FROM (
      (
          SELECT 0 AS N UNION SELECT 1 UNION SELECT 2
      ) c
-WHERE (a.N + b.N * 10 + c.N * 100 + 1) <= 1000;
+WHERE (a.N + b.N * 10 + c.N * 100 + 1) <= 300;
 
 INSERT IGNORE INTO reservation (
     reservationcd,
@@ -128,26 +128,26 @@ FROM temp_numbers;
 
 DROP TEMPORARY TABLE IF EXISTS temp_numbers;
 
--- 관리자 계정 생성
-INSERT IGNORE INTO users (
-    userid,
-    userpw,
-    username,
-    email,
-    phone,
-    birth,
-    status,
-    reg_date
-) VALUES (
-    'master001',
-    'pass_001',
-    '김관리',
-    'master1@example.com',
-    '01011112222',
-    '1995-05-01',
-    '활성',
-    CURRENT_DATE
-);
+---- 관리자 계정 생성
+--INSERT IGNORE INTO users (
+--    userid,
+--    userpw,
+--    username,
+--    email,
+--    phone,
+--    birth,
+--    status,
+--    reg_date
+--) VALUES (
+--    'master001',
+--    'pass_001',
+--    '김관리',
+--    'master1@example.com',
+--    '01011112222',
+--    '1995-05-01',
+--    '활성',
+--    CURRENT_DATE
+--);
 
 CREATE TEMPORARY TABLE temp_numbers (n INT);
 INSERT INTO temp_numbers (n)

@@ -6,40 +6,31 @@ import "../style/ReservationPlacePage.css";
 import DateSelectorMovie from "../ReservationPage/tomovie/components/DateSelectorMovie";
 import TheaterSelector from "../ReservationPage/tomovie/components/TheaterSelector";
 import ProgressBar from "./ProgressBar";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ReservationPlacePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { moviecd } = useParams(); // URL에서 moviecd 매개변수 가져오기
   const [movieDetails, setMovieDetails] = useState(null);
   const [isReadyToSeat, setIsReadyToSeat] = useState(false);
 
   // 영화 정보를 가져와서 세션스토리지에 저장
   useEffect(() => {
     const fetchMovieDetails = async () => {
-      // URL 매개변수에서 받은 moviecd 우선 사용
-      const movieCdToUse = moviecd || sessionStorage.getItem("moviecd");
-
       // 먼저 selectedMovie에서 정보를 가져오기 (홈페이지에서 선택한 경우)
       const selectedMovieStr = sessionStorage.getItem("selectedMovie");
       if (selectedMovieStr) {
         const selectedMovie = JSON.parse(selectedMovieStr);
         setMovieDetails(selectedMovie);
-        // URL에서 받은 moviecd를 세션스토리지에도 저장
-        if (moviecd) {
-          sessionStorage.setItem("moviecd", moviecd);
-        }
         return; // selectedMovie가 있으면 API 호출하지 않음
       }
 
-      // selectedMovie가 없으면 moviecd 사용
-      if (movieCdToUse) {
-        // URL에서 받은 moviecd를 세션스토리지에 저장
-        sessionStorage.setItem("moviecd", movieCdToUse);
+      // selectedMovie가 없으면 기존 방식으로 moviecd 사용
+      const storedMovieCd = sessionStorage.getItem("moviecd");
+      if (storedMovieCd) {
         const allMovies = await getCurrentMovies();
         const movieData = allMovies.find(
-          (movie) => movie.moviecd === movieCdToUse
+          (movie) => movie.moviecd === storedMovieCd
         );
 
         if (movieData) {

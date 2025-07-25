@@ -15,7 +15,7 @@ public class User {
     @Column(length = 20) // 기본 키: userid
     private String userid;
 
-    @Column(length = 50) // userpw, 선택 입력
+    @Column(length = 60) // userpw, 해시된 비밀번호 저장 (BCrypt 60자)
     private String userpw;
 
     @Column(length = 20) // username, 선택 입력

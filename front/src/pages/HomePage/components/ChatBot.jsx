@@ -39,10 +39,12 @@ const ChatBot = () => {
       } else if (data.type === "movie") {
         const { name, genre, movieinfo, releasedate, runningtime, moviecd } =
           data.data;
+        console.log("영화 데이터 받음:", data.data); // 디버깅 로그 추가
+        console.log("moviecd:", moviecd); // moviecd 확인
         botMessage = {
           text: `영화: ${name}\n장르: ${genre}\n줄거리: ${movieinfo}\n개봉일: ${releasedate}\n러닝타임: ${runningtime}분`,
           isBot: true,
-          moviecd,
+          moviecd: moviecd, // 명시적으로 설정
         };
       } else if (data.type === "top10") {
         const movieList = data.data.movies
@@ -51,17 +53,22 @@ const ChatBot = () => {
               `${index + 1}. ${movie.name} (순위: ${movie.rank})`
           )
           .join("\n");
+        console.log("탑10 영화 데이터:", data.data.movies); // 디버깅 로그
         botMessage = {
           text: `현재 인기 영화 탑10:\n${movieList}`,
           isBot: true,
           movies: data.data.movies,
+          // 첫 번째 영화의 moviecd를 기본으로 설정 (필요시)
+          moviecd:
+            data.data.movies.length > 0 ? data.data.movies[0].moviecd : null,
         };
       } else if (data.type === "cinema") {
-        const { cinemaname, cinemaaddress, cinemastatus, cinematel } =
+        const { cinemaname, cinemaaddress, cinemastatus, cinematel, cinemacd } =
           data.data;
         botMessage = {
           text: `극장: ${cinemaname}\n주소: ${cinemaaddress}\n상태: ${cinemastatus}\n전화번호: ${cinematel}`,
           isBot: true,
+          cinemacd: cinemacd,
         };
       } else if (data.type === "suggestion") {
         let suggestionText =
@@ -141,6 +148,19 @@ const ChatBot = () => {
                 <Link
                   to={`/reservation/place/${msg.moviecd}`}
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2 inline-block"
+                  onClick={() => {
+                    // 영화 정보를 세션스토리지에 저장
+                    console.log("예매하기 버튼 클릭, moviecd:", msg.moviecd);
+                    sessionStorage.setItem("moviecd", msg.moviecd);
+
+                    // 영화 이름 추출 (메시지에서)
+                    const movieNameMatch = msg.text.match(/영화: (.+)/);
+                    if (movieNameMatch) {
+                      const movieName = movieNameMatch[1];
+                      sessionStorage.setItem("movienm", movieName);
+                      console.log("영화명 저장:", movieName);
+                    }
+                  }}
                 >
                   예매하기
                 </Link>
@@ -153,6 +173,24 @@ const ChatBot = () => {
                       : `/theater`
                   }
                   className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-2 inline-block ml-2"
+                  onClick={() => {
+                    // 극장 정보를 세션스토리지에 저장
+                    if (msg.cinemacd) {
+                      console.log(
+                        "극장 선택 버튼 클릭, cinemacd:",
+                        msg.cinemacd
+                      );
+                      sessionStorage.setItem("cinemacd", msg.cinemacd);
+
+                      // 극장 이름 추출 (메시지에서)
+                      const cinemaNameMatch = msg.text.match(/극장: (.+)/);
+                      if (cinemaNameMatch) {
+                        const cinemaName = cinemaNameMatch[1];
+                        sessionStorage.setItem("cinemanm", cinemaName);
+                        console.log("극장명 저장:", cinemaName);
+                      }
+                    }
+                  }}
                 >
                   극장 선택
                 </Link>

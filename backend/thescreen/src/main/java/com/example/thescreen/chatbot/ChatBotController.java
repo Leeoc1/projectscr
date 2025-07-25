@@ -152,7 +152,7 @@ public class ChatBotController {
                     "cinemaaddress", cinema.getAddress() != null ? cinema.getAddress() : "주소 정보 없음",
                     "cinemastatus", cinema.getStatus() != null ? cinema.getStatus() : "상태 정보 없음",
                     "cinematel", cinema.getTel() != null ? cinema.getTel() : "전화번호 정보 없음",
-                    "cinemaid", String.valueOf(cinema.getCinemacd())
+                    "cinemacd", String.valueOf(cinema.getCinemacd())
             ));
             logResponse(startTime, response.toString(), "극장 기본 검색");
             return response;

@@ -57,7 +57,7 @@ const Movies = ({ activeTab: parentActiveTab, showDetailButton = true }) => {
       "moviecd:",
       movie.moviecd
     );
-    navigate(`/reservation/place/${movie.moviecd}`);
+    navigate("/reservation/place");
   };
 
   useEffect(() => {

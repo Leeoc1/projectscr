@@ -69,6 +69,30 @@ export const updateUserInfo = async (userid, userData) => {
   });
 };
 
+// 개인정보수정 시 비밀번호 확인 (users 테이블)
+export const checkPassword = async (userid, userpw) => {
+  return await apiRequest("post", "/users/pwcheck", {
+    userid: userid,
+    userpw: userpw,
+  });
+};
+
+// 비밀번호 변경 (users 테이블)
+export const updatePassword = async (userid, userpw) => {
+  return await apiRequest("put", `/users/${userid}/update/password`, {
+    userid: userid,
+    userpw: userpw,
+  });
+};
+
+// 개인정보 수정 (users 테이블)
+export const updateUserInfo = async (userid, userData) => {
+  return await apiRequest("put", `/users/${userid}/update/userinfo`, {
+    userid: userid,
+    ...userData,
+  });
+};
+
 // 회원탈퇴 (users 테이블)
 export const deleteUser = async (userid) => {
   console.log("회원탈퇴 API 호출 시작 - userid:", userid);

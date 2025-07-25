@@ -42,9 +42,11 @@ const MyPagePasswordChange = ({
       alert("새 비밀번호를 입력해주세요.");
       return;
     }
-    
+
     if (passwordForm.currentPassword === passwordForm.newPassword) {
-      alert("현재 비밀번호와 새 비밀번호가 동일합니다. 다른 비밀번호를 입력해주세요.");
+      alert(
+        "현재 비밀번호와 새 비밀번호가 동일합니다. 다른 비밀번호를 입력해주세요."
+      );
       return;
     }
 
@@ -122,7 +124,9 @@ const MyPagePasswordChange = ({
 
             <div className="mp-password-form-group">
               <label className="mp-password-label required">새 비밀번호</label>
-              <span className="mp-form-note">비밀번호는 8~20자 영문, 숫자, 특수문자만 가능합니다.</span>
+              <span className="mp-form-note">
+                비밀번호는 8~20자 영문, 숫자, 특수문자만 가능합니다.
+              </span>
               <input
                 type="password"
                 value={passwordForm.newPassword}

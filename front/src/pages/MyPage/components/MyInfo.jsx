@@ -209,7 +209,10 @@ const MyInfo = () => {
                         </div>
                       </div>
 
-                      <MyPageTelChange editForm={editForm} setEditForm={setEditForm} />
+                      <MyPageTelChange
+                        editForm={editForm}
+                        setEditForm={setEditForm}
+                      />
 
                       <div className="mp-form-field">
                         <label className="mp-form-label required">이메일</label>

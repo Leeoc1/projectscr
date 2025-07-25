@@ -51,7 +51,7 @@ const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
     }
     sessionStorage.setItem("cinemacd", cinema.cinemacd);
     sessionStorage.setItem("cinemanm", cinema.cinemanm);
-    navigate("/reservation/movie");
+    navigate(`/reservation/theater/${cinema.cinemacd}`);
   };
 
   const handleMapClick = (cinema) => {

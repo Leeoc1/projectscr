@@ -15,45 +15,57 @@ export const getAllUsers = () =>
 
 // 사용자 ID 중복 확인 (users 테이블)
 export const isAvailableUserId = async (userid) => {
-  return await apiRequest("post", "/users/idcheck", { userid: userid });
+  return await apiRequest("/users/idcheck", {
+    method: "POST",
+    body: { userid: userid },
+  });
 };
 
 // 사용자 회원가입 (users 테이블)
 export const registerUser = async (userData) => {
-  return await apiRequest("post", "/users/register", userData);
+  return await apiRequest("/users/register", {
+    method: "POST",
+    body: userData,
+  });
 };
 
 // 사용자 정보 조회 (users 테이블)
 export const getUserInfo = async (userid) => {
-  return await apiRequest("get", `/users/info/${userid}`);
+  return await apiRequest(`/users/info/${userid}`, { method: "GET" });
 };
 
 // 사용자별 예약 정보 조회 (users 테이블)
 export const getUserReservations = async (userid) => {
-  return await apiRequest("get", `/users/${userid}/reservations`);
+  return await apiRequest(`/users/${userid}/reservations`, { method: "GET" });
 };
 
 // 개인정보수정 시 비밀번호 확인 (users 테이블)
 export const checkPassword = async (userid, userpw) => {
-  return await apiRequest("post", "/users/pwcheck", {
-    userid: userid,
-    userpw: userpw,
+  return await apiRequest("/users/pwcheck", {
+    method: "POST",
+    body: {
+      userid: userid,
+      userpw: userpw,
+    },
   });
 };
 
 // 비밀번호 변경 (users 테이블)
 export const updatePassword = async (userid, userpw) => {
-  return await apiRequest("put", `/users/${userid}/update/password`, {
-    userid: userid,
-    userpw: userpw,
+  return await apiRequest(`/users/${userid}/update/password`, {
+    method: "PUT",
+    body: {
+      userid: userid,
+      userpw: userpw,
+    },
   });
 };
 
 // 개인정보 수정 (users 테이블)
 export const updateUserInfo = async (userid, userData) => {
-  return await apiRequest("put", `/users/${userid}/update/userinfo`, {
-    userid: userid,
-    ...userData,
+  return await apiRequest(`/users/${userid}/update/userinfo`, {
+    method: "PUT",
+    body: userData,
   });
 };
 
@@ -61,7 +73,7 @@ export const updateUserInfo = async (userid, userData) => {
 export const deleteUser = async (userid) => {
   console.log("회원탈퇴 API 호출 시작 - userid:", userid);
   try {
-    const result = await apiRequest("delete", `/users/${userid}`);
+    const result = await apiRequest(`/users/${userid}`, { method: "DELETE" });
     console.log("회원탈퇴 API 성공:", result);
     return result;
   } catch (error) {
@@ -124,12 +136,12 @@ export const getStaffs = () =>
 
 // 직원 정보 수정 (staff 테이블)
 export const updateStaff = async (staffData) => {
-  return await apiRequest("put", "/staff/update", staffData);
+  return await apiRequest("/staff/update", { method: "PUT", body: staffData });
 };
 
 // 직원 정보 추가 (staff 테이블)
 export const addStaff = async (staffData) => {
-  return await apiRequest("post", "/staff/add", staffData);
+  return await apiRequest("/staff/add", { method: "POST", body: staffData });
 };
 
 // ========== 공지사항 및 FAQ API (notice, faq 테이블) ==========
@@ -160,7 +172,7 @@ export const fetchAllFaqs = () =>
 
 // 카카오 API 키 조회 (서버 설정값)
 export const getKakaoApiKey = async () => {
-  const response = await apiRequest("get", "/api/kakao");
+  const response = await apiRequest("/api/kakao", { method: "GET" });
   return response.key;
 };
 
@@ -169,7 +181,7 @@ export const getKakaoApiKey = async () => {
 // Google OAuth 클라이언트 ID 조회 (서버 설정값)
 export const getGoogleClientId = async () => {
   try {
-    const response = await apiRequest("get", "/google/client-id");
+    const response = await apiRequest("/google/client-id", { method: "GET" });
     return response.clientId;
   } catch (error) {
     console.error("Error fetching Google client ID:", error);

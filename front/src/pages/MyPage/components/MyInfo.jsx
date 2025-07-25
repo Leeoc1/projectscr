@@ -6,6 +6,7 @@ import MyAccount from "./MyAccount";
 import { checkPassword, updateUserInfo } from "../../../api/userApi";
 import "../MyPage.css";
 import MyPagePasswordChange from "./MyPagePasswordChange";
+import MyPageTelChange from "./MyPageTelChange";
 
 const MyInfo = () => {
   const location = useLocation();
@@ -90,7 +91,6 @@ const MyInfo = () => {
         ...prev,
         ...editForm,
       }));
-
     } catch (error) {
       alert("개인정보 수정 중 오류가 발생했습니다.");
     }
@@ -209,23 +209,10 @@ const MyInfo = () => {
                         </div>
                       </div>
 
-                      <div className="mp-form-field">
-                        <label className="mp-form-label required">휴대폰</label>
-                        <div className="mp-form-input-wrapper">
-                          {/* <input 
-                            type="tel" 
-                            value={editForm.phone}
-                            onChange={(e) => handleEditChange('phone', e.target.value)}
-                            className="mp-form-input"
-                            disabled
-                            required
-                          /> */}
-                          {editForm.phone}
-                          <button type="button" className="mp-form-button">
-                            휴대폰번호 변경
-                          </button>
-                        </div>
-                      </div>
+                      <MyPageTelChange
+                        editForm={editForm}
+                        setEditForm={setEditForm}
+                      />
 
                       <div className="mp-form-field">
                         <label className="mp-form-label required">이메일</label>

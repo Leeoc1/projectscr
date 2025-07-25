@@ -125,9 +125,11 @@ const MyPageReservation = ({
                 </tr>
               ))
             ) : (
-              <div className="mp-no-reservations">
-                <p>예약 내역이 없습니다.</p>
-              </div>
+              <tr>
+                <td colSpan="4" className="mp-no-reservations">
+                  <p>예약 내역이 없습니다.</p>
+                </td>
+              </tr>
             )}
           </tbody>
         </table>

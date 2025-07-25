@@ -319,7 +319,7 @@ function App() {
         />
 
         <Route
-          path="/reservation/place"
+          path="/reservation/movie/:moviecd"
           element={
             <ReservationProtectedRoute requiredStep="place">
               <ReservationPlacePage />
@@ -327,7 +327,7 @@ function App() {
           }
         />
         <Route
-          path="/reservation/movie"
+          path="/reservation/theater/:cinemacd"
           element={
             <ReservationProtectedRoute requiredStep="theater-first">
               <ReservationPlaceToMoviePage />

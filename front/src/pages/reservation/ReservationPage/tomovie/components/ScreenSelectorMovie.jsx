@@ -7,38 +7,9 @@ const ScreenSelectorMovie = () => {
   const [selectedStartTime, setSelectedStartTime] = useState(null);
   const [reservedSeatsCount, setReservedSeatsCount] = useState({});
 
-  // // 상영 정보 가져오기
-  // useEffect(() => {
-  //   const fetchSchedule = async () => {
-  //     const movienm = sessionStorage.getItem("movienm");
-  //     const selectedFullDate = sessionStorage.getItem("selectedFullDate");
-  //     const selectedTheater = sessionStorage.getItem("cinemanm");
-
-  //     if (!movienm || !selectedFullDate || !selectedTheater) {
-  //       setMovieSchedule([]);
-  //       return;
-  //     }
-
-  //     const selectedSchedule = await getSchedules();
-
-  //     const filteredSchedules = selectedSchedule.filter((schedule) => {
-  //       return (
-  //         schedule.movienm === movienm &&
-  //         schedule.startdate === selectedFullDate &&
-  //         schedule.cinemanm === selectedTheater &&
-  //         schedule.screenstatus === "운영중"
-  //       );
-  //     });
-
-  //     // 상영 시간순으로 정렬
-  //     filteredSchedules.sort(
-  //       (a, b) => new Date(a.starttime) - new Date(b.starttime)
-  //     );
-  //     setMovieSchedule(filteredSchedules);
-  //   };
-
-  //   fetchSchedule();
-  // }, []);
+  // 현재 시간 정보 (컴포넌트 렌더링 시 한 번만 계산)
+  const today = new Date();
+  const todayDate = today.toLocaleDateString("sv-SE");
 
   // 세션 스토리지 변경 감지
   useEffect(() => {
@@ -152,29 +123,42 @@ const ScreenSelectorMovie = () => {
               <div className="place-screen-times-grid">
                 {movieSchedule
                   .filter((schedule) => schedule.screentype === screentype)
-                  .map((schedule) => (
-                    <div
-                      key={schedule.schedulecd}
-                      className={`place-screen-time-card ${
-                        selectedStartTime === schedule.starttime
-                          ? "place-active"
-                          : ""
-                      }`}
-                      onClick={() => handleTimeSelect(schedule)}
-                    >
-                      <div className="place-screen-time-time">
-                        {schedule.starttime.split(" ")[1]?.substring(0, 5)}
+                  .map((schedule) => {
+                    const isToday = schedule.startdate === todayDate;
+                    const isPastTime =
+                      isToday && new Date(schedule.starttime) <= today;
+
+                    return (
+                      <div
+                        key={schedule.schedulecd}
+                        className={`place-screen-time-card ${
+                          selectedStartTime === schedule.starttime
+                            ? "place-active"
+                            : ""
+                        } ${isPastTime ? "rptm-disabled" : ""}`}
+                        onClick={
+                          isPastTime ? null : () => handleTimeSelect(schedule)
+                        }
+                        style={
+                          isPastTime
+                            ? { opacity: 0.5, cursor: "not-allowed" }
+                            : {}
+                        }
+                      >
+                        <div className="place-screen-time-time">
+                          {schedule.starttime.split(" ")[1]?.substring(0, 5)}
+                        </div>
+                        <div className="place-screen-time-seats">
+                          {schedule.allseat}/
+                          {schedule.allseat -
+                            (reservedSeatsCount[schedule.schedulecd] || 0)}
+                        </div>
+                        <div className="place-screen-time-screen">
+                          {schedule.screenname}
+                        </div>
                       </div>
-                      <div className="place-screen-time-seats">
-                        {schedule.allseat}/
-                        {schedule.allseat -
-                          (reservedSeatsCount[schedule.schedulecd] || 0)}
-                      </div>
-                      <div className="place-screen-time-screen">
-                        {schedule.screenname}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
               </div>
             </div>
           ))}

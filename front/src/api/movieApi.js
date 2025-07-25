@@ -4,22 +4,22 @@ import { apiRequest, apiRequestWithErrorHandling } from "./apiUtils";
 
 // 영화 상세 정보 조회
 export const getMovieDetail = async (moviecd) => {
-  return await apiRequest("post", "/movies/detail", { movieno: moviecd });
+  return await apiRequest("/movies/detail", { method: "POST", body: { movieno: moviecd } });
 };
 
 // 찜 상태 및 카운트 조회
 export const getWishlistStatus = async (userid, moviecd) => {
-  return await apiRequest("get", `/api/wishlist/status?userid=${userid}&moviecd=${moviecd}`);
+  return await apiRequest(`/api/wishlist/status?userid=${userid}&moviecd=${moviecd}`, { method: "GET" });
 };
 
 // 찜 추가/해제 토글
 export const toggleWishlist = async (userid, moviecd) => {
-  return await apiRequest("post", `/api/wishlist/toggle?userid=${userid}&moviecd=${moviecd}`);
+  return await apiRequest(`/api/wishlist/toggle?userid=${userid}&moviecd=${moviecd}`, { method: "POST" });
 };
 
 // 내가 찜한 영화 목록 조회
 export const getUserWishlist = async (userid) => {
-  return await apiRequest("get", `/api/wishlist/list?userid=${userid}`);
+  return await apiRequest(`/api/wishlist/list?userid=${userid}`, { method: "GET" });
 };
 
 // 관리자용 KOBIS 영화 데이터 가져오기 (movie 테이블에 저장)

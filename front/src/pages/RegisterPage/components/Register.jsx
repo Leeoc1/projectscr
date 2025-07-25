@@ -146,14 +146,11 @@ const Register = () => {
       };
       const response = await registerUser(userData);
       if (response) {
-        setToastMessage("환영합니다! 회원가입이 완료되었습니다.\n신규회원 쿠폰이 발급되었습니다.");
-        setToastType("success");
-        setShowToast(true);
+        // 회원가입 완료 메시지를 세션 스토리지에 저장
+        sessionStorage.setItem("welcomeMessage", "환영합니다! 회원가입이 완료되었습니다.\n가입 환영 쿠폰이 지급되었습니다.");
         
-        // 3초 후 로그인 페이지로 이동
-        setTimeout(() => {
-          navigate("/login");
-        }, 3000);
+        // 즉시 홈페이지로 리다이렉트
+        navigate("/");
       } else {
         setToastMessage("회원가입에 실패했습니다.");
         setToastType("error");

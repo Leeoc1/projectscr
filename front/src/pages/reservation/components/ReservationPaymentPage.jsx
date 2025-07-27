@@ -4,6 +4,7 @@ import Header from "../../../shared/Header";
 import Footer from "../../../shared/Footer";
 import { saveReservation } from "../../../api/reservationApi";
 import { getUserCoupons, useCoupon as applyCoupon } from "../../../api/couponApi";
+import { getCurrentUserId } from "../../../utils/tokenUtils";
 import ProgressBar from "./ProgressBar";
 import BackNavigationModal from "../../../components/BackNavigationModal";
 import "../style/ReservationPaymentPage.css";
@@ -38,10 +39,10 @@ const ReservationPaymentPage = () => {
   // 사용자 쿠폰 목록 로드
   const loadUserCoupons = async () => {
     try {
-      // localStorage에서 userid 가져오기 (sessionStorage가 아님!)
-      const userid = localStorage.getItem("userid");
+      // 토큰에서 실제 userid 추출
+      const userid = await getCurrentUserId();
       console.log("=== 쿠폰 로드 디버깅 ===");
-      console.log("1. userid from localStorage:", userid);
+      console.log("1. userid from token:", userid);
       
       if (userid) {
         console.log("2. API 호출 시작...");
@@ -136,7 +137,7 @@ const ReservationPaymentPage = () => {
     try {
       // 쿠폰 사용 처리 (결제 시작 시점)
       if (selectedCoupon) {
-        const userid = localStorage.getItem("userid"); // sessionStorage -> localStorage 수정
+        const userid = getCurrentUserId(); // 토큰화된 userid 디코딩
         if (userid) {
           try {
             await applyCoupon(userid, selectedCoupon.couponnum);

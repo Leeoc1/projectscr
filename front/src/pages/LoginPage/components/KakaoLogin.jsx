@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { kakaoLogin, kakaoCallback } from "../../../api/userApi";
+import { kakaoLogin, kakaoCallback, decodeUserid } from "../../../api/userApi";
 
 const KakaoLogin = () => {
   const navigate = useNavigate();
@@ -37,10 +37,11 @@ const KakaoLogin = () => {
     const loginType =
       localStorage.getItem("loginType") || sessionStorage.getItem("loginType");
 
-    // 카카오 로그인인지 확인 - code가 있거나 kakao_login 파라미터가 있으면 카카오 로그인으로 처리
+    // 카카오 로그인인지 확인 - code가 있고 loginType이 kakao인 경우만 처리
     if (
       code &&
-      (loginType === "kakao" || window.location.pathname === "/login")
+      loginType === "kakao" &&
+      window.location.pathname === "/login"
     ) {
       // loginType이 없더라도 /login 경로의 code 파라미터면 카카오로 처리
       if (!loginType) {
@@ -49,19 +50,28 @@ const KakaoLogin = () => {
       }
 
       kakaoCallback(code)
-        .then((response) => {
+        .then(async (response) => {
           // 로컬스토리지에 로그인 상태 저장 (Login.jsx와 동일한 로직)
           localStorage.setItem("isLoggedIn", "true");
 
           // 응답에서 userid 추출 (백엔드 응답 구조에 따라 조정 필요)
-          const userid =
+          const tokenizedUserid =
             response.userid ||
             response.id ||
             response.email ||
             response.username;
 
-          if (userid) {
-            localStorage.setItem("userid", userid);
+          if (tokenizedUserid) {
+            // JWT 토큰을 디코딩하여 실제 userid 추출 (검증용)
+            const realUserid = await decodeUserid(tokenizedUserid);
+            if (realUserid) {
+              localStorage.setItem("userid", tokenizedUserid); // JWT 토큰화된 userid 저장 (실제 userid 아님)
+              console.log("카카오 로그인 성공 - JWT 토큰 저장:", tokenizedUserid);
+              console.log("카카오 로그인 성공 - 실제 userid (로그용):", realUserid);
+            } else {
+              console.error("JWT 토큰 디코딩 실패");
+              localStorage.setItem("userid", tokenizedUserid); // 백업으로 토큰화된 userid 저장
+            }
           }
 
           // URL에서 code 파라미터 제거 후 홈으로 이동
@@ -89,34 +99,8 @@ const KakaoLogin = () => {
           localStorage.removeItem("loginType");
           sessionStorage.removeItem("loginType");
         });
-    } else if (urlParams.get("kakao_login") === "success") {
-      // 백엔드에서 처리 완료 후 리다이렉트된 경우
-      const userid = urlParams.get("userid");
-      const username = urlParams.get("username");
-      const accessToken = urlParams.get("access_token");
-
-      if (userid) {
-        // 로컬스토리지에 로그인 상태 저장
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("userid", userid);
-
-        if (username) {
-          const decodedUsername = decodeURIComponent(username);
-          localStorage.setItem("username", decodedUsername);
-        }
-
-        if (accessToken) {
-          const decodedAccessToken = decodeURIComponent(accessToken);
-          localStorage.setItem("kakao_access_token", decodedAccessToken);
-          console.log("카카오 액세스 토큰 저장됨");
-        }
-
-        // URL 파라미터 제거 후 홈으로 이동
-        navigate("/", { replace: true });
-      } else {
-        alert("로그인 처리 중 오류가 발생했습니다.");
-      }
     }
+    // kakao_login=success 파라미터 처리는 App.js의 KakaoLoginHandler에서 담당
   }, [navigate, location]);
 
   return (

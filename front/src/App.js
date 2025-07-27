@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   useLocation,
   Navigate,
+  useNavigate,
 } from "react-router-dom";
+import { getCurrentUserId } from "./utils/tokenUtils";
+import { decodeUserid } from "./api/userApi";
 import HomePage from "./pages/HomePage/HomePage";
 import MoviePage from "./pages/MoviePage/MoviePage";
 import TheaterPage from "./pages/TheaterPage/TheaterPage";
@@ -37,6 +40,63 @@ function ScrollToTop() {
   return null;
 }
 
+// 카카오 로그인 URL 파라미터 처리 컴포넌트
+function KakaoLoginHandler() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    
+    // 카카오 로그인 성공 파라미터가 있는지 확인
+    if (urlParams.get("kakao_login") === "success") {
+      const tokenizedUserid = urlParams.get("userid");
+      const username = urlParams.get("username");
+      const accessToken = urlParams.get("access_token");
+
+      if (tokenizedUserid) {
+        console.log("카카오 로그인 URL 파라미터 처리 시작");
+        
+        // JWT 토큰을 디코딩하여 실제 userid 추출
+        decodeUserid(tokenizedUserid).then((realUserid) => {
+          if (realUserid) {
+            // 로컬스토리지에 로그인 상태 저장 (보안을 위해 토큰화된 데이터만 저장)
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("userid", tokenizedUserid); // JWT 토큰화된 userid 저장 (실제 userid 아님)
+            
+            // username은 보안상 저장하지 않음 (필요시 API로 조회)
+            // localStorage.setItem("username", decodedUsername); // 제거
+
+            if (accessToken) {
+              const decodedAccessToken = decodeURIComponent(accessToken);
+              localStorage.setItem("kakao_access_token", decodedAccessToken);
+              console.log("카카오 액세스 토큰 저장됨");
+            }
+
+            console.log("카카오 로그인 성공 - JWT 토큰 저장:", tokenizedUserid);
+            console.log("카카오 로그인 성공 - 실제 userid (로그용):", realUserid);
+
+            // URL에서 파라미터 제거하고 홈으로 이동
+            const currentPath = location.pathname;
+            const cleanUrl = currentPath === "/login" ? "/" : currentPath;
+            navigate(cleanUrl, { replace: true });
+          } else {
+            console.error("JWT 토큰 디코딩 실패");
+            alert("로그인 처리 중 오류가 발생했습니다.");
+            navigate("/login", { replace: true });
+          }
+        }).catch((error) => {
+          console.error("JWT 토큰 디코딩 중 오류:", error);
+          alert("로그인 처리 중 오류가 발생했습니다.");
+          navigate("/login", { replace: true });
+        });
+      }
+    }
+  }, [location, navigate]);
+
+  return null; // 이 컴포넌트는 아무것도 렌더링하지 않음
+}
+
 // 보호된 라우트 컴포넌트 (로그인 필요)
 function ProtectedRoute({ children }) {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -50,11 +110,40 @@ function ProtectedRoute({ children }) {
 
 // 관리자 페이지 보호 컴포넌트 (관리자 계정만 접근 가능)
 function AdminProtectedRoute({ children }) {
+  const [isChecking, setIsChecking] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-  const userid = localStorage.getItem("userid");
+
+  useEffect(() => {
+    const checkAdminAccess = async () => {
+      if (!isLoggedIn) {
+        setIsAdmin(false);
+        setIsChecking(false);
+        return;
+      }
+
+      try {
+        // 토큰에서 실제 userid 추출
+        const realUserid = await getCurrentUserId();
+        setIsAdmin(realUserid === "master001");
+      } catch (error) {
+        console.error("관리자 권한 확인 중 오류:", error);
+        setIsAdmin(false);
+      } finally {
+        setIsChecking(false);
+      }
+    };
+
+    checkAdminAccess();
+  }, [isLoggedIn]);
+
+  // 권한 확인 중일 때 로딩 표시
+  if (isChecking) {
+    return <div>권한 확인 중...</div>;
+  }
 
   // 로그인하지 않았거나 관리자 계정이 아니면 홈으로 리다이렉트
-  if (!isLoggedIn || userid !== "master001") {
+  if (!isLoggedIn || !isAdmin) {
     return <Navigate to="/" replace />;
   }
 
@@ -212,6 +301,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
+      <KakaoLoginHandler />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/movie" element={<MoviePage />} />

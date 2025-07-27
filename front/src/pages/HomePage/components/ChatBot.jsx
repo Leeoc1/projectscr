@@ -43,12 +43,31 @@ const ChatBot = () => {
   };
 
   const createCinemaMessage = (data) => {
-    const { cinemaname, cinemaaddress, cinemastatus, cinematel, cinemacd } =
-      data;
+    const { cinemaname, cinemaaddress, cinemastatus, cinematel, cinemacd, movies } = data;
+    console.log("ChatBot - createCinemaMessage 데이터:", data);
+    console.log("ChatBot - 영화 목록:", movies);
+    
+    let text = `극장: ${cinemaname}\n주소: ${cinemaaddress}\n상태: ${cinemastatus}\n전화번호: ${cinematel}`;
+    
+    if (movies && movies.length > 0) {
+      console.log("ChatBot - 영화 목록이 있음:", movies.length, "개");
+      text += `\n\n상영 중인 영화 (${movies.length}개):`;
+      movies.slice(0, 5).forEach((movie, index) => {
+        text += `\n${index + 1}. ${movie}`;
+      });
+      if (movies.length > 5) {
+        text += `\n... 외 ${movies.length - 5}개 더`;
+      }
+    } else {
+      console.log("ChatBot - 영화 목록이 없음 - movies:", movies);
+      text += "\n\n현재 상영 중인 영화가 없습니다.";
+    }
+    
     return {
-      text: `극장: ${cinemaname}\n주소: ${cinemaaddress}\n상태: ${cinemastatus}\n전화번호: ${cinematel}`,
+      text,
       isBot: true,
       cinemacd: cinemacd,
+      movies: movies || [], // 영화 목록 추가
     };
   };
 
@@ -70,6 +89,27 @@ const ChatBot = () => {
     };
   };
 
+  const createCinemaMoviesMessage = (data) => {
+    const { cinemamovies, totalCount, message, hasMore } = data;
+    
+    let text = "";
+    if (message) {
+      text = message + "\n\n";
+    }
+    
+    text += "상영 중인 영화:\n" + cinemamovies.map((movie, index) => `${index + 1}. ${movie}`).join("\n");
+    
+    if (hasMore) {
+      text += "\n\n※ 더 많은 영화가 있습니다. 구체적인 영화명으로 검색해보세요.";
+    }
+
+    return {
+      text,
+      isBot: true,
+      movies: cinemamovies,
+    };
+  };
+
   const getBotMessage = (data) => {
     const messageCreators = {
       faq: () => createFaqMessage(data.data.content),
@@ -77,7 +117,9 @@ const ChatBot = () => {
       movie: () => createMovieMessage(data.data),
       top10: () => createTop10Message(data.data.movies),
       cinema: () => createCinemaMessage(data.data),
+      cinemamovies: () => createCinemaMoviesMessage(data.data),
       suggestion: () => createSuggestionMessage(data.data),
+      ai: () => createFaqMessage(data.data.content), // AI 응답 처리 추가
     };
 
     return (

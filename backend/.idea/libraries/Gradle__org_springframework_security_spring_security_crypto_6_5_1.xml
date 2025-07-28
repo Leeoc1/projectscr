@@ -5,6 +5,8 @@
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-crypto/6.5.1/fb3f9675a194778207a497c658102f55f841b77e/spring-security-crypto-6.5.1.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-crypto/6.5.1/36f79691558d7692446aebb4c0dd0f17165ac33b/spring-security-crypto-6.5.1-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

@@ -6,22 +6,21 @@ import com.example.thescreen.service.NaverLoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@RequestMapping("/naver")
 @RestController
 public class NaverLoginController {
 
     private final NaverLoginService naverLoginService;
     private final UserRepository userRepository;
 
-    @PostMapping("/login/naver")
+    @PostMapping("/login")
     public ResponseEntity<?> getNaverLoginUrl() {
         try {
             String loginUrl = naverLoginService.getNaverLogin();
@@ -33,7 +32,7 @@ public class NaverLoginController {
         }
     }
 
-    @PostMapping("/login/naver/callback")
+    @GetMapping("/login/callback")
     public ResponseEntity<?> naverCallback(@RequestParam(required = false) String code,
             @RequestParam(required = false) String state,
             @RequestParam(required = false) String error) throws Exception {

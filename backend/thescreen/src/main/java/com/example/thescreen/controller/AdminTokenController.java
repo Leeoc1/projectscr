@@ -9,7 +9,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/admin")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:8080", "http://localhost:3000"})
 public class AdminTokenController {
 
     @Autowired

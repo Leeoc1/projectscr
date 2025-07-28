@@ -26,9 +26,16 @@ public class MovieRankService {
 
     public void saveMovieRanksFromApi() {
         try {
+            String kobisApiKey = System.getenv("KOBIS_API_KEY");
+            if (kobisApiKey == null) {
+                kobisApiKey = System.getProperty("KOBIS_API_KEY");
+            }
+            if (kobisApiKey == null) {
+                throw new RuntimeException("KOBIS_API_KEY 환경변수가 설정되어 있지 않습니다.");
+            }
             String targetDate = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
-                    + "?key=185c6011b370c8bf203f5bf993de4d24"
+                    + "?key=" + kobisApiKey
                     + "&targetDt=" + targetDate;
 
             URL url = new URL(apiUrl);

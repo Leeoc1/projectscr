@@ -5,6 +5,7 @@ import com.example.thescreen.entity.User;
 import com.example.thescreen.repository.ReservationViewRepository;
 import com.example.thescreen.repository.UserRepository;
 import com.example.thescreen.service.KaKaoService;
+import com.example.thescreen.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -26,6 +27,9 @@ import java.util.Optional;
 public class KakaoLoginController {
     @Autowired
     private KaKaoService kaKaoService;
+    
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Value("${kakao.client.id}")
     private String clientId;
@@ -102,10 +106,13 @@ public class KakaoLoginController {
             // 4. 데이터베이스 확인
             if (userRepository.existsByUserid(userId)) {
                 // 기존 사용자: 로그인 처리
+                // JWT 토큰으로 userid 암호화
+                String tokenizedUserid = jwtUtil.encodeUserid(userId);
+                
                 HttpHeaders headers = new HttpHeaders();
                 String encodedNickname = URLEncoder.encode(nickname, StandardCharsets.UTF_8);
                 String encodedAccessToken = URLEncoder.encode(accessToken, StandardCharsets.UTF_8);
-                headers.add("Location", "http://localhost:3000/login?kakao_login=success&userid=" + userId
+                headers.add("Location", "http://localhost:3000/login?kakao_login=success&userid=" + tokenizedUserid
                         + "&username=" + encodedNickname + "&access_token=" + encodedAccessToken);
                 return new ResponseEntity<>(headers, HttpStatus.FOUND);
             } else {
@@ -136,12 +143,14 @@ public class KakaoLoginController {
         userAccessTokens.put(userId, accessToken);
         System.out.println("신규 사용자 액세스 토큰 저장: " + userId);
 
+        // JWT 토큰으로 userid 암호화
+        String tokenizedUserid = jwtUtil.encodeUserid(userId);
         String encodingName = URLEncoder.encode(nickname, StandardCharsets.UTF_8);
         String encodedAccessToken = URLEncoder.encode(accessToken, StandardCharsets.UTF_8);
-        // 홈페이지로 리다이렉트 (사용자 정보 포함)
+        // 홈페이지로 리다이렉트 (JWT 토큰화된 사용자 정보 포함)
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location",
-                "http://localhost:3000/login?kakao_login=success&userid=" + userId + "&username=" + encodingName
+                "http://localhost:3000/login?kakao_login=success&userid=" + tokenizedUserid + "&username=" + encodingName
                         + "&access_token=" + encodedAccessToken);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
@@ -162,10 +171,34 @@ public class KakaoLoginController {
             String reservationId = request.get("reservationId").toString();
             System.out.println("예약 ID: " + reservationId);
 
-            // 액세스 토큰을 요청에서 가져오기
+            // 액세스 토큰을 요청에서 가져오기 (우선순위 1)
             String accessToken = (String) request.get("accessToken");
+            
+            // 만약 accessToken이 없으면 userid로 저장된 토큰에서 찾기 (백업 방법)
             if (accessToken == null || accessToken.trim().isEmpty()) {
-                System.out.println("ERROR: 액세스 토큰이 요청에 포함되지 않았습니다.");
+                String userid = (String) request.get("userid");
+                if (userid != null) {
+                    // JWT 토큰인 경우 디코딩해서 실제 userid 추출
+                    String realUserid = userid;
+                    try {
+                        String decoded = jwtUtil.decodeUserid(userid);
+                        if (decoded != null) {
+                            realUserid = decoded;
+                            System.out.println("JWT 토큰 디코딩: " + userid + " -> " + realUserid);
+                        }
+                    } catch (Exception e) {
+                        System.out.println("JWT 디코딩 실패, 원본 userid 사용: " + userid);
+                    }
+                    
+                    accessToken = userAccessTokens.get(realUserid);
+                    if (accessToken != null) {
+                        System.out.println("저장된 액세스 토큰에서 찾음: " + realUserid);
+                    }
+                }
+            }
+            
+            if (accessToken == null || accessToken.trim().isEmpty()) {
+                System.out.println("ERROR: 액세스 토큰을 찾을 수 없습니다.");
                 return ResponseEntity.badRequest().body("카카오 로그인이 필요합니다. 액세스 토큰이 없습니다.");
             }
 

@@ -5,6 +5,7 @@ import "../../styles/Stable.css";
 import { getStaffs } from "../../../../api/userApi";
 import StaffUpdatePopup from "./StaffUpdatePopup";
 import AddStaffPopup from "./AddStaffPopup";
+import ExcelDownloadButton from "../ExcelDownloadButton";
 
 const StaffManagement = () => {
   const [staffs, setStaffs] = useState([]);
@@ -50,6 +51,21 @@ const StaffManagement = () => {
     }
   };
 
+  // 엑셀 컬럼 매핑
+  const excelColumns = {
+    "직원 ID": "staffid",
+    이름: "staffname",
+    부서: "dept",
+    지점명: "theater",
+    직급: "position",
+    담당: "role",
+    휴대폰: "phone",
+    이메일: "email",
+    "채용 날짜": "hiredate",
+    "고용 형태": "shifttype",
+    "근무 상태": "status",
+  };
+
   // 수정 버튼 누를 시 작동
   // 선택된 직원, formData는 현재 선택된 직원의 정보로 초기화, 팝업 열기
   const handleEditClick = (staff) => {
@@ -74,12 +90,20 @@ const StaffManagement = () => {
     <div className="adp-content">
       <div className="adp-header">
         <h2>직원 관리</h2>
-        <button
-          className="adp-btn-primary"
-          onClick={() => setIsAddPopupOpen(true)}
-        >
-          직원 추가
-        </button>
+        <div style={{ display: "flex", gap: "8px" }}>
+          <ExcelDownloadButton
+            data={staffs}
+            columns={excelColumns}
+            fileName="직원목록"
+            sheetName="직원목록"
+          />
+          <button
+            className="adp-btn-primary"
+            onClick={() => setIsAddPopupOpen(true)}
+          >
+            직원 추가
+          </button>
+        </div>
       </div>
 
       {isAddPopupOpen && (

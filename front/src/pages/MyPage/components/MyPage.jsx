@@ -17,6 +17,7 @@ import MyPageInquiry from "./MyPageInquiry";
 import MyAccount from "./MyAccount";
 import { getUserWishlist } from "../../../api/movieApi";
 import { useNavigate } from "react-router-dom";
+import { getCurrentUserId } from "../../../utils/tokenUtils";
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -38,7 +39,10 @@ const MyPage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userid = localStorage.getItem("userid");
+        // 토큰에서 실제 userid 추출
+        const userid = await getCurrentUserId();
+        console.log("MyPage 컴포넌트 - userid:", userid);
+        
         if (userid) {
           // 사용자 정보 조회
           const userResponse = await getUserInfo(userid);
@@ -97,7 +101,8 @@ const MyPage = () => {
     }
 
     try {
-      const userid = localStorage.getItem("userid");
+      // 토큰에서 실제 userid 추출
+      const userid = await getCurrentUserId();
       console.log("회원탈퇴 처리 시작 - userid:", userid);
 
       if (userid) {

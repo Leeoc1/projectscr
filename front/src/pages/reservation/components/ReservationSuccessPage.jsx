@@ -18,21 +18,39 @@ const ReservationSuccessPage = () => {
     // 히스토리 항목을 현재 페이지로 대체하여 뒤로가기 방지
     window.history.pushState(null, "", window.location.href);
     
-    // 뒤로가기 시도 시 홈으로 리다이렉트
+    // 뒤로가기 시도 시 완전 차단 (예매 완료 후 보안)
     const handlePopState = (event) => {
+      // 뒤로가기 시도 시 아무 동작도 하지 않고 현재 페이지 유지
+      console.log("🔒 보안상 뒤로가기가 차단되었습니다. (예매 완료 페이지)");
       window.history.pushState(null, "", window.location.href);
-      // 사용자에게 확인 메시지 표시 후 홈으로 이동
-      if (window.confirm("예매가 완료되었습니다. 홈페이지로 이동하시겠습니까?")) {
-        navigate("/", { replace: true });
+    };
+
+    // 키보드 단축키 뒤로가기 방지 (Alt+왼쪽화살표, Backspace 등)
+    const handleKeyDown = (event) => {
+      // Alt + 왼쪽 화살표 (뒤로가기)
+      if (event.altKey && event.keyCode === 37) {
+        console.log("🔒 키보드 뒤로가기가 차단되었습니다. (Alt+←)");
+        event.preventDefault();
+        return false;
+      }
+      // Backspace로 뒤로가기 (input이나 textarea가 아닌 경우)
+      if (event.keyCode === 8 && 
+          !['INPUT', 'TEXTAREA'].includes(event.target.tagName) && 
+          !event.target.isContentEditable) {
+        console.log("🔒 키보드 뒤로가기가 차단되었습니다. (Backspace)");
+        event.preventDefault();
+        return false;
       }
     };
 
     // 브라우저 뒤로가기 감지
     window.addEventListener("popstate", handlePopState);
+    document.addEventListener("keydown", handleKeyDown);
 
     // 컴포넌트 언마운트 시 이벤트 리스너 제거
     return () => {
       window.removeEventListener("popstate", handlePopState);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [navigate]);
 

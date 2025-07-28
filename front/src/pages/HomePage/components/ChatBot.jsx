@@ -144,7 +144,7 @@ const ChatBot = () => {
         {msg.moviecd && (
           <Link
             to={`/reservation/movie/${msg.moviecd}`}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2 inline-block"
+            className="bot-message-reservation"
             onClick={() => {
               // 영화 정보를 세션스토리지에 저장
               console.log("예매하기 버튼 클릭, moviecd:", msg.moviecd);
@@ -192,7 +192,16 @@ const ChatBot = () => {
   };
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // ChatBot 내부 스크롤만 조정하고 전체 페이지 스크롤은 건드리지 않음
+    if (messagesEndRef.current) {
+      const chatContainer = messagesEndRef.current.parentElement;
+      if (chatContainer) {
+        chatContainer.scrollTo({
+          top: chatContainer.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+    }
   }, [messages]);
 
   return (
@@ -220,7 +229,10 @@ const ChatBot = () => {
             className="chatbot-input-field"
           />
           <button onClick={sendMessage} className="chatbot-send-button">
-            Send
+            <img
+              src="https://img.icons8.com/?size=100&id=43929&format=png&color=ffffff"
+              alt="Send"
+            />
           </button>
         </div>
       </div>

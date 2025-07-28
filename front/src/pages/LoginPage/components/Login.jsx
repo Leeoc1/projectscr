@@ -38,11 +38,23 @@ const Login = () => {
       if (response.status === 200 && response.data.success) {
         // 로컬스토리지에 로그인 상태 저장
         localStorage.setItem("isLoggedIn", "true");
-        // 토큰화된 userid 저장 (기존 구조 유지)
         localStorage.setItem("userid", response.data.userid);
-        
-        console.log("로그인 성공 - 토큰화된 userid 저장:", response.data.userid);
-        
+
+        // 관리자 여부 저장
+        if (response.data.isAdmin) {
+          localStorage.setItem("isAdminLogin", "true");
+          console.log(
+            "관리자 로그인 성공 - 평문 userid 저장:",
+            response.data.userid
+          );
+        } else {
+          localStorage.setItem("isAdminLogin", "false");
+          console.log(
+            "일반 사용자 로그인 성공 - 토큰화된 userid 저장:",
+            response.data.userid
+          );
+        }
+
         // 브라우저 창 닫기 감지해서 자동 로그아웃
         setupAutoLogout();
 
@@ -56,22 +68,22 @@ const Login = () => {
       }
     }
   };
-  
+
   // 자동 로그아웃 설정
   const setupAutoLogout = () => {
     // 새로고침 여부를 추적하는 변수
     let isRefresh = false;
 
     // 키보드 새로고침 감지 (F5, Ctrl+R)
-    window.addEventListener('keydown', (event) => {
-      if (event.key === 'F5' || (event.ctrlKey && event.key === 'r')) {
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "F5" || (event.ctrlKey && event.key === "r")) {
         isRefresh = true;
         console.log("새로고침 감지 - 로그인 유지");
       }
     });
 
     // 브라우저 창 닫기 감지
-    window.addEventListener('beforeunload', (event) => {
+    window.addEventListener("beforeunload", (event) => {
       // Performance Navigation API로 새로고침 타입 확인
       if (performance.navigation && performance.navigation.type === 1) {
         // type 1 = TYPE_RELOAD (새로고침)
@@ -96,7 +108,7 @@ const Login = () => {
       sessionStorage.clear();
     });
   };
-  
+
   const handleSocialLogin = (provider) => {
     console.log(`${provider} 로그인 시도`);
   };

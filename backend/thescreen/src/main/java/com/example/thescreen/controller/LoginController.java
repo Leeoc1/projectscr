@@ -32,14 +32,22 @@ public class LoginController {
 
         switch (result) {
             case SUCCESS:
-                // 실제 userid를 JWT 토큰으로 암호화
-                String tokenizedUserid = jwtUtil.encodeUserid(user.getUserid());
-                
-                // 응답 데이터 구성 (기존 구조 유지하되, userid만 토큰화)
                 Map<String, Object> response = new HashMap<>();
                 response.put("success", true);
                 response.put("message", "로그인 성공");
-                response.put("userid", tokenizedUserid); // 토큰화된 userid
+                
+                // master001인 경우 토큰화하지 않고 평문 userid 저장
+                if ("master001".equals(user.getUserid())) {
+                    response.put("userid", user.getUserid()); // 평문 userid
+                    response.put("isAdmin", true); // 관리자 플래그
+                    System.out.println("[관리자 로그인] userid: " + user.getUserid() + " (토큰화 안 함)");
+                } else {
+                    // 일반 사용자는 기존대로 JWT 토큰으로 암호화
+                    String tokenizedUserid = jwtUtil.encodeUserid(user.getUserid());
+                    response.put("userid", tokenizedUserid); // 토큰화된 userid
+                    response.put("isAdmin", false); // 일반 사용자 플래그
+                    System.out.println("[일반 사용자 로그인] userid: " + user.getUserid() + " -> 토큰: " + tokenizedUserid);
+                }
                 
                 return ResponseEntity.ok(response);
                 

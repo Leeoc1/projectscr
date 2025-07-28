@@ -32,7 +32,7 @@ export default function Header() {
         try {
           // 토큰에서 실제 userid 추출
           const realUserid = await getCurrentUserId();
-          
+
           if (realUserid) {
             setRealUserid(realUserid); // 실제 userid 저장
             const userInfo = await getUserInfo(realUserid);
@@ -66,6 +66,16 @@ export default function Header() {
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
+  }, []);
+
+  // localStorage 변경 시 Header 상태 동기화
+  useEffect(() => {
+    const syncLoginState = () => {
+      setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+      setUserid(localStorage.getItem("userid") || "");
+    };
+    window.addEventListener("storage", syncLoginState);
+    return () => window.removeEventListener("storage", syncLoginState);
   }, []);
 
   useEffect(() => {

@@ -1,19 +1,19 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "THE SCREEN",
+  "name": "THE SCREEN - 영화관 예매 서비스",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "logo_2.png",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "type": "image/png"
     },
     {
-      "src": "logo192.png",
+      "src": "logo_2.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "logo_2.png",
       "type": "image/png",
       "sizes": "512x512"
     }
@@ -21,5 +21,7 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "description": "THE SCREEN - 영화 예매와 극장 정보를 제공하는 온라인 영화관 서비스",
+  "categories": ["entertainment", "lifestyle"]
 }

@@ -10,4 +10,5 @@ import java.util.List;
 public interface NoticeRepository extends JpaRepository<Notice, Long> {
     List<Notice> findTop5ByNoticetypeNotOrderByNoticenumDesc(String noticetype);
     List<Notice> findByNoticenum(Long noticenum);
+    List<Notice> findByNoticesubContainingIgnoreCase(String noticesub);
 }

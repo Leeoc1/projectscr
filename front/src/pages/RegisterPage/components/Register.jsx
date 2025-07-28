@@ -9,11 +9,16 @@ import {
 import { isAvailableUserId, registerUser } from "../../../api/userApi";
 import SmsAuthForm from "./SmsAuthForm";
 import RegisterBirth from "./RegisterBirth";
+import Toast from "../../../components/Toast";
 import logoImg from "../../../images/logo_2.png";
 import "../styles/Register.css";
 
 const Register = () => {
   const navigate = useNavigate();
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState("success");
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -141,15 +146,26 @@ const Register = () => {
       };
       const response = await registerUser(userData);
       if (response) {
-        alert("회원가입이 완료되었습니다!");
-        navigate("/login");
+        setToastMessage(
+          "환영합니다! 회원가입이 완료되었습니다.\n신규회원 쿠폰이 발급되었습니다."
+        );
+        setToastType("success");
+        setShowToast(true);
+
+        // 3초 후 로그인 페이지로 이동
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
       } else {
-        alert("회원가입에 실패했습니다.");
-        navigate("/login");
+        setToastMessage("회원가입에 실패했습니다.");
+        setToastType("error");
+        setShowToast(true);
       }
     } catch (error) {
       console.error("회원가입 오류:", error);
-      alert("회원가입에 실패했습니다.");
+      setToastMessage("회원가입에 실패했습니다.");
+      setToastType("error");
+      setShowToast(true);
     }
   };
 
@@ -306,6 +322,15 @@ const Register = () => {
           </div>
         </div>
       </div>
+
+      {showToast && (
+        <Toast
+          message={toastMessage}
+          type={toastType}
+          duration={3000}
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </div>
   );
 };

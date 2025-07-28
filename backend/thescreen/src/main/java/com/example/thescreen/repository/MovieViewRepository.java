@@ -12,4 +12,5 @@ public interface MovieViewRepository extends JpaRepository<MovieView, String> {
 
     @Query("SELECT m FROM MovieView m WHERE m.movierank IS NOT NULL ORDER BY CAST(m.movierank AS int) ASC")
     List<MovieView> findMoviesWithRank();
+    List<MovieView> findByMovienmContainingIgnoreCase(String movienm);
 }

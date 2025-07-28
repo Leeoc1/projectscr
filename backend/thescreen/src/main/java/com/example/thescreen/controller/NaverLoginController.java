@@ -24,9 +24,9 @@ public class NaverLoginController {
     public ResponseEntity<?> getNaverLoginUrl() {
         try {
             String loginUrl = naverLoginService.getNaverLogin();
-            Map<String, String> response = new HashMap<>();
-            response.put("loginUrl", loginUrl);
-            return ResponseEntity.ok(response);
+            Map<String, String> reponse = new HashMap<>();
+            reponse.put("loginUrl", loginUrl);
+            return ResponseEntity.ok(reponse);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("네이버 로그인 URL 생성 실패");
         }
@@ -36,12 +36,6 @@ public class NaverLoginController {
     public ResponseEntity<?> naverCallback(@RequestParam(required = false) String code,
             @RequestParam(required = false) String state,
             @RequestParam(required = false) String error) throws Exception {
-
-                // 디버깅 로그 추가
-    System.out.println("=== 네이버 콜백 처리 시작 ===");
-    System.out.println("code: " + code);
-    System.out.println("state: " + state);
-    System.out.println("error: " + error);
 
         if ("access_denied".equals(error)) {
             // 동의 거부 시

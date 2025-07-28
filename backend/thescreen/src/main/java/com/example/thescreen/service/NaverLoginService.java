@@ -112,6 +112,11 @@ public class NaverLoginService {
             naverId = naverId.substring(0, 20);
         }
 
+        // 전화번호에서 하이픈과 공백 제거 (숫자만 남김)
+        if (mobile != null) {
+            mobile = mobile.replaceAll("[^0-9]", "");
+        }
+
         User user = new User();
         user.setUserid(naverId);
         user.setUsername(name);

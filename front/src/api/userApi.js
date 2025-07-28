@@ -1,5 +1,21 @@
 import { api, apiRequest, apiRequestWithErrorHandling } from "./apiUtils";
 
+// ========== JWT 토큰 관리 ==========
+
+// JWT 토큰에서 실제 userid 디코딩
+export const decodeUserid = async (token) => {
+  try {
+    const response = await apiRequest("/api/auth/decode-token", { 
+      method: "POST", 
+      body: { token } 
+    });
+    return response.userid;
+  } catch (error) {
+    console.error("JWT 토큰 디코딩 실패:", error);
+    return null;
+  }
+};
+
 // ========== 사용자 관리 API (users 테이블) ==========
 
 // 전체 사용자 목록 조회 (users 테이블)
@@ -90,12 +106,16 @@ export const logoutUser = () => {
   try {
     // 기본 로그인 정보 제거
     localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("userid");
-    localStorage.removeItem("username");
+    localStorage.removeItem("userid"); // JWT 토큰화된 userid 제거
+    localStorage.removeItem("username"); // 보안상 제거
 
     // 카카오 로그인 관련 데이터 제거
     localStorage.removeItem("loginType");
+    localStorage.removeItem("kakao_access_token");
     sessionStorage.removeItem("loginType");
+
+    // 네이버 로그인 관련 데이터 제거
+    localStorage.removeItem("userInfo");
 
     // 토스페이먼츠 관련 데이터 제거
     localStorage.removeItem("@tosspayments/merchant-browser-id");
@@ -107,8 +127,10 @@ export const logoutUser = () => {
     localStorage.removeItem("userToken");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    localStorage.removeItem("userInfo");
     localStorage.removeItem("authData");
+
+    // 레거시 데이터 정리 (기존에 잘못 저장된 데이터)
+    localStorage.removeItem("tokenizedUserid");
 
     // 세션 스토리지 전체 정리
     sessionStorage.clear();
@@ -259,7 +281,7 @@ export const kakaoCallback = async (code) => {
 // 네이버 로그인 URL 가져오기 (외부 네이버 API)
 export const naverLogin = async () => {
   try {
-    const response = await apiRequest("post", "/login/naver");
+    const response = await apiRequest("/naver/login", { method: "POST" });
     return response;
   } catch (error) {
     console.error("네이버 로그인 URL 가져오기 실패:", error);
@@ -271,8 +293,8 @@ export const naverLogin = async () => {
 export const naverLoginCallback = async (code, state) => {
   try {
     const response = await apiRequest(
-      "post",
-      `/login/naver/callback?code=${code}&state=${state}`
+      `/naver/login/callback?code=${code}&state=${state}`,
+      { method: "GET" }
     );
     return response;
   } catch (error) {

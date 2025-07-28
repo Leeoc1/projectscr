@@ -18,8 +18,8 @@ public class AdminTokenController {
     @GetMapping("/token")
     public ResponseEntity<Map<String, String>> getAdminToken(@RequestParam String userid) {
         try {
-            String token = jwtUtil.generateToken(userid);
-            System.out.println("[관리자 토큰 발급 요청] userid: " + userid);
+            String token = jwtUtil.generateAdminToken(userid);
+            System.out.println("[관리자 토큰 발급 요청] userid: " + userid + ", token: " + token);
             return ResponseEntity.ok(Map.of("token", token));
         } catch (Exception e) {
             System.err.println("[관리자 토큰 발급 실패] " + e.getMessage());

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { saveReservation, savePayment } from "../../../api/reservationApi";
 import { useCoupon as applyCoupon } from "../../../api/couponApi";
+import { getCurrentUserId } from "../../../utils/tokenUtils";
 
 const SuccessPage = () => {
   const navigate = useNavigate();
@@ -127,7 +128,8 @@ const SuccessPage = () => {
             sessionStorage.getItem("finalReservationInfo") || "{}"
           );
           const paymentcd = sessionStorage.getItem("paymentcd");
-          const userid = localStorage.getItem("userid");
+          const userid = await getCurrentUserId();
+        console.log("MyPage 컴포넌트 - userid:", userid);
 
           // 쿠폰 사용 처리는 이미 결제 시점에서 완료되었으므로 여기서는 하지 않음
           if (reservationInfo.usedCoupon && !reservationInfo.couponAlreadyUsed) {

@@ -41,6 +41,7 @@ const MyPage = () => {
       try {
         // 토큰에서 실제 userid 추출
         const userid = await getCurrentUserId();
+        console.log("MyPage 컴포넌트 - userid:", userid);
         
         if (userid) {
           // 사용자 정보 조회

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { naverLogin, naverLoginCallback } from "../../../api/userApi";
 
@@ -6,8 +6,17 @@ const NaverLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // 콜백 처리 중복 방지를 위한 ref
+  const callbackProcessed = useRef(false);
+
   // 네이버 로그인 콜백 처리
   useEffect(() => {
+    // 이미 처리된 경우 중복 실행 방지
+    if (callbackProcessed.current) {
+      console.log("네이버 콜백 이미 처리됨 - 중복 실행 방지");
+      return;
+    }
+
     const urlParams = new URLSearchParams(location.search);
     const code = urlParams.get("code");
     const state = urlParams.get("state");
@@ -39,23 +48,43 @@ const NaverLogin = () => {
     if (code && state) {
       console.log("네이버 콜백 처리 시작");
 
+      // 중복 처리 방지 플래그 설정
+      callbackProcessed.current = true;
+
       (async () => {
         try {
           const result = await naverLoginCallback(code, state);
+          console.log("네이버 로그인 콜백 응답:", result);
+
           if (result.success) {
-            // 일반 로그인과 동일한 방식으로 상태 설정
-            localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem(
-              "userid",
-              result.userInfo.userid || result.userInfo.id
+            console.log("네이버 로그인 성공!");
+            console.log("- userInfo:", result.userInfo);
+            console.log("- userid (JWT 토큰):", result.userid);
+            console.log(
+              "- JWT 토큰 길이:",
+              result.userid ? result.userid.length : "토큰 없음"
             );
+
+            if (!result.userid) {
+              console.error("JWT 토큰이 응답에 없습니다!");
+              alert("로그인 처리 중 오류가 발생했습니다. (토큰 없음)");
+              localStorage.removeItem("loginType");
+              navigate("/login");
+              return;
+            }
+
+            // 반드시 JWT 토큰을 저장
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("userid", result.userid); // JWT 토큰만 저장
             localStorage.setItem("userInfo", JSON.stringify(result.userInfo));
 
-            console.log("네이버 로그인 성공:", result.userInfo);
+            console.log("네이버 로그인 - localStorage 저장 완료");
 
             // loginType은 성공 후에 제거
             localStorage.removeItem("loginType");
-            navigate("/");
+
+            // 즉시 홈으로 이동 (replace: true로 login 페이지 히스토리 제거)
+            navigate("/", { replace: true });
           } else {
             console.error("네이버 로그인 실패:", result.error);
             alert("네이버 로그인 실패: " + result.error);
@@ -67,6 +96,11 @@ const NaverLogin = () => {
           alert("네이버 로그인 처리 중 오류가 발생했습니다.");
           localStorage.removeItem("loginType");
           navigate("/login");
+        } finally {
+          // 처리 완료 후 플래그 초기화 (실패 시에도)
+          setTimeout(() => {
+            callbackProcessed.current = false;
+          }, 1000);
         }
       })();
     }

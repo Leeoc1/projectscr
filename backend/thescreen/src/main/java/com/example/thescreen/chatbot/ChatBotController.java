@@ -1,8 +1,8 @@
 package com.example.thescreen.chatbot;
 
 import com.example.thescreen.chatbot.service.AiService;
-import com.example.thescreen.chatbot.util.ResponseUtil;
 import com.example.thescreen.chatbot.util.RequestValidator;
+import com.example.thescreen.chatbot.util.ResponseUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

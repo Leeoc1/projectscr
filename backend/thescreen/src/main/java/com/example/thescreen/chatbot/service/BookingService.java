@@ -1,12 +1,14 @@
 package com.example.thescreen.chatbot.service;
 
-import com.example.thescreen.entity.*;
-import com.example.thescreen.repository.*;
+import com.example.thescreen.entity.Cinema;
+import com.example.thescreen.entity.MovieView;
+import com.example.thescreen.entity.ScheduleView;
+import com.example.thescreen.repository.CinemaRepository;
+import com.example.thescreen.repository.ScheduleViewRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Comparator;
 
 /**
  * 예매 처리 관련 기능을 담당하는 서비스

@@ -2,11 +2,11 @@ package com.example.thescreen.chatbot;
 
 import com.example.thescreen.entity.Faq;
 import com.example.thescreen.repository.FaqRepository;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.ai.document.Document;
 
 import java.util.List;
 

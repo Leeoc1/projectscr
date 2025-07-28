@@ -26,14 +26,17 @@ export const getScreens = () =>
 
 // 상영관 뷰 조회 (screen_view)
 export const getScreenView = async () => {
-  return await apiRequest("get", "/screens/view");
+  return await apiRequest("/screens/view", { method: "GET" });
 };
 
 // 상영관 상태 업데이트 (screen 테이블)
 export const updateScreenStatus = async (screenData) => {
-  return await apiRequest("put", "/screens/statusupdate", {
-    screencd: screenData.screencd,
-    screenstatus: screenData.screenstatus,
+  return await apiRequest("/screens/statusupdate", {
+    method: "PUT",
+    body: {
+      screencd: screenData.screencd,
+      screenstatus: screenData.screenstatus,
+    }
   });
 };
 

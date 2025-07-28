@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../MyPage.css";
+import MyCoupons from "./MyCoupons";
 
 const MyAccount = ({ loading, userInfo, currentPage }) => {
   const navigate = useNavigate();
+  const [showCouponModal, setShowCouponModal] = useState(false);
 
   // 개인정보수정 페이지로 넘기기
   const handleGoToMyInfo = () => {
@@ -13,6 +15,16 @@ const MyAccount = ({ loading, userInfo, currentPage }) => {
   // 마이페이지로 돌아가기
   const handleGoToMyPage = () => {
     navigate("/mypage");
+  };
+
+  // 쿠폰함 모달 열기
+  const handleOpenCouponModal = () => {
+    setShowCouponModal(true);
+  };
+
+  // 쿠폰함 모달 닫기
+  const handleCloseCouponModal = () => {
+    setShowCouponModal(false);
   };
 
   return (
@@ -45,10 +57,19 @@ const MyAccount = ({ loading, userInfo, currentPage }) => {
               </p>
             )}
 
-            <p className="mp-profile-link">쿠폰함 &gt;</p>
+            <p className="mp-profile-link" onClick={handleOpenCouponModal}>
+              쿠폰함 &gt;
+            </p>
           </div>
         </div>
       </div>
+
+      {/* 쿠폰함 모달 */}
+      <MyCoupons
+        showCouponModal={showCouponModal}
+        handleCloseCouponModal={handleCloseCouponModal}
+        userInfo={userInfo}
+      />
     </section>
   );
 };

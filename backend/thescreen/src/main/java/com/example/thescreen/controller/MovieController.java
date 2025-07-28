@@ -144,7 +144,7 @@ public class MovieController {
             }
 
             LocalDate today = LocalDate.now();
-            LocalDate fiftyDaysAgo = today.minusDays(60);
+            LocalDate fiftyDaysAgo = today.minusDays(30);
 
             // 2. 오늘 이후 개봉 영화는 'E'로
             List<Movie> upcomingMovies = movieRepository.findByReleasedateAfter(today);

@@ -10,10 +10,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) { // CORS 설정
         registry.addMapping("/**") // 모든 경로 허용
-                .allowedOriginPatterns("*") // 모든 오리진 패턴 허용
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // HTTP 메서드
-                .allowedHeaders("*") // 모든 헤더 허용
-                .allowCredentials(false) // credentials 비활성화
-                .maxAge(3600); // preflight 캐시 시간
+                .allowedOrigins("http://localhost:3000") // 리액트 도메인 (명시적 지정)
+                .allowedMethods("GET", "POST", "PUT", "DELETE") // HTTP 메서드
+                .allowedHeaders("*") // Authorization(JWT), Content-Type 등 확장 대응
+                .allowCredentials(true); // 추후 로그인 상태 유지(JWT, 세션)에 사용
     }
 }

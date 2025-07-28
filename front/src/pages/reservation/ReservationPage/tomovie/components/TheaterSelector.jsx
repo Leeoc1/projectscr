@@ -5,6 +5,7 @@ import {
   getCinemas,
   getmycinema,
 } from "../../../../../api/cinemaApi";
+import { getCurrentUserId } from "../../../../../utils/tokenUtils";
 import ScreenSelectorMovie from "./ScreenSelectorMovie";
 
 const TheaterSelector = () => {
@@ -28,7 +29,7 @@ const TheaterSelector = () => {
     }
 
     try {
-      const userid = localStorage.getItem("userid");
+      const userid = await getCurrentUserId();
       const favoriteTheaters = await getmycinema(userid);
       const favoriteCinemaCds = favoriteTheaters.map((item) => item.cinemacd);
 
@@ -127,7 +128,7 @@ const TheaterSelector = () => {
           return;
         }
 
-        const userid = localStorage.getItem("userid");
+        const userid = await getCurrentUserId();
         console.log("Fetching favorites for userid:", userid);
 
         const favoriteTheaters = await getmycinema(userid);

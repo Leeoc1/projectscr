@@ -44,13 +44,19 @@ dependencies {
 	implementation 'net.nurigo:sdk:4.3.2'
 	// Redis 의존성
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
-	//스프링-ai
-	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
+	// JWT 라이브러리 (Spring Boot 3.x 호환)
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 	// 보안
 	// 스프링 시큐리티
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// env 파일 읽기
+	implementation 'me.paulschwarz:spring-dotenv:4.0.0'
+
+	//스프링-ai
+	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
 }
 
 dependencyManagement {

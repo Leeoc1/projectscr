@@ -1,6 +1,8 @@
 package com.example.thescreen.chatbot.service;
 
-import com.example.thescreen.entity.*;
+import com.example.thescreen.entity.Cinema;
+import com.example.thescreen.entity.MovieView;
+import com.example.thescreen.entity.ScheduleView;
 import com.example.thescreen.repository.*;
 import org.springframework.stereotype.Service;
 

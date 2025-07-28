@@ -1,20 +1,17 @@
 package com.example.thescreen.chatbot.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.annotation.Autowired;
-import java.util.Map;
-import java.util.List;
-import java.util.HashMap;
-import java.util.ArrayList;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.web.client.RestTemplate;
 import com.example.thescreen.entity.Movie;
 import com.example.thescreen.repository.MovieRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class AiService {
@@ -66,7 +63,7 @@ public class AiService {
             if (filtered.size() <= 3) {
                 top3 = filtered;
             } else {
-                List<Movie> temp = new java.util.ArrayList<>(filtered);
+                List<Movie> temp = new ArrayList<>(filtered);
                 java.util.Collections.shuffle(temp);
                 top3 = temp.subList(0, 3);
             }

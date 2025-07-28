@@ -2,6 +2,20 @@ import React, { useEffect, useState } from "react";
 import { getReservation } from "../../../api/reservationApi";
 import "../styles/ReservationManagement.css";
 import "../styles/AdminPage.css";
+import ExcelDownloadButton from "./ExcelDownloadButton";
+// 엑셀 컬럼 매핑
+const excelColumns = {
+  예매번호: "reservationcd",
+  고객명: "userid",
+  영화명: "movienm",
+  극장명: "cinemanm",
+  상영관: "screenname",
+  상영시간: "starttime",
+  좌석: "seatcd",
+  결제수단: "paymentmethod",
+  결제금액: "amount",
+  상태: "reservationstatus",
+};
 
 const ReservationManagement = () => {
   const [reservationList, setReservationList] = useState([]);
@@ -148,6 +162,40 @@ const ReservationManagement = () => {
     <div className="adp-content">
       <div className="adp-header">
         <h2>예매 관리</h2>
+        <div style={{ marginTop: 8, marginBottom: 8 }}>
+          <ExcelDownloadButton
+            data={reservationList.map((r) => ({
+              ...r,
+              starttime: (() => {
+                if (!r.starttime) return "";
+                try {
+                  const date = new Date(r.starttime);
+                  const dateStr = date
+                    .toLocaleDateString("ko-KR", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                    })
+                    .replace(/\./g, "-")
+                    .replace(/ /g, "")
+                    .slice(0, -1);
+                  const timeStr = date.toLocaleTimeString("ko-KR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  });
+                  return `${dateStr} ${timeStr}`;
+                } catch {
+                  return r.starttime;
+                }
+              })(),
+            }))}
+            columns={excelColumns}
+            fileName="예매목록"
+            sheetName="예매목록"
+            buttonText="엑셀 다운로드"
+          />
+        </div>
       </div>
 
       <div className="rsm-reservation-tabs">

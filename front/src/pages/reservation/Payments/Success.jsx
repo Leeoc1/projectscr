@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { saveReservation, savePayment } from "../../../api/reservationApi";
+import { useCoupon as applyCoupon } from "../../../api/couponApi";
+import { getCurrentUserId } from "../../../utils/tokenUtils";
 
 const SuccessPage = () => {
   const navigate = useNavigate();
@@ -13,19 +15,37 @@ const SuccessPage = () => {
 
   // 뒤로가기 방지 및 보안 처리 (토스 결제 성공 페이지)
   useEffect(() => {
-    // 결제 성공 페이지에서 뒤로가기 방지
+    // 결제 성공 페이지에서 뒤로가기 완전 차단 (보안상 중요)
     const handlePopState = (event) => {
+      // 뒤로가기 시도 시 아무 동작도 하지 않고 현재 페이지 유지
+      console.log("🔒 보안상 뒤로가기가 차단되었습니다. (결제 완료 페이지)");
       window.history.pushState(null, "", window.location.href);
+    };
+
+    // 키보드 단축키 뒤로가기 방지 (Alt+왼쪽화살표, Backspace 등)
+    const handleKeyDown = (event) => {
+      // Alt + 왼쪽 화살표 (뒤로가기)
+      if (event.altKey && event.keyCode === 37) {
+        console.log("🔒 키보드 뒤로가기가 차단되었습니다. (Alt+←)");
+        event.preventDefault();
+        return false;
+      }
+      // Backspace로 뒤로가기 (input이나 textarea가 아닌 경우)
       if (
-        window.confirm("결제가 완료되었습니다. 홈페이지로 이동하시겠습니까?")
+        event.keyCode === 8 &&
+        !["INPUT", "TEXTAREA"].includes(event.target.tagName) &&
+        !event.target.isContentEditable
       ) {
-        navigate("/", { replace: true });
+        console.log("🔒 키보드 뒤로가기가 차단되었습니다. (Backspace)");
+        event.preventDefault();
+        return false;
       }
     };
 
     // 히스토리 조작으로 뒤로가기 차단
     window.history.pushState(null, "", window.location.href);
     window.addEventListener("popstate", handlePopState);
+    document.addEventListener("keydown", handleKeyDown);
 
     // 민감한 결제 정보 3초 후 정리
     const timeoutId = setTimeout(() => {
@@ -43,6 +63,7 @@ const SuccessPage = () => {
 
     return () => {
       window.removeEventListener("popstate", handlePopState);
+      document.removeEventListener("keydown", handleKeyDown);
       clearTimeout(timeoutId);
     };
   }, [navigate]);
@@ -109,7 +130,58 @@ const SuccessPage = () => {
             sessionStorage.getItem("finalReservationInfo") || "{}"
           );
           const paymentcd = sessionStorage.getItem("paymentcd");
-          const userid = localStorage.getItem("userid");
+          const userid = await getCurrentUserId();
+          console.log("MyPage 컴포넌트 - userid:", userid);
+
+          // 쿠폰 사용 처리는 이미 결제 시점에서 완료되었으므로 여기서는 하지 않음
+          if (
+            reservationInfo.usedCoupon &&
+            !reservationInfo.couponAlreadyUsed
+          ) {
+            console.log(
+              "쿠폰이 아직 사용되지 않았습니다. 사용 처리를 진행합니다."
+            );
+            try {
+              await applyCoupon(userid, reservationInfo.usedCoupon.couponnum);
+              console.log(
+                "쿠폰 사용 처리 완료:",
+                reservationInfo.usedCoupon.couponname
+              );
+            } catch (couponError) {
+              console.error("쿠폰 사용 처리 중 오류:", couponError);
+              // 쿠폰 사용 실패해도 예약은 계속 진행
+            }
+          } else if (reservationInfo.usedCoupon) {
+            console.log(
+              "쿠폰은 이미 사용 처리되었습니다:",
+              reservationInfo.usedCoupon.couponname
+            );
+          }
+
+          // 쿠폰 사용 처리는 이미 결제 시점에서 완료되었으므로 여기서는 하지 않음
+          if (
+            reservationInfo.usedCoupon &&
+            !reservationInfo.couponAlreadyUsed
+          ) {
+            console.log(
+              "쿠폰이 아직 사용되지 않았습니다. 사용 처리를 진행합니다."
+            );
+            try {
+              await applyCoupon(userid, reservationInfo.usedCoupon.couponnum);
+              console.log(
+                "쿠폰 사용 처리 완료:",
+                reservationInfo.usedCoupon.couponname
+              );
+            } catch (couponError) {
+              console.error("쿠폰 사용 처리 중 오류:", couponError);
+              // 쿠폰 사용 실패해도 예약은 계속 진행
+            }
+          } else if (reservationInfo.usedCoupon) {
+            console.log(
+              "쿠폰은 이미 사용 처리되었습니다:",
+              reservationInfo.usedCoupon.couponname
+            );
+          }
 
           await saveReservation({
             schedulecd: reservationInfo.schedulecd,
@@ -117,10 +189,6 @@ const SuccessPage = () => {
             paymentcd,
             userid,
           });
-          const timer = setTimeout(() => {
-            navigate("/reservation/success");
-          }, 3000);
-          return () => clearTimeout(timer);
         } catch (error) {
           console.error("예약 저장 중 오류:", error);
         }

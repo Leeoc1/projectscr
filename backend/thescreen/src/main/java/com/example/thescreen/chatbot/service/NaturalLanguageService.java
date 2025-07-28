@@ -1,11 +1,15 @@
 package com.example.thescreen.chatbot.service;
 
-import com.example.thescreen.entity.*;
+import com.example.thescreen.entity.Cinema;
+import com.example.thescreen.entity.MovieView;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

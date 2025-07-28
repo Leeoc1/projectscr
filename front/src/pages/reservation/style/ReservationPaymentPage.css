@@ -105,45 +105,7 @@
   width: 100%;
 }
 
-.payment-accordion-item {
-  margin-bottom: 15px; /* 아이템 간 간격 증가 */
-}
 
-.payment-accordion-item:last-child {
-  margin-bottom: 0; /* 마지막 아이템 하단 마진 제거 */
-}
-
-.payment-container .payment-accordion .payment-accordion-title {
-  background-color: #f5f5f5 !important; /* 연한 회색 */
-  padding: 16px 20px;
-  cursor: pointer;
-  font-weight: bold;
-  color: #222;
-  font-size: 1.1rem;
-  transition: background-color 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid #dee2e6; /* 보더 선 추가 */
-  border-radius: 4px 4px 0 0; /* 상단만 둥글게 */
-}
-
-.payment-accordion-title:hover {
-  background-color: #d1ecf1; /* 호버 시 더 진한 색상 */
-  border-color: #bee5eb;
-}
-
-.payment-accordion-title::after {
-  content: "▼";
-  font-size: 12px;
-  transition: transform 0.3s ease;
-}
-
-.payment-accordion-title.active::after {
-  transform: rotate(180deg);
-}
 
 .payment-accordion-content {
   padding: 20px;
@@ -155,81 +117,224 @@
   box-sizing: border-box;
 }
 
-/* 쿠폰 옵션 스타일 */
-.coupon-options,
-.gift-options,
-.point-options {
+/* 새로운 섹션 스타일 */
+.coupon-section {
+  margin-bottom: 30px;
+  padding: 0;
+  background-color: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.coupon-section h3 {
+  margin: 0;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #000;
+  border: none;
+}
+
+/* 쿠폰 옵션 스타일 - 테이블 형식으로 변경 */
+.coupon-options {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0;
+  background-color: #fff;
 }
 
-.coupon-options label,
-.gift-options label,
-.point-options label {
+.coupon-options label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   cursor: pointer;
-  padding: 8px 0;
-}
-
-.coupon-options input[type="radio"],
-.gift-options input[type="radio"],
-.point-options input[type="radio"] {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s ease;
+  flex-direction: row;
   margin: 0;
 }
 
-/* 포인트 입력 스타일 */
-.point-input {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
+.coupon-options label:hover {
+  background-color: #f8f9fa;
 }
 
-.point-input input[type="number"] {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  width: 150px;
+.coupon-options label:last-child {
+  border-bottom: none;
 }
 
-.point-input span {
+.coupon-options input[type="radio"] {
+  margin-right: 12px;
+  margin-top: 0;
+  width: 18px;
+  height: 18px;
+  accent-color: #000;
+}
+
+/* 기본 "사용 안함" 옵션 스타일 */
+.coupon-options label:first-child {
+  font-weight: 500;
+  color: #212529;
+}
+
+/* 로딩 및 빈 상태 스타일 */
+.coupon-options > div {
+  padding: 1rem 1.5rem;
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.coupon-expire {
+  font-size: 0.85rem;
   color: #666;
+  margin-left: 24px;
+  margin-top: 4px;
+}
+
+.no-coupons {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+/* 개선된 쿠폰 아이템 스타일 - 테이블 행 형식 */
+.coupon-item {
+  display: flex !important;
+  align-items: center !important;
+  padding: 1rem 1.5rem !important;
+  border-bottom: 1px solid #e9ecef;
+  margin-bottom: 0 !important;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  background-color: #fff;
+  flex-direction: row !important;
+  gap: 0 !important;
+}
+
+.coupon-item:hover {
+  background-color: #f8f9fa !important;
+}
+
+.coupon-item:has(input:checked) {
+  background-color: #e7f3ff !important;
+  border-color: #007bff;
+}
+
+.coupon-item:last-child {
+  border-bottom: none;
+}
+
+.coupon-radio-container {
+  margin-right: 12px;
+  margin-top: 0;
+  flex-shrink: 0;
+}
+
+.coupon-info {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.coupon-left-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.coupon-name {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #212529;
+  margin-bottom: 0;
+}
+
+.coupon-discount-info {
+  color: #e74c3c;
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 0;
+}
+
+.coupon-expire {
+  font-size: 0.75rem !important;
+  color: #6c757d !important;
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* 결제 요약 스타일 */
+.payment-summary {
+  flex: 1;
   font-size: 14px;
 }
 
-.other-payment {
+.payment-original-price,
+.payment-discount-item {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 0;
+}
+
+.payment-original-price span:first-child {
+  color: #666;
+}
+
+.payment-original-price span:last-child {
+  color: #333;
+  font-weight: 500;
+}
+
+.payment-discount-item span:first-child {
+  color: #666;
+}
+
+.discount-amount {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.payment-divider {
+  height: 1px;
+  background-color: #ddd;
+  margin: 12px 0;
 }
 
 /* 최종 결제 금액 박스 */
 .payment-final-amount-box {
   background-color: white;
   border-radius: 8px;
-  padding: 15px 20px;
+  padding: 20px;
   margin: 20px auto;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  width: fit-content;
-  min-width: 200px;
+  width: 300px;
+  height: 170px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .payment-final-label {
-  font-size: 16px;
-  color: #666;
+  font-size: 18px;
+  color: #333;
   margin-bottom: 8px;
-  display: block;
+  text-align: center;
+  font-weight: 600;
 }
 
 .payment-final-amount {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: bold;
   color: #e50914;
-  display: block;
+  text-align: center;
 }
 
 /* 하단 버튼 */

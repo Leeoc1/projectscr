@@ -6,6 +6,7 @@ import {
   updateMyCinema,
   deleteMyCinema,
 } from "../../../api/cinemaApi";
+import { getCurrentUserId } from "../../../utils/tokenUtils";
 
 const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
   const navigate = useNavigate();
@@ -20,8 +21,14 @@ const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
       const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
       if (!isLoggedIn) return;
 
-      const userid = localStorage.getItem("userid");
+      // 토큰에서 실제 userid 추출
+      const userid = await getCurrentUserId();
       console.log("Fetching favorites for userid:", userid);
+
+      if (!userid) {
+        console.log("토큰에서 userid 추출 실패");
+        return;
+      }
 
       try {
         const favorites = await getmycinema(userid);
@@ -75,7 +82,14 @@ const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
       return;
     }
 
-    const userid = localStorage.getItem("userid");
+    // 토큰에서 실제 userid 추출
+    const userid = await getCurrentUserId();
+    if (!userid) {
+      console.log("토큰에서 userid 추출 실패");
+      setShowLoginModal(true);
+      return;
+    }
+    
     const cinemacd = cinema.cinemacd;
     const isFavorite = starFills[cinemacd] === "#fbbf24";
 

@@ -10,15 +10,18 @@ export const api = axios.create({
 });
 
 // 공통 API 호출 래퍼 함수
-export const apiRequest = async (method, url, data = null, config = {}) => {
+export const apiRequest = async (url, config = {}) => {
   try {
+    const method = config.method?.toLowerCase() || 'get';
+    const { method: _, body, ...restConfig } = config; // method 제거
     let response;
+    
     if (method === "delete" || method === "get") {
-      // DELETE와 GET은 data 대신 config만 전달
-      response = await api[method](url, config);
+      // DELETE와 GET은 config만 전달 (method 속성 제외)
+      response = await api[method](url, restConfig);
     } else {
       // POST, PUT 등은 data와 config 모두 전달
-      response = await api[method](url, data, config);
+      response = await api[method](url, body, restConfig);
     }
     return response.data;
   } catch (error) {

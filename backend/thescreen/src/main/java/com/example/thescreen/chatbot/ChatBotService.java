@@ -1,10 +1,18 @@
 package com.example.thescreen.chatbot;
 
-import com.example.thescreen.chatbot.service.*;
-import com.example.thescreen.entity.*;
+import com.example.thescreen.chatbot.service.AiService;
+import com.example.thescreen.chatbot.service.BookingService;
+import com.example.thescreen.chatbot.service.DataService;
+import com.example.thescreen.chatbot.service.SearchService;
+import com.example.thescreen.entity.Cinema;
+import com.example.thescreen.entity.Faq;
+import com.example.thescreen.entity.MovieView;
+import com.example.thescreen.entity.Notice;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * 챗봇 메인 서비스 - 각 전문 서비스를 조합하여 통합된 기능 제공

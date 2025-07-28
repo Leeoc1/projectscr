@@ -46,13 +46,11 @@ public class KakaoLoginController {
     }
 
     @PostMapping("/kakao")
-    public Map<String, String> kakaoLogin(@RequestParam(value = "prompt", required = false) String prompt,
-            @RequestParam(value = "scope", required = false) String scope) {
-        String scopeParam = (scope != null) ? scope : "profile_nickname,talk_message";
+    public Map<String, String> kakaoLogin(@RequestParam(value = "prompt", required = false) String prompt) {
         String authorizationUrl = "https://kauth.kakao.com/oauth/authorize?response_type=code" +
                 "&client_id=" + clientId +
                 "&redirect_uri=" + redirectUri +
-                "&scope=" + scopeParam;
+                "&scope=profile_nickname";
         if (prompt != null) {
             authorizationUrl += "&prompt=" + prompt;
         }

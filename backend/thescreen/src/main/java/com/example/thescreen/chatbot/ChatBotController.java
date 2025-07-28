@@ -1,180 +1,158 @@
 package com.example.thescreen.chatbot;
 
-import com.example.thescreen.entity.*;
-import org.springframework.ai.chat.client.ChatClient;
+import com.example.thescreen.chatbot.service.AiService;
+import com.example.thescreen.chatbot.util.ResponseUtil;
+import com.example.thescreen.chatbot.util.RequestValidator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+/**
+ * 챗봇 REST API 컨트롤러 - 간소화된 버전
+ * 요청 처리와 응답 생성에만 집중
+ */
 @RestController
 @RequestMapping("/chatbot")
 public class ChatBotController {
 
     private final ChatBotService chatBotService;
-    private final ChatClient chatClient;
+    private final AiService aiService;
+    private final RequestValidator requestValidator;
+    private final ResponseUtil responseUtil;
 
-    public ChatBotController(ChatBotService chatBotService, ChatClient chatClient) {
+    public ChatBotController(ChatBotService chatBotService,
+            AiService aiService,
+            RequestValidator requestValidator,
+            ResponseUtil responseUtil) {
         this.chatBotService = chatBotService;
-        this.chatClient = chatClient;
+        this.aiService = aiService;
+        this.requestValidator = requestValidator;
+        this.responseUtil = responseUtil;
     }
 
+    /**
+     * 챗봇 질문 처리 메인 엔드포인트
+     */
     @GetMapping("/ask")
     public ResponseEntity<Map<String, Object>> ask(@RequestParam String question) {
         long startTime = System.currentTimeMillis();
 
         try {
-            String cleanQuestion = question.trim().toLowerCase();
-            Map<String, Object> response = null;
+            // 1. 입력 검증 및 정리
+            String cleanQuestion = requestValidator.cleanAndValidate(question);
 
-            // 1. FAQ 검색
-            response = chatBotService.searchFAQ(cleanQuestion);
-            if (response != null) {
-                logResponse(startTime, response.toString(), "FAQ 검색");
-                return createCorsResponse(response);
+            // 2. AI 우선 처리 (추천, 줄거리 관련 질문을 가장 먼저 확인)
+            String lowerQuestion = cleanQuestion.toLowerCase();
+            System.out.println("=== AI 키워드 확인 ===");
+            System.out.println("원본 질문: " + question);
+            System.out.println("정리된 질문: " + cleanQuestion);
+            System.out.println("소문자 질문: " + lowerQuestion);
+            System.out.println("추천 포함: " + lowerQuestion.contains("추천"));
+            System.out.println("recommend 포함: " + lowerQuestion.contains("recommend"));
+            System.out.println("줄거리 포함: " + lowerQuestion.contains("줄거리"));
+            System.out.println("스토리 포함: " + lowerQuestion.contains("스토리"));
+
+            if (lowerQuestion.contains("추천") || lowerQuestion.contains("recommend") ||
+                    lowerQuestion.contains("줄거리") || lowerQuestion.contains("스토리")) {
+                System.out.println("AI 키워드 매칭됨! AI 서비스로 직접 전달");
+                Map<String, Object> response = aiService.askAI(cleanQuestion);
+                responseUtil.logResponse(startTime, response.toString(), "AI 최우선 응답");
+                return responseUtil.createSuccessResponse(response);
+            } else {
+                System.out.println("AI 키워드 매칭 안됨, 일반 로직으로 진행");
             }
 
-            // 2. Public 검색
-            response = chatBotService.searchNotice(cleanQuestion);
-            if (response != null) {
-                logResponse(startTime, response.toString(), "공지사항 검색");
-                return createCorsResponse(response);
+            // 3. 요청 타입 판별 및 처리
+            Map<String, Object> response;
+            if (requestValidator.isQuickBookingRequest(cleanQuestion)) {
+                response = chatBotService.processNaturalLanguageBooking(question);
+                responseUtil.logResponse(startTime, response.toString(), "자연어 예매");
+            } else {
+                response = processGeneralQuestion(cleanQuestion, startTime);
             }
 
-            // 3. 탑10 영화 검색
-            response = chatBotService.searchTopMovies(cleanQuestion);
-            if (response != null) {
-                logResponse(startTime, response.toString(), "탑10 영화 검색");
-                return createCorsResponse(response);
-            }
-
-            // 4. 영화 검색
-            response = chatBotService.searchMovie(cleanQuestion);
-            if (response != null) {
-                logResponse(startTime, response.toString(), "영화 검색");
-                return createCorsResponse(response);
-            }
-
-            // 5. 극장 검색 (상영관별 영화 검색보다 먼저)
-            response = chatBotService.searchCinema(cleanQuestion);
-            if (response != null) {
-                logResponse(startTime, response.toString(), "극장 검색");
-                return createCorsResponse(response);
-            }
-
-            // 6. 상영관별 영화 검색
-            response = chatBotService.searchCinemaMovies(cleanQuestion);
-            if (response != null) {
-                logResponse(startTime, response.toString(), "상영관별 영화 검색");
-                return createCorsResponse(response);
-            }
-
-            // 7. AI 응답
-            return handleAIResponse(question, startTime);
+            return responseUtil.createSuccessResponse(response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("type", "error");
-            errorResponse.put("data", Map.of("content", "서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."));
-            logResponse(startTime, errorResponse.toString(), "서버 내부 오류");
-            return createErrorResponse(errorResponse, 500);
+            return responseUtil.createErrorResponse("서버 내부 오류가 발생했습니다.", 500, startTime);
         }
     }
 
-    private ResponseEntity<Map<String, Object>> handleAIResponse(String question, long startTime) {
-        Map<String, Object> response = new HashMap<>();
-
+    /**
+     * 직접 예매 확인
+     */
+    @PostMapping("/direct-booking")
+    public ResponseEntity<Map<String, Object>> directBookingConfirm(@RequestBody Map<String, Object> bookingData) {
         try {
-            // AI 컨텍스트 생성
-            StringBuilder context = new StringBuilder();
-            context.append("너는 영화 예매 사이트의 챗봇이야. 다음 정보를 참고해서 질문에 답변해:\n");
-
-            // FAQ 정보 추가
-            List<Faq> allFaqs = chatBotService.getAllFaqs();
-            context.append("- FAQ: ").append(allFaqs.stream()
-                    .map(f -> f.getFaqsub() + ": " + f.getFaqcontents())
-                    .collect(Collectors.joining("\n"))).append("\n");
-
-            // 공지사항 정보 추가
-            List<Notice> allNotices = chatBotService.getAllNotices();
-            context.append("- 공지사항: ").append(allNotices.stream()
-                    .map(n -> n.getNoticesub() + ": " + n.getNoticecontents())
-                    .collect(Collectors.joining("\n"))).append("\n");
-
-            // 영화 정보 추가
-            List<MovieView> allMovies = chatBotService.getAllMovies();
-            context.append("- 영화: ").append(allMovies.stream()
-                    .map(m -> m.getMovienm() + " (장르: " + m.getGenre() + ", 개봉일: "
-                            + (m.getReleasedate() != null ? new SimpleDateFormat("yyyy-MM-dd").format(m.getReleasedate()) : "미공개") + ")")
-                    .collect(Collectors.joining("\n"))).append("\n");
-
-            // 극장 정보 추가
-            List<Cinema> allCinemas = chatBotService.getAllCinemas();
-            context.append("- 극장: ").append(allCinemas.stream()
-                    .map(c -> c.getCinemanm() + " (주소: " + (c.getAddress() != null ? c.getAddress() : "정보 없음") + ")")
-                    .collect(Collectors.joining("\n"))).append("\n");
-
-            context.append("질문이 영화 예매, 영화 정보, 극장 정보와 관련 없으면 '죄송하지만, 해당 질문에 대한 답변을 찾지 못했습니다. 다른 질문을 해 주세요.'라고 답해주세요.\n");
-            context.append("질문: ").append(question).append("\n답변을 간결하고 자연스럽게 제공해.");
-
-            // AI 응답 호출
-            String aiResponse = chatClient
-                    .prompt()
-                    .user(context.toString())
-                    .call()
-                    .content();
-
-            response.put("type", "ai");
-            response.put("data", Map.of("content", aiResponse));
-            logResponse(startTime, response.toString(), "OpenAI API 응답");
-            return createCorsResponse(response);
-
+            Map<String, Object> result = chatBotService.directBookingConfirm(bookingData);
+            return responseUtil.createSuccessResponse(result);
         } catch (Exception e) {
             e.printStackTrace();
-            response.put("type", "error");
-            response.put("data", Map.of("content", "죄송합니다. 답변을 생성하는 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요."));
-            logResponse(startTime, response.toString(), "OpenAI API 예외 발생");
-            return createErrorResponse(response, 500);
+            return responseUtil.createErrorResponse("예매 처리 중 오류가 발생했습니다.", 500, System.currentTimeMillis());
         }
     }
 
+    /**
+     * CORS 옵션 처리
+     */
     @RequestMapping(value = "/ask", method = RequestMethod.OPTIONS)
     public ResponseEntity<?> handleOptions() {
-        return ResponseEntity.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "*")
-                .header("Access-Control-Max-Age", "3600")
-                .build();
+        return responseUtil.createOptionsResponse();
     }
 
-    private void logResponse(long startTime, String response, String searchType) {
-        long endTime = System.currentTimeMillis();
-        long processingTime = endTime - startTime;
-        System.out.println(
-                "Search Type: " + searchType + ", Processing Time: " + processingTime + "ms, Response: " + response);
-    }
+    /**
+     * 일반 질문 처리 (검색 순서대로)
+     */
+    private Map<String, Object> processGeneralQuestion(String cleanQuestion, long startTime) {
+        Map<String, Object> response;
 
-    private ResponseEntity<Map<String, Object>> createCorsResponse(Map<String, Object> response) {
-        return ResponseEntity.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "*")
-                .header("Content-Type", "application/json")
-                .body(response);
-    }
+        // 1. FAQ 검색
+        response = chatBotService.searchFAQ(cleanQuestion);
+        if (response != null) {
+            responseUtil.logResponse(startTime, response.toString(), "FAQ 검색");
+            return response;
+        }
 
-    private ResponseEntity<Map<String, Object>> createErrorResponse(Map<String, Object> response, int statusCode) {
-        return ResponseEntity.status(statusCode)
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "*")
-                .header("Content-Type", "application/json")
-                .body(response);
+        // 2. 공지사항 검색
+        response = chatBotService.searchNotice(cleanQuestion);
+        if (response != null) {
+            responseUtil.logResponse(startTime, response.toString(), "공지사항 검색");
+            return response;
+        }
+
+        // 3. TOP10 영화 검색
+        response = chatBotService.searchTopMovies(cleanQuestion);
+        if (response != null) {
+            responseUtil.logResponse(startTime, response.toString(), "TOP10 영화 검색");
+            return response;
+        }
+
+        // 4. 영화 검색
+        response = chatBotService.searchMovie(cleanQuestion);
+        if (response != null) {
+            responseUtil.logResponse(startTime, response.toString(), "영화 검색");
+            return response;
+        }
+
+        // 5. 극장 검색
+        response = chatBotService.searchCinema(cleanQuestion);
+        if (response != null) {
+            responseUtil.logResponse(startTime, response.toString(), "극장 검색");
+            return response;
+        }
+
+        // 6. 극장별 영화 검색
+        response = chatBotService.searchCinemaMovies(cleanQuestion);
+        if (response != null) {
+            responseUtil.logResponse(startTime, response.toString(), "극장별 영화 검색");
+            return response;
+        }
+
+        // 7. 기본 AI 응답
+        response = chatBotService.askQuestion(cleanQuestion);
+        responseUtil.logResponse(startTime, response.toString(), "기본 응답");
+        return response;
     }
 }

@@ -25,25 +25,16 @@ public class KaKaoService {
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.set("Authorization", "Bearer " + accessToken);
 
-        // 기본 템플릿 객체 생성
-        String templateObject = String.format(
-                "{\"object_type\":\"text\"," +
-                        "\"text\":\"🎬 영화 예약이 완료되었습니다!\\n\\n" +
-                        "📽️ 영화: %s\\n" +
-                        "📅 예약일시: %s\\n" +
-                        "🎭 상영관: %s\\n" +
-                        "💰 결제금액: %s원\\n\\n" +
-                        "즐거운 관람 되세요! 😊\"," +
-                        "\"link\":{\"web_url\":\"http://localhost:3000\",\"mobile_web_url\":\"http://localhost:3000\"}}",
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("template_id", "122730");
+        params.add("template_args", String.format(
+                "{\"title\":\"%s\",\"date\":\"%s\",\"screenname\":\"%s\",\"payment\":\"%s\"}",
                 escapeJsonString(reservationView.getMovienm()),
                 escapeJsonString(reservationView.getReservationtime() != null
-                        ? reservationView.getReservationtime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+                        ? reservationView.getReservationtime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
                         : ""),
                 escapeJsonString(reservationView.getScreenname()),
-                escapeJsonString(String.valueOf(reservationView.getAmount())));
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("template_object", templateObject);
+                escapeJsonString(String.valueOf(reservationView.getAmount()))));
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 

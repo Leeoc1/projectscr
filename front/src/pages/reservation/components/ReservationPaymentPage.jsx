@@ -108,8 +108,9 @@ const ReservationPaymentPage = () => {
     const info = JSON.parse(
       sessionStorage.getItem("finalReservationInfo") || "{}"
     );
-    // 최종 결제 금액을 info에 추가
-    info.finalPrice = finalPrice;
+    // 최종 결제 금액을 info에 추가 (기존 호환성을 위해 finalPrice도 유지)
+    info.totalPrice = finalPrice;
+    info.finalPrice = finalPrice; // 기존 시스템 호환성
     // 다시 저장
     sessionStorage.setItem("finalReservationInfo", JSON.stringify(info));
     // 체크아웃 페이지로 이동

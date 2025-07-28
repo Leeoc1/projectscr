@@ -12,11 +12,7 @@ const KakaoLogin = () => {
       localStorage.setItem("loginType", "kakao");
       sessionStorage.setItem("loginType", "kakao");
 
-      // talk_message 권한을 포함한 스코프 요청
-      const response = await kakaoLogin({
-        prompt: "login",
-        scope: "profile_nickname,talk_message",
-      });
+      const response = await kakaoLogin({ prompt: "login" });
 
       if (response && response.redirectUrl) {
         window.location.href = response.redirectUrl; // 백엔드에서 받은 URL로 리다이렉트

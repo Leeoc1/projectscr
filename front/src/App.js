@@ -137,7 +137,7 @@ function ReservationProtectedRoute({ children, requiredStep }) {
       break;
 
     case "checkout":
-      // /checkout은 finalReservationInfo에 finalPrice가 1원 이상이어야 접근 가능
+      // /checkout은 finalReservationInfo에 totalPrice가 1원 이상이어야 접근 가능
       const checkoutReservationInfo = sessionStorage.getItem(
         "finalReservationInfo"
       );
@@ -147,10 +147,10 @@ function ReservationProtectedRoute({ children, requiredStep }) {
       try {
         const checkoutInfo = JSON.parse(checkoutReservationInfo);
         if (
-          checkoutInfo.finalPrice === undefined ||
-          checkoutInfo.finalPrice === null ||
-          isNaN(checkoutInfo.finalPrice) ||
-          Number(checkoutInfo.finalPrice) < 1
+          (checkoutInfo.totalPrice === undefined && checkoutInfo.finalPrice === undefined) ||
+          (checkoutInfo.totalPrice === null && checkoutInfo.finalPrice === null) ||
+          (isNaN(checkoutInfo.totalPrice) && isNaN(checkoutInfo.finalPrice)) ||
+          (Number(checkoutInfo.totalPrice || checkoutInfo.finalPrice) < 1)
         ) {
           return <Navigate to="/movie" replace />;
         }

@@ -125,3 +125,140 @@
     height: 300px;
   }
 }
+
+/* 버튼 스타일 */
+.cinema-select-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin-top: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.cinema-select-button:hover {
+  background: #0056b3;
+}
+
+.movie-buttons-container {
+  margin-top: 8px;
+}
+
+.movie-button {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 15px;
+  margin: 2px;
+  cursor: pointer;
+  font-size: 12px;
+  display: inline-block;
+  transition: background-color 0.2s ease;
+}
+
+.movie-button:hover {
+  background: #ff5252;
+}
+
+.confirmation-buttons-container {
+  margin-top: 8px;
+}
+
+.confirm-button {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.confirm-button:hover {
+  background: #218838;
+}
+
+.reject-button {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.reject-button:hover {
+  background: #c82333;
+}
+
+.reservation-button-container {
+  margin-top: 8px;
+}
+
+.reservation-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.reservation-button:hover {
+  background: #0056b3;
+}
+
+.direct-payment-button-container {
+  margin-top: 8px;
+}
+
+.direct-payment-button {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+}
+
+.direct-payment-button:hover {
+  background: #218838;
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4);
+}
+
+.cinema-list-container {
+  margin-top: 8px;
+}
+
+.cinema-list-button {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 15px;
+  margin: 2px;
+  cursor: pointer;
+  font-size: 12px;
+  display: inline-block;
+  transition: background-color 0.2s ease;
+}
+
+.cinema-list-button:hover {
+  background: #218838;
+}

@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a7929261-1ad1-4007-9ae7-86e384453840" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/thescreen.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/thescreen.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/thescreen.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/thescreen.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/thescreen/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/thescreen/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/thescreen/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/thescreen/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/thescreen/src/main/java/com/example/thescreen/service/MovieRankService.java" beforeDir="false" afterPath="$PROJECT_DIR$/thescreen/src/main/java/com/example/thescreen/service/MovieRankService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/thescreen/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/thescreen/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../front/public/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

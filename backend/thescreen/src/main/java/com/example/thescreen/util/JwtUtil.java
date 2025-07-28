@@ -9,9 +9,10 @@ import javax.crypto.SecretKey;
 @Component
 public class JwtUtil {
     private final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long EXPIRATION = 30 * 60 * 1000; // 30분
+    private final long EXPIRATION = 24 * 60 * 60 * 1000; // 24시간
 
-    public String generateToken(String userid) {
+    // userid를 JWT 토큰으로 암호화
+    public String encodeUserid(String userid) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + EXPIRATION);
         
@@ -22,23 +23,55 @@ public class JwtUtil {
                 .signWith(SECRET_KEY)
                 .compact();
                 
-        System.out.println("[관리자 JWT 토큰 발급] " + token);
+        System.out.println("[USERID 토큰화] 원본: " + userid + " -> 토큰: " + token);
         return token;
     }
 
+    // JWT 토큰에서 실제 userid 추출
+    public String decodeUserid(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY)
+                    .build().parseClaimsJws(token).getBody();
+            String userid = claims.getSubject();
+            System.out.println("[USERID 디코딩] 토큰: " + token + " -> 원본: " + userid);
+            return userid;
+        } catch (ExpiredJwtException e) {
+            System.out.println("[JWT 토큰 만료] " + e.getMessage());
+            return null;
+        } catch (Exception e) {
+            System.out.println("[JWT 토큰 디코딩 실패] " + e.getMessage());
+            return null;
+        }
+    }
+
+    // 토큰 유효성 검사
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token);
             return true;
+        } catch (ExpiredJwtException e) {
+            System.out.println("[JWT 토큰 만료] " + e.getMessage());
+            return false;
         } catch (Exception e) {
             System.out.println("[JWT 토큰 검증 실패] " + e.getMessage());
             return false;
         }
     }
-
-    public String getUseridFromToken(String token) {
-        Claims claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY)
-                .build().parseClaimsJws(token).getBody();
-        return claims.getSubject();
+    
+    // 관리자용 토큰 생성 (기존 기능 유지)
+    public String generateAdminToken(String userid) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + 30 * 60 * 1000); // 30분
+        
+        String token = Jwts.builder()
+                .setSubject(userid)
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .claim("type", "admin")
+                .signWith(SECRET_KEY)
+                .compact();
+                
+        System.out.println("[관리자 JWT 토큰 발급] " + token);
+        return token;
     }
 }

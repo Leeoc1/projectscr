@@ -1,6 +1,7 @@
 import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import BackNavigationModal from "../../../components/BackNavigationModal";
 import "./paycss/pay.css";
 
 // TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
@@ -17,6 +18,7 @@ export function CheckoutPage() {
   });
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState(null);
+  const [showBackModal, setShowBackModal] = useState(false);
 
   // 뒤로가기 방지 및 세션 보안 처리 (결제 위젯 페이지)
   useEffect(() => {
@@ -24,31 +26,17 @@ export function CheckoutPage() {
     const handlePopState = (event) => {
       event.preventDefault();
       
-      if (window.confirm("결제를 취소하시겠습니까? 모든 선택 정보가 초기화됩니다.")) {
-        // 결제 취소 시 완전히 세션 정리
-        sessionStorage.clear();
-        navigate("/", { replace: true }); // 홈으로 이동
-      } else {
-        // 취소했을 때는 현재 페이지에 그대로 있도록 히스토리 조작
-        window.history.pushState(null, "", window.location.href);
-      }
+      // 모달을 표시하고 히스토리를 다시 푸시
+      setShowBackModal(true);
+      window.history.pushState(null, "", window.location.href);
     };
 
     // 히스토리 조작으로 뒤로가기 차단
     window.history.pushState(null, "", window.location.href);
     window.addEventListener("popstate", handlePopState);
 
-    // 페이지 새로고침 및 탭 닫기 방지
-    const handleBeforeUnload = (event) => {
-      event.preventDefault();
-      event.returnValue = "결제 진행 중입니다. 페이지를 나가면 결제가 취소됩니다.";
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
     return () => {
       window.removeEventListener("popstate", handlePopState);
-      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [navigate]);
 
@@ -147,6 +135,17 @@ export function CheckoutPage() {
     renderPaymentWidgets();
   }, [widgets]);
 
+  // 모달 핸들러 함수들
+  const handleBackModalClose = () => {
+    setShowBackModal(false);
+  };
+
+  const handleBackModalConfirm = () => {
+    // 결제 취소 시 완전히 세션 정리
+    sessionStorage.clear();
+    navigate("/", { replace: true }); // 홈으로 이동
+  };
+
   return (
     <div className="pay-body">
       <div className="wrapper">
@@ -190,6 +189,18 @@ export function CheckoutPage() {
           </button>
         </div>
       </div>
+      
+      {/* 뒤로가기 확인 모달 */}
+      <BackNavigationModal
+        isOpen={showBackModal}
+        onClose={handleBackModalClose}
+        onConfirm={handleBackModalConfirm}
+        title="🚫 결제를 취소하시겠습니까?"
+        message="결제를 취소하시겠습니까?"
+        submessage="모든 선택 정보가 초기화되고 홈으로 이동합니다."
+        confirmText="결제 취소"
+        cancelText="계속 진행"
+      />
     </div>
   );
 }

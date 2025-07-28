@@ -1,0 +1,51 @@
+JWT로 userid를 토큰화하는 것과 관련된 파일들
+1. 백엔드 파일들
+JWT 핵심 유틸리티
+JwtUtil.java
+userid를 JWT 토큰으로 암호화하는 encodeUserid() 메서드
+JWT 토큰에서 실제 userid를 추출하는 decodeUserid() 메서드
+토큰 유효성 검사하는 validateToken() 메서드
+관리자용 토큰 생성 기능
+컨트롤러 파일들
+LoginController.java
+
+일반 로그인 시 userid를 JWT 토큰으로 암호화해서 응답
+/api/auth/decode-userid - 토큰화된 userid 디코딩 API
+/api/auth/decode-token - 토큰 기반 userid 디코딩 API
+KakaoLoginController.java
+
+카카오 로그인 시 userid를 JWT 토큰으로 암호화
+카카오 메시지 전송 시 JWT 토큰 디코딩 처리
+의존성 설정
+build.gradle
+JWT 라이브러리 의존성 설정 (io.jsonwebtoken:jjwt-*)
+2. 프론트엔드 파일들
+JWT 토큰 유틸리티
+tokenUtils.js
+decodeUserid() - JWT 토큰에서 실제 userid 추출
+getCurrentUserId() - localStorage에서 userid 가져와서 JWT 토큰이면 디코딩
+secureLogout() - 로그아웃 시 토큰화된 정보 정리
+JWT 형식 검증 기능
+API 통신
+userApi.js
+decodeUserid() - 백엔드 API 호출하여 JWT 토큰 디코딩
+애플리케이션 진입점
+App.js
+getCurrentUserId import 및 사용
+카카오 로그인 시 JWT 토큰 처리
+URL 파라미터로 받은 JWT 토큰을 localStorage에 저장
+3. 주요 작동 방식
+로그인 시:
+
+백엔드에서 실제 userid를 JWT 토큰으로 암호화해서 프론트엔드로 전송
+프론트엔드는 JWT 토큰을 localStorage에 저장
+userid 사용 시:
+
+프론트엔드에서 getCurrentUserId() 또는 decodeUserid() 호출
+백엔드 /api/auth/decode-token API로 JWT 토큰 전송
+백엔드에서 토큰을 검증하고 실제 userid 반환
+보안 특징:
+
+실제 userid는 JWT 토큰으로 암호화되어 클라이언트에 저장
+토큰 만료 시간 설정 (24시간)
+토큰 유효성 검증 로직 포함

@@ -10,5 +10,6 @@ import java.util.List;
 public interface FaqRepository extends JpaRepository<Faq, Long> {
     List<Faq> findTop5ByOrderByFaqnumDesc();
     // faqsub(제목)에서 키워드를 포함하는 FAQ 검색
+
     List<Faq> findByFaqsubContainingIgnoreCase(String keyword);
 }

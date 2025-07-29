@@ -23,11 +23,11 @@ import java.util.Random;
 public class ScheduleService {
 
     private static final Random RANDOM = new Random();
-    private static final int TOTAL_DAYS = 7;
+    private static final int TOTAL_DAYS = 30;
     //이후 실행시 아래 1000개 막고 100개로 실행
-    private static final int SCHEDULES_PER_MOVIE = 100;
+//    private static final int SCHEDULES_PER_MOVIE = 100;
     //첫 실행시 주석 해제하고 사용
-//    private static final int SCHEDULES_PER_MOVIE = 1000;
+    private static final int SCHEDULES_PER_MOVIE = 10000;
     private static final int MIN_HOUR_GAP = 3;
 
     @Autowired

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./Header.css";
 import logoImg from "../images/logo_1.png";
 import { getUserInfo } from "../api/userApi";
+import { secureLogout, getCurrentUserId } from "../utils/tokenUtils";
 import QuickReservation from "./QuickReservation";
 
 export default function Header() {
@@ -15,31 +16,48 @@ export default function Header() {
     localStorage.getItem("isLoggedIn") === "true"
   );
   const [userid, setUserid] = useState(localStorage.getItem("userid") || "");
+  const [realUserid, setRealUserid] = useState(""); // 실제 userid (토큰 디코딩된)
   const [username, setUsername] = useState(""); // DB에서 가져올 username
+  const [isLoadingUser, setIsLoadingUser] = useState(false); // 사용자 정보 로딩 상태
+
   const [showQuickReservation, setShowQuickReservation] = useState(false);
 
   // 로그인 상태 변화 감지 및 사용자 정보 로드
   useEffect(() => {
     const checkLoginStatus = async () => {
       const storedIsLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-      const storedUserid = localStorage.getItem("userid") || "";
+      const tokenizedUserid = localStorage.getItem("userid") || "";
 
       setIsLoggedIn(storedIsLoggedIn);
-      setUserid(storedUserid);
+      setUserid(tokenizedUserid); // 토큰화된 상태로 설정 (표시용)
 
-      // 로그인 상태이고 userid가 있으면 DB에서 username 조회
-      if (storedIsLoggedIn && storedUserid) {
+      // 로그인 상태이고 토큰화된 userid가 있으면 실제 userid로 DB 조회
+      if (storedIsLoggedIn && tokenizedUserid) {
+        setIsLoadingUser(true); // 로딩 시작
         try {
-          const userInfo = await getUserInfo(storedUserid);
-          setUsername(userInfo.username || storedUserid); // username이 없으면 userid 사용
+          // 토큰에서 실제 userid 추출
+          const realUserid = await getCurrentUserId();
+
+          if (realUserid) {
+            setRealUserid(realUserid); // 실제 userid 저장
+            const userInfo = await getUserInfo(realUserid);
+            setUsername(userInfo.username || realUserid);
+          } else {
+            // 토큰이 유효하지 않으면 로그아웃
+            console.log("유효하지 않은 토큰으로 인한 자동 로그아웃");
+            handleLogout();
+          }
         } catch (error) {
-          // API 실패 시 localStorage의 username 사용 (카카오 로그인 등)
-          const storedUsername =
-            localStorage.getItem("username") || storedUserid;
-          setUsername(storedUsername);
+          console.error("토큰 디코딩 또는 사용자 정보 조회 실패:", error);
+          // 오류 발생 시 로그아웃 처리
+          handleLogout();
+        } finally {
+          setIsLoadingUser(false); // 로딩 종료
         }
       } else {
+        setRealUserid("");
         setUsername("");
+        setIsLoadingUser(false);
       }
     };
 
@@ -55,6 +73,16 @@ export default function Header() {
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
+  }, []);
+
+  // localStorage 변경 시 Header 상태 동기화
+  useEffect(() => {
+    const syncLoginState = () => {
+      setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+      setUserid(localStorage.getItem("userid") || "");
+    };
+    window.addEventListener("storage", syncLoginState);
+    return () => window.removeEventListener("storage", syncLoginState);
   }, []);
 
   useEffect(() => {
@@ -82,35 +110,15 @@ export default function Header() {
 
   // 로그아웃 핸들러
   const handleLogout = () => {
-    // 기본 로그인 정보 제거
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("userid");
-    localStorage.removeItem("username");
-
-    // 카카오 로그인 관련 데이터 제거
-    localStorage.removeItem("loginType");
-    sessionStorage.removeItem("loginType");
-
-    // 토스페이먼츠 관련 데이터 제거
-    localStorage.removeItem("@tosspayments/merchant-browser-id");
-    localStorage.removeItem(
-      "@tosspayments/payment-widget-previous-payment-method-id"
-    );
-
-    // 추가 보안을 위해 다른 사용자 관련 데이터도 제거
-    localStorage.removeItem("userToken");
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("userInfo");
-    localStorage.removeItem("authData");
-
-    // 세션 스토리지 전체 정리
-    sessionStorage.clear();
+    // 보안 로그아웃 실행
+    secureLogout();
 
     // 상태 초기화
     setIsLoggedIn(false);
     setUserid("");
+    setRealUserid("");
     setUsername("");
+    setIsLoadingUser(false);
 
     // 홈페이지로 리다이렉트
     navigate("/");
@@ -126,10 +134,7 @@ export default function Header() {
           </div>
 
           {/* Navigation - Shows when scrolled */}
-          <nav
-            className={`h-nav-scrolled ${isScrolled ? "h-show" : ""}`}
-            style={{ position: "relative" }}
-          >
+          <nav className={`h-nav-scrolled ${isScrolled ? "h-show" : ""}`}>
             <a className="h-nav-item" onClick={goMovie}>
               영화
             </a>
@@ -146,13 +151,11 @@ export default function Header() {
               빠른예매
             </a>
           </nav>
-
-          {/* QuickReservation 컴포넌트 - 스크롤된 네비게이션 바로 아래 */}
           {showQuickReservation && isScrolled && <QuickReservation />}
 
           {/* User Actions */}
           <div className="h-user-actions">
-            {isLoggedIn && userid === "master001" && (
+            {isLoggedIn && realUserid === "master001" && (
               <button className="h-manager-btn" onClick={goAdmin}>
                 관리페이지
               </button>
@@ -165,7 +168,9 @@ export default function Header() {
                     alt="User Icon"
                     className="h-user-icon-img"
                   />
-                  <span className="h-username">{username || userid}님</span>
+                  <span className="h-username">
+                    {isLoadingUser ? "로딩중..." : username || "사용자"}님
+                  </span>
                 </div>
                 <button className="h-logout-btn" onClick={goNotice}>
                   고객센터
@@ -200,10 +205,7 @@ export default function Header() {
       </div>
 
       {/* Navigation Bar - Shows when not scrolled */}
-      <div
-        className={`h-nav-bottom ${isScrolled ? "h-hidden" : ""}`}
-        style={{ position: "relative" }}
-      >
+      <div className={`h-nav-bottom ${isScrolled ? "h-hidden" : ""}`}>
         <div className="h-nav-bottom-container">
           <nav className="h-nav-bottom-content">
             <a className="h-nav-item" onClick={goMovie}>
@@ -223,8 +225,6 @@ export default function Header() {
             </a>
           </nav>
         </div>
-
-        {/* QuickReservation 컴포넌트 - 네비게이션 바로 아래 */}
         {showQuickReservation && !isScrolled && <QuickReservation />}
       </div>
 

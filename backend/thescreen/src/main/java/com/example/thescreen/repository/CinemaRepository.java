@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface CinemaRepository extends JpaRepository<Cinema, String> {
+
     boolean existsByCinemanm(String cinmanm);
 
     Optional<Cinema> findByCinemanm(String cinemanm);

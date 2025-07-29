@@ -9,7 +9,7 @@ import {
 import { isAvailableUserId, registerUser } from "../../../api/userApi";
 import SmsAuthForm from "./SmsAuthForm";
 import RegisterBirth from "./RegisterBirth";
-import Toast from "../../../components/Toast";
+import Toast from "../../../utils/Toast";
 import logoImg from "../../../images/logo_2.png";
 import "../styles/Register.css";
 

@@ -9,7 +9,7 @@ import {
 } from "../../../api/couponApi";
 import { getCurrentUserId } from "../../../utils/tokenUtils";
 import ProgressBar from "./ProgressBar";
-import BackNavigationModal from "../../../components/BackNavigationModal";
+import BackNavigationModal from "../../../utils/BackNavigationModal";
 import "../style/ReservationPaymentPage.css";
 
 const ReservationPaymentPage = () => {

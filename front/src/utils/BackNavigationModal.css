@@ -151,15 +151,15 @@
     padding: 24px;
     margin: 20px;
   }
-  
+
   .bnm-title {
     font-size: 20px;
   }
-  
+
   .bnm-buttons {
     flex-direction: column;
   }
-  
+
   .bnm-btn {
     width: 100%;
   }

@@ -10,7 +10,7 @@ import EventManagement from "./EventManagement";
 import AdminSidebar from "./AdminSideBar";
 import AdminHeader from "./AdminHeader";
 import TheaterManagement from "./TheaterManagement/TheaterManagement";
-import { NotificationProvider } from "../../../contexts/NotificationContext";
+import { NotificationProvider } from "../utils/NotificationContext";
 import { getAdminToken, decodeUserid } from "../../../api/adminApi";
 
 const AdminPage = () => {

@@ -4,7 +4,7 @@ import bellIcon from "../../../images/bell.png";
 import "../styles/AdminHeader.css";
 import "../styles/AdminPage.css";
 import { useNavigate } from "react-router-dom";
-import { useNotification } from "../../../contexts/NotificationContext";
+import { useNotification } from "../utils/NotificationContext";
 
 const AdminHeader = () => {
   const navigate = useNavigate();
@@ -18,9 +18,6 @@ const AdminHeader = () => {
 
   // 토큰 삭제 및 로그아웃 함수
   const clearAdminSession = (reason = "Manual logout") => {
-
-
-
     // 관리자 토큰 제거
     localStorage.removeItem("adminToken");
     // 기본 로그인 정보 제거
@@ -29,8 +26,6 @@ const AdminHeader = () => {
     localStorage.removeItem("username");
     // 세션 스토리지 전체 정리
     sessionStorage.clear();
-
-
 
     // 홈페이지로 이동
     navigate("/");
@@ -60,7 +55,6 @@ const AdminHeader = () => {
 
   // 세션 연장 함수
   const extendSession = () => {
-
     setTimeLeft(30 * 60); // 30분으로 리셋
     setShowExtensionModal(false);
   };
@@ -95,7 +89,6 @@ const AdminHeader = () => {
   // 페이지 벗어날 때 토큰 삭제
   useEffect(() => {
     const handleBeforeUnload = (event) => {
-
       localStorage.removeItem("adminToken");
       sessionStorage.clear();
     };
@@ -121,7 +114,6 @@ const AdminHeader = () => {
   // 컴포넌트 언마운트 시 토큰 삭제
   useEffect(() => {
     return () => {
-
       localStorage.removeItem("adminToken");
       sessionStorage.clear();
     };

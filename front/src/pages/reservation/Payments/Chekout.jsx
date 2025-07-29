@@ -1,7 +1,7 @@
 import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BackNavigationModal from "../../../components/BackNavigationModal";
+import BackNavigationModal from "../../../utils/BackNavigationModal";
 import "./paycss/pay.css";
 
 // TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
@@ -63,18 +63,6 @@ export function CheckoutPage() {
       currency: "KRW",
       value: price || 0,
     });
-
-
-
-
-
-
-
-
-
-
-
-
   }, []);
 
   useEffect(() => {

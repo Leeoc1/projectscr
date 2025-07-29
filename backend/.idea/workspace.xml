@@ -6,33 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a7929261-1ad1-4007-9ae7-86e384453840" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/favicon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/28Years.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/Dragon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/Elio.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/Ellio.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/F1_TheMovie.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/Fureru.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/Hifive.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/Nausicaa.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/Noise.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/Seventeen.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/Tiger.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/cinemascreen1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/cinemascreen2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/cinemascreen3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/cloud.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/google_button.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/home.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/kakao_button.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/login.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/movie.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/naver_button.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/images/tank.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/logo192.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/public/logo512.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/thescreen/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/thescreen/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

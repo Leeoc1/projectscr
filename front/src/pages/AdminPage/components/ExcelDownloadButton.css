@@ -1,4 +1,4 @@
-/* 포멀한 회색 계열 데이터 다운로드 버튼 스타일
+/* 포멀한 회색 계열 데이터 다운로드 버튼 스타일 */
 .excel-download-btn {
   background: #f5f5f5;
   color: #222;
@@ -14,4 +14,4 @@
 .excel-download-btn:hover {
   background: #e0e0e0;
   border-color: #888;
-} */
+}

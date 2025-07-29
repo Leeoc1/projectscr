@@ -1,8 +1,13 @@
 package com.example.thescreen.chatbot;
 
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ChatClientConfig {
-    // 현재는 빈 등록 필요 없음
+    @Bean
+    public ChatClient chatClient(ChatClient.Builder builder) {
+        return builder.build();
+    }
 }

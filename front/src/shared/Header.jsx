@@ -4,6 +4,7 @@ import "./Header.css";
 import logoImg from "../images/logo_1.png";
 import { getUserInfo } from "../api/userApi";
 import { secureLogout, getCurrentUserId } from "../utils/tokenUtils";
+import QuickReservation from "./QuickReservation";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,6 +19,8 @@ export default function Header() {
   const [realUserid, setRealUserid] = useState(""); // 실제 userid (토큰 디코딩된)
   const [username, setUsername] = useState(""); // DB에서 가져올 username
   const [isLoadingUser, setIsLoadingUser] = useState(false); // 사용자 정보 로딩 상태
+
+  const [showQuickReservation, setShowQuickReservation] = useState(false);
 
   // 로그인 상태 변화 감지 및 사용자 정보 로드
   useEffect(() => {
@@ -102,6 +105,8 @@ export default function Header() {
   const goNotice = () => navigate("/notice");
   const goHome = () => navigate("/");
   const goMyPage = () => navigate("/mypage");
+  const toggleQuickReservation = () =>
+    setShowQuickReservation(!showQuickReservation);
 
   // 로그아웃 핸들러
   const handleLogout = () => {
@@ -142,7 +147,11 @@ export default function Header() {
             <a className="h-nav-item" onClick={goEvent}>
               이벤트
             </a>
+            <a className="h-nav-item" onClick={toggleQuickReservation}>
+              빠른예매
+            </a>
           </nav>
+          {showQuickReservation && isScrolled && <QuickReservation />}
 
           {/* User Actions */}
           <div className="h-user-actions">
@@ -211,8 +220,12 @@ export default function Header() {
             <a className="h-nav-item" onClick={goEvent}>
               이벤트
             </a>
+            <a className="h-nav-item" onClick={toggleQuickReservation}>
+              빠른예매
+            </a>
           </nav>
         </div>
+        {showQuickReservation && !isScrolled && <QuickReservation />}
       </div>
 
       {/* Mobile Menu */}

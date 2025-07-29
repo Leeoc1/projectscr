@@ -43,12 +43,31 @@ const ChatBot = () => {
   };
 
   const createCinemaMessage = (data) => {
-    const { cinemaname, cinemaaddress, cinemastatus, cinematel, cinemacd } =
-      data;
+    const { cinemaname, cinemaaddress, cinemastatus, cinematel, cinemacd, movies } = data;
+    console.log("ChatBot - createCinemaMessage 데이터:", data);
+    console.log("ChatBot - 영화 목록:", movies);
+    
+    let text = `극장: ${cinemaname}\n주소: ${cinemaaddress}\n상태: ${cinemastatus}\n전화번호: ${cinematel}`;
+    
+    if (movies && movies.length > 0) {
+      console.log("ChatBot - 영화 목록이 있음:", movies.length, "개");
+      text += `\n\n상영 중인 영화 (${movies.length}개):`;
+      movies.slice(0, 5).forEach((movie, index) => {
+        text += `\n${index + 1}. ${movie}`;
+      });
+      if (movies.length > 5) {
+        text += `\n... 외 ${movies.length - 5}개 더`;
+      }
+    } else {
+      console.log("ChatBot - 영화 목록이 없음 - movies:", movies);
+      text += "\n\n현재 상영 중인 영화가 없습니다.";
+    }
+    
     return {
-      text: `극장: ${cinemaname}\n주소: ${cinemaaddress}\n상태: ${cinemastatus}\n전화번호: ${cinematel}`,
+      text,
       isBot: true,
       cinemacd: cinemacd,
+      movies: movies || [], // 영화 목록 추가
     };
   };
 
@@ -70,6 +89,27 @@ const ChatBot = () => {
     };
   };
 
+  const createCinemaMoviesMessage = (data) => {
+    const { cinemamovies, totalCount, message, hasMore } = data;
+    
+    let text = "";
+    if (message) {
+      text = message + "\n\n";
+    }
+    
+    text += "상영 중인 영화:\n" + cinemamovies.map((movie, index) => `${index + 1}. ${movie}`).join("\n");
+    
+    if (hasMore) {
+      text += "\n\n※ 더 많은 영화가 있습니다. 구체적인 영화명으로 검색해보세요.";
+    }
+
+    return {
+      text,
+      isBot: true,
+      movies: cinemamovies,
+    };
+  };
+
   const getBotMessage = (data) => {
     const messageCreators = {
       faq: () => createFaqMessage(data.data.content),
@@ -77,7 +117,9 @@ const ChatBot = () => {
       movie: () => createMovieMessage(data.data),
       top10: () => createTop10Message(data.data.movies),
       cinema: () => createCinemaMessage(data.data),
+      cinemamovies: () => createCinemaMoviesMessage(data.data),
       suggestion: () => createSuggestionMessage(data.data),
+      ai: () => createFaqMessage(data.data.content), // AI 응답 처리 추가
     };
 
     return (
@@ -144,7 +186,7 @@ const ChatBot = () => {
         {msg.moviecd && (
           <Link
             to={`/reservation/movie/${msg.moviecd}`}
-            className="bot-message-reservation"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2 inline-block"
             onClick={() => {
               // 영화 정보를 세션스토리지에 저장
               console.log("예매하기 버튼 클릭, moviecd:", msg.moviecd);
@@ -192,16 +234,7 @@ const ChatBot = () => {
   };
 
   useEffect(() => {
-    // ChatBot 내부 스크롤만 조정하고 전체 페이지 스크롤은 건드리지 않음
-    if (messagesEndRef.current) {
-      const chatContainer = messagesEndRef.current.parentElement;
-      if (chatContainer) {
-        chatContainer.scrollTo({
-          top: chatContainer.scrollHeight,
-          behavior: "smooth",
-        });
-      }
-    }
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
@@ -229,10 +262,7 @@ const ChatBot = () => {
             className="chatbot-input-field"
           />
           <button onClick={sendMessage} className="chatbot-send-button">
-            <img
-              src="https://img.icons8.com/?size=100&id=43929&format=png&color=ffffff"
-              alt="Send"
-            />
+            Send
           </button>
         </div>
       </div>

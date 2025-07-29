@@ -51,12 +51,6 @@ const Movies = ({ activeTab: parentActiveTab, showDetailButton = true }) => {
     };
     sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
 
-    console.log(
-      "🎬 영화카드 클릭 - 영화:",
-      movie.movienm,
-      "moviecd:",
-      movie.moviecd
-    );
     navigate(`/reservation/movie/${movie.moviecd}`);
   };
 

@@ -41,8 +41,8 @@ const MyPage = () => {
       try {
         // 토큰에서 실제 userid 추출
         const userid = await getCurrentUserId();
-        console.log("MyPage 컴포넌트 - userid:", userid);
-        
+
+
         if (userid) {
           // 사용자 정보 조회
           const userResponse = await getUserInfo(userid);
@@ -103,17 +103,17 @@ const MyPage = () => {
     try {
       // 토큰에서 실제 userid 추출
       const userid = await getCurrentUserId();
-      console.log("회원탈퇴 처리 시작 - userid:", userid);
+
 
       if (userid) {
-        console.log("DELETE 요청 전송 중...");
+
         const response = await deleteUser(userid);
-        console.log("회원탈퇴 응답:", response);
+
 
         // 자동 로그아웃 처리
         const logoutSuccess = logoutUser();
         if (logoutSuccess) {
-          console.log("자동 로그아웃 처리 완료");
+
         }
 
         // 회원탈퇴 모달 닫기

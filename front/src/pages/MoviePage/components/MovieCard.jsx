@@ -26,12 +26,6 @@ const MovieCard = ({ movie, isBoxOffice }) => {
     };
     sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
 
-    console.log(
-      "🎬 영화 페이지 예매하기 버튼 클릭 - 영화:",
-      movie.movienm,
-      "moviecd:",
-      movie.moviecd
-    );
     navigate("/reservation/place");
   };
 

@@ -15,7 +15,7 @@ export const apiRequest = async (url, config = {}) => {
     const method = config.method?.toLowerCase() || 'get';
     const { method: _, body, ...restConfig } = config; // method 제거
     let response;
-    
+
     if (method === "delete" || method === "get") {
       // DELETE와 GET은 config만 전달 (method 속성 제외)
       response = await api[method](url, restConfig);

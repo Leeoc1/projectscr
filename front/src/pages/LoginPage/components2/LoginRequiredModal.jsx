@@ -28,7 +28,7 @@ const LoginRequiredModal = ({ isOpen, onClose }) => {
         <div className="lrm-header">
           <h2 className="lrm-title">🔒 로그인이 필요합니다</h2>
         </div>
-        
+
         <div className="lrm-content">
           <p className="lrm-message">
            서비스를 이용하시려면 로그인이 필요합니다.

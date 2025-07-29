@@ -93,7 +93,7 @@ const TheaterInfoPage = () => {
           navigator.geolocation.getCurrentPosition(success, error, options);
         }
       } else {
-        console.log("kakao 객체 로딩 대기 중...");
+
         setTimeout(waitForKakao, 100);
       }
     };

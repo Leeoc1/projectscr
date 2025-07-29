@@ -15,7 +15,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       >
         &lt;
       </button>
-      
+
       {pageNumbers.map(pageNum => (
         <button
           key={pageNum}
@@ -25,7 +25,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           {pageNum}
         </button>
       ))}
-      
+
       <button 
         className="pagination-btn"
         onClick={() => onPageChange(currentPage + 1)}

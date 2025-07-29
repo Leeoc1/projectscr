@@ -19,7 +19,7 @@ const KaKapTemplate = ({ reservationId }) => {
 
       // 토큰 상태 확인
       const accessToken = localStorage.getItem("kakao_access_token");
-      console.log("저장된 카카오 토큰:", accessToken ? "있음" : "없음");
+
 
       if (!accessToken) {
         setMessage("카카오 로그인이 필요합니다. 다시 로그인해주세요.");
@@ -30,9 +30,9 @@ const KaKapTemplate = ({ reservationId }) => {
       hasExecuted.current = true;
 
       try {
-        console.log("카카오 메시지 전송 시도, 예약 ID:", reservationId);
+
         const response = await kakaoTemplate(reservationId);
-        console.log("카카오 메시지 응답:", response);
+
         setMessage(response.data || "메시지 전송 성공");
       } catch (error) {
         console.error("카카오 메시지 전송 실패:", error);

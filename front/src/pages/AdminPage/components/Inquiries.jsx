@@ -17,7 +17,7 @@ const Inquiries = () => {
     }
   };
 
-  
+
   return(
   <div className="adp-content">
     <div className="adp-header">

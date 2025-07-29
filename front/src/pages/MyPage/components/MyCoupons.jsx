@@ -23,7 +23,7 @@ const MyCoupons = ({ showCouponModal, handleCloseCouponModal, userInfo }) => {
   const getCouponStatusText = (couponstatus, couponexpiredate) => {
     const today = new Date();
     const expireDate = new Date(couponexpiredate);
-    
+
     if (!couponstatus) {
       return "사용완료";
     } else if (expireDate < today) {
@@ -37,7 +37,7 @@ const MyCoupons = ({ showCouponModal, handleCloseCouponModal, userInfo }) => {
   const getCouponStatusClass = (couponstatus, couponexpiredate) => {
     const today = new Date();
     const expireDate = new Date(couponexpiredate);
-    
+
     if (!couponstatus) {
       return "mp-coupon-status-used";
     } else if (expireDate < today) {
@@ -60,7 +60,7 @@ const MyCoupons = ({ showCouponModal, handleCloseCouponModal, userInfo }) => {
   // 쿠폰 목록 조회
   const fetchCoupons = async () => {
     if (!userInfo?.userid) return;
-    
+
     setLoading(true);
     try {
       const response = await getUserCoupons(userInfo.userid);

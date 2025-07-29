@@ -70,9 +70,9 @@ const TheaterSelector = () => {
   const fetchAllRegions = async () => {
     try {
       const regions = await getRegions();
-      console.log("All regions:", regions); // 디버깅용
-      console.log("First region object:", regions[0]); // 첫 번째 객체의 구조 확인
-      console.log("Region object keys:", Object.keys(regions[0] || {})); // 객체의 키들 확인
+       // 디버깅용
+       // 첫 번째 객체의 구조 확인
+       // 객체의 키들 확인
 
       // regions가 배열인지 확인하고, 적절한 속성 추출
       if (Array.isArray(regions)) {
@@ -81,7 +81,7 @@ const TheaterSelector = () => {
           (region) =>
             region.regionnm || region.regionNm || region.name || region
         );
-        console.log("Region names:", regionNames); // 디버깅용
+         // 디버깅용
 
         // "즐겨찾는 극장"을 맨 위에 추가
         const regionsWithFavorite = ["즐겨찾는 극장", ...regionNames];
@@ -129,13 +129,13 @@ const TheaterSelector = () => {
         }
 
         const userid = await getCurrentUserId();
-        console.log("Fetching favorites for userid:", userid);
+
 
         const favoriteTheaters = await getmycinema(userid);
-        console.log("Favorite theaters data:", favoriteTheaters);
+
 
         const favoriteCinemaCds = favoriteTheaters.map((item) => item.cinemacd);
-        console.log("Favorite cinema codes:", favoriteCinemaCds);
+
 
         // 전체 영화관 목록에서 즐겨찾기 영화관만 가져오기
         const allCinemas = await getCinemas();
@@ -143,7 +143,7 @@ const TheaterSelector = () => {
           .filter((cinema) => favoriteCinemaCds.includes(cinema.cinemacd))
           .map((cinema) => cinema.cinemanm);
 
-        console.log("Available favorite theaters:", favoriteTheaterNames);
+
 
         setAvailableTheaters(favoriteTheaterNames);
         return;
@@ -164,12 +164,12 @@ const TheaterSelector = () => {
         );
       });
 
-      console.log("Filtered schedules for region:", filteredSchedules);
+
 
       const theaters = [
         ...new Set(filteredSchedules.map((schedule) => schedule.cinemanm)),
       ];
-      console.log("Available theaters:", theaters);
+
 
       setAvailableTheaters(theaters);
     } catch (error) {

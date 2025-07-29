@@ -44,11 +44,9 @@ export default function Header() {
             setUsername(userInfo.username || realUserid);
           } else {
             // 토큰이 유효하지 않으면 로그아웃
-            console.log("유효하지 않은 토큰으로 인한 자동 로그아웃");
             handleLogout();
           }
         } catch (error) {
-          console.error("토큰 디코딩 또는 사용자 정보 조회 실패:", error);
           // 오류 발생 시 로그아웃 처리
           handleLogout();
         } finally {

@@ -25,7 +25,7 @@ export function CheckoutPage() {
     // 결제 위젯에서 뒤로가기 방지 (더 엄격하게)
     const handlePopState = (event) => {
       event.preventDefault();
-      
+
       // 모달을 표시하고 히스토리를 다시 푸시
       setShowBackModal(true);
       window.history.pushState(null, "", window.location.href);
@@ -63,18 +63,18 @@ export function CheckoutPage() {
       currency: "KRW",
       value: price || 0,
     });
-    console.log("=== Checkout 페이지의 예약 정보 ===");
-    console.log("전체 예약 정보:", reservationInfo);
-    console.log("영화 제목:", reservationInfo.movienm);
-    console.log("극장명:", reservationInfo.cinemanm);
-    console.log("상영관:", reservationInfo.screenname);
-    console.log("상영 시간:", reservationInfo.starttime);
-    console.log("러닝타임:", reservationInfo.runningtime);
-    console.log("선택된 좌석:", reservationInfo.selectedSeats);
-    console.log("인원 정보:", reservationInfo.guestCount);
-    console.log("총 인원:", reservationInfo.totalGuests);
-    console.log("최종 결제 금액:", price);
-    console.log("================================");
+
+
+
+
+
+
+
+
+
+
+
+
   }, []);
 
   useEffect(() => {
@@ -189,7 +189,7 @@ export function CheckoutPage() {
           </button>
         </div>
       </div>
-      
+
       {/* 뒤로가기 확인 모달 */}
       <BackNavigationModal
         isOpen={showBackModal}

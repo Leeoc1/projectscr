@@ -23,26 +23,26 @@ const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
 
       // 토큰에서 실제 userid 추출
       const userid = await getCurrentUserId();
-      console.log("Fetching favorites for userid:", userid);
+
 
       if (!userid) {
-        console.log("토큰에서 userid 추출 실패");
+
         return;
       }
 
       try {
         const favorites = await getmycinema(userid);
-        console.log("Fetched favorites:", favorites);
+
 
         const starFillsData = favorites.reduce((acc, item) => {
           acc[item.cinemacd] = "#fbbf24"; // DB에 있으면 노란색
           return acc;
         }, {});
-        console.log("starFillsData:", starFillsData);
+
 
         setStarFills(starFillsData);
         setFavoriteCinemas(favorites); // 즐겨찾기 영화관 목록 저장
-        console.log("Set favoriteCinemas:", favorites);
+
       } catch (error) {
         console.error("Failed to fetch favorites:", error);
       }
@@ -85,11 +85,11 @@ const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
     // 토큰에서 실제 userid 추출
     const userid = await getCurrentUserId();
     if (!userid) {
-      console.log("토큰에서 userid 추출 실패");
+
       setShowLoginModal(true);
       return;
     }
-    
+
     const cinemacd = cinema.cinemacd;
     const isFavorite = starFills[cinemacd] === "#fbbf24";
 
@@ -123,27 +123,27 @@ const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
 
   // 즐겨찾기 필터링 함수
   const getFilteredCinemas = () => {
-    console.log("selectedRegion:", selectedRegion);
-    console.log("favoriteCinemas:", favoriteCinemas);
+
+
 
     if (selectedRegion === "favorite") {
       const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-      console.log("isLoggedIn:", isLoggedIn);
+
 
       if (!isLoggedIn) {
         return []; // 로그인하지 않았으면 빈 배열 반환
       }
 
       const allCinemas = getMoviesByTab();
-      console.log("allCinemas:", allCinemas);
+
 
       const favoriteCinemaCds = favoriteCinemas.map((item) => item.cinemacd);
-      console.log("favoriteCinemaCds:", favoriteCinemaCds);
+
 
       const filteredResult = allCinemas.filter((cinema) =>
         favoriteCinemaCds.includes(cinema.cinemacd)
       );
-      console.log("filteredResult:", filteredResult);
+
 
       return filteredResult;
     }

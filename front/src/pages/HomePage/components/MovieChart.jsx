@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import ArrowLeft from "../assets/arrow-left.svg";
-import ArrowRight from "../assets/arrow-right.svg";
+import ArrowLeft from "../../../images/arrow-left.svg";
+import ArrowRight from "../../../images/arrow-right.svg";
 import { useNavigate } from "react-router-dom";
 import { getTopTenMovies } from "../../../api/movieApi";
 import "../styles/MovieChart.css";
@@ -122,7 +122,6 @@ const MovieChart = () => {
 
     navigate(`/reservation/movie/${movie.moviecd}`);
   };
-  console.log("MovieChart 렌더링", movies);
 
   return (
     <section className="mcs-section">

@@ -6,6 +6,7 @@ import {
   MapTypeControl,
   ZoomControl,
 } from "react-kakao-maps-sdk";
+import mygpsIcon from "../../../images/mygps.png";
 import "../style/MapInfo.css";
 
 const MapInfo = ({ cinemanm, tel, address, myState, theaterState }) => {
@@ -106,7 +107,7 @@ const MapInfo = ({ cinemanm, tel, address, myState, theaterState }) => {
           handleMyState();
         }}
       >
-        <img src="/images/mygps.png" alt="mygps" />
+        <img src={mygpsIcon} alt="mygps" />
       </div>
     </div>
   );

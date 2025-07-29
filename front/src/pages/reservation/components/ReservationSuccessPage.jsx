@@ -17,11 +17,11 @@ const ReservationSuccessPage = () => {
   useEffect(() => {
     // 히스토리 항목을 현재 페이지로 대체하여 뒤로가기 방지
     window.history.pushState(null, "", window.location.href);
-    
+
     // 뒤로가기 시도 시 완전 차단 (예매 완료 후 보안)
     const handlePopState = (event) => {
       // 뒤로가기 시도 시 아무 동작도 하지 않고 현재 페이지 유지
-      console.log("🔒 보안상 뒤로가기가 차단되었습니다. (예매 완료 페이지)");
+
       window.history.pushState(null, "", window.location.href);
     };
 
@@ -29,7 +29,7 @@ const ReservationSuccessPage = () => {
     const handleKeyDown = (event) => {
       // Alt + 왼쪽 화살표 (뒤로가기)
       if (event.altKey && event.keyCode === 37) {
-        console.log("🔒 키보드 뒤로가기가 차단되었습니다. (Alt+←)");
+
         event.preventDefault();
         return false;
       }
@@ -37,7 +37,7 @@ const ReservationSuccessPage = () => {
       if (event.keyCode === 8 && 
           !['INPUT', 'TEXTAREA'].includes(event.target.tagName) && 
           !event.target.isContentEditable) {
-        console.log("🔒 키보드 뒤로가기가 차단되었습니다. (Backspace)");
+
         event.preventDefault();
         return false;
       }
@@ -65,7 +65,7 @@ const ReservationSuccessPage = () => {
         "totalGuests",
         "finalPrice"
       ];
-      
+
       keysToRemove.forEach(key => {
         sessionStorage.removeItem(key);
       });
@@ -90,7 +90,7 @@ const ReservationSuccessPage = () => {
 
     // 3초 후 정리 (사용자가 페이지 내용을 볼 시간 제공)
     const timeoutId = setTimeout(cleanupSensitiveData, 3000);
-    
+
     return () => clearTimeout(timeoutId);
   }, []);
 

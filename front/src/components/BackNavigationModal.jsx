@@ -34,7 +34,7 @@ const BackNavigationModal = ({
         <div className="bnm-header">
           <h2 className="bnm-title">{title}</h2>
         </div>
-        
+
         <div className="bnm-content">
           <p className="bnm-message">
             {message}

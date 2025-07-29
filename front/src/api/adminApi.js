@@ -3,11 +3,11 @@ import { api } from "./apiUtils";
 // 암호화된 userid 디코딩
 export const decodeUserid = async (tokenizedUserid) => {
   try {
-    console.log("userid 디코딩 요청:", tokenizedUserid);
+
     const response = await api.post("/api/auth/decode-userid", {
       tokenizedUserid: tokenizedUserid,
     });
-    console.log("디코딩 응답:", response.data);
+
     return response.data.userid;
   } catch (error) {
     console.error("userid 디코딩 실패:", error);
@@ -18,9 +18,9 @@ export const decodeUserid = async (tokenizedUserid) => {
 // 관리자 토큰 발급
 export const getAdminToken = async (userid) => {
   try {
-    console.log("관리자 토큰 발급 요청:", userid);
+
     const response = await api.get(`/admin/token?userid=${userid}`);
-    console.log("토큰 발급 응답:", response.data);
+
     return response.data.token;
   } catch (error) {
     console.error("관리자 토큰 발급 실패:", error);

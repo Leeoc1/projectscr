@@ -31,11 +31,6 @@ export const sidebarItems = [
     icon: "🎫",
   },
   {
-    id: "inquiries",
-    label: "문의 관리",
-    icon: "❓",
-  },
-  {
     id: "events",
     label: "이벤트 관리",
     icon: "🎉",

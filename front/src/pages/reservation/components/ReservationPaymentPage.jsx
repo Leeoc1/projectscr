@@ -44,31 +44,19 @@ const ReservationPaymentPage = () => {
     try {
       // 토큰에서 실제 userid 추출
       const userid = await getCurrentUserId();
-      console.log("=== 쿠폰 로드 디버깅 ===");
-      console.log("1. userid from token:", userid);
 
       if (userid) {
-        console.log("2. API 호출 시작...");
         const coupons = await getUserCoupons(userid);
-        console.log("3. API 응답 원본 데이터:", coupons);
-        console.log("4. 쿠폰 개수:", coupons ? coupons.length : 0);
 
         if (coupons && coupons.length > 0) {
-          console.log("5. 첫 번째 쿠폰 상세:", coupons[0]);
         }
 
         // 사용 가능한 쿠폰만 필터링 (만료되지 않고, 사용되지 않은 쿠폰)
         const availableCoupons = coupons.filter((coupon) => {
           const isActive = coupon.couponstatus;
           const isNotExpired = new Date(coupon.couponexpiredate) > new Date();
-          console.log(
-            `쿠폰 ${coupon.couponname} - 활성: ${isActive}, 만료되지않음: ${isNotExpired}`
-          );
           return isActive && isNotExpired;
         });
-
-        console.log("6. 필터링된 사용 가능한 쿠폰:", availableCoupons);
-        console.log("7. 사용 가능한 쿠폰 개수:", availableCoupons.length);
 
         setUserCoupons(availableCoupons);
 
@@ -82,7 +70,6 @@ const ReservationPaymentPage = () => {
           setSelectedCoupon(null);
         }
       } else {
-        console.log("userid가 없습니다! 로그인이 필요합니다.");
       }
     } catch (error) {
       console.error("쿠폰 목록 로드 실패:", error);
@@ -91,18 +78,12 @@ const ReservationPaymentPage = () => {
       setUserCoupons([]);
     } finally {
       setIsLoading(false);
-      console.log("=== 쿠폰 로드 완료 ===");
     }
   };
 
   // 사용자 쿠폰 목록 로드 useEffect
   useEffect(() => {
     // 브라우저 저장소 전체 확인
-    console.log("=== 브라우저 저장소 확인 ===");
-    console.log("localStorage 전체:", { ...localStorage });
-    console.log("sessionStorage 전체:", { ...sessionStorage });
-    console.log("localStorage.userid:", localStorage.getItem("userid"));
-    console.log("sessionStorage.userid:", sessionStorage.getItem("userid"));
 
     loadUserCoupons();
   }, []);
@@ -151,7 +132,6 @@ const ReservationPaymentPage = () => {
         if (userid) {
           try {
             await applyCoupon(userid, selectedCoupon.couponnum);
-            console.log("쿠폰 사용 처리 완료:", selectedCoupon.couponname);
           } catch (couponError) {
             console.error("쿠폰 사용 처리 중 오류:", couponError);
             alert("쿠폰 사용 중 오류가 발생했습니다. 다시 시도해주세요.");

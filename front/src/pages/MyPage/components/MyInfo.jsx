@@ -79,7 +79,7 @@ const MyInfo = () => {
     e.preventDefault();
 
     try {
-      console.log("Edit form data:", editForm);
+
       const response = await updateUserInfo(userInfo.userid, editForm);
 
       if (response.success) {

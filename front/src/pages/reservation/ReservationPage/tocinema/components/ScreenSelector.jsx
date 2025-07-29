@@ -23,9 +23,9 @@ const ScreenSelector = () => {
       try {
         const selectedSchedule = await getSchedules();
 
-        console.log("API에서 받은 전체 스케줄:", selectedSchedule);
-        console.log("선택된 영화명:", selectedMovieName);
-        console.log("선택된 날짜:", selectedDate);
+
+
+
 
         const filteredSchedules = selectedSchedule.filter((schedule) => {
           return (
@@ -36,7 +36,7 @@ const ScreenSelector = () => {
           );
         });
 
-        console.log("필터링 결과:", filteredSchedules);
+
 
         // 상영 시간순으로 정렬
         filteredSchedules.sort(

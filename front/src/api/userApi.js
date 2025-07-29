@@ -87,10 +87,10 @@ export const updateUserInfo = async (userid, userData) => {
 
 // 회원탈퇴 (users 테이블)
 export const deleteUser = async (userid) => {
-  console.log("회원탈퇴 API 호출 시작 - userid:", userid);
+
   try {
     const result = await apiRequest(`/users/${userid}`, { method: "DELETE" });
-    console.log("회원탈퇴 API 성공:", result);
+
     return result;
   } catch (error) {
     console.error("회원탈퇴 API 실패:", error);
@@ -102,7 +102,7 @@ export const deleteUser = async (userid) => {
 
 // 로그아웃 처리 (클라이언트 사이드)
 export const logoutUser = () => {
-  console.log("로그아웃 처리 시작");
+
   try {
     // 기본 로그인 정보 제거
     localStorage.removeItem("isLoggedIn");
@@ -135,7 +135,7 @@ export const logoutUser = () => {
     // 세션 스토리지 전체 정리
     sessionStorage.clear();
 
-    console.log("로그아웃 처리 완료");
+
     return true;
   } catch (error) {
     console.error("로그아웃 처리 중 오류:", error);
@@ -306,11 +306,11 @@ export const naverLoginCallback = async (code, state) => {
 
 // 리뷰 작성
 export const createReview = (reviewData) => {
-  console.log("API 호출 - 리뷰 데이터:", reviewData);
+
   return api
     .post("/api/review/review", reviewData)
     .then((response) => {
-      console.log("API 응답 성공:", response.data);
+
       return response.data;
     })
     .catch((error) => {

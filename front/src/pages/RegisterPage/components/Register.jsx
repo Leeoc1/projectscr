@@ -45,17 +45,18 @@ const Register = () => {
   );
 
   const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
 
-    if (e.target.name === "username") {
-      setValidationState({
-        ...validationState,
+    if (name === "username") {
+      setValidationState((prev) => ({
+        ...prev,
         usernameChecked: false,
         usernameAvailable: false,
-      });
+      }));
     }
   };
 
@@ -64,10 +65,10 @@ const Register = () => {
       const lengthValid = validateUsernameLength(formData.username);
       const formatValid = validateUsernameFormat(formData.username);
 
-      setValidationState({
-        ...validationState,
+      setValidationState((prev) => ({
+        ...prev,
         usernameError: !lengthValid || !formatValid,
-      });
+      }));
     }
   };
 
@@ -76,10 +77,10 @@ const Register = () => {
       const lengthValid = validatePasswordLength(formData.password);
       const strengthValid = validatePasswordStrength(formData.password);
 
-      setValidationState({
-        ...validationState,
+      setValidationState((prev) => ({
+        ...prev,
         passwordError: !lengthValid || !strengthValid,
-      });
+      }));
     }
   };
 
@@ -96,11 +97,11 @@ const Register = () => {
 
     try {
       const response = await isAvailableUserId(formData.username);
-      setValidationState({
-        ...validationState,
+      setValidationState((prev) => ({
+        ...prev,
         usernameChecked: true,
         usernameAvailable: response.available,
-      });
+      }));
       alert(
         response.available
           ? "사용 가능한 아이디입니다."
@@ -152,8 +153,8 @@ const Register = () => {
           "환영합니다! 회원가입이 완료되었습니다.\n가입 환영 쿠폰이 지급되었습니다."
         );
 
-        // 즉시 홈페이지로 리다이렉트
-        navigate("/");
+        // 로그인으로 리다이렉트
+        navigate("/login");
       } else {
         setToastMessage("회원가입에 실패했습니다.");
         setToastType("error");

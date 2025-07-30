@@ -4,7 +4,7 @@ import ArrowRight from "../../../images/arrow-right.svg";
 import { useNavigate } from "react-router-dom";
 import { getTopTenMovies } from "../../../api/movieApi";
 import "../styles/MovieChart.css";
-import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
+import LoginRequiredModal from "../../LoginPage/components/LoginRequiredModal";
 
 const MovieChart = () => {
   const [currentIndex, setCurrentIndex] = useState(0);

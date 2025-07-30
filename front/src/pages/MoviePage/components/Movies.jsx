@@ -5,7 +5,7 @@ import {
   getMoviesForAdmin,
   getTopTenMovies,
 } from "../../../api/movieApi";
-import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
+import LoginRequiredModal from "../../LoginPage/components/LoginRequiredModal";
 import "../styles/Movies.css";
 
 const Movies = ({ activeTab: parentActiveTab, showDetailButton = true }) => {

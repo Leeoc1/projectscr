@@ -8,7 +8,7 @@ import {
   toggleWishlist,
 } from "../../../api/movieApi";
 import { useNavigate } from "react-router-dom";
-import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
+import LoginRequiredModal from "../../LoginPage/components/LoginRequiredModal";
 
 export default function MovieDetail() {
   const navigate = useNavigate();

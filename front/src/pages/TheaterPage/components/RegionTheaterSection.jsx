@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
+import LoginRequiredModal from "../../LoginPage/components/LoginRequiredModal";
 import {
   getmycinema,
   updateMyCinema,
@@ -24,25 +24,20 @@ const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
       // 토큰에서 실제 userid 추출
       const userid = await getCurrentUserId();
 
-
       if (!userid) {
-
         return;
       }
 
       try {
         const favorites = await getmycinema(userid);
 
-
         const starFillsData = favorites.reduce((acc, item) => {
           acc[item.cinemacd] = "#fbbf24"; // DB에 있으면 노란색
           return acc;
         }, {});
 
-
         setStarFills(starFillsData);
         setFavoriteCinemas(favorites); // 즐겨찾기 영화관 목록 저장
-
       } catch (error) {
         console.error("Failed to fetch favorites:", error);
       }
@@ -85,7 +80,6 @@ const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
     // 토큰에서 실제 userid 추출
     const userid = await getCurrentUserId();
     if (!userid) {
-
       setShowLoginModal(true);
       return;
     }
@@ -123,12 +117,8 @@ const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
 
   // 즐겨찾기 필터링 함수
   const getFilteredCinemas = () => {
-
-
-
     if (selectedRegion === "favorite") {
       const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-
 
       if (!isLoggedIn) {
         return []; // 로그인하지 않았으면 빈 배열 반환
@@ -136,14 +126,11 @@ const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
 
       const allCinemas = getMoviesByTab();
 
-
       const favoriteCinemaCds = favoriteCinemas.map((item) => item.cinemacd);
-
 
       const filteredResult = allCinemas.filter((cinema) =>
         favoriteCinemaCds.includes(cinema.cinemacd)
       );
-
 
       return filteredResult;
     }

@@ -2,6 +2,8 @@ import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackNavigationModal from "../../../utils/BackNavigationModal";
+import { getCurrentUserIdForPayment } from "../../../utils/tokenUtils";
+import { getUserInfo } from "../../../api/userApi";
 import "./paycss/pay.css";
 
 // TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
@@ -19,6 +21,17 @@ export function CheckoutPage() {
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState(null);
   const [showBackModal, setShowBackModal] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+  const [orderId] = useState(generateRandomString()); // 컴포넌트 생성 시 한 번만 생성
+
+  // 결제 페이지 접근 시 로그인 상태 로깅
+  useEffect(() => {
+    console.log("=== 결제 페이지 접근 ===");
+    console.log("localStorage token:", localStorage.getItem("userid"));
+    console.log("localStorage isLoggedIn:", localStorage.getItem("isLoggedIn"));
+    console.log("sessionStorage token:", sessionStorage.getItem("token"));
+    console.log("sessionStorage role:", sessionStorage.getItem("role"));
+  }, []);
 
   // 뒤로가기 방지 및 세션 보안 처리 (결제 위젯 페이지)
   useEffect(() => {
@@ -63,6 +76,47 @@ export function CheckoutPage() {
       currency: "KRW",
       value: price || 0,
     });
+  }, []);
+
+  // 사용자 정보 가져오기
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        // 로그인 상태 확인
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+        if (!isLoggedIn) {
+          console.log("로그인되지 않은 사용자");
+          return;
+        }
+
+        const userid = await getCurrentUserIdForPayment();
+
+        if (userid) {
+          const userData = await getUserInfo(userid);
+          setUserInfo(userData);
+          console.log("사용자 정보 로드 성공");
+        } else {
+          console.log("userid 가져오기 실패");
+          // 기본값 설정 (게스트 사용자용)
+          setUserInfo({
+            username: "게스트",
+            email: "guest@example.com",
+            phone: "010-0000-0000",
+          });
+        }
+      } catch (error) {
+        console.error("사용자 정보 가져오기 실패:", error);
+        // 에러 발생 시 기본값 설정
+        setUserInfo({
+          username: "게스트",
+          email: "guest@example.com",
+          phone: "010-0000-0000",
+        });
+      }
+    };
+
+    fetchUserInfo();
   }, []);
 
   useEffect(() => {
@@ -129,8 +183,10 @@ export function CheckoutPage() {
   };
 
   const handleBackModalConfirm = () => {
-    // 결제 취소 시 완전히 세션 정리
-    sessionStorage.clear();
+    // 결제 취소 시 예매 관련 정보만 정리 (로그인 정보는 유지)
+    sessionStorage.removeItem("finalReservationInfo");
+    sessionStorage.removeItem("selectedSeats");
+    sessionStorage.removeItem("reservationInfo");
     navigate("/", { replace: true }); // 홈으로 이동
   };
 
@@ -158,18 +214,32 @@ export function CheckoutPage() {
             disabled={!ready}
             onClick={async () => {
               try {
+                console.log("=== 결제 버튼 클릭 ===");
+                console.log(
+                  "결제 전 로그인 상태:",
+                  localStorage.getItem("isLoggedIn")
+                );
+                console.log("결제 전 userid:", localStorage.getItem("userid"));
+                console.log("결제 시 userInfo:", userInfo);
+
                 // 결제 요청 시 amount.value(즉, finalPrice)로 결제
                 await widgets.requestPayment({
-                  orderId: generateRandomString(),
+                  orderId: orderId,
                   orderName: "영화 예매",
                   successUrl: window.location.origin + "/success",
                   failUrl: window.location.origin + "/fail",
-                  customerEmail: "customer123@gmail.com",
-                  customerName: "전요한",
-                  customerMobilePhone: "01012341234",
+                  customerEmail: userInfo?.email || "guest@example.com",
+                  customerName: userInfo?.username || "게스트",
+                  customerMobilePhone: userInfo?.phone || "010-0000-0000",
                 });
+
+                console.log("결제 요청 완료");
               } catch (error) {
-                console.error(error);
+                console.error("결제 요청 오류:", error);
+                console.log(
+                  "결제 오류 후 로그인 상태:",
+                  localStorage.getItem("isLoggedIn")
+                );
               }
             }}
           >

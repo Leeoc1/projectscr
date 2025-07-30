@@ -170,8 +170,10 @@ const ReservationPaymentPage = () => {
   };
 
   const handleBackModalConfirm = () => {
-    // 사용자가 확인했을 때만 세션 정리하고 이동
-    sessionStorage.clear();
+    // 사용자가 확인했을 때만 예매 관련 정보 정리하고 이동 (로그인 정보는 유지)
+    sessionStorage.removeItem("finalReservationInfo");
+    sessionStorage.removeItem("selectedSeats");
+    sessionStorage.removeItem("reservationInfo");
     navigate("/movie", { replace: true });
   };
 

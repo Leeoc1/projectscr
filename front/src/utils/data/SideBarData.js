@@ -1,4 +1,5 @@
-// SideBarData.js
+// ========== 관리자 사이드바 메뉴 데이터 ==========
+
 export const sidebarItems = [
   {
     id: "dashboard",

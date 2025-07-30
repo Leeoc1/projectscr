@@ -1,10 +1,11 @@
-import event1 from "../images/event1.png";
-import event2 from "../images/event2.png";
-import event3 from "../images/event3.png";
-import event4 from "../images/event4.jpg";
-import event5 from "../images/event5.jpg";
-import event6 from "../images/event6.jpg";
+import event1 from "../../images/event1.png";
+import event2 from "../../images/event2.png";
+import event3 from "../../images/event3.png";
+import event4 from "../../images/event4.jpg";
+import event5 from "../../images/event5.jpg";
+import event6 from "../../images/event6.jpg";
 
+// ========== 이벤트 페이지 데이터 ==========
 // 이미지들은 src/images 폴더에서 import로 참조
 export const eventsData = [
   {

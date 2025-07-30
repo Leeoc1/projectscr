@@ -4,7 +4,6 @@ import TrailerPlayer from "./ReactPlayer";
 const ImageSlide = () => {
   return (
     <section className="isc-section">
-      {/* <div className="isc-overlay"></div> */}
       <div className="isc-container">
         <TrailerPlayer />
       </div>

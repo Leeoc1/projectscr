@@ -43,14 +43,18 @@ const ChatBot = () => {
   };
 
   const createCinemaMessage = (data) => {
-    const { cinemaname, cinemaaddress, cinemastatus, cinematel, cinemacd, movies } = data;
-
-
+    const {
+      cinemaname,
+      cinemaaddress,
+      cinemastatus,
+      cinematel,
+      cinemacd,
+      movies,
+    } = data;
 
     let text = `극장: ${cinemaname}\n주소: ${cinemaaddress}\n상태: ${cinemastatus}\n전화번호: ${cinematel}`;
 
     if (movies && movies.length > 0) {
-
       text += `\n\n상영 중인 영화 (${movies.length}개):`;
       movies.slice(0, 5).forEach((movie, index) => {
         text += `\n${index + 1}. ${movie}`;
@@ -59,7 +63,6 @@ const ChatBot = () => {
         text += `\n... 외 ${movies.length - 5}개 더`;
       }
     } else {
-
       text += "\n\n현재 상영 중인 영화가 없습니다.";
     }
 
@@ -97,10 +100,13 @@ const ChatBot = () => {
       text = message + "\n\n";
     }
 
-    text += "상영 중인 영화:\n" + cinemamovies.map((movie, index) => `${index + 1}. ${movie}`).join("\n");
+    text +=
+      "상영 중인 영화:\n" +
+      cinemamovies.map((movie, index) => `${index + 1}. ${movie}`).join("\n");
 
     if (hasMore) {
-      text += "\n\n※ 더 많은 영화가 있습니다. 구체적인 영화명으로 검색해보세요.";
+      text +=
+        "\n\n※ 더 많은 영화가 있습니다. 구체적인 영화명으로 검색해보세요.";
     }
 
     return {
@@ -170,11 +176,6 @@ const ChatBot = () => {
 
   // 메시지 렌더링 함수
   const renderMessage = (msg, index) => {
-    // 디버깅을 위한 로그
-    if (msg.moviecd) {
-
-    }
-
     return (
       <div
         key={index}
@@ -189,7 +190,6 @@ const ChatBot = () => {
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2 inline-block"
             onClick={() => {
               // 영화 정보를 세션스토리지에 저장
-
               sessionStorage.setItem("moviecd", msg.moviecd);
 
               // 영화 이름 추출 (메시지에서)
@@ -197,7 +197,6 @@ const ChatBot = () => {
               if (movieNameMatch) {
                 const movieName = movieNameMatch[1];
                 sessionStorage.setItem("movienm", movieName);
-
               }
             }}
           >
@@ -213,7 +212,6 @@ const ChatBot = () => {
             onClick={() => {
               // 극장 정보를 세션스토리지에 저장
               if (msg.cinemacd) {
-
                 sessionStorage.setItem("cinemacd", msg.cinemacd);
 
                 // 극장 이름 추출 (메시지에서)
@@ -221,7 +219,6 @@ const ChatBot = () => {
                 if (cinemaNameMatch) {
                   const cinemaName = cinemaNameMatch[1];
                   sessionStorage.setItem("cinemanm", cinemaName);
-
                 }
               }
             }}

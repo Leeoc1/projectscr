@@ -1,5 +1,7 @@
 import React from "react";
-import "../MyPage.css";
+import "../styles/MyPageHistory.css";
+import "../styles/MyCoupons.css"; // 모달 스타일
+import "../styles/MyPageReservation.css"; // 테이블 스타일
 
 const MyPageHistory = ({
   showHistoryModal,

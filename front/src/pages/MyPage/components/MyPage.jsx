@@ -1,4 +1,4 @@
-import "../MyPage.css";
+import "../styles/MyPageMain.css";
 import Header from "../../../shared/Header";
 import Footer from "../../../shared/Footer";
 import { useState, useEffect } from "react";
@@ -41,7 +41,6 @@ const MyPage = () => {
       try {
         // 토큰에서 실제 userid 추출
         const userid = await getCurrentUserId();
-
 
         if (userid) {
           // 사용자 정보 조회
@@ -104,16 +103,12 @@ const MyPage = () => {
       // 토큰에서 실제 userid 추출
       const userid = await getCurrentUserId();
 
-
       if (userid) {
-
         const response = await deleteUser(userid);
-
 
         // 자동 로그아웃 처리
         const logoutSuccess = logoutUser();
         if (logoutSuccess) {
-
         }
 
         // 회원탈퇴 모달 닫기

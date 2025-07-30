@@ -4,7 +4,8 @@ import Header from "../../../shared/Header";
 import Footer from "../../../shared/Footer";
 import MyAccount from "./MyAccount";
 import { checkPassword, updateUserInfo } from "../../../api/userApi";
-import "../MyPage.css";
+import "../styles/MyInfo.css";
+import "../styles/MyPageMain.css"; // mp-my-page 스타일
 import MyPagePasswordChange from "./MyPagePasswordChange";
 import MyPageTelChange from "./MyPageTelChange";
 
@@ -79,7 +80,6 @@ const MyInfo = () => {
     e.preventDefault();
 
     try {
-
       const response = await updateUserInfo(userInfo.userid, editForm);
 
       if (response.success) {

@@ -7,7 +7,7 @@ import {
   getUserCoupons,
   useCoupon as applyCoupon,
 } from "../../../api/couponApi";
-import { getCurrentUserId } from "../../../utils/tokenUtils";
+import { getCurrentUserIdForPayment } from "../../../utils/tokenUtils";
 import ProgressBar from "./ProgressBar";
 import BackNavigationModal from "../../../utils/BackNavigationModal";
 import "../style/ReservationPaymentPage.css";
@@ -43,7 +43,7 @@ const ReservationPaymentPage = () => {
   const loadUserCoupons = async () => {
     try {
       // 토큰에서 실제 userid 추출
-      const userid = await getCurrentUserId();
+      const userid = await getCurrentUserIdForPayment();
 
       if (userid) {
         const coupons = await getUserCoupons(userid);
@@ -128,7 +128,7 @@ const ReservationPaymentPage = () => {
     try {
       // 쿠폰 사용 처리 (결제 시작 시점)
       if (selectedCoupon) {
-        const userid = getCurrentUserId(); // 토큰화된 userid 디코딩
+        const userid = getCurrentUserIdForPayment(); // 토큰화된 userid 디코딩
         if (userid) {
           try {
             await applyCoupon(userid, selectedCoupon.couponnum);

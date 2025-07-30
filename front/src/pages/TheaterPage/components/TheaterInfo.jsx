@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../style/TheaterInfo.css";
+import "../styles/TheaterInfo.css";
 import LoginRequiredModal from "../../LoginPage/components/LoginRequiredModal";
 
 const TheaterInfo = ({

@@ -7,7 +7,7 @@ import {
   ZoomControl,
 } from "react-kakao-maps-sdk";
 import mygpsIcon from "../../../images/mygps.png";
-import "../style/MapInfo.css";
+import "../styles/MapInfo.css";
 
 const MapInfo = ({ cinemanm, tel, address, myState, theaterState }) => {
   // 내가 보고 있는 지도 위치 (보여주는 용도, 마커 안 찍음)

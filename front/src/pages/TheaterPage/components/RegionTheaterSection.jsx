@@ -63,7 +63,7 @@ const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
       address: cinema.address,
       tel: cinema.tel,
     };
-    navigate("/theater/info", { state });
+    navigate("/theater", { state });
   };
 
   const handleShowMore = () => {

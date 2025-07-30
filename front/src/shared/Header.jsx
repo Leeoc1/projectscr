@@ -35,20 +35,40 @@ export default function Header() {
       if (storedIsLoggedIn && tokenizedUserid) {
         setIsLoadingUser(true); // 로딩 시작
         try {
-          // 토큰에서 실제 userid 추출
-          const realUserid = await getCurrentUserId();
+          // 토큰에서 실제 userid 추출 (재시도 로직 포함)
+          let realUserid = await getCurrentUserId();
+
+          // 첫 번째 시도 실패 시 한 번 더 재시도
+          if (!realUserid && tokenizedUserid) {
+            await new Promise((resolve) => setTimeout(resolve, 500)); // 500ms 대기
+            realUserid = await getCurrentUserId();
+          }
 
           if (realUserid) {
             setRealUserid(realUserid); // 실제 userid 저장
             const userInfo = await getUserInfo(realUserid);
             setUsername(userInfo.username || realUserid);
           } else {
-            // 토큰이 유효하지 않으면 로그아웃
-            handleLogout();
+            // 두 번 실패해도 결제 페이지에서는 로그아웃하지 않음
+            const isPaymentPage =
+              window.location.pathname.includes("/checkout") ||
+              window.location.pathname.includes("/success") ||
+              window.location.pathname.includes("/payment");
+
+            if (!isPaymentPage) {
+              handleLogout();
+            }
           }
         } catch (error) {
-          // 오류 발생 시 로그아웃 처리
-          handleLogout();
+          // 결제 페이지에서는 오류 발생 시에도 로그아웃하지 않음
+          const isPaymentPage =
+            window.location.pathname.includes("/checkout") ||
+            window.location.pathname.includes("/success") ||
+            window.location.pathname.includes("/payment");
+
+          if (!isPaymentPage) {
+            handleLogout();
+          }
         } finally {
           setIsLoadingUser(false); // 로딩 종료
         }

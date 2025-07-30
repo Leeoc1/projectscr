@@ -8,7 +8,7 @@ const isValidJWTFormat = (token) => {
 };
 
 // 토큰화된 userid에서 실제 userid 추출
-export const decodeUserid = async (tokenizedUserid) => {
+export const decodeUserid = async (tokenizedUserid, skipAutoLogout = false) => {
   try {
     if (!tokenizedUserid) {
       return null;
@@ -34,8 +34,8 @@ export const decodeUserid = async (tokenizedUserid) => {
       const data = await response.json();
       return data.userid;
     } else {
-      // 토큰이 유효하지 않으면 localStorage 정리
-      if (response.status === 401) {
+      // 결제 과정에서는 자동 로그아웃 건너뛰기
+      if (response.status === 401 && !skipAutoLogout) {
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("userid");
         localStorage.removeItem("tokenizedUserid");
@@ -49,7 +49,7 @@ export const decodeUserid = async (tokenizedUserid) => {
 };
 
 // 현재 로그인된 사용자의 실제 userid 가져오기
-export const getCurrentUserId = async () => {
+export const getCurrentUserId = async (skipAutoLogout = false) => {
   const storedValue = localStorage.getItem("userid");
 
   if (!storedValue) {
@@ -58,11 +58,16 @@ export const getCurrentUserId = async () => {
 
   // JWT 형식인지 확인하고 디코딩
   if (isValidJWTFormat(storedValue)) {
-    return await decodeUserid(storedValue);
+    return await decodeUserid(storedValue, skipAutoLogout);
   } else {
     // JWT 형식이 아니면 이미 디코딩된 userid (기존 데이터 호환성)
     return storedValue;
   }
+};
+
+// 결제 과정용 안전한 userid 가져오기 (자동 로그아웃 비활성화)
+export const getCurrentUserIdForPayment = async () => {
+  return await getCurrentUserId(true);
 };
 
 // 보안 로그아웃 (기존 로그아웃과 동일)

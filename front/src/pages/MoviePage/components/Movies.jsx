@@ -157,7 +157,6 @@ const Movies = ({ activeTab: parentActiveTab, showDetailButton = true }) => {
             className="mvs-searchbox-input"
           />
           <span className="mvs-searchbox-icon">
-            {/* SVG 돋보기 아이콘 */}
             <svg
               className="mvs-searchbox-svg"
               viewBox="0 0 20 20"

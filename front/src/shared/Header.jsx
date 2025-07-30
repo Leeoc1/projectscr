@@ -4,6 +4,7 @@ import "./Header.css";
 import logoImg from "../images/logo_1.png";
 import { getUserInfo } from "../api/userApi";
 import { secureLogout, getCurrentUserId } from "../utils/tokenUtils";
+import QuickReservation from "./QuickReservation";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,6 +18,9 @@ export default function Header() {
   const [userid, setUserid] = useState(localStorage.getItem("userid") || "");
   const [realUserid, setRealUserid] = useState(""); // 실제 userid (토큰 디코딩된)
   const [username, setUsername] = useState(""); // DB에서 가져올 username
+  const [isLoadingUser, setIsLoadingUser] = useState(false); // 사용자 정보 로딩 상태
+
+  const [showQuickReservation, setShowQuickReservation] = useState(false);
 
   // 로그인 상태 변화 감지 및 사용자 정보 로드
   useEffect(() => {
@@ -29,10 +33,11 @@ export default function Header() {
 
       // 로그인 상태이고 토큰화된 userid가 있으면 실제 userid로 DB 조회
       if (storedIsLoggedIn && tokenizedUserid) {
+        setIsLoadingUser(true); // 로딩 시작
         try {
           // 토큰에서 실제 userid 추출
           const realUserid = await getCurrentUserId();
-          
+
           if (realUserid) {
             setRealUserid(realUserid); // 실제 userid 저장
             const userInfo = await getUserInfo(realUserid);
@@ -44,13 +49,15 @@ export default function Header() {
           }
         } catch (error) {
           console.error("토큰 디코딩 또는 사용자 정보 조회 실패:", error);
-          // API 실패 시 localStorage의 username 사용 (fallback)
-          const storedUsername = localStorage.getItem("username") || "";
-          setUsername(storedUsername);
+          // 오류 발생 시 로그아웃 처리
+          handleLogout();
+        } finally {
+          setIsLoadingUser(false); // 로딩 종료
         }
       } else {
         setRealUserid("");
         setUsername("");
+        setIsLoadingUser(false);
       }
     };
 
@@ -66,6 +73,16 @@ export default function Header() {
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
+  }, []);
+
+  // localStorage 변경 시 Header 상태 동기화
+  useEffect(() => {
+    const syncLoginState = () => {
+      setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+      setUserid(localStorage.getItem("userid") || "");
+    };
+    window.addEventListener("storage", syncLoginState);
+    return () => window.removeEventListener("storage", syncLoginState);
   }, []);
 
   useEffect(() => {
@@ -88,6 +105,8 @@ export default function Header() {
   const goNotice = () => navigate("/notice");
   const goHome = () => navigate("/");
   const goMyPage = () => navigate("/mypage");
+  const toggleQuickReservation = () =>
+    setShowQuickReservation(!showQuickReservation);
 
   // 로그아웃 핸들러
   const handleLogout = () => {
@@ -99,6 +118,7 @@ export default function Header() {
     setUserid("");
     setRealUserid("");
     setUsername("");
+    setIsLoadingUser(false);
 
     // 홈페이지로 리다이렉트
     navigate("/");
@@ -127,7 +147,11 @@ export default function Header() {
             <a className="h-nav-item" onClick={goEvent}>
               이벤트
             </a>
+            <a className="h-nav-item" onClick={toggleQuickReservation}>
+              빠른예매
+            </a>
           </nav>
+          {showQuickReservation && isScrolled && <QuickReservation />}
 
           {/* User Actions */}
           <div className="h-user-actions">
@@ -144,7 +168,9 @@ export default function Header() {
                     alt="User Icon"
                     className="h-user-icon-img"
                   />
-                  <span className="h-username">{username || userid}님</span>
+                  <span className="h-username">
+                    {isLoadingUser ? "로딩중..." : username || "사용자"}님
+                  </span>
                 </div>
                 <button className="h-logout-btn" onClick={goNotice}>
                   고객센터
@@ -194,8 +220,12 @@ export default function Header() {
             <a className="h-nav-item" onClick={goEvent}>
               이벤트
             </a>
+            <a className="h-nav-item" onClick={toggleQuickReservation}>
+              빠른예매
+            </a>
           </nav>
         </div>
+        {showQuickReservation && !isScrolled && <QuickReservation />}
       </div>
 
       {/* Mobile Menu */}

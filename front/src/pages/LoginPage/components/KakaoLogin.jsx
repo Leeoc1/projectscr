@@ -37,7 +37,12 @@ const KakaoLogin = () => {
     const loginType =
       localStorage.getItem("loginType") || sessionStorage.getItem("loginType");
 
-    // 카카오 로그인인지 확인 - code가 있고 loginType이 kakao인 경우만 처리
+    // 카카오 로그인이 아닌 경우 early return으로 처리 차단
+    if (loginType !== "kakao") {
+      return;
+    }
+
+    // 카카오 로그인인지 확인 - code가 있거나 kakao_login 파라미터가 있으면 카카오 로그인으로 처리
     if (
       code &&
       loginType === "kakao" &&
@@ -66,8 +71,14 @@ const KakaoLogin = () => {
             const realUserid = await decodeUserid(tokenizedUserid);
             if (realUserid) {
               localStorage.setItem("userid", tokenizedUserid); // JWT 토큰화된 userid 저장 (실제 userid 아님)
-              console.log("카카오 로그인 성공 - JWT 토큰 저장:", tokenizedUserid);
-              console.log("카카오 로그인 성공 - 실제 userid (로그용):", realUserid);
+              console.log(
+                "카카오 로그인 성공 - JWT 토큰 저장:",
+                tokenizedUserid
+              );
+              console.log(
+                "카카오 로그인 성공 - 실제 userid (로그용):",
+                realUserid
+              );
             } else {
               console.error("JWT 토큰 디코딩 실패");
               localStorage.setItem("userid", tokenizedUserid); // 백업으로 토큰화된 userid 저장

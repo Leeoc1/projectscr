@@ -28,7 +28,7 @@ const TheaterInfo = ({
     // 로그인된 경우 기존 로직 실행
     sessionStorage.setItem("cinemacd", cinemacd);
     sessionStorage.setItem("cinemanm", cinemanm);
-    navigate("/reservation/movie");
+    navigate(`/reservation/theater/${cinemacd}`);
   };
 
   // 길찾기 버튼, 클릭시 카카오맵으로 이동(현위치에 현위치, 도착지에 해당 영화관)

@@ -57,13 +57,15 @@ const MyAccount = ({ loading, userInfo, currentPage }) => {
               </p>
             )}
 
-            <p className="mp-profile-link" onClick={handleOpenCouponModal}>쿠폰함 &gt;</p>
+            <p className="mp-profile-link" onClick={handleOpenCouponModal}>
+              쿠폰함 &gt;
+            </p>
           </div>
         </div>
       </div>
 
       {/* 쿠폰함 모달 */}
-      <MyCoupons 
+      <MyCoupons
         showCouponModal={showCouponModal}
         handleCloseCouponModal={handleCloseCouponModal}
         userInfo={userInfo}

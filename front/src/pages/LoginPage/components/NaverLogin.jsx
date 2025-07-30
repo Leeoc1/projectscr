@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { naverLogin, naverLoginCallback } from "../../../api/userApi";
 
@@ -6,37 +6,101 @@ const NaverLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // 콜백 처리 중복 방지를 위한 ref
+  const callbackProcessed = useRef(false);
+
   // 네이버 로그인 콜백 처리
   useEffect(() => {
+    // 이미 처리된 경우 중복 실행 방지
+    if (callbackProcessed.current) {
+      console.log("네이버 콜백 이미 처리됨 - 중복 실행 방지");
+      return;
+    }
+
     const urlParams = new URLSearchParams(location.search);
     const code = urlParams.get("code");
     const state = urlParams.get("state");
     const error = urlParams.get("error");
+    const errorDescription = urlParams.get("error_description");
+
     const loginType = localStorage.getItem("loginType");
 
+    // 네이버 로그인이 아닌 경우 early return으로 처리 차단
+    if (loginType !== "naver") {
+      return;
+    }
+
+    // 네이버 콜백에 필요한 파라미터가 없는 경우도 차단
+    if (!code && !error) {
+      return;
+    }
+
+    // 에러 처리 개선
     if (error === "access_denied") {
+      console.log("네이버 로그인 동의 취소됨:", errorDescription);
       alert("네이버 로그인 동의가 취소되었습니다.");
-      localStorage.removeItem("loginType"); // loginType 제거
+      localStorage.removeItem("loginType");
       navigate("/login");
       return;
     }
 
     // 네이버 로그인인지 확인하고, 네이버 콜백만 처리
-    if (code && state && loginType === "naver") {
+    if (code && state) {
+      console.log("네이버 콜백 처리 시작");
+
+      // 중복 처리 방지 플래그 설정
+      callbackProcessed.current = true;
+
       (async () => {
         try {
           const result = await naverLoginCallback(code, state);
+          console.log("네이버 로그인 콜백 응답:", result);
+
           if (result.success) {
+            console.log("네이버 로그인 성공!");
+            console.log("- userInfo:", result.userInfo);
+            console.log("- userid (JWT 토큰):", result.userid);
+            console.log(
+              "- JWT 토큰 길이:",
+              result.userid ? result.userid.length : "토큰 없음"
+            );
+
+            if (!result.userid) {
+              console.error("JWT 토큰이 응답에 없습니다!");
+              alert("로그인 처리 중 오류가 발생했습니다. (토큰 없음)");
+              localStorage.removeItem("loginType");
+              navigate("/login");
+              return;
+            }
+
+            // 반드시 JWT 토큰을 저장
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("userid", result.userid); // JWT 토큰만 저장
             localStorage.setItem("userInfo", JSON.stringify(result.userInfo));
-            localStorage.setItem("loginType", "naver");
-            navigate("/");
+
+            console.log("네이버 로그인 - localStorage 저장 완료");
+
+            // loginType은 성공 후에 제거
+            localStorage.removeItem("loginType");
+
+            // 즉시 홈으로 이동 (replace: true로 login 페이지 히스토리 제거)
+            navigate("/", { replace: true });
           } else {
+            console.error("네이버 로그인 실패:", result.error);
             alert("네이버 로그인 실패: " + result.error);
+            localStorage.removeItem("loginType");
+            navigate("/login");
           }
         } catch (error) {
-          alert("네이버 로그인 콜백 처리 실패");
+          console.error("네이버 로그인 콜백 처리 실패:", error);
+          alert("네이버 로그인 처리 중 오류가 발생했습니다.");
+          localStorage.removeItem("loginType");
+          navigate("/login");
         } finally {
-          localStorage.removeItem("loginType"); // 처리 완료 후 loginType 제거
+          // 처리 완료 후 플래그 초기화 (실패 시에도)
+          setTimeout(() => {
+            callbackProcessed.current = false;
+          }, 1000);
         }
       })();
     }
@@ -45,28 +109,33 @@ const NaverLogin = () => {
   // 네이버 로그인 버튼 클릭 핸들러
   const handleNaverLogin = async () => {
     try {
-      // 네이버 로그인 시작 시 loginType 설정
+      console.log("네이버 로그인 시작");
       localStorage.setItem("loginType", "naver");
-      
+
       const response = await naverLogin();
-      window.location.href = response.loginUrl;
+      console.log("네이버 로그인 응답:", response);
+
+      if (response && response.loginUrl) {
+        console.log("리다이렉트 URL:", response.loginUrl);
+        window.location.href = response.loginUrl;
+      } else {
+        console.error("로그인 URL이 없습니다:", response);
+        alert("네이버 로그인 URL을 받아올 수 없습니다.");
+      }
     } catch (error) {
       console.error("네이버 로그인 실패:", error);
       console.error("에러 상세:", error.response?.data);
       alert("네이버 로그인을 시작할 수 없습니다. 서버 연결을 확인해주세요.");
-      localStorage.removeItem("loginType"); // 에러 시 loginType 제거
+      localStorage.removeItem("loginType");
     }
   };
 
   return (
-    <button
-      className="lgs-social-btn lgs-naver"
-      onClick={handleNaverLogin}
-    >
+    <button className="lgs-social-btn lgs-naver" onClick={handleNaverLogin}>
       <span className="lgs-social-icon">N</span>
       네이버로 로그인
     </button>
   );
 };
 
-export default NaverLogin; 
+export default NaverLogin;

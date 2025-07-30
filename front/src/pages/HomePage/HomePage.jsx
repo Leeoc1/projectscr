@@ -6,6 +6,7 @@ import MovieChart from "./components/MovieChart";
 import Event from "./components/Event";
 import "./styles/HomePage.css";
 import Notice from "./components/Notice";
+import ChatBot from "./components/ChatBot";
 import Toast from "../../components/Toast";
 
 const HomePage = () => {
@@ -34,8 +35,9 @@ const HomePage = () => {
       <MovieChart />
       <Event />
       <Notice />
+      <ChatBot />
       <Footer />
-      
+
       {showWelcomeToast && (
         <Toast
           message={welcomeMessage}

@@ -31,12 +31,18 @@ export const getAllUsers = () =>
 
 // 사용자 ID 중복 확인 (users 테이블)
 export const isAvailableUserId = async (userid) => {
-  return await apiRequest("/users/idcheck", { method: "POST", body: { userid: userid } });
+  return await apiRequest("/users/idcheck", {
+    method: "POST",
+    body: { userid: userid },
+  });
 };
 
 // 사용자 회원가입 (users 테이블)
 export const registerUser = async (userData) => {
-  return await apiRequest("/users/register", { method: "POST", body: userData });
+  return await apiRequest("/users/register", {
+    method: "POST",
+    body: userData,
+  });
 };
 
 // 사용자 정보 조회 (users 테이블)
@@ -56,7 +62,7 @@ export const checkPassword = async (userid, userpw) => {
     body: {
       userid: userid,
       userpw: userpw,
-    }
+    },
   });
 };
 
@@ -67,7 +73,7 @@ export const updatePassword = async (userid, userpw) => {
     body: {
       userid: userid,
       userpw: userpw,
-    }
+    },
   });
 };
 
@@ -75,10 +81,7 @@ export const updatePassword = async (userid, userpw) => {
 export const updateUserInfo = async (userid, userData) => {
   return await apiRequest(`/users/${userid}/update/userinfo`, {
     method: "PUT",
-    body: {
-      userid: userid,
-      ...userData,
-    }
+    body: userData,
   });
 };
 
@@ -278,7 +281,7 @@ export const kakaoCallback = async (code) => {
 // 네이버 로그인 URL 가져오기 (외부 네이버 API)
 export const naverLogin = async () => {
   try {
-    const response = await apiRequest("post", "/login/naver");
+    const response = await apiRequest("/naver/login", { method: "POST" });
     return response;
   } catch (error) {
     console.error("네이버 로그인 URL 가져오기 실패:", error);
@@ -290,8 +293,8 @@ export const naverLogin = async () => {
 export const naverLoginCallback = async (code, state) => {
   try {
     const response = await apiRequest(
-      "post",
-      `/login/naver/callback?code=${code}&state=${state}`
+      `/naver/login/callback?code=${code}&state=${state}`,
+      { method: "GET" }
     );
     return response;
   } catch (error) {

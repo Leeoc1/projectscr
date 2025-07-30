@@ -13,6 +13,10 @@ const ScreenSelector = () => {
   );
   const [reservedSeatsCount, setReservedSeatsCount] = useState({});
 
+  // 현재 시간 정보 (컴포넌트 렌더링 시 한 번만 계산)
+  const today = new Date();
+  const todayDate = today.toLocaleDateString("sv-SE");
+
   // 상영 정보 가져오기
   useEffect(() => {
     const fetchSchedule = async () => {
@@ -148,29 +152,42 @@ const ScreenSelector = () => {
                 <div className="rptm-screen-times-grid">
                   {movieSchedule
                     .filter((schedule) => schedule.screentype === screentype)
-                    .map((schedule) => (
-                      <div
-                        key={schedule.schedulecd}
-                        className={`rptm-screen-time-card ${
-                          selectedStartTime === schedule.starttime
-                            ? "rptm-active"
-                            : ""
-                        }`}
-                        onClick={() => handleTimeSelect(schedule)}
-                      >
-                        <div className="rptm-screen-time-time">
-                          {schedule.starttime.split(" ")[1]?.substring(0, 5)}
+                    .map((schedule) => {
+                      const isToday = schedule.startdate === todayDate;
+                      const isPastTime =
+                        isToday && new Date(schedule.starttime) <= today;
+
+                      return (
+                        <div
+                          key={schedule.schedulecd}
+                          className={`rptm-screen-time-card ${
+                            selectedStartTime === schedule.starttime
+                              ? "rptm-active"
+                              : ""
+                          } ${isPastTime ? "rptm-disabled" : ""}`}
+                          onClick={
+                            isPastTime ? null : () => handleTimeSelect(schedule)
+                          }
+                          style={
+                            isPastTime
+                              ? { opacity: 0.5, cursor: "not-allowed" }
+                              : {}
+                          }
+                        >
+                          <div className="rptm-screen-time-time">
+                            {schedule.starttime.split(" ")[1]?.substring(0, 5)}
+                          </div>
+                          <div className="rptm-screen-time-seats">
+                            {schedule.allseat}/
+                            {schedule.allseat -
+                              (reservedSeatsCount[schedule.schedulecd] || 0)}
+                          </div>
+                          <div className="rptm-screen-time-screen">
+                            {schedule.screenname}
+                          </div>
                         </div>
-                        <div className="rptm-screen-time-seats">
-                          {schedule.allseat}/
-                          {schedule.allseat -
-                            (reservedSeatsCount[schedule.schedulecd] || 0)}
-                        </div>
-                        <div className="rptm-screen-time-screen">
-                          {schedule.screenname}
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                 </div>
               </div>
             ))}

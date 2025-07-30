@@ -18,7 +18,7 @@ const Register = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState("success");
-  
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -147,8 +147,11 @@ const Register = () => {
       const response = await registerUser(userData);
       if (response) {
         // 회원가입 완료 메시지를 세션 스토리지에 저장
-        sessionStorage.setItem("welcomeMessage", "환영합니다! 회원가입이 완료되었습니다.\n가입 환영 쿠폰이 지급되었습니다.");
-        
+        sessionStorage.setItem(
+          "welcomeMessage",
+          "환영합니다! 회원가입이 완료되었습니다.\n가입 환영 쿠폰이 지급되었습니다."
+        );
+
         // 즉시 홈페이지로 리다이렉트
         navigate("/");
       } else {
@@ -317,7 +320,7 @@ const Register = () => {
           </div>
         </div>
       </div>
-      
+
       {showToast && (
         <Toast
           message={toastMessage}

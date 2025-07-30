@@ -8,23 +8,35 @@ import javax.crypto.SecretKey;
 
 @Component
 public class JwtUtil {
-    private final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    // 고정된 시크릿 키 사용 (Base64 인코딩된 256비트 키)
+    private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor("MyVerySecretKeyForJWTTokenSigningThatIsAtLeast256Bits".getBytes());
     private final long EXPIRATION = 24 * 60 * 60 * 1000; // 24시간
 
     // userid를 JWT 토큰으로 암호화
     public String encodeUserid(String userid) {
+        if (userid == null || userid.trim().isEmpty()) {
+            System.err.println("[JWT 토큰 생성 오류] userid가 null이거나 비어있음: " + userid);
+            throw new IllegalArgumentException("userid가 null이거나 비어있습니다.");
+        }
+        
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + EXPIRATION);
         
-        String token = Jwts.builder()
-                .setSubject(userid)
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(SECRET_KEY)
-                .compact();
-                
-        System.out.println("[USERID 토큰화] 원본: " + userid + " -> 토큰: " + token);
-        return token;
+        try {
+            String token = Jwts.builder()
+                    .setSubject(userid)
+                    .setIssuedAt(now)
+                    .setExpiration(expiryDate)
+                    .signWith(SECRET_KEY)
+                    .compact();
+                    
+            System.out.println("[USERID 토큰화 성공] 원본: " + userid + " -> 토큰 길이: " + token.length());
+            return token;
+        } catch (Exception e) {
+            System.err.println("[JWT 토큰 생성 실패] userid: " + userid + ", 오류: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     // JWT 토큰에서 실제 userid 추출

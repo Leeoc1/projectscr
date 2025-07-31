@@ -23,6 +23,10 @@ const ScreenSelector = () => {
       try {
         const selectedSchedule = await getSchedules();
 
+
+
+
+
         const filteredSchedules = selectedSchedule.filter((schedule) => {
           return (
             schedule.movienm === selectedMovieName &&
@@ -31,6 +35,8 @@ const ScreenSelector = () => {
             schedule.cinemanm === sessionStorage.getItem("cinemanm")
           );
         });
+
+
 
         // 상영 시간순으로 정렬
         filteredSchedules.sort(
@@ -172,9 +178,9 @@ const ScreenSelector = () => {
                             {schedule.starttime.split(" ")[1]?.substring(0, 5)}
                           </div>
                           <div className="rptm-screen-time-seats">
+                            {schedule.allseat}/
                             {schedule.allseat -
                               (reservedSeatsCount[schedule.schedulecd] || 0)}
-                            /{schedule.allseat}
                           </div>
                           <div className="rptm-screen-time-screen">
                             {schedule.screenname}

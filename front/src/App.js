@@ -250,36 +250,9 @@ function ReservationProtectedRoute({ children, requiredStep }) {
       const orderId = urlParams.get("orderId");
       const amount = urlParams.get("amount");
 
-      // 디버깅을 위해 콘솔 로그 추가
-      console.log("=== Success 라우트 보호 로직 ===");
-      console.log("현재 URL:", window.location.href);
-      console.log("URL 파라미터들:", {
-        paymentKey,
-        orderId,
-        amount,
-      });
-      console.log("모든 URL 파라미터:", Object.fromEntries(urlParams));
-
-      // 로그인 상태도 함께 확인
-      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-      const userid = localStorage.getItem("userid");
-      console.log("Success 페이지 접근 시 로그인 상태:", {
-        isLoggedIn,
-        hasUserid: !!userid,
-      });
-
-      // paymentKey가 있고 로그인 상태여야 접근 허용
-      if (!paymentKey) {
-        console.log("❌ paymentKey가 없어서 홈으로 리다이렉트");
+      if (!paymentKey || !orderId || !amount) {
         return <Navigate to="/" replace />;
       }
-
-      if (!isLoggedIn || !userid) {
-        console.log("❌ 로그인 상태가 아니어서 홈으로 리다이렉트");
-        return <Navigate to="/" replace />;
-      }
-
-      console.log("✅ Success 페이지 접근 허용");
       break;
 
     case "reservation-success":

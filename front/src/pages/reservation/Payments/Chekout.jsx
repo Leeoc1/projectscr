@@ -4,13 +4,16 @@ import { useNavigate } from "react-router-dom";
 import BackNavigationModal from "../../../utils/BackNavigationModal";
 import { getCurrentUserIdForPayment } from "../../../utils/tokenUtils";
 import { getUserInfo } from "../../../api/userApi";
+import {
+  cleanupOnReservationCancel,
+  logSessionState,
+} from "../../../utils/sessionCleanup";
 import "./paycss/pay.css";
 
 // TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
 // TODO: 구매자의 고유 아이디를 불러와서 customerKey로 설정하세요. 이메일・전화번호와 같이 유추가 가능한 값은 안전하지 않습니다.
 // @docs https://docs.tosspayments.com/sdk/v2/js#토스페이먼츠-초기화
 const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
-const customerKey = generateRandomString();
 
 export function CheckoutPage() {
   const navigate = useNavigate();
@@ -22,7 +25,9 @@ export function CheckoutPage() {
   const [widgets, setWidgets] = useState(null);
   const [showBackModal, setShowBackModal] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
-  const [orderId] = useState(generateRandomString()); // 컴포넌트 생성 시 한 번만 생성
+  const [customerKey, setCustomerKey] = useState(null);
+  const [orderId] = useState(generateRandomString());
+  const [isPaymentLoading, setIsPaymentLoading] = useState(false);
 
   // 결제 페이지 접근 시 로그인 상태 로깅
   useEffect(() => {
@@ -31,6 +36,9 @@ export function CheckoutPage() {
     console.log("localStorage isLoggedIn:", localStorage.getItem("isLoggedIn"));
     console.log("sessionStorage token:", sessionStorage.getItem("token"));
     console.log("sessionStorage role:", sessionStorage.getItem("role"));
+
+    // 세션 상태 로깅
+    logSessionState("(결제 페이지 접근)");
   }, []);
 
   // 뒤로가기 방지 및 세션 보안 처리 (결제 위젯 페이지)
@@ -81,38 +89,11 @@ export function CheckoutPage() {
   // 사용자 정보 가져오기
   useEffect(() => {
     const fetchUserInfo = async () => {
-      try {
-        // 로그인 상태 확인
-        const isLoggedIn = localStorage.getItem("isLoggedIn");
-
-        if (!isLoggedIn) {
-          console.log("로그인되지 않은 사용자");
-          return;
-        }
-
-        const userid = await getCurrentUserIdForPayment();
-
-        if (userid) {
-          const userData = await getUserInfo(userid);
-          setUserInfo(userData);
-          console.log("사용자 정보 로드 성공");
-        } else {
-          console.log("userid 가져오기 실패");
-          // 기본값 설정 (게스트 사용자용)
-          setUserInfo({
-            username: "게스트",
-            email: "guest@example.com",
-            phone: "010-0000-0000",
-          });
-        }
-      } catch (error) {
-        console.error("사용자 정보 가져오기 실패:", error);
-        // 에러 발생 시 기본값 설정
-        setUserInfo({
-          username: "게스트",
-          email: "guest@example.com",
-          phone: "010-0000-0000",
-        });
+      const userid = await getCurrentUserIdForPayment();
+      if (userid) {
+        setCustomerKey(userid);
+        const userData = await getUserInfo(userid);
+        setUserInfo(userData);
       }
     };
 
@@ -121,27 +102,17 @@ export function CheckoutPage() {
 
   useEffect(() => {
     async function fetchPaymentWidgets() {
-      try {
-        // ------  SDK 초기화 ------
-        // @docs https://docs.tosspayments.com/sdk/v2/js#토스페이먼츠-초기화
-        const tossPayments = await loadTossPayments(clientKey);
+      if (!customerKey) return;
 
-        // 회원 결제
-        // @docs https://docs.tosspayments.com/sdk/v2/js#tosspaymentswidgets
-        const widgets = tossPayments.widgets({
-          customerKey,
-        });
-        // 비회원 결제
-        // const widgets = tossPayments.widgets({ customerKey: ANONYMOUS });
-
-        setWidgets(widgets);
-      } catch (error) {
-        console.error("Error fetching payment widget:", error);
-      }
+      const tossPayments = await loadTossPayments(clientKey);
+      const widgets = tossPayments.widgets({
+        customerKey,
+      });
+      setWidgets(widgets);
     }
 
     fetchPaymentWidgets();
-  }, [clientKey, customerKey]);
+  }, [customerKey]);
 
   useEffect(() => {
     async function renderPaymentWidgets() {
@@ -183,10 +154,11 @@ export function CheckoutPage() {
   };
 
   const handleBackModalConfirm = () => {
-    // 결제 취소 시 예매 관련 정보만 정리 (로그인 정보는 유지)
-    sessionStorage.removeItem("finalReservationInfo");
-    sessionStorage.removeItem("selectedSeats");
-    sessionStorage.removeItem("reservationInfo");
+    console.log("🚫 결제 취소 - 예매 관련 정보 정리");
+
+    // 체계적인 세션 정리
+    cleanupOnReservationCancel();
+
     navigate("/", { replace: true }); // 홈으로 이동
   };
 
@@ -211,10 +183,38 @@ export function CheckoutPage() {
           <button
             className="button"
             style={{ marginTop: "30px" }}
-            disabled={!ready}
+            disabled={!ready || isPaymentLoading || amount.value <= 0}
             onClick={async () => {
               try {
+                setIsPaymentLoading(true);
+
                 console.log("=== 결제 버튼 클릭 ===");
+                console.log("결제 금액:", amount.value);
+                console.log("결제 준비 상태:", ready);
+                console.log("사용자 정보:", userInfo);
+
+                // 결제 금액 검증
+                if (amount.value <= 0) {
+                  alert("결제 금액이 올바르지 않습니다.");
+                  return;
+                }
+
+                // 사용자 정보 검증
+                if (!userInfo) {
+                  alert(
+                    "사용자 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요."
+                  );
+                  return;
+                }
+
+                // 위젯 준비 상태 검증
+                if (!widgets) {
+                  alert(
+                    "결제 시스템을 준비하는 중입니다. 잠시 후 다시 시도해주세요."
+                  );
+                  return;
+                }
+
                 console.log(
                   "결제 전 로그인 상태:",
                   localStorage.getItem("isLoggedIn")
@@ -222,28 +222,57 @@ export function CheckoutPage() {
                 console.log("결제 전 userid:", localStorage.getItem("userid"));
                 console.log("결제 시 userInfo:", userInfo);
 
-                // 결제 요청 시 amount.value(즉, finalPrice)로 결제
-                await widgets.requestPayment({
+                const paymentData = {
                   orderId: orderId,
                   orderName: "영화 예매",
                   successUrl: window.location.origin + "/success",
                   failUrl: window.location.origin + "/fail",
                   customerEmail: userInfo?.email || "guest@example.com",
                   customerName: userInfo?.username || "게스트",
-                  customerMobilePhone: userInfo?.phone || "010-0000-0000",
-                });
+                  customerMobilePhone:
+                    userInfo?.phone?.replace(/[-\s]/g, "") || "01012341234",
+                };
+
+                console.log("결제 요청 데이터:", paymentData);
+
+                // 결제 요청 데이터를 sessionStorage에 저장 (success/fail 페이지에서 확인용)
+                sessionStorage.setItem(
+                  "paymentRequestData",
+                  JSON.stringify(paymentData)
+                );
+
+                // 결제 요청 시 amount.value(즉, finalPrice)로 결제
+                console.log("결제 요청 시작...");
+                await widgets.requestPayment(paymentData);
 
                 console.log("결제 요청 완료");
               } catch (error) {
                 console.error("결제 요청 오류:", error);
+                console.log("오류 상세:", error.message, error.code);
+
+                // 사용자에게 구체적인 오류 메시지 제공
+                let errorMessage = "결제 요청 중 오류가 발생했습니다.";
+
+                if (error.code === "USER_CANCEL") {
+                  errorMessage = "결제가 취소되었습니다.";
+                } else if (error.code === "INVALID_CARD") {
+                  errorMessage = "유효하지 않은 카드 정보입니다.";
+                } else if (error.message) {
+                  errorMessage = `결제 오류: ${error.message}`;
+                }
+
+                alert(errorMessage);
+
                 console.log(
                   "결제 오류 후 로그인 상태:",
                   localStorage.getItem("isLoggedIn")
                 );
+              } finally {
+                setIsPaymentLoading(false);
               }
             }}
           >
-            결제하기
+            {isPaymentLoading ? "결제 진행 중..." : "결제하기"}
           </button>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { saveReservation, savePayment } from "../../../api/reservationApi";
 import { useCoupon as applyCoupon } from "../../../api/couponApi";
 import { getCurrentUserIdForPayment } from "../../../utils/tokenUtils";
+import { cleanupSensitivePaymentData } from "../../../utils/sessionCleanup";
 
 const SuccessPage = () => {
   const navigate = useNavigate();
@@ -12,6 +13,11 @@ const SuccessPage = () => {
     return savedResponseData ? JSON.parse(savedResponseData) : null;
   });
   const [showResponseData, setShowResponseData] = useState(false);
+  const [paymentRequestData, setPaymentRequestData] = useState(() => {
+    const savedRequestData = sessionStorage.getItem("paymentRequestData");
+    return savedRequestData ? JSON.parse(savedRequestData) : null;
+  });
+  const [showRequestData, setShowRequestData] = useState(false);
 
   // 뒤로가기 방지 및 보안 처리 (토스 결제 성공 페이지)
   useEffect(() => {
@@ -45,19 +51,10 @@ const SuccessPage = () => {
     window.addEventListener("popstate", handlePopState);
     document.addEventListener("keydown", handleKeyDown);
 
-    // 민감한 결제 정보 3초 후 정리
+    // 결제 완료 후 즉시 민감한 결제 정보만 정리 (예매 정보는 ReservationSuccessPage에서 정리)
     const timeoutId = setTimeout(() => {
-      // 결제 관련 민감한 정보 제거
-      sessionStorage.removeItem("paymentResponseData");
-      const keysToRemove = [
-        "selectedMovieTime",
-        "selectedSeats",
-        "guestCount",
-        "totalGuests",
-        "finalPrice",
-      ];
-      keysToRemove.forEach((key) => sessionStorage.removeItem(key));
-    }, 3000);
+      cleanupSensitivePaymentData();
+    }, 1000); // 1초로 단축
 
     return () => {
       window.removeEventListener("popstate", handlePopState);
@@ -214,15 +211,30 @@ const SuccessPage = () => {
         </div>
       </div>
       {showResponseData && (
-        <div
-          className="box_section"
-          style={{ width: "600px", textAlign: "left" }}
-        >
-          <b>토스페이먼츠 결제 응답 데이터:</b>
-          <div style={{ whiteSpace: "initial" }}>
-            {responseData && <pre>{JSON.stringify(responseData, null, 4)}</pre>}
+        <>
+          <div
+            className="box_section"
+            style={{ width: "600px", textAlign: "left" }}
+          >
+            <b>토스페이먼츠 결제 요청 데이터:</b>
+            <div style={{ whiteSpace: "initial" }}>
+              {paymentRequestData && (
+                <pre>{JSON.stringify(paymentRequestData, null, 4)}</pre>
+              )}
+            </div>
           </div>
-        </div>
+          <div
+            className="box_section"
+            style={{ width: "600px", textAlign: "left" }}
+          >
+            <b>토스페이먼츠 결제 응답 데이터:</b>
+            <div style={{ whiteSpace: "initial" }}>
+              {responseData && (
+                <pre>{JSON.stringify(responseData, null, 4)}</pre>
+              )}
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

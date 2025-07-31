@@ -6,6 +6,7 @@ import { getReservation } from "../../../api/reservationApi";
 import { getCurrentMovies } from "../../../api/movieApi";
 import "../style/ReservationSuccessPage.css";
 import KaKapTemplate from "../KaKapTemplate";
+import { cleanupOnReservationComplete } from "../../../utils/sessionCleanup";
 
 const ReservationSuccessPage = () => {
   const navigate = useNavigate();
@@ -29,15 +30,15 @@ const ReservationSuccessPage = () => {
     const handleKeyDown = (event) => {
       // Alt + 왼쪽 화살표 (뒤로가기)
       if (event.altKey && event.keyCode === 37) {
-
         event.preventDefault();
         return false;
       }
       // Backspace로 뒤로가기 (input이나 textarea가 아닌 경우)
-      if (event.keyCode === 8 && 
-          !['INPUT', 'TEXTAREA'].includes(event.target.tagName) && 
-          !event.target.isContentEditable) {
-
+      if (
+        event.keyCode === 8 &&
+        !["INPUT", "TEXTAREA"].includes(event.target.tagName) &&
+        !event.target.isContentEditable
+      ) {
         event.preventDefault();
         return false;
       }
@@ -54,42 +55,12 @@ const ReservationSuccessPage = () => {
     };
   }, [navigate]);
 
-  // 페이지 로드 후 민감한 세션 정보 정리
+  // 예매 완료 후 모든 예매 관련 세션 정보 완전 정리
   useEffect(() => {
-    const cleanupSensitiveData = () => {
-      // 예매 완료 후 필요없는 민감한 정보들 삭제
-      const keysToRemove = [
-        "selectedMovieTime",
-        "selectedSeats", 
-        "guestCount",
-        "totalGuests",
-        "finalPrice"
-      ];
-
-      keysToRemove.forEach(key => {
-        sessionStorage.removeItem(key);
-      });
-
-      // finalReservationInfo에서 민감한 정보만 제거하고 필요한 정보만 유지
-      try {
-        const finalInfo = sessionStorage.getItem("finalReservationInfo");
-        if (finalInfo) {
-          const parsed = JSON.parse(finalInfo);
-          // 영화 정보와 예매 완료 표시만 유지
-          const cleanedInfo = {
-            movienm: parsed.movienm,
-            cinemanm: parsed.cinemanm,
-            reservationCompleted: true // 예매 완료 플래그
-          };
-          sessionStorage.setItem("finalReservationInfo", JSON.stringify(cleanedInfo));
-        }
-      } catch (error) {
-        console.error("세션 정리 중 오류:", error);
-      }
-    };
-
-    // 3초 후 정리 (사용자가 페이지 내용을 볼 시간 제공)
-    const timeoutId = setTimeout(cleanupSensitiveData, 3000);
+    // 사용자가 예매 내용을 확인할 수 있도록 5초 후 정리
+    const timeoutId = setTimeout(() => {
+      cleanupOnReservationComplete();
+    }, 5000);
 
     return () => clearTimeout(timeoutId);
   }, []);

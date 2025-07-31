@@ -47,6 +47,12 @@
   display: block;
 }
 
+.h-logo-line {
+  line-height: 1.2;
+  transition: all 0.3s ease;
+  font-size: 1.125rem;
+}
+
 .h-nav-scrolled {
   display: none;
   align-items: center;
@@ -211,6 +217,7 @@
 }
 
 .h-nav-bottom {
+  position: relative;
   background-color: #1a1a1a;
   border-top: 1px solid #4b5563;
   transition: all 0.3s ease;

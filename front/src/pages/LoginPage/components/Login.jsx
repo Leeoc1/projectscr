@@ -86,13 +86,20 @@ const Login = () => {
         return;
       }
 
+      // 결제 페이지에서는 자동 로그아웃 방지
+      const currentPath = window.location.pathname;
+      const isPaymentPage =
+        currentPath.includes("/checkout") ||
+        currentPath.includes("/success") ||
+        currentPath.includes("/fail");
+
+      if (isPaymentPage) {
+        return; // 결제 관련 페이지에서는 로그아웃하지 않음
+      }
+
       // 브라우저 창 닫기인 경우만 로그아웃
 
-      localStorage.removeItem("isLoggedIn");
-      localStorage.removeItem("userid");
-      localStorage.removeItem("tokenizedUserid"); // JWT 토큰화된 userid 제거
-      localStorage.removeItem("username");
-      localStorage.removeItem("loginType");
+      localStorage.clear();
       sessionStorage.clear();
     });
   };

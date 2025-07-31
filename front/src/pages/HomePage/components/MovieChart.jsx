@@ -19,11 +19,8 @@ const MovieChart = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       const top10Movies = await getTopTenMovies();
-      // movierank 오름차순 정렬
-      const sorted = [...top10Movies].sort(
-        (a, b) => Number(a.movierank) - Number(b.movierank)
-      );
-      setMovies(sorted);
+      // 백엔드에서 이미 정렬된 데이터를 받으므로 추가 정렬 불필요
+      setMovies(top10Movies);
     };
     fetchMovies();
   }, []);

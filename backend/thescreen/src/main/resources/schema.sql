@@ -93,30 +93,35 @@ from
     inner join cinema c on s.cinemacd = c.cinemacd
     inner join region rg on rg.regioncd = c.regioncd;
 
+
 CREATE OR REPLACE VIEW view_movie_with_rank AS
-SELECT m.moviecd, m.movienm, m.description, m.genre, m.director, m.actors, m.runningtime, m.releasedate, m.posterurl, m.runningscreen, m.movieinfo, m.isadult, r.movierankcd, r.movierank, r.rankchange
+SELECT
+    m.moviecd,
+    m.movienm,
+    m.description,
+    m.genre,
+    m.director,
+    m.actors,
+    m.runningtime,
+    m.releasedate,
+    m.posterurl,
+    m.runningscreen,
+    m.movieinfo,
+    m.isadult,
+    r.movierankcd,
+    r.movierank,
+    r.rankchange
 FROM movie m
-    LEFT JOIN movierank r ON m.movienm = r.moviename;
+LEFT JOIN movierank r ON m.movienm = r.moviename;
 
 CREATE OR REPLACE VIEW review_view AS
-SELECT r.reviewnum, -- 리뷰 번호
-    u.userid, -- 유저 ID
-    m.movienm, -- 영화 이름
-    r.rating, -- 평점
-    r.likes -- 추천(좋아요)
-FROM review r
-    LEFT JOIN users u ON r.userid = u.userid
-    LEFT JOIN movie m ON r.moviecd = m.moviecd;
-
---스케줄이 있는 영화 (movierank 유무와 상관없이 모든 스케줄 영화 포함)
-CREATE OR REPLACE VIEW moviewithschedule AS
-SELECT m.moviecd, m.movienm, m.description, m.genre, m.director, m.actors, m.runningtime, m.releasedate, m.posterurl, m.runningscreen, m.movieinfo, m.isadult, mr.movierank
-FROM Movie m
-    LEFT JOIN MovieRank mr ON m.moviecd = mr.movierankcd
-WHERE
-    EXISTS (
-        SELECT 1
-        FROM Schedule s
-        WHERE
-            s.moviecd = m.moviecd
-    );
+SELECT
+r.reviewnum,               -- 리뷰 번호
+u.userid,                  -- 유저 ID
+m.movienm,                 -- 영화 이름
+r.rating,                  -- 평점
+r.likes                    -- 추천(좋아요)
+FROM
+review r
+LEFT JOIN users u ON r.userid = u.userid
+LEFT JOIN movie m ON r.moviecd = m.moviecd;

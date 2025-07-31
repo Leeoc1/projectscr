@@ -50,3 +50,4 @@ const TheaterDetail = ({
 };
 
 export default TheaterDetail;
+

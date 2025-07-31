@@ -10,7 +10,6 @@ export const getUserCoupons = async (userid) => {
     });
     return response;
   } catch (error) {
-    console.error("쿠폰 목록 조회 오류:", error);
     throw error;
   }
 };
@@ -26,7 +25,6 @@ export const useCoupon = async (userid, couponnum) => {
     );
     return response;
   } catch (error) {
-    console.error("쿠폰 사용 오류:", error);
     throw error;
   }
 };
@@ -44,7 +42,6 @@ export const issueCoupon = async (userid, couponcd, couponexpiredate) => {
     });
     return response;
   } catch (error) {
-    console.error("쿠폰 발급 오류:", error);
     throw error;
   }
 };

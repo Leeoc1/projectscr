@@ -75,3 +75,4 @@ const RegisterBirth = ({ birthDate, setBirthDate }) => {
 };
 
 export default RegisterBirth;
+

@@ -22,3 +22,4 @@ export const validatePasswordStrength = (password) => {
 
     return passwordRegex.test(password);
 }
+

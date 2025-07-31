@@ -80,3 +80,4 @@ export const cancelReservation = (reservationcd, reservationstatus = "환불 처
     "Error canceling reservation:", 
     null
   );
+

@@ -44,11 +44,10 @@ export default function Header() {
             setUsername(userInfo.username || realUserid);
           } else {
             // 토큰이 유효하지 않으면 로그아웃
-            console.log("유효하지 않은 토큰으로 인한 자동 로그아웃");
+
             handleLogout();
           }
         } catch (error) {
-          console.error("토큰 디코딩 또는 사용자 정보 조회 실패:", error);
           // 오류 발생 시 로그아웃 처리
           handleLogout();
         } finally {
@@ -101,10 +100,16 @@ export default function Header() {
       setShowQuickReservation(false);
     };
 
-    window.addEventListener('closeQuickReservation', handleCloseQuickReservation);
+    window.addEventListener(
+      "closeQuickReservation",
+      handleCloseQuickReservation
+    );
 
     return () => {
-      window.removeEventListener('closeQuickReservation', handleCloseQuickReservation);
+      window.removeEventListener(
+        "closeQuickReservation",
+        handleCloseQuickReservation
+      );
     };
   }, []);
 
@@ -121,7 +126,7 @@ export default function Header() {
   const toggleQuickReservation = () => {
     // 빠른예매를 열 때 챗봇 닫기 이벤트 발생
     if (!showQuickReservation) {
-      window.dispatchEvent(new CustomEvent('closeChatBot'));
+      window.dispatchEvent(new CustomEvent("closeChatBot"));
     }
     setShowQuickReservation(!showQuickReservation);
   };
@@ -137,6 +142,7 @@ export default function Header() {
     setRealUserid("");
     setUsername("");
     setIsLoadingUser(false);
+    window.location.reload(); // 페이지 새로고침으로 상태 초기화
 
     // 홈페이지로 리다이렉트
     navigate("/");
@@ -169,7 +175,9 @@ export default function Header() {
               빠른예매
             </a>
           </nav>
-          {showQuickReservation && isScrolled && <QuickReservation onClose={() => setShowQuickReservation(false)} />}
+          {showQuickReservation && isScrolled && (
+            <QuickReservation onClose={() => setShowQuickReservation(false)} />
+          )}
 
           {/* User Actions */}
           <div className="h-user-actions">
@@ -243,7 +251,9 @@ export default function Header() {
             </a>
           </nav>
         </div>
-        {showQuickReservation && !isScrolled && <QuickReservation onClose={() => setShowQuickReservation(false)} />}
+        {showQuickReservation && !isScrolled && (
+          <QuickReservation onClose={() => setShowQuickReservation(false)} />
+        )}
       </div>
 
       {/* Mobile Menu */}

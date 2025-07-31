@@ -41,12 +41,12 @@ const GoogleLoginButton = ({ onLoginAttempt }) => {
         alert("구글 로그인 성공!");
         navigate("/");
       } catch (error) {
-        console.error("Google 로그인 처리 실패:", error);
+        
         alert("구글 로그인 처리 중 오류가 발생했습니다.");
       }
     },
     onError: (error) => {
-      console.error("Google 로그인 실패:", error);
+      
       alert("구글 로그인에 실패했습니다.");
     },
     scope:
@@ -83,7 +83,7 @@ const GoogleLogin = ({ onLoginAttempt }) => {
         const clientId = await getGoogleClientId();
         setGoogleClientId(clientId);
       } catch (error) {
-        console.error("Google 클라이언트 ID 가져오기 실패:", error);
+        
       } finally {
         setIsLoading(false);
       }
@@ -109,3 +109,4 @@ const GoogleLogin = ({ onLoginAttempt }) => {
 };
 
 export default GoogleLogin;
+

@@ -135,3 +135,4 @@ export const deleteMyCinema = async (userid, cinemacd) => {
     null
   );
 };
+

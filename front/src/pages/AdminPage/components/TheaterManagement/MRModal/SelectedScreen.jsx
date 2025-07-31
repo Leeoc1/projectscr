@@ -24,7 +24,7 @@ const SelectedScreen = ({
           screens.filter((screen) => screen.cinemacd === theater.cinemacd)
         );
       } catch (error) {
-        console.error("상영관 정보 조회 실패:", error);
+        
       }
     };
 
@@ -174,3 +174,4 @@ const SelectedScreen = ({
 };
 
 export default SelectedScreen;
+

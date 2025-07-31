@@ -59,3 +59,4 @@ export {
 
 // 기본 API 인스턴스 export (호환성)
 export { api as default } from "./apiUtils";
+

@@ -12,3 +12,4 @@ const ImageSlide = () => {
 };
 
 export default ImageSlide;
+

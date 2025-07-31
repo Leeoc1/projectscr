@@ -18,7 +18,7 @@ const MyPageLike = ({ loading, wishlist, setWishlist }) => {
         setWishlist((prev) => prev.filter((wish) => wish.moviecd !== moviecd));
       }
     } catch (error) {
-      console.error("찜 해제 오류:", error);
+      
     }
   };
 
@@ -98,3 +98,4 @@ const MyPageLike = ({ loading, wishlist, setWishlist }) => {
 };
 
 export default MyPageLike;
+

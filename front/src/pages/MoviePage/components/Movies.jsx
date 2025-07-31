@@ -83,7 +83,7 @@ const Movies = ({ activeTab: parentActiveTab, showDetailButton = true }) => {
           )
         );
       } catch (error) {
-        console.error("영화 데이터 로딩 실패:", error);
+        
       }
     };
     fetchMovies();
@@ -257,3 +257,4 @@ const Movies = ({ activeTab: parentActiveTab, showDetailButton = true }) => {
 };
 
 export default Movies;
+

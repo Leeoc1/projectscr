@@ -11,17 +11,13 @@ const isValidJWTFormat = (token) => {
 export const decodeUserid = async (tokenizedUserid) => {
   try {
     if (!tokenizedUserid) {
-      console.log("tokenUtils: tokenizedUserid가 없음");
       return null;
     }
 
     // JWT 형식이 아니면 바로 반환 (이미 디코딩된 userid일 수 있음)
     if (!isValidJWTFormat(tokenizedUserid)) {
-      console.log("tokenUtils: JWT 형식이 아님, 바로 반환:", tokenizedUserid);
       return tokenizedUserid;
     }
-
-    console.log("tokenUtils: JWT 토큰 디코딩 시도");
     const response = await fetch(
       "http://localhost:8080/api/auth/decode-token",
       {
@@ -35,15 +31,12 @@ export const decodeUserid = async (tokenizedUserid) => {
 
     if (response.ok) {
       const data = await response.json();
-      console.log("tokenUtils: 토큰 디코딩 성공:", data.userid);
       return data.userid;
     } else {
-      console.log("tokenUtils: 토큰 디코딩 실패, status:", response.status);
       // 🚫 자동 로그아웃 코드 완전 제거 - 일반 회원가입 사용자 결제 시 로그아웃 방지
     }
     return null;
   } catch (error) {
-    console.error("tokenUtils: 토큰 디코딩 에러:", error);
     return null;
   }
 };
@@ -51,38 +44,23 @@ export const decodeUserid = async (tokenizedUserid) => {
 // 현재 로그인된 사용자의 실제 userid 가져오기
 export const getCurrentUserId = async () => {
   const storedValue = localStorage.getItem("userid");
-  console.log("tokenUtils: getCurrentUserId 호출, storedValue:", storedValue);
 
   if (!storedValue) {
-    console.log("tokenUtils: storedValue가 없음");
     return null;
   }
 
   // JWT 형식인지 확인하고 디코딩
   if (isValidJWTFormat(storedValue)) {
-    console.log("tokenUtils: JWT 형식 확인됨, 디코딩 시도");
     return await decodeUserid(storedValue);
   } else {
     // JWT 형식이 아니면 이미 디코딩된 userid (기존 데이터 호환성)
-    console.log("tokenUtils: JWT 형식이 아님, 그대로 반환");
     return storedValue;
   }
 };
 
 // 결제 과정용 userid 가져오기 (getCurrentUserId와 동일하게 변경)
 export const getCurrentUserIdForPayment = async () => {
-  console.log("tokenUtils: getCurrentUserIdForPayment 호출");
-
-  // 🔍 추가 디버깅: 로그인 상태 확인
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
-  const storedUserid = localStorage.getItem("userid");
-  console.log("tokenUtils: isLoggedIn =", isLoggedIn);
-  console.log("tokenUtils: storedUserid =", storedUserid);
-
-  const result = await getCurrentUserId();
-  console.log("tokenUtils: getCurrentUserIdForPayment 최종 결과 =", result);
-
-  return result;
+  return await getCurrentUserId();
 };
 
 // 보안 로그아웃 (기존 로그아웃과 동일)

@@ -148,3 +148,4 @@ const TheaterPage = () => {
 };
 
 export default TheaterPage;
+

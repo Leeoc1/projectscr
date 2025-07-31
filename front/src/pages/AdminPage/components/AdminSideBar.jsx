@@ -24,3 +24,4 @@ const AdminSidebar = ({ activeTab, setActiveTab }) => {
 };
 
 export default AdminSidebar;
+

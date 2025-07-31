@@ -27,7 +27,7 @@ const AdminPage = () => {
         const isAdminLogin = localStorage.getItem("isAdminLogin") === "true";
 
         if (!storedUserid) {
-          console.error("로그인된 사용자가 없습니다.");
+          
           alert("로그인이 필요합니다.");
           navigate("/");
           return;
@@ -48,8 +48,8 @@ const AdminPage = () => {
         const token = await getAdminToken(realUserid);
         localStorage.setItem("adminToken", token);
       } catch (e) {
-        console.error("관리자 토큰 발급 실패:", e);
-        console.error("에러 상세:", e.response?.data);
+        
+        
         alert(`관리자 인증 토큰 발급 실패: ${e.message}`);
         navigate("/");
       }
@@ -127,3 +127,4 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
+

@@ -54,7 +54,7 @@ const Login = () => {
       if (error.response) {
         alert("아이디 혹은 비밀번호가 일치하지 않습니다.........");
       } else {
-        console.error("네트워크 오류:", error);
+        
       }
     }
   };
@@ -200,3 +200,4 @@ const Login = () => {
 };
 
 export default Login;
+

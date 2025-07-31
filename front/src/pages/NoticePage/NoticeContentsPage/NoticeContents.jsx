@@ -21,7 +21,7 @@ const NoticeContents = () => {
                 setLoading(false);
             })
             .catch((err) => {
-                console.error('Error fetching notice:', err);
+                
                 setError(true);
                 setLoading(false);
             });
@@ -54,3 +54,4 @@ const NoticeContents = () => {
 };
 
 export default NoticeContents;
+

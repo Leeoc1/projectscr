@@ -72,9 +72,9 @@ const ReservationPaymentPage = () => {
       } else {
       }
     } catch (error) {
-      
-      
-      
+      console.error("쿠폰 목록 로드 실패:", error);
+      console.error("에러 상세:", error.message);
+      console.error("에러 스택:", error.stack);
       setUserCoupons([]);
     } finally {
       setIsLoading(false);
@@ -128,12 +128,12 @@ const ReservationPaymentPage = () => {
     try {
       // 쿠폰 사용 처리 (결제 시작 시점)
       if (selectedCoupon) {
-        const userid = getCurrentUserIdForPayment(); // 토큰화된 userid 디코딩
+        const userid = await getCurrentUserIdForPayment(); // 토큰화된 userid 디코딩
         if (userid) {
           try {
             await applyCoupon(userid, selectedCoupon.couponnum);
           } catch (couponError) {
-            
+            console.error("쿠폰 사용 처리 중 오류:", couponError);
             alert("쿠폰 사용 중 오류가 발생했습니다. 다시 시도해주세요.");
             return; // 쿠폰 사용 실패 시 결제 중단
           }
@@ -153,7 +153,7 @@ const ReservationPaymentPage = () => {
       // 체크아웃 페이지로 이동
       navigate("/checkout");
     } catch (error) {
-      
+      console.error("결제 처리 중 오류:", error);
       alert("결제 처리 중 오류가 발생했습니다.");
     }
   };
@@ -298,4 +298,3 @@ const ReservationPaymentPage = () => {
 };
 
 export default ReservationPaymentPage;
-

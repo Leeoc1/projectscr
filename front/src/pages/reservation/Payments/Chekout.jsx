@@ -1,5 +1,5 @@
 import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import BackNavigationModal from "../../../utils/BackNavigationModal";
 import { getCurrentUserIdForPayment } from "../../../utils/tokenUtils";
@@ -28,6 +28,7 @@ export function CheckoutPage() {
   const [customerKey, setCustomerKey] = useState(null);
   const [orderId] = useState(generateRandomString());
   const [isPaymentLoading, setIsPaymentLoading] = useState(false);
+  const beforeUnloadHandlerRef = useRef(null);
 
   // 결제 페이지 접근 시 로그인 상태 로깅
   useEffect(() => {
@@ -39,6 +40,27 @@ export function CheckoutPage() {
 
     // 세션 상태 로깅
     logSessionState("(결제 페이지 접근)");
+
+    // 로그인 상태 변화 감지
+    const loginStatusMonitor = setInterval(() => {
+      const currentLoginStatus = localStorage.getItem("isLoggedIn");
+      const currentUserid = localStorage.getItem("userid");
+
+      if (currentLoginStatus !== "true" || !currentUserid) {
+        console.log("🚨 결제 페이지에서 로그인 상태 변화 감지!");
+        console.log("현재 로그인 상태:", currentLoginStatus);
+        console.log("현재 userid:", currentUserid);
+        console.log("페이지를 홈으로 리다이렉트합니다.");
+        clearInterval(loginStatusMonitor);
+
+        // 로그인 상태가 변경되면 즉시 홈으로 이동
+        navigate("/", { replace: true });
+      }
+    }, 1000); // 1초마다 체크
+
+    return () => {
+      clearInterval(loginStatusMonitor);
+    };
   }, []);
 
   // 뒤로가기 방지 및 세션 보안 처리 (결제 위젯 페이지)
@@ -52,14 +74,28 @@ export function CheckoutPage() {
       window.history.pushState(null, "", window.location.href);
     };
 
+    // 페이지 이탈 방지 (결제 진행 중)
+    const handleBeforeUnload = (event) => {
+      if (isPaymentLoading) {
+        event.preventDefault();
+        event.returnValue = "결제가 진행 중입니다. 페이지를 벗어나시겠습니까?";
+        console.log("⚠️ 결제 진행 중 페이지 이탈 시도 감지");
+      }
+    };
+
+    // ref에 핸들러 저장
+    beforeUnloadHandlerRef.current = handleBeforeUnload;
+
     // 히스토리 조작으로 뒤로가기 차단
     window.history.pushState(null, "", window.location.href);
     window.addEventListener("popstate", handlePopState);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
       window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [navigate]);
+  }, [navigate, isPaymentLoading]);
 
   // 페이지 로드 시 body 백그라운드 설정
   useEffect(() => {
@@ -89,11 +125,74 @@ export function CheckoutPage() {
   // 사용자 정보 가져오기
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const userid = await getCurrentUserIdForPayment();
-      if (userid) {
-        setCustomerKey(userid);
-        const userData = await getUserInfo(userid);
-        setUserInfo(userData);
+      console.log("=== 사용자 정보 가져오기 시작 ===");
+      console.log(
+        "localStorage isLoggedIn:",
+        localStorage.getItem("isLoggedIn")
+      );
+      console.log("localStorage userid:", localStorage.getItem("userid"));
+
+      try {
+        const userid = await getCurrentUserIdForPayment();
+        console.log("getCurrentUserIdForPayment 결과:", userid);
+
+        if (userid) {
+          // customerKey는 토스페이먼츠에서 사용할 수 있는 형태로 변환
+          // 특수문자나 공백, 점 등을 제거하고 영숫자만 사용
+          const sanitizedCustomerKey = userid
+            .replace(/[^a-zA-Z0-9]/g, "")
+            .substring(0, 50);
+          console.log("원본 userid:", userid);
+          console.log("sanitized customerKey:", sanitizedCustomerKey);
+
+          // customerKey가 비어있거나 너무 짧으면 기본값 사용
+          const finalCustomerKey =
+            sanitizedCustomerKey.length >= 3
+              ? sanitizedCustomerKey
+              : `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+          console.log("최종 customerKey:", finalCustomerKey);
+          setCustomerKey(finalCustomerKey);
+
+          try {
+            const userData = await getUserInfo(userid);
+            console.log("getUserInfo 결과:", userData);
+            setUserInfo(userData);
+          } catch (error) {
+            console.error("getUserInfo 에러:", error);
+            // 사용자 정보 로드 실패해도 결제는 진행할 수 있도록 기본값 설정
+            setUserInfo({
+              userid: userid,
+              username: "사용자",
+              email: "user@example.com",
+              phone: "01012341234",
+            });
+          }
+        } else {
+          console.log("❌ userid가 null이므로 임시 customerKey 생성");
+          // userid를 못 가져온 경우 임시 customerKey 생성
+          const tempCustomerKey = `temp_${Date.now()}_${Math.random()
+            .toString(36)
+            .substr(2, 9)}`;
+          setCustomerKey(tempCustomerKey);
+          setUserInfo({
+            userid: "temp_user",
+            username: "게스트",
+            email: "guest@example.com",
+            phone: "01012341234",
+          });
+        }
+      } catch (error) {
+        console.error("사용자 정보 가져오기 전체 에러:", error);
+        // 모든 과정이 실패한 경우 최후 수단
+        const emergencyCustomerKey = `emergency_${Date.now()}`;
+        setCustomerKey(emergencyCustomerKey);
+        setUserInfo({
+          userid: "emergency_user",
+          username: "게스트",
+          email: "guest@example.com",
+          phone: "01012341234",
+        });
       }
     };
 
@@ -222,12 +321,26 @@ export function CheckoutPage() {
                 console.log("결제 전 userid:", localStorage.getItem("userid"));
                 console.log("결제 시 userInfo:", userInfo);
 
+                // 이메일 형식 검증 함수
+                const isValidEmail = (email) => {
+                  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                  return emailRegex.test(email);
+                };
+
+                // 안전한 이메일 처리
+                const getValidEmail = (userEmail) => {
+                  if (userEmail && isValidEmail(userEmail)) {
+                    return userEmail;
+                  }
+                  return "guest@example.com"; // 기본값
+                };
+
                 const paymentData = {
                   orderId: orderId,
                   orderName: "영화 예매",
                   successUrl: window.location.origin + "/success",
                   failUrl: window.location.origin + "/fail",
-                  customerEmail: userInfo?.email || "guest@example.com",
+                  customerEmail: getValidEmail(userInfo?.email),
                   customerName: userInfo?.username || "게스트",
                   customerMobilePhone:
                     userInfo?.phone?.replace(/[-\s]/g, "") || "01012341234",
@@ -241,11 +354,53 @@ export function CheckoutPage() {
                   JSON.stringify(paymentData)
                 );
 
+                // 결제 요청 전 현재 상태 로깅
+                console.log("=== 결제 요청 직전 상태 ===");
+                console.log("isLoggedIn:", localStorage.getItem("isLoggedIn"));
+                console.log("userid:", localStorage.getItem("userid"));
+                console.log("customerKey:", customerKey);
+                console.log("현재 URL:", window.location.href);
+                console.log("widgets 객체:", widgets);
+
                 // 결제 요청 시 amount.value(즉, finalPrice)로 결제
                 console.log("결제 요청 시작...");
-                await widgets.requestPayment(paymentData);
 
-                console.log("결제 요청 완료");
+                try {
+                  console.log("🔄 결제 성공 시 beforeunload 이벤트 제거");
+                  if (beforeUnloadHandlerRef.current) {
+                    window.removeEventListener(
+                      "beforeunload",
+                      beforeUnloadHandlerRef.current
+                    );
+                    console.log("✅ beforeunload 이벤트 제거 완료");
+                  }
+
+                  const paymentResult = await widgets.requestPayment(
+                    paymentData
+                  );
+                  console.log("✅ 결제 요청 성공:", paymentResult);
+                  console.log(
+                    "결제 요청 완료 - 이 로그가 보이면 성공 페이지로 리다이렉트되어야 함"
+                  );
+                } catch (paymentError) {
+                  console.error("💳 결제 과정 중 에러:", paymentError);
+                  console.log("결제 에러 코드:", paymentError.code);
+                  console.log("결제 에러 메시지:", paymentError.message);
+
+                  // 결제 취소나 실패 시 구체적인 처리
+                  if (paymentError.code === "USER_CANCEL") {
+                    console.log("사용자가 결제를 취소함");
+                    alert("결제가 취소되었습니다.");
+                    return;
+                  } else if (paymentError.code === "INVALID_CARD") {
+                    console.log("유효하지 않은 카드");
+                    alert("유효하지 않은 카드 정보입니다.");
+                    return;
+                  } else {
+                    console.log("기타 결제 에러:", paymentError);
+                    throw paymentError; // 다른 에러는 상위로 전파
+                  }
+                }
               } catch (error) {
                 console.error("결제 요청 오류:", error);
                 console.log("오류 상세:", error.message, error.code);

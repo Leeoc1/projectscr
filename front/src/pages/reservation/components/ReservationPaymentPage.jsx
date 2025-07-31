@@ -128,7 +128,7 @@ const ReservationPaymentPage = () => {
     try {
       // 쿠폰 사용 처리 (결제 시작 시점)
       if (selectedCoupon) {
-        const userid = getCurrentUserIdForPayment(); // 토큰화된 userid 디코딩
+        const userid = await getCurrentUserIdForPayment(); // 토큰화된 userid 디코딩
         if (userid) {
           try {
             await applyCoupon(userid, selectedCoupon.couponnum);

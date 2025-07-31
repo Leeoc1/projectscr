@@ -53,21 +53,10 @@ export default function Header() {
             const isPaymentPage =
               window.location.pathname.includes("/checkout") ||
               window.location.pathname.includes("/success") ||
-              window.location.pathname.includes("/fail") ||
-              window.location.pathname.includes("/payment") ||
-              window.location.pathname.includes("/reservation");
-
-            console.log(
-              "🔍 Header JWT 디코딩 실패 - 현재 경로:",
-              window.location.pathname
-            );
-            console.log("🔍 결제 페이지 여부:", isPaymentPage);
+              window.location.pathname.includes("/payment");
 
             if (!isPaymentPage) {
-              console.log("❌ Header에서 로그아웃 실행");
               handleLogout();
-            } else {
-              console.log("✅ 결제 관련 페이지이므로 로그아웃 방지");
             }
           }
         } catch (error) {
@@ -75,22 +64,10 @@ export default function Header() {
           const isPaymentPage =
             window.location.pathname.includes("/checkout") ||
             window.location.pathname.includes("/success") ||
-            window.location.pathname.includes("/fail") ||
-            window.location.pathname.includes("/payment") ||
-            window.location.pathname.includes("/reservation");
-
-          console.log(
-            "🔍 Header JWT 디코딩 에러 - 현재 경로:",
-            window.location.pathname
-          );
-          console.log("🔍 결제 페이지 여부:", isPaymentPage);
-          console.log("🔍 에러 내용:", error);
+            window.location.pathname.includes("/payment");
 
           if (!isPaymentPage) {
-            console.log("❌ Header에서 에러로 인한 로그아웃 실행");
             handleLogout();
-          } else {
-            console.log("✅ 결제 관련 페이지이므로 에러 시에도 로그아웃 방지");
           }
         } finally {
           setIsLoadingUser(false); // 로딩 종료

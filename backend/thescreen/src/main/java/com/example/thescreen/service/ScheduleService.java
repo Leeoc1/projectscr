@@ -2,8 +2,10 @@ package com.example.thescreen.service;
 
 import com.example.thescreen.entity.MovieView;
 import com.example.thescreen.entity.Schedule;
+import com.example.thescreen.entity.ScheduleView;
 import com.example.thescreen.repository.MovieViewRepository;
 import com.example.thescreen.repository.ScheduleRepository;
+import com.example.thescreen.repository.ScheduleViewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,11 +26,11 @@ import java.util.Random;
 public class ScheduleService {
 
     private static final Random RANDOM = new Random();
-    private static final int TOTAL_DAYS = 7;
-    //이후 실행시 아래 1000개 막고 100개로 실행
-    private static final int SCHEDULES_PER_MOVIE = 100;
-    //첫 실행시 주석 해제하고 사용
-//    private static final int SCHEDULES_PER_MOVIE = 1000;
+    private static final int TOTAL_DAYS = 30;
+    // 이후 실행시 아래 1000개 막고 100개로 실행
+    // private static final int SCHEDULES_PER_MOVIE = 100;
+    // 첫 실행시 주석 해제하고 사용
+    private static final int SCHEDULES_PER_MOVIE = 10000;
     private static final int MIN_HOUR_GAP = 3;
 
     @Autowired
@@ -35,6 +38,9 @@ public class ScheduleService {
 
     @Autowired
     private ScheduleRepository scheduleRepository;
+
+    @Autowired
+    private ScheduleViewRepository scheduleViewRepository;
 
     @Transactional
     public String generateDummySchedules() {
@@ -53,18 +59,19 @@ public class ScheduleService {
             List<String> screens = generateScreenCodes();
             Map<String, List<Schedule>> screenSchedules = new HashMap<>();
             for (String screen : screens) {
-                screenSchedules.put(screen, scheduleRepository.findByScreencdAndStartdateBetween(screen, startDate, endDate));
+                screenSchedules.put(screen,
+                        scheduleRepository.findByScreencdAndStartdateBetween(screen, startDate, endDate));
             }
 
             StringBuilder sqlOutput = new StringBuilder();
-            sqlOutput.append("INSERT INTO schedule (schedulecd, moviecd, screencd, startdate, starttime, endtime) VALUES\n");
+            sqlOutput.append(
+                    "INSERT INTO schedule (schedulecd, moviecd, screencd, startdate, starttime, endtime) VALUES\n");
 
             int totalSchedules = 0;
             for (MovieView movie : movies) {
                 // 기존 스케줄 여부 확인
                 boolean hasPreviousSchedules = scheduleRepository.existsByMoviecd(movie.getMoviecd());
-                List<LocalDate> targetDates = hasPreviousSchedules ?
-                        List.of(endDate) : // 기존/재진입 영화: 마지막 날만
+                List<LocalDate> targetDates = hasPreviousSchedules ? List.of(endDate) : // 기존/재진입 영화: 마지막 날만
                         generateDateRange(startDate, endDate); // 신규 영화: 7일 모두
 
                 int schedulesPerDay = SCHEDULES_PER_MOVIE / Math.max(1, targetDates.size()); // 균등 분배
@@ -72,7 +79,8 @@ public class ScheduleService {
                     for (int i = 0; i < schedulesPerDay; i++) {
                         String scheduleCode = generateScheduleCode();
                         String screenCode = screens.get(RANDOM.nextInt(screens.size()));
-                        LocalDateTime startTime = generateValidStartTime(screenSchedules.get(screenCode), date, movie.getRunningtime());
+                        LocalDateTime startTime = generateValidStartTime(screenSchedules.get(screenCode), date,
+                                movie.getRunningtime());
 
                         if (startTime != null) {
                             LocalDateTime endTime = startTime.plusMinutes(movie.getRunningtime());
@@ -89,7 +97,9 @@ public class ScheduleService {
                             sqlOutput.append(String.format("('%s', '%s', '%s', '%s', '%s', '%s')%s\n",
                                     scheduleCode, movie.getMoviecd(), screenCode, date,
                                     startTime.toString().replace("T", " "), endTime.toString().replace("T", " "),
-                                    (i < schedulesPerDay - 1 || !isLastMovieAndDate(movies, movie, date, targetDates)) ? "," : ";"));
+                                    (i < schedulesPerDay - 1 || !isLastMovieAndDate(movies, movie, date, targetDates))
+                                            ? ","
+                                            : ";"));
                             totalSchedules++;
                         }
                     }
@@ -159,7 +169,8 @@ public class ScheduleService {
         return true;
     }
 
-    private boolean isLastMovieAndDate(List<MovieView> movies, MovieView movie, LocalDate date, List<LocalDate> targetDates) {
+    private boolean isLastMovieAndDate(List<MovieView> movies, MovieView movie, LocalDate date,
+            List<LocalDate> targetDates) {
         return movies.indexOf(movie) == movies.size() - 1 && date.equals(targetDates.get(targetDates.size() - 1));
     }
 
@@ -169,5 +180,55 @@ public class ScheduleService {
             dates.add(date);
         }
         return dates;
+    }
+
+    /**
+     * 오늘 포함 5일간의 전체 영화 스케줄 조회
+     * 
+     * @return 5일간의 스케줄 리스트
+     */
+    public List<ScheduleView> getSchedulesForNext5Days() {
+        LocalDate today = LocalDate.now();
+        LocalDate endDate = today.plusDays(4);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String startDateStr = today.format(formatter);
+        String endDateStr = endDate.format(formatter);
+
+        return scheduleViewRepository.findSchedulesByDateRange(startDateStr, endDateStr);
+    }
+
+    /**
+     * 오늘 포함 5일간의 특정 극장 영화 스케줄 조회
+     * 
+     * @param cinemaName 극장명
+     * @return 5일간의 해당 극장 스케줄 리스트
+     */
+    public List<ScheduleView> getSchedulesForNext5DaysByCinema(String cinemaName) {
+        LocalDate today = LocalDate.now();
+        LocalDate endDate = today.plusDays(4);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String startDateStr = today.format(formatter);
+        String endDateStr = endDate.format(formatter);
+
+        return scheduleViewRepository.findSchedulesByCinemaAndDateRange(cinemaName, startDateStr, endDateStr);
+    }
+
+    /**
+     * 오늘 포함 5일간의 특정 극장에서 상영하는 영화명 목록 조회
+     * 
+     * @param cinemaName 극장명
+     * @return 5일간의 해당 극장 상영 영화명 리스트
+     */
+    public List<String> getMovieNamesForNext5DaysByCinema(String cinemaName) {
+        LocalDate today = LocalDate.now();
+        LocalDate endDate = today.plusDays(4);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String startDateStr = today.format(formatter);
+        String endDateStr = endDate.format(formatter);
+
+        return scheduleViewRepository.findDistinctMovieNamesByCinemaAndDateRange(cinemaName, startDateStr, endDateStr);
     }
 }

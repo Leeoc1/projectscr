@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import "../MyPage.css";
+import { useState, useEffect } from "react";
+import "../styles/MyCoupons.css";
 import { getUserCoupons } from "../../../api/couponApi";
 
 const MyCoupons = ({ showCouponModal, handleCloseCouponModal, userInfo }) => {
@@ -14,7 +14,7 @@ const MyCoupons = ({ showCouponModal, handleCloseCouponModal, userInfo }) => {
       103: "학생 할인 쿠폰",
       104: "시니어 할인 쿠폰",
       105: "영화관람권",
-      106: "환영 쿠폰"
+      106: "환영 쿠폰",
     };
     return couponMap[couponcd] || "알 수 없는 쿠폰";
   };
@@ -23,7 +23,7 @@ const MyCoupons = ({ showCouponModal, handleCloseCouponModal, userInfo }) => {
   const getCouponStatusText = (couponstatus, couponexpiredate) => {
     const today = new Date();
     const expireDate = new Date(couponexpiredate);
-    
+
     if (!couponstatus) {
       return "사용완료";
     } else if (expireDate < today) {
@@ -37,7 +37,7 @@ const MyCoupons = ({ showCouponModal, handleCloseCouponModal, userInfo }) => {
   const getCouponStatusClass = (couponstatus, couponexpiredate) => {
     const today = new Date();
     const expireDate = new Date(couponexpiredate);
-    
+
     if (!couponstatus) {
       return "mp-coupon-status-used";
     } else if (expireDate < today) {
@@ -50,17 +50,17 @@ const MyCoupons = ({ showCouponModal, handleCloseCouponModal, userInfo }) => {
   // 날짜 포맷팅 함수
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
+    return date.toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
     });
   };
 
   // 쿠폰 목록 조회
   const fetchCoupons = async () => {
     if (!userInfo?.userid) return;
-    
+
     setLoading(true);
     try {
       const response = await getUserCoupons(userInfo.userid);
@@ -84,16 +84,13 @@ const MyCoupons = ({ showCouponModal, handleCloseCouponModal, userInfo }) => {
 
   return (
     <div className="mp-modal-overlay" onClick={handleCloseCouponModal}>
-      <div 
-        className="mp-modal-content mp-coupon-modal" 
+      <div
+        className="mp-modal-content mp-coupon-modal"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mp-modal-header">
           <h2 className="mp-modal-title">내 쿠폰함</h2>
-          <button 
-            className="mp-modal-close" 
-            onClick={handleCloseCouponModal}
-          >
+          <button className="mp-modal-close" onClick={handleCloseCouponModal}>
             ×
           </button>
         </div>
@@ -112,7 +109,10 @@ const MyCoupons = ({ showCouponModal, handleCloseCouponModal, userInfo }) => {
                       </h3>
                       <div className="mp-coupon-details">
                         <p className="mp-coupon-discount">
-                          할인금액: {coupon.discount ? `${coupon.discount.toLocaleString()}원` : '0원'}
+                          할인금액:{" "}
+                          {coupon.discount
+                            ? `${coupon.discount.toLocaleString()}원`
+                            : "0원"}
                         </p>
                         <p className="mp-coupon-expire">
                           만료일: {formatDate(coupon.couponexpiredate)}
@@ -125,13 +125,16 @@ const MyCoupons = ({ showCouponModal, handleCloseCouponModal, userInfo }) => {
                       </div>
                     </div>
                     <div className="mp-coupon-status">
-                      <span 
+                      <span
                         className={`mp-coupon-status-badge ${getCouponStatusClass(
-                          coupon.couponstatus, 
+                          coupon.couponstatus,
                           coupon.couponexpiredate
                         )}`}
                       >
-                        {getCouponStatusText(coupon.couponstatus, coupon.couponexpiredate)}
+                        {getCouponStatusText(
+                          coupon.couponstatus,
+                          coupon.couponexpiredate
+                        )}
                       </span>
                     </div>
                   </div>
@@ -146,7 +149,7 @@ const MyCoupons = ({ showCouponModal, handleCloseCouponModal, userInfo }) => {
         </div>
 
         <div className="mp-coupon-modal-footer">
-          <button 
+          <button
             className="mp-btn mp-btn-close"
             onClick={handleCloseCouponModal}
           >

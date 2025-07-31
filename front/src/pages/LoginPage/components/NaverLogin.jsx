@@ -13,7 +13,6 @@ const NaverLogin = () => {
   useEffect(() => {
     // 이미 처리된 경우 중복 실행 방지
     if (callbackProcessed.current) {
-      console.log("네이버 콜백 이미 처리됨 - 중복 실행 방지");
       return;
     }
 
@@ -37,7 +36,6 @@ const NaverLogin = () => {
 
     // 에러 처리 개선
     if (error === "access_denied") {
-      console.log("네이버 로그인 동의 취소됨:", errorDescription);
       alert("네이버 로그인 동의가 취소되었습니다.");
       localStorage.removeItem("loginType");
       navigate("/login");
@@ -46,25 +44,14 @@ const NaverLogin = () => {
 
     // 네이버 로그인인지 확인하고, 네이버 콜백만 처리
     if (code && state) {
-      console.log("네이버 콜백 처리 시작");
-
       // 중복 처리 방지 플래그 설정
       callbackProcessed.current = true;
 
       (async () => {
         try {
           const result = await naverLoginCallback(code, state);
-          console.log("네이버 로그인 콜백 응답:", result);
 
           if (result.success) {
-            console.log("네이버 로그인 성공!");
-            console.log("- userInfo:", result.userInfo);
-            console.log("- userid (JWT 토큰):", result.userid);
-            console.log(
-              "- JWT 토큰 길이:",
-              result.userid ? result.userid.length : "토큰 없음"
-            );
-
             if (!result.userid) {
               console.error("JWT 토큰이 응답에 없습니다!");
               alert("로그인 처리 중 오류가 발생했습니다. (토큰 없음)");
@@ -77,8 +64,6 @@ const NaverLogin = () => {
             localStorage.setItem("isLoggedIn", "true");
             localStorage.setItem("userid", result.userid); // JWT 토큰만 저장
             localStorage.setItem("userInfo", JSON.stringify(result.userInfo));
-
-            console.log("네이버 로그인 - localStorage 저장 완료");
 
             // loginType은 성공 후에 제거
             localStorage.removeItem("loginType");
@@ -109,14 +94,11 @@ const NaverLogin = () => {
   // 네이버 로그인 버튼 클릭 핸들러
   const handleNaverLogin = async () => {
     try {
-      console.log("네이버 로그인 시작");
       localStorage.setItem("loginType", "naver");
 
       const response = await naverLogin();
-      console.log("네이버 로그인 응답:", response);
 
       if (response && response.loginUrl) {
-        console.log("리다이렉트 URL:", response.loginUrl);
         window.location.href = response.loginUrl;
       } else {
         console.error("로그인 URL이 없습니다:", response);

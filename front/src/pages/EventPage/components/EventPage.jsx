@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { eventsData } from "../../../data/EventPageData";
+import { eventsData } from "../../../utils/data/EventPageData";
 import Header from "../../../shared/Header";
 import Footer from "../../../shared/Footer";
 import "../styles/EventPage.css";

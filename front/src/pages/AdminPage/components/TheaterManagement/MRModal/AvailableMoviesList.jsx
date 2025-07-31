@@ -1,5 +1,5 @@
 import React from "react";
-import { getRating } from "../../../../../data/MovieInfo";
+import { getRating } from "../../../../../utils/data/MovieInfo";
 
 const AvailableMoviesList = ({ movieList, selectedMovies, onMovieSelect }) => (
   <div className="mrm-movie-list">

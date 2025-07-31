@@ -1,5 +1,5 @@
 import React from "react";
-import "../MyPage.css";
+import "../styles/MyPagePasswordChange.css";
 import {
   validatePasswordLength,
   validatePasswordStrength,

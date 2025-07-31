@@ -15,8 +15,6 @@ const GoogleLoginButton = ({ onLoginAttempt }) => {
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        console.log("구글 로그인 성공, 사용자 정보 처리 시작...");
-
         // 기본 사용자 정보 가져오기
         const userInfo = await getGoogleUserInfo(tokenResponse.access_token);
 
@@ -32,11 +30,8 @@ const GoogleLoginButton = ({ onLoginAttempt }) => {
           phoneNumbers: peopleData.phoneNumbers,
         };
 
-        console.log("구글 사용자 정보:", completeUserInfo);
-
         // 백엔드로 사용자 정보 전송
         const savedUser = await saveGoogleUserToBackend(completeUserInfo);
-        console.log("구글 백엔드 응답:", savedUser);
 
         // 로그인 성공 처리
         localStorage.setItem("isLoggedIn", "true");
@@ -59,7 +54,6 @@ const GoogleLoginButton = ({ onLoginAttempt }) => {
   });
 
   const handleClick = () => {
-    console.log("구글 로그인 버튼 클릭");
     if (onLoginAttempt) {
       onLoginAttempt("구글");
     }

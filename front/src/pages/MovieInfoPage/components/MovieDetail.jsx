@@ -8,7 +8,7 @@ import {
   toggleWishlist,
 } from "../../../api/movieApi";
 import { useNavigate } from "react-router-dom";
-import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
+import LoginRequiredModal from "../../LoginPage/components/LoginRequiredModal";
 
 export default function MovieDetail() {
   const navigate = useNavigate();
@@ -97,10 +97,6 @@ export default function MovieDetail() {
     }
   };
 
-  const handleSearch = () => {
-    // TODO: Implement search functionality
-  };
-
   return (
     <div>
       <Header />
@@ -118,7 +114,6 @@ export default function MovieDetail() {
                 {/* Movie Info */}
                 <div className="mvd-movie-info">
                   <h1 className="mvd-movie-title">{movie.movienm}</h1>
-                  {/* <p className="mvd-movie-subtitle">{movieData.subtitle}</p> */}
 
                   <div className="mvd-movie-meta">
                     <div className="mvd-meta-item">

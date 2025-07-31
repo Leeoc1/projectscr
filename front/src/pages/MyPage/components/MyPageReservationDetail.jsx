@@ -1,4 +1,5 @@
 import React from "react";
+import "../styles/MyPageReservationDetail.css";
 import { cancelReservation } from "../../../api/reservationApi";
 import { getUserReservations } from "../../../api/userApi";
 

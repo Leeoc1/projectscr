@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { getUserInfo } from "../../../api/userApi";
+import bellIcon from "../../../images/bell.png";
 import "../styles/AdminHeader.css";
 import "../styles/AdminPage.css";
 import { useNavigate } from "react-router-dom";
-import { useNotification } from "../../../contexts/NotificationContext";
+import { useNotification } from "../utils/NotificationContext";
 
 const AdminHeader = () => {
   const navigate = useNavigate();
@@ -17,9 +18,6 @@ const AdminHeader = () => {
 
   // 토큰 삭제 및 로그아웃 함수
   const clearAdminSession = (reason = "Manual logout") => {
-    console.log(`[관리자 세션 종료] ${reason}`);
-    console.log("토큰 삭제 중...");
-
     // 관리자 토큰 제거
     localStorage.removeItem("adminToken");
     // 기본 로그인 정보 제거
@@ -28,8 +26,6 @@ const AdminHeader = () => {
     localStorage.removeItem("username");
     // 세션 스토리지 전체 정리
     sessionStorage.clear();
-
-    console.log("모든 토큰 및 세션 데이터가 삭제되었습니다.");
 
     // 홈페이지로 이동
     navigate("/");
@@ -59,7 +55,6 @@ const AdminHeader = () => {
 
   // 세션 연장 함수
   const extendSession = () => {
-    console.log("[관리자 세션] 30분 연장됨");
     setTimeLeft(30 * 60); // 30분으로 리셋
     setShowExtensionModal(false);
   };
@@ -94,7 +89,6 @@ const AdminHeader = () => {
   // 페이지 벗어날 때 토큰 삭제
   useEffect(() => {
     const handleBeforeUnload = (event) => {
-      console.log("[관리자 세션] 페이지 벗어남 감지 - 토큰 삭제");
       localStorage.removeItem("adminToken");
       sessionStorage.clear();
     };
@@ -120,7 +114,6 @@ const AdminHeader = () => {
   // 컴포넌트 언마운트 시 토큰 삭제
   useEffect(() => {
     return () => {
-      console.log("[관리자 세션] AdminHeader 컴포넌트 언마운트 - 토큰 삭제");
       localStorage.removeItem("adminToken");
       sessionStorage.clear();
     };
@@ -159,11 +152,7 @@ const AdminHeader = () => {
               className="adp-bell-wrapper"
               onClick={toggleNotificationDropdown}
             >
-              <img
-                src="/images/bell.png"
-                alt="알림"
-                className="adp-bell-icon"
-              />
+              <img src={bellIcon} alt="알림" className="adp-bell-icon" />
               {hasNewNotifications && (
                 <div className="adp-notification-dot"></div>
               )}

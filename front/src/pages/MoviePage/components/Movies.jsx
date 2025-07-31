@@ -5,7 +5,7 @@ import {
   getMoviesForAdmin,
   getTopTenMovies,
 } from "../../../api/movieApi";
-import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
+import LoginRequiredModal from "../../LoginPage/components/LoginRequiredModal";
 import "../styles/Movies.css";
 
 const Movies = ({ activeTab: parentActiveTab, showDetailButton = true }) => {
@@ -51,12 +51,6 @@ const Movies = ({ activeTab: parentActiveTab, showDetailButton = true }) => {
     };
     sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
 
-    console.log(
-      "🎬 영화카드 클릭 - 영화:",
-      movie.movienm,
-      "moviecd:",
-      movie.moviecd
-    );
     navigate(`/reservation/movie/${movie.moviecd}`);
   };
 
@@ -163,7 +157,6 @@ const Movies = ({ activeTab: parentActiveTab, showDetailButton = true }) => {
             className="mvs-searchbox-input"
           />
           <span className="mvs-searchbox-icon">
-            {/* SVG 돋보기 아이콘 */}
             <svg
               className="mvs-searchbox-svg"
               viewBox="0 0 20 20"

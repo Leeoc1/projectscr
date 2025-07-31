@@ -7,7 +7,7 @@ import {
 } from "../../../api/movieApi";
 import "../styles/MovieManagement.css";
 import "../styles/AdminPage.css";
-import { useNotification } from "../../../contexts/NotificationContext";
+import { useNotification } from "../utils/NotificationContext";
 
 const MovieManagement = () => {
   const [readyMovies, setReadyMovies] = useState([]);

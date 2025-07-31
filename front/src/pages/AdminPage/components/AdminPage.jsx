@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import SalesOverview from "./adminmain/SalesOverview";
 import StaffManagement from "./StaffManagement/StaffManagement";
@@ -10,7 +10,7 @@ import EventManagement from "./EventManagement";
 import AdminSidebar from "./AdminSideBar";
 import AdminHeader from "./AdminHeader";
 import TheaterManagement from "./TheaterManagement/TheaterManagement";
-import { NotificationProvider } from "../../../contexts/NotificationContext";
+import { NotificationProvider } from "../utils/NotificationContext";
 import { getAdminToken, decodeUserid } from "../../../api/adminApi";
 
 const AdminPage = () => {
@@ -38,22 +38,15 @@ const AdminPage = () => {
         if (isAdminLogin) {
           // 관리자 로그인인 경우 - 평문 userid 사용
           realUserid = storedUserid;
-          console.log("관리자 로그인 모드 - 평문 userid:", realUserid);
         } else {
           // 일반 사용자 로그인인 경우 - 암호화된 userid 디코딩
-          console.log(
-            "일반 사용자 로그인 모드 - 암호화된 userid:",
-            storedUserid
-          );
           realUserid = await decodeUserid(storedUserid);
-          console.log("디코딩된 실제 userid:", realUserid);
         }
 
         // 실제 userid로 관리자 토큰 발급
-        console.log("관리자 토큰 발급 시도 중...", realUserid);
+
         const token = await getAdminToken(realUserid);
         localStorage.setItem("adminToken", token);
-        console.log("관리자 토큰 저장 완료:", token);
       } catch (e) {
         console.error("관리자 토큰 발급 실패:", e);
         console.error("에러 상세:", e.response?.data);

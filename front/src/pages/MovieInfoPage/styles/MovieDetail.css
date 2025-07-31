@@ -43,13 +43,6 @@
   line-height: 1.3;
 }
 
-.mvd-movie-subtitle {
-  font-size: 16px;
-  color: hsl(0, 0%, 40%);
-  margin-bottom: 25px;
-  font-style: italic;
-}
-
 .mvd-movie-meta {
   display: flex;
   gap: 30px;
@@ -227,12 +220,24 @@
 }
 
 @keyframes heartBeat {
-  0% { transform: scale(1); }
-  25% { transform: scale(1.2); }
-  40% { transform: scale(1.1); }
-  60% { transform: scale(1.15); }
-  80% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.2);
+  }
+  40% {
+    transform: scale(1.1);
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  80% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .mvd-wishlist-count {

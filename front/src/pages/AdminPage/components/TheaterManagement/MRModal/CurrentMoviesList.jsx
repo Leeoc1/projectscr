@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getRating } from "../../../../../data/MovieInfo";
+import { getRating } from "../../../../../utils/data/MovieInfo";
 import { getSchedules } from "../../../../../api/cinemaApi";
 import SelectedScreen from "./SelectedScreen";
 

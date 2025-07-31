@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import ArrowLeft from "../assets/arrow-left.svg";
-import ArrowRight from "../assets/arrow-right.svg";
+import ArrowLeft from "../../../images/arrow-left.svg";
+import ArrowRight from "../../../images/arrow-right.svg";
 import { useNavigate } from "react-router-dom";
 import { getTopTenMovies } from "../../../api/movieApi";
 import "../styles/MovieChart.css";
-import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
+import LoginRequiredModal from "../../LoginPage/components/LoginRequiredModal";
 
 const MovieChart = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -19,8 +19,11 @@ const MovieChart = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       const top10Movies = await getTopTenMovies();
-      // 백엔드에서 이미 정렬된 데이터를 받으므로 추가 정렬 불필요
-      setMovies(top10Movies);
+      // movierank 오름차순 정렬
+      const sorted = [...top10Movies].sort(
+        (a, b) => Number(a.movierank) - Number(b.movierank)
+      );
+      setMovies(sorted);
     };
     fetchMovies();
   }, []);
@@ -119,7 +122,6 @@ const MovieChart = () => {
 
     navigate(`/reservation/movie/${movie.moviecd}`);
   };
-  console.log("MovieChart 렌더링", movies);
 
   return (
     <section className="mcs-section">

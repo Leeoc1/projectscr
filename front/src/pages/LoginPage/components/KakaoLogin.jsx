@@ -71,14 +71,6 @@ const KakaoLogin = () => {
             const realUserid = await decodeUserid(tokenizedUserid);
             if (realUserid) {
               localStorage.setItem("userid", tokenizedUserid); // JWT 토큰화된 userid 저장 (실제 userid 아님)
-              console.log(
-                "카카오 로그인 성공 - JWT 토큰 저장:",
-                tokenizedUserid
-              );
-              console.log(
-                "카카오 로그인 성공 - 실제 userid (로그용):",
-                realUserid
-              );
             } else {
               console.error("JWT 토큰 디코딩 실패");
               localStorage.setItem("userid", tokenizedUserid); // 백업으로 토큰화된 userid 저장

@@ -1,4 +1,4 @@
-import { eventsData } from "../../../data/EventPageData.js";
+import { eventsData } from "../../../utils/data/EventPageData.js";
 import "../styles/Event.css";
 import { useNavigate } from "react-router-dom";
 

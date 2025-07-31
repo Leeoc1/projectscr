@@ -102,7 +102,7 @@ const TheaterManagement = () => {
   const handleAddTheater = async () => {
     try {
       const result = await scheduleData();
-      console.log("스케줄 데이터 등록 완료:", result);
+
       alert("스케줄이 성공적으로 등록되었습니다.");
     } catch (error) {
       console.error("스케줄 데이터 등록 실패:", error);

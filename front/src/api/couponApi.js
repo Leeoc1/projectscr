@@ -1,14 +1,16 @@
-import { apiRequest } from './apiUtils';
+import { apiRequest } from "./apiUtils";
+
+// ========== 쿠폰 관련 API (coupon, coupon_type 테이블) ==========
 
 // 사용자 쿠폰 목록 조회
 export const getUserCoupons = async (userid) => {
   try {
     const response = await apiRequest(`/api/users/${userid}/coupons`, {
-      method: 'GET',
+      method: "GET",
     });
     return response;
   } catch (error) {
-    console.error('쿠폰 목록 조회 오류:', error);
+    console.error("쿠폰 목록 조회 오류:", error);
     throw error;
   }
 };
@@ -16,12 +18,15 @@ export const getUserCoupons = async (userid) => {
 // 쿠폰 사용
 export const useCoupon = async (userid, couponnum) => {
   try {
-    const response = await apiRequest(`/api/users/${userid}/coupons/${couponnum}/use`, {
-      method: 'PUT',
-    });
+    const response = await apiRequest(
+      `/api/users/${userid}/coupons/${couponnum}/use`,
+      {
+        method: "PUT",
+      }
+    );
     return response;
   } catch (error) {
-    console.error('쿠폰 사용 오류:', error);
+    console.error("쿠폰 사용 오류:", error);
     throw error;
   }
 };
@@ -29,17 +34,17 @@ export const useCoupon = async (userid, couponnum) => {
 // 쿠폰 발급 (관리자 기능)
 export const issueCoupon = async (userid, couponcd, couponexpiredate) => {
   try {
-    const response = await apiRequest('/api/coupons/issue', {
-      method: 'POST',
+    const response = await apiRequest("/api/coupons/issue", {
+      method: "POST",
       body: JSON.stringify({
         userid,
         couponcd,
-        couponexpiredate
+        couponexpiredate,
       }),
     });
     return response;
   } catch (error) {
-    console.error('쿠폰 발급 오류:', error);
+    console.error("쿠폰 발급 오류:", error);
     throw error;
   }
 };

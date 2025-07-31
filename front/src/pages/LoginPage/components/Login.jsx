@@ -33,8 +33,6 @@ const Login = () => {
         }
       );
 
-      console.log("응답 데이터:", response.data);
-
       if (response.status === 200 && response.data.success) {
         // 로컬스토리지에 로그인 상태 저장
         localStorage.setItem("isLoggedIn", "true");
@@ -43,16 +41,8 @@ const Login = () => {
         // 관리자 여부 저장
         if (response.data.isAdmin) {
           localStorage.setItem("isAdminLogin", "true");
-          console.log(
-            "관리자 로그인 성공 - 평문 userid 저장:",
-            response.data.userid
-          );
         } else {
           localStorage.setItem("isAdminLogin", "false");
-          console.log(
-            "일반 사용자 로그인 성공 - 토큰화된 userid 저장:",
-            response.data.userid
-          );
         }
 
         // 브라우저 창 닫기 감지해서 자동 로그아웃
@@ -78,7 +68,6 @@ const Login = () => {
     window.addEventListener("keydown", (event) => {
       if (event.key === "F5" || (event.ctrlKey && event.key === "r")) {
         isRefresh = true;
-        console.log("새로고침 감지 - 로그인 유지");
       }
     });
 
@@ -87,19 +76,18 @@ const Login = () => {
       // Performance Navigation API로 새로고침 타입 확인
       if (performance.navigation && performance.navigation.type === 1) {
         // type 1 = TYPE_RELOAD (새로고침)
-        console.log("새로고침으로 감지 - 로그인 유지");
+
         return;
       }
 
       // 키보드로 새로고침한 경우
       if (isRefresh) {
-        console.log("키보드 새로고침 감지 - 로그인 유지");
         isRefresh = false; // 플래그 리셋
         return;
       }
 
       // 브라우저 창 닫기인 경우만 로그아웃
-      console.log("브라우저 창 닫기 감지 - 자동 로그아웃");
+
       localStorage.removeItem("isLoggedIn");
       localStorage.removeItem("userid");
       localStorage.removeItem("tokenizedUserid"); // JWT 토큰화된 userid 제거
@@ -109,9 +97,7 @@ const Login = () => {
     });
   };
 
-  const handleSocialLogin = (provider) => {
-    console.log(`${provider} 로그인 시도`);
-  };
+  const handleSocialLogin = (provider) => {};
 
   return (
     <div className="lgs-page">

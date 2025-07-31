@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { eventsData } from "../../../data/EventPageData";
+import { eventsData } from "../../../utils/data/EventPageData";
 import "../styles/EventManagement.css";
 import "../styles/AdminPage.css";
 

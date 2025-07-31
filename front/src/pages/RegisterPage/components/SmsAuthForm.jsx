@@ -17,13 +17,13 @@ function SmsAuthForm({
     const value = e.target.value;
     // 숫자만 허용
     const numbersOnly = value.replace(/[^0-9]/g, "");
-    setFormData({ ...formData, phone: numbersOnly });
+    setFormData((prev) => ({ ...prev, phone: numbersOnly }));
     setMessage("");
   };
 
   // 인증번호 입력 처리
   const handleCodeChange = (e) => {
-    setFormData({ ...formData, verificationCode: e.target.value });
+    setFormData((prev) => ({ ...prev, verificationCode: e.target.value }));
     setMessage("");
   };
 
@@ -50,7 +50,7 @@ function SmsAuthForm({
 
     try {
       await sendVerificationCode(formData.phone);
-      setValidationState({ ...validationState, verificationSent: true });
+      setValidationState((prev) => ({ ...prev, verificationSent: true }));
       setTimer(300); // 5분 = 300초
       setIsTimerActive(true);
       setMessage("인증번호가 전송되었습니다.");
@@ -68,7 +68,7 @@ function SmsAuthForm({
 
     try {
       await verifyCode(formData.phone, formData.verificationCode);
-      setValidationState({ ...validationState, phoneVerified: true });
+      setValidationState((prev) => ({ ...prev, phoneVerified: true }));
       setIsTimerActive(false); // 인증 성공 시 타이머 중지
       setTimer(0);
       setMessage("전화번호 인증이 완료되었습니다.");

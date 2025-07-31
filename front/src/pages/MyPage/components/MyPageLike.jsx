@@ -1,7 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toggleWishlist } from "../../../api/movieApi";
-import "../MyPage.css";
+import "../styles/MyPageLike.css";
+import "../styles/MyPageMain.css"; // section 스타일
+import "../styles/MyPageMain.css"; // section 스타일
 
 const MyPageLike = ({ loading, wishlist, setWishlist }) => {
   const navigate = useNavigate();

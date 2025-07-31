@@ -44,7 +44,7 @@ const DateSelectorMovie = () => {
     sessionStorage.removeItem("selectedMovieName");
     sessionStorage.removeItem("selectedMovieTime");
     sessionStorage.removeItem("cinemanm"); // 상영관명 제거
-    
+
     window.dispatchEvent(
       new CustomEvent("sessionStorageChange", {
         detail: { 
@@ -54,7 +54,7 @@ const DateSelectorMovie = () => {
         },
       })
     );
-    
+
     // selectedMovieTime이 초기화되었음을 알리는 커스텀 이벤트
     window.dispatchEvent(new CustomEvent("selectedMovieTimeCleared"));
   };
@@ -117,7 +117,7 @@ const DateSelectorMovie = () => {
           </button>
         </div>
       </div>
-      
+
 
     </div>
   );

@@ -28,7 +28,7 @@ const NoticeItem = ({ item, index, type, isExpanded, onToggle }) => {
       <div className="notice-number">
         {isFaq ? `Q${index + 1}` : index + 1}
       </div>
-      
+
       <div className="notice-content">
         {isFaq ? (
           <div className="faq-content">
@@ -52,7 +52,7 @@ const NoticeItem = ({ item, index, type, isExpanded, onToggle }) => {
           </div>
         )}
       </div>
-      
+
       <div className="notice-date">
         {formatDate(item.faqdate || item.noticedate)}
       </div>

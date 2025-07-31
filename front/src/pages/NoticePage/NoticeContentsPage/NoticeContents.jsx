@@ -36,8 +36,8 @@ const NoticeContents = () => {
             <div className="rts-content notice-detail-content">
                 <div className="rts-main notice-detail-main">
                     <div className="rts-container notice-contents-container">
-                        
-                        
+
+
                         <section className="notice-detail-section">
                             <div className="notice-contents-title">{notice.noticesub}</div>
                             <div className="notice-contents-date">{notice.noticedate}</div>

@@ -2,7 +2,7 @@
   min-height: 100vh;
   background: #f4f6fa;
   padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .notice-container {
@@ -61,7 +61,7 @@
 }
 
 .tab-button.active::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -2px;
   left: 0;
@@ -74,15 +74,6 @@
 .tab-content {
   padding: 40px;
   overflow: visible;
-}
-
-.section-notice-title {
-  font-size: 1.8rem;
-
-  color: #333;
-  margin-bottom: 30px;
-  text-align: center;
-  font-weight: 600;
 }
 
 /* 공지사항 리스트 */
@@ -178,7 +169,8 @@
   max-height: 0;
   opacity: 0;
   overflow: hidden;
-  transition: max-height 0.7s cubic-bezier(0.4,0,0.2,1), opacity 0.7s cubic-bezier(0.4,0,0.2,1);
+  transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
   background: white;
   border: 1px solid #e9ecef;
   border-radius: 0 0 12px 12px;
@@ -188,7 +180,8 @@
 .faq-answer-block.open {
   max-height: 200px;
   opacity: 1;
-  transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s cubic-bezier(0.4,0,0.2,1);
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .answer-content {
@@ -220,7 +213,6 @@
   display: block;
 }
 
-
 /* 반응형 디자인 */
 @media (max-width: 900px) {
   .notice-container {
@@ -240,29 +232,24 @@
   .notice-page {
     padding: 10px;
   }
-  
+
   .notice-page-title {
     font-size: 2rem;
     padding: 30px 15px 15px;
   }
-  
+
   .tab-content {
     padding: 20px;
   }
-  
+
   .notice-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
-  
+
   .notice-number {
     margin-right: 0;
-  }
-  
-  .faq-answer {
-    padding: 15px;
-    font-size: 1rem;
   }
 }
 
@@ -270,14 +257,10 @@
   .notice-page-title {
     font-size: 1.5rem;
   }
-  
+
   .tab-button {
     padding: 15px;
     font-size: 1rem;
-  }
-  
-  .section-title {
-    font-size: 1.5rem;
   }
 }
 
@@ -322,45 +305,23 @@
   cursor: not-allowed;
 }
 
+.pagination-ellipsis {
+  padding: 10px 15px;
+  color: #6b7280;
+  font-weight: 500;
+  min-width: 40px;
+  text-align: center;
+}
+
 /* 반응형 페이지네이션 */
 @media (max-width: 480px) {
   .pagination {
     gap: 4px;
   }
-  
+
   .pagination-btn {
     padding: 8px 12px;
     min-width: 35px;
     font-size: 0.9rem;
   }
-}
-
-/* 영화 필터 스타일 */
-.movie-filter {
-  margin: 20px 0;
-  padding: 15px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  border: 1px solid #dee2e6;
-}
-
-.movie-filter label {
-  font-weight: 600;
-  color: #495057;
-  margin-right: 10px;
-}
-
-.movie-filter select {
-  padding: 8px 12px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  font-size: 14px;
-  min-width: 200px;
-  background: white;
-}
-
-.movie-filter select:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }

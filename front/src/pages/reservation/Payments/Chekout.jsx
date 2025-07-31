@@ -76,7 +76,8 @@ export function CheckoutPage() {
 
     // 페이지 이탈 방지 (결제 진행 중)
     const handleBeforeUnload = (event) => {
-      if (isPaymentLoading) {
+      // 결제 진행 중이고, 아직 결제 완료되지 않은 경우에만 경고
+      if (isPaymentLoading && !sessionStorage.getItem("paymentRequestData")) {
         event.preventDefault();
         event.returnValue = "결제가 진행 중입니다. 페이지를 벗어나시겠습니까?";
         console.log("⚠️ 결제 진행 중 페이지 이탈 시도 감지");
@@ -366,7 +367,8 @@ export function CheckoutPage() {
                 console.log("결제 요청 시작...");
 
                 try {
-                  console.log("🔄 결제 성공 시 beforeunload 이벤트 제거");
+                  // 결제 요청 전에 beforeunload 이벤트 제거
+                  console.log("🔄 결제 요청 전 beforeunload 이벤트 제거");
                   if (beforeUnloadHandlerRef.current) {
                     window.removeEventListener(
                       "beforeunload",

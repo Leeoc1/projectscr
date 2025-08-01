@@ -53,7 +53,7 @@ SELECT
     '결제 완료'
 FROM temp_numbers;
 
--- 예약(reservation) 가데이터 300개 생성
+-- 예약(reservation) 가데이터 1000개 생성
 DROP TEMPORARY TABLE IF EXISTS temp_numbers;
 CREATE TEMPORARY TABLE temp_numbers (n INT);
 
@@ -68,9 +68,11 @@ FROM (
          SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
      ) b,
      (
-         SELECT 0 AS N UNION SELECT 1 UNION SELECT 2
+         SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+         UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
+
      ) c
-WHERE (a.N + b.N * 10 + c.N * 100 + 1) <= 300;
+WHERE (a.N + b.N * 10 + c.N * 100 + 1) <= 1000;
 
 INSERT IGNORE INTO reservation (
     reservationcd,
@@ -85,7 +87,7 @@ SELECT
     CONCAT(LPAD(n, 12, '0')),
     CONCAT('user', LPAD(FLOOR(1 + (RAND() * 50)), 3, '0')),
     (SELECT schedulecd FROM schedule ORDER BY RAND() LIMIT 1),
-    DATE_ADD('2025-07-13', INTERVAL FLOOR(RAND()*13) DAY)
+    DATE_ADD('2025-07-25', INTERVAL FLOOR(RAND()*13) DAY)
       + INTERVAL FLOOR(RAND()*24) HOUR + INTERVAL FLOOR(RAND()*60) MINUTE,
     IF(RAND() < 0.5, '예약완료', '예약취소'),
     CONCAT(CHAR(65 + FLOOR(RAND()*10)), LPAD(FLOOR(1 + (RAND()*10)), 2, '0')),
@@ -126,29 +128,8 @@ SELECT
     DATE_ADD('2025-07-10', INTERVAL FLOOR(RAND()*6) DAY)
 FROM temp_numbers;
 
+-- staff 가데이터 생성
 DROP TEMPORARY TABLE IF EXISTS temp_numbers;
-
----- 관리자 계정 생성
---INSERT IGNORE INTO users (
---    userid,
---    userpw,
---    username,
---    email,
---    phone,
---    birth,
---    status,
---    reg_date
---) VALUES (
---    'master001',
---    'pass_001',
---    '김관리',
---    'master1@example.com',
---    '01011112222',
---    '1995-05-01',
---    '활성',
---    CURRENT_DATE
---);
-
 CREATE TEMPORARY TABLE temp_numbers (n INT);
 INSERT INTO temp_numbers (n)
 SELECT a.N + 1

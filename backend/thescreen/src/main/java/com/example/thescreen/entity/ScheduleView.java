@@ -1,9 +1,6 @@
 package com.example.thescreen.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -53,9 +50,15 @@ public class ScheduleView {
 
     private String regionnm;
 
+    @Column(length = 50, columnDefinition = "VARCHAR(50) DEFAULT 'N'")
     private String movieinfo = "N";
 
+    @Enumerated(EnumType.STRING)
     private Movie.IsAdult isadult;
+
+    public enum IsAdult {
+        Y, N
+    }
 
     private String movierank;
 

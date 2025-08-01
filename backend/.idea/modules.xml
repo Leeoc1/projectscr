@@ -6,7 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.example.thescreen.test.iml" filepath="$PROJECT_DIR$/.idea/modules/com.example.thescreen.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/thescreen.iml" filepath="$PROJECT_DIR$/.idea/modules/thescreen.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/thescreen.main.iml" filepath="$PROJECT_DIR$/.idea/modules/thescreen.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/thescreen.test.iml" filepath="$PROJECT_DIR$/.idea/modules/thescreen.test.iml" />
     </modules>
   </component>
 </project>

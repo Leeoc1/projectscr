@@ -94,40 +94,6 @@ SELECT
     CONCAT('PAY', LPAD(FLOOR(1 + (RAND()*15)), 3, '0'))
 FROM temp_numbers;
 
--- 사용자(users) 가데이터 200개 생성
-DROP TEMPORARY TABLE IF EXISTS temp_numbers;
-CREATE TEMPORARY TABLE temp_numbers (n INT);
-INSERT INTO temp_numbers (n)
-SELECT a.N + b.N * 10 + 1
-FROM (
-         SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
-     ) a,
-     (
-         SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
-     ) b
-WHERE a.N + b.N * 10 + 1 <= 200;
-
-INSERT IGNORE INTO users (
-    userid,
-    userpw,
-    username,
-    email,
-    phone,
-    birth,
-    status,
-    reg_date
-)
-SELECT
-    CONCAT('user', LPAD(n, 3, '0')),
-    CONCAT('pass_', LPAD(n, 3, '0')),
-    CONCAT('테스트', n, '번'),
-    CONCAT('user', n, '@example.com'),
-    CONCAT('010-', LPAD(FLOOR(RAND()*9000)+1000, 4, '0'), '-', LPAD(FLOOR(RAND()*9000)+1000, 4, '0')),
-    DATE_ADD('1980-01-01', INTERVAL FLOOR(RAND()*9000) DAY),
-    '활성',
-    DATE_ADD('2025-07-10', INTERVAL FLOOR(RAND()*6) DAY)
-FROM temp_numbers;
-
 -- staff 가데이터 생성
 DROP TEMPORARY TABLE IF EXISTS temp_numbers;
 CREATE TEMPORARY TABLE temp_numbers (n INT);

@@ -10,7 +10,7 @@ import javax.crypto.SecretKey;
 public class JwtUtil {
     // 고정된 시크릿 키 사용 (Base64 인코딩된 256비트 키)
     private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor("MyVerySecretKeyForJWTTokenSigningThatIsAtLeast256Bits".getBytes());
-    private final long EXPIRATION = 1 * 60 * 60 * 1000; // 1시간
+    private final long EXPIRATION = 24 * 60 * 60 * 1000; // 24시간
 
     // userid를 JWT 토큰으로 암호화
     public String encodeUserid(String userid) {

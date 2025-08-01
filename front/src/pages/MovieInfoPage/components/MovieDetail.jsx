@@ -32,12 +32,12 @@ export default function MovieDetail() {
         const userid = localStorage.getItem("userid");
         if (userid && data.moviecd) {
           try {
+            // 토큰에서 실제 userid 추출
+            const userid = await getCurrentUserId();
             const wishlistData = await getWishlistStatus(userid, data.moviecd);
             setWishlistCount(wishlistData.count);
             setIsWished(wishlistData.wished);
-          } catch (error) {
-            
-          }
+          } catch (error) {}
         }
       }
     };
@@ -84,21 +84,18 @@ export default function MovieDetail() {
     }
     // 토큰에서 실제 userid 추출
     const userid = await getCurrentUserId();
-    
+
     if (!userid) {
       setShowLoginModal(true);
       return;
     }
     try {
-      
       // 찜 상태 토글 API 호출
       const result = await toggleWishlist(userid, movie.moviecd);
       // 상태 업데이트
       setIsWished(result.wished);
       setWishlistCount(result.count);
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   return (
@@ -224,4 +221,3 @@ export default function MovieDetail() {
     </div>
   );
 }
-

@@ -5,6 +5,92 @@ import { useCoupon as applyCoupon } from "../../../api/couponApi";
 import { getCurrentUserIdForPayment } from "../../../utils/tokenUtils";
 import { cleanupSensitivePaymentData } from "../../../utils/sessionCleanup";
 
+// 토스페이먼츠 결제 확인
+async function confirmTossPayment(searchParams) {
+  const requestData = {
+    orderId: searchParams.get("orderId"),
+    amount: searchParams.get("amount"),
+    paymentKey: searchParams.get("paymentKey"),
+  };
+
+  const response = await fetch("/confirm", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(requestData),
+  });
+
+  const json = await response.json();
+  if (!response.ok) {
+    throw { message: json.message, code: json.code };
+  }
+
+  return json;
+}
+
+// 결제 정보 DB 저장
+async function processPaymentSave(paymentData) {
+  const paymentInfo = {
+    orderId: paymentData.orderId,
+    method: paymentData.method || paymentData.easyPay?.provider || "기타",
+    amount: paymentData.totalAmount || paymentData.balanceAmount || 0,
+  };
+  
+  const result = await savePayment(paymentInfo);
+  
+  if (result?.success) {
+    sessionStorage.setItem("paymentcd", result.paymentcd);
+    return result.paymentcd;
+  }
+  
+  throw new Error("결제 정보 저장에 실패했습니다.");
+}
+
+// 예약 정보 저장 (중복 방지)
+async function processReservationSave() {
+  const reservationInfo = JSON.parse(
+    sessionStorage.getItem("finalReservationInfo") || "{}"
+  );
+  
+  // 이미 예약 완료된 경우 스킵
+  if (reservationInfo.reservationCompleted) {
+    return;
+  }
+
+  const paymentcd = sessionStorage.getItem("paymentcd");
+  if (!paymentcd) {
+    throw new Error("paymentcd가 없어서 예약을 저장할 수 없습니다.");
+  }
+
+  const userid = await getCurrentUserIdForPayment();
+
+  // 쿠폰 사용 처리
+  if (reservationInfo.usedCoupon && !reservationInfo.couponAlreadyUsed) {
+    try {
+      await applyCoupon(userid, reservationInfo.usedCoupon.couponnum);
+      reservationInfo.couponAlreadyUsed = true;
+      sessionStorage.setItem("finalReservationInfo", JSON.stringify(reservationInfo));
+    } catch (couponError) {
+      console.warn("쿠폰 사용 실패:", couponError);
+    }
+  }
+
+  // 예약 정보 저장
+  const reservationResult = await saveReservation({
+    schedulecd: reservationInfo.schedulecd,
+    seatcd: reservationInfo.selectedSeats,
+    paymentcd,
+    userid,
+  });
+  
+  if (reservationResult?.success === false) {
+    throw new Error(`예약 저장에 실패했습니다: ${reservationResult.message || '알 수 없는 오류'}`);
+  }
+
+  // 예약 완료 플래그 설정
+  reservationInfo.reservationCompleted = true;
+  sessionStorage.setItem("finalReservationInfo", JSON.stringify(reservationInfo));
+}
+
 const SuccessPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -19,16 +105,12 @@ const SuccessPage = () => {
   });
   const [showRequestData, setShowRequestData] = useState(false);
 
-  // 뒤로가기 방지 및 보안 처리 (토스 결제 성공 페이지)
+  // 뒤로가기 방지 및 보안 처리
   useEffect(() => {
-    // 결제 성공 페이지에서 뒤로가기 완전 차단 (보안상 중요)
-    const handlePopState = (event) => {
-      // 뒤로가기 시도 시 아무 동작도 하지 않고 현재 페이지 유지
-
+    const handlePopState = () => {
       window.history.pushState(null, "", window.location.href);
     };
 
-    // 키보드 단축키 뒤로가기 방지 (Alt+왼쪽화살표, Backspace 등)
     const handleKeyDown = (event) => {
       // Alt + 왼쪽 화살표 (뒤로가기)
       if (event.altKey && event.keyCode === 37) {
@@ -46,24 +128,22 @@ const SuccessPage = () => {
       }
     };
 
-    // 히스토리 조작으로 뒤로가기 차단
+    // 이벤트 리스너 등록
     window.history.pushState(null, "", window.location.href);
     window.addEventListener("popstate", handlePopState);
     document.addEventListener("keydown", handleKeyDown);
 
-    // 결제 완료 후 즉시 민감한 결제 정보만 정리 (예매 정보는 ReservationSuccessPage에서 정리)
-    const timeoutId = setTimeout(() => {
-      cleanupSensitivePaymentData();
-    }, 1000); // 1초로 단축
+    // 민감한 결제 정보 정리
+    const timeoutId = setTimeout(cleanupSensitivePaymentData, 1000);
 
     return () => {
       window.removeEventListener("popstate", handlePopState);
       document.removeEventListener("keydown", handleKeyDown);
       clearTimeout(timeoutId);
     };
-  }, [navigate]);
+  }, []);
 
-  // 페이지 로드 시 body 백그라운드 설정
+  // 페이지 스타일 설정
   useEffect(() => {
     document.body.style.backgroundColor = "#e8f3ff";
     return () => {
@@ -77,95 +157,38 @@ const SuccessPage = () => {
 
     sessionStorage.setItem("confirmRequested", "true");
 
-    const confirmPayment = async () => {
-      const requestData = {
-        orderId: searchParams.get("orderId"),
-        amount: searchParams.get("amount"),
-        paymentKey: searchParams.get("paymentKey"),
-      };
+    const processPayment = async () => {
+      try {
+        // 1. 토스페이먼츠 결제 확인
+        const paymentData = await confirmTossPayment(searchParams);
+        setResponseData(paymentData);
+        sessionStorage.setItem("paymentResponseData", JSON.stringify(paymentData));
 
-      const response = await fetch("/confirm", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestData),
-      });
+        // 2. 결제 정보 DB 저장
+        await processPaymentSave(paymentData);
 
-      const json = await response.json();
-      if (!response.ok) {
-        throw { message: json.message, code: json.code };
-      }
+        // 3. 예약 정보 저장
+        await processReservationSave();
 
-      return json;
-    };
-
-    confirmPayment()
-      .then(async (data) => {
-        setResponseData(data);
-        sessionStorage.setItem("paymentResponseData", JSON.stringify(data));
-
-        // 결제 정보 저장
-        try {
-          const paymentMethod = data.easyPay?.provider || "";
-          const paymentData = {
-            orderId: searchParams.get("orderId"),
-            method: paymentMethod,
-            amount: searchParams.get("amount"),
-          };
-          const paymentResult = await savePayment(paymentData);
-          if (paymentResult.success) {
-            sessionStorage.setItem("paymentcd", paymentResult.paymentcd);
-          }
-        } catch (error) {
-          
-        }
-
-        // 예약 정보 저장
-        try {
+      } catch (error) {
+        if (error.message?.includes("이미 예약된 좌석") || error.message?.includes("duplicate")) {
+          // 중복 저장 시도는 정상 처리로 간주
           const reservationInfo = JSON.parse(
             sessionStorage.getItem("finalReservationInfo") || "{}"
           );
-          const paymentcd = sessionStorage.getItem("paymentcd");
-          const userid = await getCurrentUserIdForPayment();
-
-          // 쿠폰 사용 처리는 이미 결제 시점에서 완료되었으므로 여기서는 하지 않음
-          if (
-            reservationInfo.usedCoupon &&
-            !reservationInfo.couponAlreadyUsed
-          ) {
-            try {
-              await applyCoupon(userid, reservationInfo.usedCoupon.couponnum);
-            } catch (couponError) {
-              
-              // 쿠폰 사용 실패해도 예약은 계속 진행
-            }
-          }
-
-          // 쿠폰 사용 처리는 이미 결제 시점에서 완료되었으므로 여기서는 하지 않음
-          if (
-            reservationInfo.usedCoupon &&
-            !reservationInfo.couponAlreadyUsed
-          ) {
-            try {
-              await applyCoupon(userid, reservationInfo.usedCoupon.couponnum);
-            } catch (couponError) {
-              
-              // 쿠폰 사용 실패해도 예약은 계속 진행
-            }
-          }
-
-          await saveReservation({
-            schedulecd: reservationInfo.schedulecd,
-            seatcd: reservationInfo.selectedSeats,
-            paymentcd,
-            userid,
-          });
-        } catch (error) {
-          
+          reservationInfo.reservationCompleted = true;
+          sessionStorage.setItem("finalReservationInfo", JSON.stringify(reservationInfo));
+        } else if (error.code) {
+          // 토스페이먼츠 에러
+          navigate(`/fail?code=${error.code}&message=${error.message}`);
+        } else {
+          // 기타 에러
+          alert("예약 처리 중 오류가 발생했습니다: " + error.message);
         }
-      })
-      .catch((error) => {
-        navigate(`/fail?code=${error.code}&message=${error.message}`);
-      });
+      }
+    };
+
+    processPayment();
   }, []);
 
   const goToReservationSuccess = () => {

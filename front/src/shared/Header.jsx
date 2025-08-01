@@ -16,7 +16,9 @@ export default function Header() {
     localStorage.getItem("isLoggedIn") === "true"
   );
   const [userid, setUserid] = useState(localStorage.getItem("userid") || "");
-  const [realUserid, setRealUserid] = useState(localStorage.getItem("realUserid") || ""); // localStorage에서 실제 userid 가져오기
+  const [realUserid, setRealUserid] = useState(
+    localStorage.getItem("realUserid") || ""
+  ); // localStorage에서 실제 userid 가져오기
   const [username, setUsername] = useState(
     localStorage.getItem("username") || ""
   ); // localStorage에서 username 가져오기
@@ -38,7 +40,7 @@ export default function Header() {
         // 이미 realUserid와 username이 localStorage에 있으면 로딩 없이 사용
         const storedRealUserid = localStorage.getItem("realUserid");
         const storedUsername = localStorage.getItem("username");
-        
+
         if (storedRealUserid && storedUsername) {
           setRealUserid(storedRealUserid);
           setUsername(storedUsername);

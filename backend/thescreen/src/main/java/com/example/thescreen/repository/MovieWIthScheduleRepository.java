@@ -1,7 +1,5 @@
 package com.example.thescreen.repository;
 
-import com.example.thescreen.entity.MovieSchedule;
-import com.example.thescreen.entity.MovieView;
 import com.example.thescreen.entity.MovieWithSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

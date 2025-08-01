@@ -16,13 +16,18 @@
 --    AND CAST(SUBSTRING(s.screencd FROM 4) AS INTEGER) <= 10;
 
 create or replace view schedule_view as
-select s.schedulecd, s.startdate, s.starttime, m.movienm, m.runningscreen, m.runningtime, sc.screenname, sc.screenstatus, sc.screentype, sc.allseat, sc.reservationseat, c.cinemanm, r.regionnm
+select s.schedulecd, s.startdate, s.starttime, m.movienm, m.moviecd,
+m.runningscreen, m.runningtime, m.director, m.description, m.actors,
+m.genre, m.movieinfo, m.isadult, mr.movierank, mr.rankchange,
+sc.screenname,sc.screenstatus, sc.screentype, sc.allseat,
+sc.reservationseat, c.cinemanm, r.regionnm
 from
     schedule s
     inner join movie m on s.moviecd = m.moviecd
     inner join screen sc on s.screencd = sc.screencd
     inner join cinema c on sc.cinemacd = c.cinemacd
-    inner join region r on c.regioncd = r.regioncd;
+    inner join region r on c.regioncd = r.regioncd
+    inner join movierank mr on s.moviecd = mr.movierankcd;
 
 create or replace view reservation_view as
 select r.reservationcd, r.seatcd, r.reservationtime, r.reservationstatus, sv.starttime, sv.movienm, sv.runningtime, sv.screenname, sv.cinemanm, r.userid, p.paymenttime, p.paymentmethod, p.amount

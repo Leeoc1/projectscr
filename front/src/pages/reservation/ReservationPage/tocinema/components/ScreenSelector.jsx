@@ -38,7 +38,7 @@ const ScreenSelector = () => {
         );
         setMovieSchedule(filteredSchedules);
       } catch (error) {
-        console.error("상영 정보를 가져오는 중 에러 발생:", error);
+        
         setMovieSchedule([]);
       }
     };
@@ -193,3 +193,4 @@ const ScreenSelector = () => {
 };
 
 export default ScreenSelector;
+

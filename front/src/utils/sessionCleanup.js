@@ -49,8 +49,6 @@ export const LOGIN_KEYS = {
  * 예매 취소 시 세션 정리 (결제 전)
  */
 export const cleanupOnReservationCancel = () => {
-  console.log("🚫 예매 취소 - 세션 정리 시작");
-
   const keysToRemove = [
     RESERVATION_KEYS.FINAL_RESERVATION_INFO,
     RESERVATION_KEYS.SELECTED_SEATS,
@@ -67,27 +65,21 @@ export const cleanupOnReservationCancel = () => {
   ];
 
   removeSessionKeys(keysToRemove);
-  console.log("✅ 예매 취소 세션 정리 완료");
 };
 
 /**
  * 결제 실패 시 세션 정리
  */
 export const cleanupOnPaymentFailure = () => {
-  console.log("💥 결제 실패 - 세션 정리 시작");
-
   const keysToRemove = [...Object.values(RESERVATION_KEYS)];
 
   removeSessionKeys(keysToRemove);
-  console.log("✅ 결제 실패 세션 정리 완료");
 };
 
 /**
  * 결제 성공 시 민감한 결제 정보만 정리
  */
 export const cleanupSensitivePaymentData = () => {
-  console.log("🔒 결제 성공 - 민감한 결제 정보 정리 시작");
-
   const keysToRemove = [
     RESERVATION_KEYS.PAYMENT_REQUEST_DATA,
     RESERVATION_KEYS.PAYMENT_RESPONSE_DATA,
@@ -96,30 +88,23 @@ export const cleanupSensitivePaymentData = () => {
   ];
 
   removeSessionKeys(keysToRemove);
-  console.log("✅ 민감한 결제 정보 정리 완료");
 };
 
 /**
  * 예매 완료 시 모든 예매 관련 정보 정리
  */
 export const cleanupOnReservationComplete = () => {
-  console.log("🧹 예매 완료 - 모든 예매 관련 세션 정리 시작");
-
   const keysToRemove = [...Object.values(RESERVATION_KEYS)];
 
   removeSessionKeys(keysToRemove);
-  console.log("✅ 예매 완료 세션 정리 완료");
 };
 
 /**
  * 로그아웃 시 모든 정보 정리 (로그인 정보 포함)
  */
 export const cleanupOnLogout = () => {
-  console.log("🚪 로그아웃 - 모든 세션 정리 시작");
-
   // 모든 sessionStorage 클리어
   sessionStorage.clear();
-  console.log("✅ 로그아웃 세션 정리 완료");
 };
 
 /**
@@ -130,7 +115,6 @@ const removeSessionKeys = (keys) => {
     const value = sessionStorage.getItem(key);
     if (value) {
       sessionStorage.removeItem(key);
-      console.log(`🗑️ 정리됨: ${key}`);
     }
   });
 };
@@ -139,28 +123,5 @@ const removeSessionKeys = (keys) => {
  * 헬퍼 함수: 현재 세션스토리지 상태 로깅
  */
 export const logSessionState = (context = "") => {
-  console.log(`📊 세션 상태 확인 ${context}`);
-
-  const reservationKeys = Object.values(RESERVATION_KEYS);
-  const loginKeys = Object.values(LOGIN_KEYS);
-
-  console.log("예매 관련 키:");
-  reservationKeys.forEach((key) => {
-    const value = sessionStorage.getItem(key);
-    if (value) {
-      console.log(
-        `  ${key}: ${
-          value.length > 50 ? value.substring(0, 50) + "..." : value
-        }`
-      );
-    }
-  });
-
-  console.log("로그인 관련 키:");
-  loginKeys.forEach((key) => {
-    const value = sessionStorage.getItem(key);
-    if (value) {
-      console.log(`  ${key}: ${value}`);
-    }
-  });
+  // 로깅 함수는 비워둠 (디버깅 시에만 사용)
 };

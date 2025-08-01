@@ -27,3 +27,4 @@ const ScreenItem = ({ screen, onStatusClick, getStatusClass }) => {
 };
 
 export default ScreenItem;
+

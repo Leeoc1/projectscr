@@ -66,7 +66,7 @@ const MyCoupons = ({ showCouponModal, handleCloseCouponModal, userInfo }) => {
       const response = await getUserCoupons(userInfo.userid);
       setCoupons(response || []);
     } catch (error) {
-      console.error("쿠폰 조회 오류:", error);
+      
       setCoupons([]); // 오류 시 빈 배열로 설정
     } finally {
       setLoading(false);
@@ -162,3 +162,4 @@ const MyCoupons = ({ showCouponModal, handleCloseCouponModal, userInfo }) => {
 };
 
 export default MyCoupons;
+

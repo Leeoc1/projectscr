@@ -122,3 +122,4 @@ const BarChart = ({ data, onPrevious, onNext, currentChartIndex }) => {
 };
 
 export default BarChart;
+

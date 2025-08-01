@@ -51,3 +51,4 @@ const AvailableMoviesList = ({ movieList, selectedMovies, onMovieSelect }) => (
 );
 
 export default AvailableMoviesList;
+

@@ -116,3 +116,4 @@ const PieChartComponent = ({ data, onPrevious, onNext, currentChartIndex }) => {
 };
 
 export default PieChartComponent;
+

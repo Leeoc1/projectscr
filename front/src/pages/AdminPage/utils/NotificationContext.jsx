@@ -42,7 +42,7 @@ export const NotificationProvider = ({ children }) => {
       // 실제 알림이 있을 때만 빨간 점 표시
       setHasNewNotifications(newNotifications.length > 0);
     } catch (error) {
-      console.error("알림 데이터 로드 실패:", error);
+      
     }
   };
 
@@ -68,3 +68,4 @@ export const NotificationProvider = ({ children }) => {
     </NotificationContext.Provider>
   );
 };
+

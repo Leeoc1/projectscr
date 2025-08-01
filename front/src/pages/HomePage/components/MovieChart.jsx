@@ -218,3 +218,4 @@ const MovieChart = () => {
 };
 
 export default MovieChart;
+

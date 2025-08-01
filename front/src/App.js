@@ -75,13 +75,13 @@ function KakaoLoginHandler() {
               const cleanUrl = currentPath === "/login" ? "/" : currentPath;
               navigate(cleanUrl, { replace: true });
             } else {
-              console.error("JWT 토큰 디코딩 실패");
+              
               alert("로그인 처리 중 오류가 발생했습니다.");
               navigate("/login", { replace: true });
             }
           })
           .catch((error) => {
-            console.error("JWT 토큰 디코딩 중 오류:", error);
+            
             alert("로그인 처리 중 오류가 발생했습니다.");
             navigate("/login", { replace: true });
           });
@@ -122,7 +122,7 @@ function AdminProtectedRoute({ children }) {
         const realUserid = await getCurrentUserId();
         setIsAdmin(realUserid === "master001");
       } catch (error) {
-        console.error("관리자 권한 확인 중 오류:", error);
+        
         setIsAdmin(false);
       } finally {
         setIsChecking(false);
@@ -221,7 +221,7 @@ function ReservationProtectedRoute({ children, requiredStep }) {
       break;
 
     case "checkout":
-      // /checkout은 finalReservationInfo에 finalPrice가 1원 이상이어야 접근 가능
+      // /checkout은 finalReservationInfo에 finalPrice가 0원 이상이어야 접근 가능
       const checkoutReservationInfo = sessionStorage.getItem(
         "finalReservationInfo"
       );
@@ -234,7 +234,7 @@ function ReservationProtectedRoute({ children, requiredStep }) {
           checkoutInfo.finalPrice === undefined ||
           checkoutInfo.finalPrice === null ||
           isNaN(checkoutInfo.finalPrice) ||
-          Number(checkoutInfo.finalPrice) < 1
+          Number(checkoutInfo.finalPrice) < 0
         ) {
           return <Navigate to="/movie" replace />;
         }
@@ -250,36 +250,9 @@ function ReservationProtectedRoute({ children, requiredStep }) {
       const orderId = urlParams.get("orderId");
       const amount = urlParams.get("amount");
 
-      // 디버깅을 위해 콘솔 로그 추가
-      console.log("=== Success 라우트 보호 로직 ===");
-      console.log("현재 URL:", window.location.href);
-      console.log("URL 파라미터들:", {
-        paymentKey,
-        orderId,
-        amount,
-      });
-      console.log("모든 URL 파라미터:", Object.fromEntries(urlParams));
-
-      // 로그인 상태도 함께 확인
-      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-      const userid = localStorage.getItem("userid");
-      console.log("Success 페이지 접근 시 로그인 상태:", {
-        isLoggedIn,
-        hasUserid: !!userid,
-      });
-
-      // paymentKey가 있고 로그인 상태여야 접근 허용
-      if (!paymentKey) {
-        console.log("❌ paymentKey가 없어서 홈으로 리다이렉트");
+      if (!paymentKey || !orderId || !amount) {
         return <Navigate to="/" replace />;
       }
-
-      if (!isLoggedIn || !userid) {
-        console.log("❌ 로그인 상태가 아니어서 홈으로 리다이렉트");
-        return <Navigate to="/" replace />;
-      }
-
-      console.log("✅ Success 페이지 접근 허용");
       break;
 
     case "reservation-success":
@@ -495,3 +468,4 @@ function App() {
 }
 
 export default App;
+

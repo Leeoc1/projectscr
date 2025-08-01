@@ -66,3 +66,4 @@ const LoginRequiredModal = ({ isOpen, onClose }) => {
 };
 
 export default LoginRequiredModal;
+

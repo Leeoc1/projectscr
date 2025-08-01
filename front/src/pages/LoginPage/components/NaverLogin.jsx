@@ -53,7 +53,7 @@ const NaverLogin = () => {
 
           if (result.success) {
             if (!result.userid) {
-              console.error("JWT 토큰이 응답에 없습니다!");
+              
               alert("로그인 처리 중 오류가 발생했습니다. (토큰 없음)");
               localStorage.removeItem("loginType");
               navigate("/login");
@@ -71,13 +71,13 @@ const NaverLogin = () => {
             // 즉시 홈으로 이동 (replace: true로 login 페이지 히스토리 제거)
             navigate("/", { replace: true });
           } else {
-            console.error("네이버 로그인 실패:", result.error);
+            
             alert("네이버 로그인 실패: " + result.error);
             localStorage.removeItem("loginType");
             navigate("/login");
           }
         } catch (error) {
-          console.error("네이버 로그인 콜백 처리 실패:", error);
+          
           alert("네이버 로그인 처리 중 오류가 발생했습니다.");
           localStorage.removeItem("loginType");
           navigate("/login");
@@ -101,12 +101,12 @@ const NaverLogin = () => {
       if (response && response.loginUrl) {
         window.location.href = response.loginUrl;
       } else {
-        console.error("로그인 URL이 없습니다:", response);
+        
         alert("네이버 로그인 URL을 받아올 수 없습니다.");
       }
     } catch (error) {
-      console.error("네이버 로그인 실패:", error);
-      console.error("에러 상세:", error.response?.data);
+      
+      
       alert("네이버 로그인을 시작할 수 없습니다. 서버 연결을 확인해주세요.");
       localStorage.removeItem("loginType");
     }
@@ -121,3 +121,4 @@ const NaverLogin = () => {
 };
 
 export default NaverLogin;
+

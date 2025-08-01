@@ -74,3 +74,4 @@ const MovieTabs = ({
 };
 
 export default MovieTabs;
+

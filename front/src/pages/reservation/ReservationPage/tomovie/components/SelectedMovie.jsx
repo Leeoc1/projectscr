@@ -34,3 +34,4 @@ const SelectedMovie = ({ selectedMovie }) => {
 };
 
 export default SelectedMovie; 
+

@@ -124,3 +124,4 @@ const DateSelectorMovie = () => {
 };
 
 export default DateSelectorMovie;
+

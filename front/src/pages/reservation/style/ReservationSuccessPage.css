@@ -44,3 +44,30 @@
 .no-poster-placeholder span {
   text-align: center;
 }
+
+/* 예약 정보 로딩 페이지에서 헤더와의 간격 조정 */
+.reservation-payment-page-loading .payment-container-loading {
+  margin-top: 0px;
+  width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+  background: #fff;
+  min-height: 400px;
+  padding: 40px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e0e0e0;
+}
+
+.reservation-payment-page-loading .payment-box-loading {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.reservation-payment-page-loading .payment-box-loading h2 {
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin: 0;
+}

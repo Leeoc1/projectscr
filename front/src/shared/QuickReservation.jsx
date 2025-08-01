@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getSchedules } from "../api/cinemaApi";
 import "./QuickReservation.css";
 
-const QuickReservation = () => {
+const QuickReservation = ({ onClose }) => {
   const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([
@@ -12,6 +12,15 @@ const QuickReservation = () => {
       isBot: true,
     },
   ]);
+
+  // 컴포넌트 마운트 시 배경 스크롤 막기
+  useEffect(() => {
+    document.body.classList.add("no-scroll");
+
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  }, []);
 
   // AI 기반 연령별 인원수 분석을 위한 백업 함수 (간단한 키워드 검색만)
   const parseAgeFromInput = (userInput, totalPerson) => {
@@ -57,11 +66,13 @@ const QuickReservation = () => {
 
     if (priceBreakdown) {
       // 백엔드 AI가 처리한 결과 사용 (우선순위 1)
+
       adultCount = priceBreakdown.adult?.count || 0;
       youthCount = priceBreakdown.youth?.count || 0;
       seniorCount = priceBreakdown.senior?.count || 0;
     } else {
       // 백엔드 AI 처리 실패시 간단한 백업 로직 사용 (우선순위 2)
+
       const parsed = parseAgeFromInput(userInput, totalPerson);
       adultCount = parsed.adultCount;
       youthCount = parsed.youthCount;
@@ -72,7 +83,6 @@ const QuickReservation = () => {
       adultCount * ADULT_PRICE +
       youthCount * YOUTH_PRICE +
       seniorCount * SENIOR_PRICE;
-
     return {
       adultCount,
       youthCount,
@@ -154,10 +164,8 @@ const QuickReservation = () => {
 
           // 추가 필수 정보들 저장 (보호 라우트에서 확인하는 정보들)
           sessionStorage.setItem("selectedMovieName", data.data.movienm);
-          sessionStorage.setItem("selectedCinemaName", data.data.cinemanm);
-
-          // finalReservationInfo 생성 (결제 페이지 보호 라우트에서 필요)
-          // 백엔드 응답 데이터
+          sessionStorage.setItem("selectedCinemaName", data.data.cinemanm); // finalReservationInfo 생성 (결제 페이지 보호 라우트에서 필요)
+          // 백엔드 응답 데이터 로깅
 
           // 백엔드에서 totalPrice가 있으면 바로 사용
           let finalTotalPrice = data.data.totalPrice;
@@ -221,6 +229,11 @@ const QuickReservation = () => {
               },
             })
           );
+
+          // 세션 스토리지 검증
+          setTimeout(() => {
+            // 세션 상태 확인 로직 (콘솔 로그 제거됨)
+          }, 100);
 
           botMessage = {
             text:
@@ -589,101 +602,117 @@ const QuickReservation = () => {
   };
 
   return (
-    <div className="quickreservation-container open">
-      <div className="quickreservation-header">빠른 예매 챗봇</div>
-      <div className="quickreservation-messages">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`message ${msg.isBot ? "bot-message" : "user-message"}`}
+    <div className="qkr-overlay" onClick={onClose}>
+      <div
+        className="qkr-quickreservation-container qkr-open"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="qkr-quickreservation-header">빠른 예매 챗봇</div>
+        <div className="qkr-quickreservation-messages">
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`qkr-message ${
+                msg.isBot ? "qkr-bot-message" : "qkr-user-message"
+              }`}
+            >
+              {msg.text.split("\n").map((line, i) => (
+                <div key={i}>{line}</div>
+              ))}
+              {msg.cinemacd && (
+                <button
+                  onClick={() => handleCinemaSelect(msg)}
+                  className="qkr-cinema-select-button"
+                >
+                  이 극장 선택하기
+                </button>
+              )}
+              {msg.movies && (
+                <div className="qkr-movie-buttons-container">
+                  {msg.movies.map((movie, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleMovieSelect(movie)}
+                      className="qkr-movie-button"
+                    >
+                      {movie}
+                    </button>
+                  ))}
+                </div>
+              )}
+              {msg.selectedMovie && msg.selectedCinema && (
+                <div className="qkr-confirmation-buttons-container">
+                  <button
+                    onClick={() =>
+                      handleMovieConfirm(msg.selectedMovie, msg.selectedCinema)
+                    }
+                    className="qkr-confirm-button"
+                  >
+                    예
+                  </button>
+                  <button
+                    onClick={handleMovieReject}
+                    className="qkr-reject-button"
+                  >
+                    아니오
+                  </button>
+                </div>
+              )}
+              {msg.finalConfirmation && (
+                <div className="qkr-reservation-button-container">
+                  <button
+                    onClick={handleReservationStart}
+                    className="qkr-reservation-button"
+                  >
+                    예매하러 가기
+                  </button>
+                </div>
+              )}
+              {msg.directPayment && (
+                <div className="qkr-direct-payment-button-container">
+                  <button
+                    onClick={handleDirectPayment}
+                    className="qkr-direct-payment-button"
+                  >
+                    결제하러 가기
+                  </button>
+                </div>
+              )}
+              {msg.cinemas && (
+                <div className="qkr-cinema-list-container">
+                  {msg.cinemas.map((cinema, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleCinemaFromList(cinema)}
+                      className="qkr-cinema-list-button"
+                    >
+                      {cinema.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="qkr-quickreservation-input">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="메시지를 입력하세요..."
+            className="qkr-quickreservation-input-field"
+          />
+          <button
+            onClick={sendMessage}
+            className="qkr-quickreservation-send-button"
           >
-            {msg.text.split("\n").map((line, i) => (
-              <div key={i}>{line}</div>
-            ))}
-            {msg.cinemacd && (
-              <button
-                onClick={() => handleCinemaSelect(msg)}
-                className="cinema-select-button"
-              >
-                이 극장 선택하기
-              </button>
-            )}
-            {msg.movies && (
-              <div className="movie-buttons-container">
-                {msg.movies.map((movie, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleMovieSelect(movie)}
-                    className="movie-button"
-                  >
-                    {movie}
-                  </button>
-                ))}
-              </div>
-            )}
-            {msg.selectedMovie && msg.selectedCinema && (
-              <div className="confirmation-buttons-container">
-                <button
-                  onClick={() =>
-                    handleMovieConfirm(msg.selectedMovie, msg.selectedCinema)
-                  }
-                  className="confirm-button"
-                >
-                  예
-                </button>
-                <button onClick={handleMovieReject} className="reject-button">
-                  아니오
-                </button>
-              </div>
-            )}
-            {msg.finalConfirmation && (
-              <div className="reservation-button-container">
-                <button
-                  onClick={handleReservationStart}
-                  className="reservation-button"
-                >
-                  예매하러 가기
-                </button>
-              </div>
-            )}
-            {msg.directPayment && (
-              <div className="direct-payment-button-container">
-                <button
-                  onClick={handleDirectPayment}
-                  className="direct-payment-button"
-                >
-                  결제하러 가기
-                </button>
-              </div>
-            )}
-            {msg.cinemas && (
-              <div className="cinema-list-container">
-                {msg.cinemas.map((cinema, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleCinemaFromList(cinema)}
-                    className="cinema-list-button"
-                  >
-                    {cinema.name}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-      <div className="quickreservation-input">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="메시지를 입력하세요..."
-          className="quickreservation-input-field"
-        />
-        <button onClick={sendMessage} className="quickreservation-send-button">
-          전송
-        </button>
+            <img
+              src="https://img.icons8.com/?size=100&id=43929&format=png&color=000000"
+              alt="Send"
+            />
+          </button>
+        </div>
       </div>
     </div>
   );

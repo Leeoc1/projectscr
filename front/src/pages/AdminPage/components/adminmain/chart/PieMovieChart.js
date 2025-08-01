@@ -113,3 +113,4 @@ const PieMovieChartComponent = ({
 };
 
 export default PieMovieChartComponent;
+

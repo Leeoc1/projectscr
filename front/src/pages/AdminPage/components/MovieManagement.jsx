@@ -292,3 +292,4 @@ const MovieManagement = () => {
 };
 
 export default MovieManagement;
+

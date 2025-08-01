@@ -1,13 +1,10 @@
 package com.example.thescreen.controller;
 
 import com.example.thescreen.entity.Movie;
-import com.example.thescreen.entity.MovieSchedule;
 import com.example.thescreen.entity.MovieView;
 import com.example.thescreen.entity.MovieWithSchedule;
 import com.example.thescreen.repository.MovieRepository;
-import com.example.thescreen.repository.MovieScheduleRepository;
 import com.example.thescreen.repository.MovieViewRepository;
-//import com.example.thescreen.service.FetchMovieService;
 import com.example.thescreen.repository.MovieWIthScheduleRepository;
 import com.example.thescreen.service.MovieService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +18,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 

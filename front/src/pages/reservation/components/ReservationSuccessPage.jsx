@@ -218,8 +218,8 @@ const ReservationSuccessPage = () => {
     return (
       <div className="reservation-payment-page">
         <Header isOtherPage={true} isScrolled={true} />
-        <div className="payment-container-loading">
-          <div className="payment-box-loading">
+        <div className="payment-container">
+          <div className="payment-box">
             <h2>예약 정보를 불러오는 중...</h2>
           </div>
         </div>

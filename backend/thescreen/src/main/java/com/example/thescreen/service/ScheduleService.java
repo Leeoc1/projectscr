@@ -21,15 +21,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduleService {
 
     private static final Random RANDOM = new Random();
     private static final int TOTAL_DAYS = 30;
-    // 이후 실행시 아래 1000개 막고 100개로 실행
-    // private static final int SCHEDULES_PER_MOVIE = 100;
-    // 첫 실행시 주석 해제하고 사용
     private static final int SCHEDULES_PER_MOVIE = 10000;
     private static final int MIN_HOUR_GAP = 3;
 
@@ -41,6 +39,7 @@ public class ScheduleService {
 
     @Autowired
     private ScheduleViewRepository scheduleViewRepository;
+
 
     @Transactional
     public String generateDummySchedules() {
@@ -55,7 +54,16 @@ public class ScheduleService {
             }
 
             // 탑 10 영화 조회
-            List<MovieView> movies = movieViewRepository.findMoviesWithRank();
+            List<MovieView> allMovies = movieViewRepository.findMoviesWithRank();
+            List<MovieView> movies = allMovies.stream()
+                    .filter(movie -> !scheduleRepository.existsByMoviecd(movie.getMoviecd()))
+                    .collect(Collectors.toList());
+
+            System.out.println("스케줄 생성 대상 영화 목록:");
+            for (MovieView movie : movies) {
+                System.out.println(String.format("영화 코드: %s, 영화 이름: %s",
+                        movie.getMoviecd(), movie.getMovienm()));
+            }
             List<String> screens = generateScreenCodes();
             Map<String, List<Schedule>> screenSchedules = new HashMap<>();
             for (String screen : screens) {

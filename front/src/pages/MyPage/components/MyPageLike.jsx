@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toggleWishlist } from "../../../api/movieApi";
+import { getCurrentUserId } from "../../../utils/tokenUtils";
 import "../styles/MyPageLike.css";
 import "../styles/MyPageMain.css"; // section 스타일
 import "../styles/MyPageMain.css"; // section 스타일
@@ -13,13 +14,14 @@ const MyPageLike = ({ loading, wishlist, setWishlist }) => {
     try {
       const userid = localStorage.getItem("userid");
       if (userid) {
+        // 토큰에서 실제 userid 추출
+        const userid = await getCurrentUserId();
+
         await toggleWishlist(userid, moviecd);
         // 찜 목록에서 해당 영화 제거
         setWishlist((prev) => prev.filter((wish) => wish.moviecd !== moviecd));
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   // 예매하기 핸들러
@@ -98,4 +100,3 @@ const MyPageLike = ({ loading, wishlist, setWishlist }) => {
 };
 
 export default MyPageLike;
-

@@ -26,10 +26,6 @@ const NoticeContents = () => {
       });
   }, [noticenum]);
 
-  const goNotice = () => {
-    navigate("/notice");
-  };
-
   if (loading) return <div className="notice-contents-loading">로딩 중...</div>;
   if (error || !notice)
     return (
@@ -49,7 +45,10 @@ const NoticeContents = () => {
                 {notice.noticecontents}
               </div>
             </section>
-            <button className="notice-back-btn" onClick={goNotice}>
+            <button
+              className="notice-back-btn"
+              onClick={() => navigate("/notice")}
+            >
               목록으로
             </button>
           </div>

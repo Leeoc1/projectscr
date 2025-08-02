@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getSchedules } from "../api/cinemaApi";
 import "./QuickReservation.css";
@@ -12,6 +12,7 @@ const QuickReservation = ({ onClose }) => {
       isBot: true,
     },
   ]);
+  const messagesEndRef = useRef(null);
 
   // 컴포넌트 마운트 시 배경 스크롤 막기
   useEffect(() => {
@@ -21,6 +22,20 @@ const QuickReservation = ({ onClose }) => {
       document.body.classList.remove("no-scroll");
     };
   }, []);
+
+  // 메시지가 추가될 때 자동 스크롤
+  useEffect(() => {
+    // QuickReservation 내부 스크롤만 조정하고 전체 페이지 스크롤은 건드리지 않음
+    if (messagesEndRef.current) {
+      const chatContainer = messagesEndRef.current.parentElement;
+      if (chatContainer) {
+        chatContainer.scrollTo({
+          top: chatContainer.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+    }
+  }, [messages]);
 
   // AI 기반 연령별 인원수 분석을 위한 백업 함수 (간단한 키워드 검색만)
   const parseAgeFromInput = (userInput, totalPerson) => {
@@ -693,6 +708,7 @@ const QuickReservation = ({ onClose }) => {
               )}
             </div>
           ))}
+          <div ref={messagesEndRef} />
         </div>
         <div className="qkr-quickreservation-input">
           <input

@@ -114,13 +114,6 @@ public class ScheduleService {
                 }
             }
 
-            // SQL 파일 저장
-            try (FileWriter writer = new FileWriter("schedule_inserts_" + startDate + ".sql")) {
-                writer.write(sqlOutput.toString());
-            } catch (IOException e) {
-                throw new RuntimeException("SQL 파일 작성 실패: " + e.getMessage());
-            }
-
             return String.format("%s에 대한 스케줄 %d개 생성 완료", endDate, totalSchedules);
         } catch (Exception e) {
             throw new RuntimeException("스케줄 생성 실패: " + e.getMessage());

@@ -6,6 +6,7 @@ const ScreenSelectorMovie = () => {
   const [movieSchedule, setMovieSchedule] = useState([]);
   const [selectedStartTime, setSelectedStartTime] = useState(null);
   const [reservedSeatsCount, setReservedSeatsCount] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   // 현재 시간 정보 (컴포넌트 렌더링 시 한 번만 계산)
   const today = new Date();
@@ -20,25 +21,33 @@ const ScreenSelectorMovie = () => {
 
       if (movienm && selectedFullDate && selectedTheater) {
         const fetchSchedule = async () => {
-          const selectedSchedule = await getSchedules();
+          setIsLoading(true);
+          try {
+            const selectedSchedule = await getSchedules();
 
-          const filteredSchedules = selectedSchedule.filter((schedule) => {
-            return (
-              schedule.movienm === movienm &&
-              schedule.startdate === selectedFullDate &&
-              schedule.cinemanm === selectedTheater &&
-              schedule.screenstatus === "운영중"
+            const filteredSchedules = selectedSchedule.filter((schedule) => {
+              return (
+                schedule.movienm === movienm &&
+                schedule.startdate === selectedFullDate &&
+                schedule.cinemanm === selectedTheater &&
+                schedule.screenstatus === "운영중"
+              );
+            });
+
+            // 상영 시간순으로 정렬
+            filteredSchedules.sort(
+              (a, b) => new Date(a.starttime) - new Date(b.starttime)
             );
-          });
+            setMovieSchedule(filteredSchedules);
 
-          // 상영 시간순으로 정렬
-          filteredSchedules.sort(
-            (a, b) => new Date(a.starttime) - new Date(b.starttime)
-          );
-          setMovieSchedule(filteredSchedules);
-
-          // 상영관이 변경되면 선택된 시간 초기화
-          setSelectedStartTime(null);
+            // 상영관이 변경되면 선택된 시간 초기화
+            setSelectedStartTime(null);
+          } catch (error) {
+            console.error("상영정보 로딩 중 오류:", error);
+            setMovieSchedule([]);
+          } finally {
+            setIsLoading(false);
+          }
         };
 
         fetchSchedule();
@@ -114,8 +123,13 @@ const ScreenSelectorMovie = () => {
 
   return (
     <div className="place-time-list-content">
-      {movieSchedule.length === 0 && <div>상영정보가 없습니다.</div>}
-      {uniqueScreentypes.length > 0 && (
+      {isLoading && (
+        <div className="loading-message">상영정보를 불러오는 중...</div>
+      )}
+      {!isLoading && movieSchedule.length === 0 && (
+        <div>선택한 조건에 맞는 상영정보가 없습니다.</div>
+      )}
+      {!isLoading && uniqueScreentypes.length > 0 && (
         <>
           {uniqueScreentypes.map((screentype) => (
             <div key={screentype}>
@@ -169,4 +183,3 @@ const ScreenSelectorMovie = () => {
 };
 
 export default ScreenSelectorMovie;
-

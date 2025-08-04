@@ -2,11 +2,13 @@ package com.example.thescreen.entity;
 
 import lombok.Data;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Immutable;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "view_movie_with_rank")
+@Immutable
 @Data
 public class MovieView {
     @Id

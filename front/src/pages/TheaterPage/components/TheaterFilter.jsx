@@ -47,3 +47,4 @@ const TheaterFilter = ({ selectedRegion, setSelectedRegion }) => {
 };
 
 export default TheaterFilter;
+

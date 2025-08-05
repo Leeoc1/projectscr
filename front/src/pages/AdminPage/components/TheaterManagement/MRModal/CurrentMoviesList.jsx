@@ -24,7 +24,7 @@ const CurrentMoviesList = ({
           const screenData = await getSchedules(movie.moviecd);
           schedulesMap[movie.moviecd] = screenData;
         } catch (error) {
-          console.error(`영화 ${movie.movienm} 스케줄 가져오기 실패:`, error);
+          
           schedulesMap[movie.moviecd] = [];
         }
       }
@@ -132,3 +132,4 @@ const CurrentMoviesList = ({
 };
 
 export default CurrentMoviesList;
+

@@ -31,12 +31,6 @@ export function CheckoutPage() {
 
   // 결제 페이지 접근 시 로그인 상태 로깅
   useEffect(() => {
-    console.log("=== 결제 페이지 접근 ===");
-    console.log("localStorage token:", localStorage.getItem("userid"));
-    console.log("localStorage isLoggedIn:", localStorage.getItem("isLoggedIn"));
-    console.log("sessionStorage token:", sessionStorage.getItem("token"));
-    console.log("sessionStorage role:", sessionStorage.getItem("role"));
-
     // 세션 상태 로깅
     logSessionState("(결제 페이지 접근)");
   }, []);
@@ -65,11 +59,9 @@ export function CheckoutPage() {
   useEffect(() => {
     document.body.style.backgroundColor = "#e8f3ff";
 
-    // 컴포넌트 언마운트 시 원래 스타일로 복원 및 결제 플래그 정리
+    // 컴포넌트 언마운트 시 원래 스타일로 복원
     return () => {
       document.body.style.backgroundColor = "";
-      // 결제 페이지를 떠날 때 플래그 정리
-      sessionStorage.removeItem("isPaymentInProgress");
     };
   }, []);
 
@@ -156,8 +148,6 @@ export function CheckoutPage() {
   };
 
   const handleBackModalConfirm = () => {
-    console.log("🚫 결제 취소 - 예매 관련 정보 정리");
-
     // 체계적인 세션 정리
     cleanupOnReservationCancel();
 
@@ -190,11 +180,6 @@ export function CheckoutPage() {
               try {
                 setIsPaymentLoading(true);
 
-                console.log("=== 결제 버튼 클릭 ===");
-                console.log("결제 금액:", amount.value);
-                console.log("결제 준비 상태:", ready);
-                console.log("사용자 정보:", userInfo);
-
                 // 결제 금액 검증
                 if (amount.value <= 0) {
                   alert("결제 금액이 올바르지 않습니다.");
@@ -217,16 +202,6 @@ export function CheckoutPage() {
                   return;
                 }
 
-                console.log(
-                  "결제 전 로그인 상태:",
-                  localStorage.getItem("isLoggedIn")
-                );
-                console.log("결제 전 userid:", localStorage.getItem("userid"));
-                console.log("결제 시 userInfo:", userInfo);
-
-                // 결제 진행 중 플래그 설정 (로그아웃 방지)
-                sessionStorage.setItem("isPaymentInProgress", "true");
-
                 const paymentData = {
                   orderId: orderId,
                   orderName: "영화 예매",
@@ -238,8 +213,6 @@ export function CheckoutPage() {
                     userInfo?.phone?.replace(/[-\s]/g, "") || "01012341234",
                 };
 
-                console.log("결제 요청 데이터:", paymentData);
-
                 // 결제 요청 데이터를 sessionStorage에 저장 (success/fail 페이지에서 확인용)
                 sessionStorage.setItem(
                   "paymentRequestData",
@@ -247,16 +220,9 @@ export function CheckoutPage() {
                 );
 
                 // 결제 요청 시 amount.value(즉, finalPrice)로 결제
-                console.log("결제 요청 시작...");
+
                 await widgets.requestPayment(paymentData);
-
-                console.log("결제 요청 완료");
-                // 결제 완료 시 플래그 제거
-                sessionStorage.removeItem("isPaymentInProgress");
               } catch (error) {
-                console.error("결제 요청 오류:", error);
-                console.log("오류 상세:", error.message, error.code);
-
                 // 사용자에게 구체적인 오류 메시지 제공
                 let errorMessage = "결제 요청 중 오류가 발생했습니다.";
 
@@ -269,14 +235,6 @@ export function CheckoutPage() {
                 }
 
                 alert(errorMessage);
-
-                console.log(
-                  "결제 오류 후 로그인 상태:",
-                  localStorage.getItem("isLoggedIn")
-                );
-
-                // 결제 오류 시에도 플래그 제거
-                sessionStorage.removeItem("isPaymentInProgress");
               } finally {
                 setIsPaymentLoading(false);
               }

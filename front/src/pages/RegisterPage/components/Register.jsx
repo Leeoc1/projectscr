@@ -108,7 +108,7 @@ const Register = () => {
           : "이미 사용 중인 아이디입니다."
       );
     } catch (error) {
-      console.error("아이디 중복 체크 오류:", error);
+      
       alert("아이디 중복 체크에 실패했습니다.");
     }
   };
@@ -161,7 +161,7 @@ const Register = () => {
         setShowToast(true);
       }
     } catch (error) {
-      console.error("회원가입 오류:", error);
+      
       setToastMessage("회원가입에 실패했습니다.");
       setToastType("error");
       setShowToast(true);
@@ -335,3 +335,4 @@ const Register = () => {
 };
 
 export default Register;
+

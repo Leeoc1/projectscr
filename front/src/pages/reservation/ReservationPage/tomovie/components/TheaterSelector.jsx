@@ -41,7 +41,7 @@ const TheaterSelector = () => {
 
       setAvailableTheaters(favoriteTheaterNames);
     } catch (error) {
-      console.error("Error loading favorite theaters:", error);
+      
     }
   };
 
@@ -87,11 +87,11 @@ const TheaterSelector = () => {
         const regionsWithFavorite = ["즐겨찾는 극장", ...regionNames];
         setAvailableRegions(regionsWithFavorite);
       } else {
-        console.error("Regions is not an array:", regions);
+        
         setAvailableRegions(["즐겨찾는 극장"]);
       }
     } catch (error) {
-      console.error("Error fetching regions:", error);
+      
       setAvailableRegions(["즐겨찾는 극장"]);
     }
   };
@@ -113,7 +113,7 @@ const TheaterSelector = () => {
     const movienm = sessionStorage.getItem("movienm");
 
     if (!selectedDate || !movienm) {
-      console.error("선택된 날짜나 영화가 없습니다.");
+      
       setAvailableTheaters([]);
       return;
     }
@@ -173,7 +173,7 @@ const TheaterSelector = () => {
 
       setAvailableTheaters(theaters);
     } catch (error) {
-      console.error("Error fetching theaters:", error);
+      
       setAvailableTheaters([]);
     }
   };
@@ -247,3 +247,4 @@ const TheaterSelector = () => {
 };
 
 export default TheaterSelector;
+

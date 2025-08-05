@@ -84,6 +84,8 @@ const ReservationPaymentPage = () => {
   // 사용자 쿠폰 목록 로드 useEffect
   useEffect(() => {
     // 브라우저 저장소 전체 확인
+
+    loadUserCoupons();
   }, []);
 
   // 쿠폰 할인 금액 계산
@@ -126,7 +128,7 @@ const ReservationPaymentPage = () => {
     try {
       // 쿠폰 사용 처리 (결제 시작 시점)
       if (selectedCoupon) {
-        const userid = getCurrentUserIdForPayment(); // 토큰화된 userid 디코딩
+        const userid = await getCurrentUserIdForPayment(); // 토큰화된 userid 디코딩
         if (userid) {
           try {
             await applyCoupon(userid, selectedCoupon.couponnum);

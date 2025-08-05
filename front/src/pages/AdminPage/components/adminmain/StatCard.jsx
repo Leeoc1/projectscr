@@ -22,3 +22,4 @@ const StatCard = ({ title, value, change, isNegative = false, onClick }) => {
 };
 
 export default StatCard;
+

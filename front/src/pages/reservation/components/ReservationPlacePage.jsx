@@ -173,3 +173,4 @@ const ReservationPlacePage = () => {
 };
 
 export default ReservationPlacePage;
+

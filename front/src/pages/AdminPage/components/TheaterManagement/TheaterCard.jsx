@@ -43,3 +43,4 @@ const TheaterCard = ({ theater, onDetailClick, onDelete }) => {
 };
 
 export default TheaterCard;
+

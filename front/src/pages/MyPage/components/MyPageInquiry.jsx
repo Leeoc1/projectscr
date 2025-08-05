@@ -35,3 +35,4 @@ const MyPageInquiry = () => {
 };
 
 export default MyPageInquiry;
+

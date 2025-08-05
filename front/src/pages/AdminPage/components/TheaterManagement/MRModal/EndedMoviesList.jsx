@@ -39,3 +39,4 @@ const EndedMoviesList = ({ movieList }) => (
 );
 
 export default EndedMoviesList;
+

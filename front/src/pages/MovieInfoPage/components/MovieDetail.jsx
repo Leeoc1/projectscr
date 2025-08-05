@@ -7,6 +7,7 @@ import {
   getWishlistStatus,
   toggleWishlist,
 } from "../../../api/movieApi";
+import { getCurrentUserId } from "../../../utils/tokenUtils";
 import { useNavigate } from "react-router-dom";
 import LoginRequiredModal from "../../LoginPage/components/LoginRequiredModal";
 
@@ -35,7 +36,7 @@ export default function MovieDetail() {
             setWishlistCount(wishlistData.count);
             setIsWished(wishlistData.wished);
           } catch (error) {
-            console.error("Error fetching wishlist status:", error);
+            
           }
         }
       }
@@ -81,19 +82,22 @@ export default function MovieDetail() {
       setShowLoginModal(true);
       return;
     }
-    const userid = localStorage.getItem("userid");
+    // 토큰에서 실제 userid 추출
+    const userid = await getCurrentUserId();
+    
     if (!userid) {
       setShowLoginModal(true);
       return;
     }
     try {
+      
       // 찜 상태 토글 API 호출
       const result = await toggleWishlist(userid, movie.moviecd);
       // 상태 업데이트
       setIsWished(result.wished);
       setWishlistCount(result.count);
     } catch (error) {
-      console.error("Error toggling wishlist:", error);
+      
     }
   };
 
@@ -220,3 +224,4 @@ export default function MovieDetail() {
     </div>
   );
 }
+

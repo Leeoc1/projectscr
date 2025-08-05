@@ -61,3 +61,4 @@ const NoticeItem = ({ item, index, type, isExpanded, onToggle }) => {
 };
 
 export default NoticeItem; 
+

@@ -75,13 +75,13 @@ function KakaoLoginHandler() {
               const cleanUrl = currentPath === "/login" ? "/" : currentPath;
               navigate(cleanUrl, { replace: true });
             } else {
-              console.error("JWT 토큰 디코딩 실패");
+              
               alert("로그인 처리 중 오류가 발생했습니다.");
               navigate("/login", { replace: true });
             }
           })
           .catch((error) => {
-            console.error("JWT 토큰 디코딩 중 오류:", error);
+            
             alert("로그인 처리 중 오류가 발생했습니다.");
             navigate("/login", { replace: true });
           });
@@ -122,7 +122,7 @@ function AdminProtectedRoute({ children }) {
         const realUserid = await getCurrentUserId();
         setIsAdmin(realUserid === "master001");
       } catch (error) {
-        console.error("관리자 권한 확인 중 오류:", error);
+        
         setIsAdmin(false);
       } finally {
         setIsChecking(false);
@@ -468,3 +468,4 @@ function App() {
 }
 
 export default App;
+

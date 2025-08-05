@@ -66,3 +66,4 @@ const TheaterInfo = ({
 };
 
 export default TheaterInfo;
+

@@ -114,3 +114,4 @@ const MapInfo = ({ cinemanm, tel, address, myState, theaterState }) => {
 };
 
 export default MapInfo;
+

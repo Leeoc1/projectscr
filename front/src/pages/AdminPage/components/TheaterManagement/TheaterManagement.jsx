@@ -105,7 +105,7 @@ const TheaterManagement = () => {
 
       alert("스케줄이 성공적으로 등록되었습니다.");
     } catch (error) {
-      console.error("스케줄 데이터 등록 실패:", error);
+      
       alert("스케줄 등록에 실패했습니다. 다시 시도해주세요.");
     }
   };
@@ -140,3 +140,4 @@ const TheaterManagement = () => {
 };
 
 export default TheaterManagement;
+

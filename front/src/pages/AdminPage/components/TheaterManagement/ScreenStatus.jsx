@@ -70,3 +70,4 @@ const ScreenStatus = ({ screen, onStatusChange, onClose }) => {
 };
 
 export default ScreenStatus;
+

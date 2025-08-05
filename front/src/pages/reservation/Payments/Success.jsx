@@ -116,7 +116,7 @@ const SuccessPage = () => {
             sessionStorage.setItem("paymentcd", paymentResult.paymentcd);
           }
         } catch (error) {
-          console.error("결제 정보 저장 중 오류:", error);
+          
         }
 
         // 예약 정보 저장
@@ -135,7 +135,7 @@ const SuccessPage = () => {
             try {
               await applyCoupon(userid, reservationInfo.usedCoupon.couponnum);
             } catch (couponError) {
-              console.error("쿠폰 사용 처리 중 오류:", couponError);
+              
               // 쿠폰 사용 실패해도 예약은 계속 진행
             }
           }
@@ -148,7 +148,7 @@ const SuccessPage = () => {
             try {
               await applyCoupon(userid, reservationInfo.usedCoupon.couponnum);
             } catch (couponError) {
-              console.error("쿠폰 사용 처리 중 오류:", couponError);
+              
               // 쿠폰 사용 실패해도 예약은 계속 진행
             }
           }
@@ -160,7 +160,7 @@ const SuccessPage = () => {
             userid,
           });
         } catch (error) {
-          console.error("예약 저장 중 오류:", error);
+          
         }
       })
       .catch((error) => {
@@ -241,3 +241,4 @@ const SuccessPage = () => {
 };
 
 export { SuccessPage };
+

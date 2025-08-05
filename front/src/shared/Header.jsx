@@ -35,40 +35,21 @@ export default function Header() {
       if (storedIsLoggedIn && tokenizedUserid) {
         setIsLoadingUser(true); // 로딩 시작
         try {
-          // 토큰에서 실제 userid 추출 (재시도 로직 포함)
-          let realUserid = await getCurrentUserId();
-
-          // 첫 번째 시도 실패 시 한 번 더 재시도
-          if (!realUserid && tokenizedUserid) {
-            await new Promise((resolve) => setTimeout(resolve, 500)); // 500ms 대기
-            realUserid = await getCurrentUserId();
-          }
+          // 토큰에서 실제 userid 추출
+          const realUserid = await getCurrentUserId();
 
           if (realUserid) {
             setRealUserid(realUserid); // 실제 userid 저장
             const userInfo = await getUserInfo(realUserid);
             setUsername(userInfo.username || realUserid);
           } else {
-            // 두 번 실패해도 결제 페이지에서는 로그아웃하지 않음
-            const isPaymentPage =
-              window.location.pathname.includes("/checkout") ||
-              window.location.pathname.includes("/success") ||
-              window.location.pathname.includes("/payment");
+            // 토큰이 유효하지 않으면 로그아웃
 
-            if (!isPaymentPage) {
-              handleLogout();
-            }
-          }
-        } catch (error) {
-          // 결제 페이지에서는 오류 발생 시에도 로그아웃하지 않음
-          const isPaymentPage =
-            window.location.pathname.includes("/checkout") ||
-            window.location.pathname.includes("/success") ||
-            window.location.pathname.includes("/payment");
-
-          if (!isPaymentPage) {
             handleLogout();
           }
+        } catch (error) {
+          // 오류 발생 시 로그아웃 처리
+          handleLogout();
         } finally {
           setIsLoadingUser(false); // 로딩 종료
         }
@@ -113,6 +94,25 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // 챗봇이 열릴 때 빠른예매 닫기 이벤트 리스너
+  useEffect(() => {
+    const handleCloseQuickReservation = () => {
+      setShowQuickReservation(false);
+    };
+
+    window.addEventListener(
+      "closeQuickReservation",
+      handleCloseQuickReservation
+    );
+
+    return () => {
+      window.removeEventListener(
+        "closeQuickReservation",
+        handleCloseQuickReservation
+      );
+    };
+  }, []);
+
   const goTheater = () => navigate("/theater");
   const goMovie = () => navigate("/movie");
   const goEvent = () => navigate("/event");
@@ -123,8 +123,13 @@ export default function Header() {
   const goNotice = () => navigate("/notice");
   const goHome = () => navigate("/");
   const goMyPage = () => navigate("/mypage");
-  const toggleQuickReservation = () =>
+  const toggleQuickReservation = () => {
+    // 빠른예매를 열 때 챗봇 닫기 이벤트 발생
+    if (!showQuickReservation) {
+      window.dispatchEvent(new CustomEvent("closeChatBot"));
+    }
     setShowQuickReservation(!showQuickReservation);
+  };
 
   // 로그아웃 핸들러
   const handleLogout = () => {
@@ -137,7 +142,7 @@ export default function Header() {
     setRealUserid("");
     setUsername("");
     setIsLoadingUser(false);
-    window.location.reload(); // 페이지 새로고침
+    window.location.reload(); // 페이지 새로고침으로 상태 초기화
 
     // 홈페이지로 리다이렉트
     navigate("/");
@@ -170,7 +175,9 @@ export default function Header() {
               빠른예매
             </a>
           </nav>
-          {showQuickReservation && isScrolled && <QuickReservation />}
+          {showQuickReservation && isScrolled && (
+            <QuickReservation onClose={() => setShowQuickReservation(false)} />
+          )}
 
           {/* User Actions */}
           <div className="h-user-actions">
@@ -244,7 +251,9 @@ export default function Header() {
             </a>
           </nav>
         </div>
-        {showQuickReservation && !isScrolled && <QuickReservation />}
+        {showQuickReservation && !isScrolled && (
+          <QuickReservation onClose={() => setShowQuickReservation(false)} />
+        )}
       </div>
 
       {/* Mobile Menu */}

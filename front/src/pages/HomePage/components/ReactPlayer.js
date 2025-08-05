@@ -34,3 +34,4 @@ const TrailerPlayer = () => (
 );
 
 export default TrailerPlayer;
+

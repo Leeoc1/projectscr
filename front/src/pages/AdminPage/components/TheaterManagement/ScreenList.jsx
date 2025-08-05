@@ -23,3 +23,4 @@ const ScreenList = ({ screenList, onStatusClick, getStatusClass }) => {
 };
 
 export default ScreenList;
+

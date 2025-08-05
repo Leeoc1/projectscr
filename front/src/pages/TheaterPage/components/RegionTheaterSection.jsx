@@ -39,7 +39,7 @@ const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
         setStarFills(starFillsData);
         setFavoriteCinemas(favorites); // 즐겨찾기 영화관 목록 저장
       } catch (error) {
-        console.error("Failed to fetch favorites:", error);
+        
       }
     };
     fetchFavorites();
@@ -110,7 +110,7 @@ const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
         setFavoriteCinemas((prev) => [...prev, { cinemacd, userid }]);
       }
     } catch (error) {
-      console.error("Failed to update/delete favorite:", error);
+      
       alert("즐겨찾기 업데이트에 실패했습니다.");
     }
   };
@@ -206,3 +206,4 @@ const RegionTheaterSection = ({ getMoviesByTab, selectedRegion }) => {
 };
 
 export default RegionTheaterSection;
+

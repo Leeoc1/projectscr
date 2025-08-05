@@ -28,3 +28,4 @@ export const verifyCode = async (phoneNumber, certificateNum) => {
     throw new Error(error.response?.data || "인증 실패");
   }
 };
+

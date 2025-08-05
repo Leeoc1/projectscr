@@ -51,3 +51,4 @@ const Inquiries = () => {
 };
 
 export default Inquiries;
+

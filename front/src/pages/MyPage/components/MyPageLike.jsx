@@ -38,7 +38,7 @@ const MyPageLike = ({ loading, wishlist, setWishlist }) => {
     sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
 
     // 예매 페이지로 이동
-    navigate("/reservation/place");
+    navigate("/reservation/movie/${movie.moviecd}");
   };
 
   return (

@@ -48,13 +48,24 @@ const Login = () => {
         // 브라우저 창 닫기 감지해서 자동 로그아웃
         setupAutoLogout();
 
+        // 회원가입 후 첫 로그인인지 확인
+        const justRegistered = sessionStorage.getItem("justRegistered");
+        if (justRegistered) {
+          // 환영 메시지를 세션 스토리지에 저장
+          sessionStorage.setItem(
+            "welcomeMessage",
+            "환영합니다! 회원가입이 완료되었습니다.\n가입 환영 쿠폰이 지급되었습니다."
+          );
+          // 플래그 제거
+          sessionStorage.removeItem("justRegistered");
+        }
+
         navigate("/"); // 메인으로 이동
       }
     } catch (error) {
       if (error.response) {
         alert("아이디 혹은 비밀번호가 일치하지 않습니다.........");
       } else {
-        
       }
     }
   };
@@ -200,4 +211,3 @@ const Login = () => {
 };
 
 export default Login;
-

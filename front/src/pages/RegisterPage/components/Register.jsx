@@ -108,7 +108,6 @@ const Register = () => {
           : "이미 사용 중인 아이디입니다."
       );
     } catch (error) {
-      
       alert("아이디 중복 체크에 실패했습니다.");
     }
   };
@@ -147,11 +146,8 @@ const Register = () => {
       };
       const response = await registerUser(userData);
       if (response) {
-        // 회원가입 완료 메시지를 세션 스토리지에 저장
-        sessionStorage.setItem(
-          "welcomeMessage",
-          "환영합니다! 회원가입이 완료되었습니다.\n가입 환영 쿠폰이 지급되었습니다."
-        );
+        // 회원가입 완료 표시를 위한 플래그 저장 (로그인 성공 시에만 환영 메시지 표시)
+        sessionStorage.setItem("justRegistered", "true");
 
         // 로그인으로 리다이렉트
         navigate("/login");
@@ -161,7 +157,6 @@ const Register = () => {
         setShowToast(true);
       }
     } catch (error) {
-      
       setToastMessage("회원가입에 실패했습니다.");
       setToastType("error");
       setShowToast(true);
@@ -335,4 +330,3 @@ const Register = () => {
 };
 
 export default Register;
-

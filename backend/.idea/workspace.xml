@@ -6,6 +6,18 @@
   <component name="ChangeListManager">
     <list default="true" id="a7929261-1ad1-4007-9ae7-86e384453840" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thescreen/bin/main/com/example/thescreen/controller/ScheduleViewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/thescreen/bin/main/com/example/thescreen/controller/ScheduleViewController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thescreen/bin/main/com/example/thescreen/repository/ScheduleViewRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/thescreen/bin/main/com/example/thescreen/repository/ScheduleViewRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thescreen/bin/main/com/example/thescreen/service/ScheduleService.class" beforeDir="false" afterPath="$PROJECT_DIR$/thescreen/bin/main/com/example/thescreen/service/ScheduleService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thescreen/build/reports/problems/problems-report.html" beforeDir="false" afterPath="$PROJECT_DIR$/thescreen/build/reports/problems/problems-report.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thescreen/src/main/java/com/example/thescreen/controller/ScheduleViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/thescreen/src/main/java/com/example/thescreen/controller/ScheduleViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thescreen/src/main/java/com/example/thescreen/repository/MovieWIthScheduleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/thescreen/src/main/java/com/example/thescreen/repository/MovieWIthScheduleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thescreen/src/main/java/com/example/thescreen/repository/ScheduleViewRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/thescreen/src/main/java/com/example/thescreen/repository/ScheduleViewRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thescreen/src/main/java/com/example/thescreen/service/ScheduleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/thescreen/src/main/java/com/example/thescreen/service/ScheduleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/pages/LoginPage/components/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/pages/LoginPage/components/Login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/pages/MoviePage/components/Movies.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/pages/MoviePage/components/Movies.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/pages/reservation/Payments/Chekout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/pages/reservation/Payments/Chekout.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/src/pages/reservation/components/ReservationPaymentPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front/src/pages/reservation/components/ReservationPaymentPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

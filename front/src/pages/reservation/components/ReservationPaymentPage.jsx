@@ -84,8 +84,6 @@ const ReservationPaymentPage = () => {
   // 사용자 쿠폰 목록 로드 useEffect
   useEffect(() => {
     // 브라우저 저장소 전체 확인
-
-    loadUserCoupons();
   }, []);
 
   // 쿠폰 할인 금액 계산

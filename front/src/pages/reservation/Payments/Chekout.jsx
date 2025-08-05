@@ -65,9 +65,11 @@ export function CheckoutPage() {
   useEffect(() => {
     document.body.style.backgroundColor = "#e8f3ff";
 
-    // 컴포넌트 언마운트 시 원래 스타일로 복원
+    // 컴포넌트 언마운트 시 원래 스타일로 복원 및 결제 플래그 정리
     return () => {
       document.body.style.backgroundColor = "";
+      // 결제 페이지를 떠날 때 플래그 정리
+      sessionStorage.removeItem("isPaymentInProgress");
     };
   }, []);
 
@@ -222,6 +224,9 @@ export function CheckoutPage() {
                 console.log("결제 전 userid:", localStorage.getItem("userid"));
                 console.log("결제 시 userInfo:", userInfo);
 
+                // 결제 진행 중 플래그 설정 (로그아웃 방지)
+                sessionStorage.setItem("isPaymentInProgress", "true");
+
                 const paymentData = {
                   orderId: orderId,
                   orderName: "영화 예매",
@@ -246,6 +251,8 @@ export function CheckoutPage() {
                 await widgets.requestPayment(paymentData);
 
                 console.log("결제 요청 완료");
+                // 결제 완료 시 플래그 제거
+                sessionStorage.removeItem("isPaymentInProgress");
               } catch (error) {
                 console.error("결제 요청 오류:", error);
                 console.log("오류 상세:", error.message, error.code);
@@ -267,6 +274,9 @@ export function CheckoutPage() {
                   "결제 오류 후 로그인 상태:",
                   localStorage.getItem("isLoggedIn")
                 );
+
+                // 결제 오류 시에도 플래그 제거
+                sessionStorage.removeItem("isPaymentInProgress");
               } finally {
                 setIsPaymentLoading(false);
               }

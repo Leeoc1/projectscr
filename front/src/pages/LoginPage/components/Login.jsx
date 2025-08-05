@@ -88,6 +88,14 @@ const Login = () => {
 
       // 브라우저 창 닫기인 경우만 로그아웃
 
+      // 결제 진행 중인지 확인
+      const isPaymentInProgress = sessionStorage.getItem("isPaymentInProgress");
+      if (isPaymentInProgress === "true") {
+        console.log("결제 진행 중이므로 로그아웃하지 않음");
+        return; // 결제 중이면 로그아웃 하지 않음
+      }
+
+      console.log("브라우저 창 닫기 감지 - 로그아웃 처리");
       localStorage.removeItem("isLoggedIn");
       localStorage.removeItem("userid");
       localStorage.removeItem("tokenizedUserid"); // JWT 토큰화된 userid 제거

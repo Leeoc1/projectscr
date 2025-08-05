@@ -137,6 +137,7 @@ export default function Header() {
     setRealUserid("");
     setUsername("");
     setIsLoadingUser(false);
+    window.location.reload(); // 페이지 새로고침
 
     // 홈페이지로 리다이렉트
     navigate("/");

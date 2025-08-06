@@ -60,6 +60,19 @@ const UserManagement = () => {
     );
   }
 
+  const formatPhoneNumber = (phone) => {
+    if (!phone || phone.length !== 11) return phone;
+    return `${phone.slice(0, 3)}-${phone.slice(3, 7)}-${phone.slice(7)}`;
+  };
+
+  const maskPhoneNumber = (phone) => {
+    const formatted = formatPhoneNumber(phone);
+    if (!formatted || !/^\d{3}-\d{4}-\d{4}$/.test(formatted)) {
+      return formatted || 'Invalid number';
+    }
+    return formatted.replace(/(\d{3})-(\d{4})-(\d{4})/, '$1-****-$3');
+  };
+
   return (
     <div className="adp-content">
       <div className="adp-header">
@@ -86,7 +99,7 @@ const UserManagement = () => {
                 <td>{user.userid}</td>
                 <td>{user.username}</td>
                 <td>{user.email}</td>
-                <td>{user.phone}</td>
+                <td>{maskPhoneNumber(user.phone)}</td>
                 <td>{user.birth}</td>
                 <td>
                   <span className={`adp-status ${getStatusClass(user.status)}`}>

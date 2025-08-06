@@ -20,7 +20,6 @@ const BarChart = ({ data, onPrevious, onNext, currentChartIndex }) => {
             매출액: item.amount || item.totalAmount,
           }))
           .reverse()
-          .slice(1)
       : [];
 
   // 아래 JSX는 기존 그대로 두세요!
@@ -123,3 +122,4 @@ const BarChart = ({ data, onPrevious, onNext, currentChartIndex }) => {
 };
 
 export default BarChart;
+

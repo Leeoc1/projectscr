@@ -69,6 +69,7 @@ export const secureLogout = () => {
   localStorage.removeItem("isLoggedIn");
   localStorage.removeItem("userid"); // JWT 토큰화된 userid 제거
   localStorage.removeItem("username"); // 보안상 제거
+  localStorage.removeItem("isAdminLogin");
 
   // 카카오 로그인 관련 데이터 제거
   localStorage.removeItem("loginType");

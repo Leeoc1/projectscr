@@ -44,27 +44,50 @@ public class ScheduleService {
     @Transactional
     public String generateDummySchedules() {
         try {
+            System.out.println("=== 스케줄 생성 서비스 시작 ===");
             LocalDate startDate = LocalDate.now(); // 오늘 날짜
-            LocalDate endDate = startDate.plusDays(TOTAL_DAYS - 1); // 7일 후
+            LocalDate endDate = startDate.plusDays(TOTAL_DAYS - 1); // 30일 후
+            System.out.println("시작 날짜: " + startDate + ", 종료 날짜: " + endDate);
 
-            // 마지막 날짜(예: 7월 29일)에 스케줄이 있는지 확인
+            // 마지막 날짜에 스케줄이 있는지 확인
             boolean hasSchedules = scheduleRepository.existsByStartdate(endDate);
+            System.out.println("해당 날짜에 기존 스케줄 존재 여부: " + hasSchedules);
             if (hasSchedules) {
                 return String.format("해당 날짜(%s)에 대한 스케줄이 이미 등록되었습니다.", endDate);
             }
 
             // 탑 10 영화 조회
+            System.out.println("영화 데이터 조회 중...");
             List<MovieView> allMovies = movieViewRepository.findMoviesWithRank();
+            System.out.println("조회된 전체 영화 수: " + allMovies.size());
+            
             List<MovieView> movies = allMovies.stream()
                     .filter(movie -> !scheduleRepository.existsByMoviecd(movie.getMoviecd()))
                     .collect(Collectors.toList());
+            System.out.println("스케줄 생성 대상 영화 수: " + movies.size());
 
             System.out.println("스케줄 생성 대상 영화 목록:");
             for (MovieView movie : movies) {
-                System.out.println(String.format("영화 코드: %s, 영화 이름: %s",
-                        movie.getMoviecd(), movie.getMovienm()));
+                // runningtime 확인 및 로깅 (수정하지 않음)
+                int actualRunningTime = (movie.getRunningtime() != null && movie.getRunningtime() > 0) 
+                    ? movie.getRunningtime() 
+                    : 120; // 기본값
+                    
+                if (movie.getRunningtime() == null || movie.getRunningtime() <= 0) {
+                    System.out.println(String.format("영화 코드: %s, 영화 이름: %s, 상영시간: %d분 (기본값 적용)",
+                            movie.getMoviecd(), movie.getMovienm(), actualRunningTime));
+                } else {
+                    System.out.println(String.format("영화 코드: %s, 영화 이름: %s, 상영시간: %d분",
+                            movie.getMoviecd(), movie.getMovienm(), actualRunningTime));
+                }
             }
+            
+            if (movies.isEmpty()) {
+                return "스케줄을 생성할 수 있는 영화가 없습니다. 영화 데이터를 먼저 등록해주세요.";
+            }
+            
             List<String> screens = generateScreenCodes();
+            System.out.println("생성된 상영관 코드 수: " + screens.size());
             Map<String, List<Schedule>> screenSchedules = new HashMap<>();
             for (String screen : screens) {
                 screenSchedules.put(screen,
@@ -77,10 +100,15 @@ public class ScheduleService {
 
             int totalSchedules = 0;
             for (MovieView movie : movies) {
+                // runningtime 안전하게 처리
+                int actualRunningTime = (movie.getRunningtime() != null && movie.getRunningtime() > 0) 
+                    ? movie.getRunningtime() 
+                    : 120; // 기본값
+                    
                 // 기존 스케줄 여부 확인
                 boolean hasPreviousSchedules = scheduleRepository.existsByMoviecd(movie.getMoviecd());
                 List<LocalDate> targetDates = hasPreviousSchedules ? List.of(endDate) : // 기존/재진입 영화: 마지막 날만
-                        generateDateRange(startDate, endDate); // 신규 영화: 7일 모두
+                        generateDateRange(startDate, endDate); // 신규 영화: 30일 모두
 
                 int schedulesPerDay = SCHEDULES_PER_MOVIE / Math.max(1, targetDates.size()); // 균등 분배
                 for (LocalDate date : targetDates) {
@@ -88,10 +116,10 @@ public class ScheduleService {
                         String scheduleCode = generateScheduleCode();
                         String screenCode = screens.get(RANDOM.nextInt(screens.size()));
                         LocalDateTime startTime = generateValidStartTime(screenSchedules.get(screenCode), date,
-                                movie.getRunningtime());
+                                actualRunningTime);
 
                         if (startTime != null) {
-                            LocalDateTime endTime = startTime.plusMinutes(movie.getRunningtime());
+                            LocalDateTime endTime = startTime.plusMinutes(actualRunningTime);
                             Schedule schedule = new Schedule();
                             schedule.setSchedulecd(scheduleCode);
                             schedule.setMoviecd(movie.getMoviecd());
@@ -112,6 +140,13 @@ public class ScheduleService {
                         }
                     }
                 }
+            }
+
+            // SQL 파일 저장
+            try (FileWriter writer = new FileWriter("schedule_inserts_" + startDate + ".sql")) {
+                writer.write(sqlOutput.toString());
+            } catch (IOException e) {
+                throw new RuntimeException("SQL 파일 작성 실패: " + e.getMessage());
             }
 
             return String.format("%s에 대한 스케줄 %d개 생성 완료", endDate, totalSchedules);

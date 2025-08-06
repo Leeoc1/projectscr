@@ -46,39 +46,15 @@ FROM review r
     LEFT JOIN users u ON r.userid = u.userid
     LEFT JOIN movie m ON r.moviecd = m.moviecd;
 
-
+-- create moviewithschedule view (스케줄이 있는 영화)
 CREATE OR REPLACE VIEW moviewithschedule AS
-SELECT
-    m.moviecd,
-    m.movienm,
-    m.description,
-    m.genre,
-    m.director,
-    m.actors,
-    m.runningtime,
-    m.releasedate,
-    m.posterurl,
-    m.runningscreen,
-    m.movieinfo,
-    m.isadult,
-    mr.movierank
-FROM
-    movie m
-INNER JOIN
-    schedule s ON m.moviecd = s.moviecd -- LEFT JOIN을 INNER JOIN으로 변경
-LEFT JOIN
-    movierank mr ON m.moviecd = mr.movierankcd
-GROUP BY
-    m.moviecd,
-    m.movienm,
-    m.description,
-    m.genre,
-    m.director,
-    m.actors,
-    m.runningtime,
-    m.releasedate,
-    m.posterurl,
-    m.runningscreen,
-    m.movieinfo,
-    m.isadult,
-    mr.movierank;
+SELECT m.moviecd, m.movienm, m.description, m.genre, m.director, m.actors, m.runningtime, m.releasedate, m.posterurl, m.runningscreen, m.movieinfo, m.isadult, mr.movierank
+FROM movie m
+    LEFT JOIN movierank mr ON m.moviecd = mr.movierankcd
+WHERE
+    EXISTS (
+        SELECT 1
+        FROM schedule s
+        WHERE
+            s.moviecd = m.moviecd
+    );

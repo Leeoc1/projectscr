@@ -23,7 +23,6 @@ import ReservationPlaceToMoviePage from "./pages/reservation/components/Reservat
 import ReservationSeatPage from "./pages/reservation/components/ReservationSeatPage";
 import ReservationPaymentPage from "./pages/reservation/components/ReservationPaymentPage";
 import ReservationSuccessPage from "./pages/reservation/components/ReservationSuccessPage";
-import TheaterInfoPage from "./pages/TheaterInfoPage/TheaterInfoPage";
 import NoticeContents from "./pages/NoticePage/NoticeContentsPage/NoticeContents";
 import { CheckoutPage } from "./pages/reservation/Payments/Chekout";
 import { SuccessPage } from "./pages/reservation/Payments/Success";
@@ -47,7 +46,7 @@ function KakaoLoginHandler() {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-    
+
     // 카카오 로그인 성공 파라미터가 있는지 확인
     if (urlParams.get("kakao_login") === "success") {
       const tokenizedUserid = urlParams.get("userid");
@@ -55,41 +54,37 @@ function KakaoLoginHandler() {
       const accessToken = urlParams.get("access_token");
 
       if (tokenizedUserid) {
-        console.log("카카오 로그인 URL 파라미터 처리 시작");
-        
         // JWT 토큰을 디코딩하여 실제 userid 추출
-        decodeUserid(tokenizedUserid).then((realUserid) => {
-          if (realUserid) {
-            // 로컬스토리지에 로그인 상태 저장 (보안을 위해 토큰화된 데이터만 저장)
-            localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("userid", tokenizedUserid); // JWT 토큰화된 userid 저장 (실제 userid 아님)
-            
-            // username은 보안상 저장하지 않음 (필요시 API로 조회)
-            // localStorage.setItem("username", decodedUsername); // 제거
+        decodeUserid(tokenizedUserid)
+          .then((realUserid) => {
+            if (realUserid) {
+              // 로컬스토리지에 로그인 상태 저장 (보안을 위해 토큰화된 데이터만 저장)
+              localStorage.setItem("isLoggedIn", "true");
+              localStorage.setItem("userid", tokenizedUserid); // JWT 토큰화된 userid 저장 (실제 userid 아님)
 
-            if (accessToken) {
-              const decodedAccessToken = decodeURIComponent(accessToken);
-              localStorage.setItem("kakao_access_token", decodedAccessToken);
-              console.log("카카오 액세스 토큰 저장됨");
+              // username은 보안상 저장하지 않음 (필요시 API로 조회)
+              // localStorage.setItem("username", decodedUsername); // 제거
+
+              if (accessToken) {
+                const decodedAccessToken = decodeURIComponent(accessToken);
+                localStorage.setItem("kakao_access_token", decodedAccessToken);
+              }
+
+              // URL에서 파라미터 제거하고 홈으로 이동
+              const currentPath = location.pathname;
+              const cleanUrl = currentPath === "/login" ? "/" : currentPath;
+              navigate(cleanUrl, { replace: true });
+            } else {
+              
+              alert("로그인 처리 중 오류가 발생했습니다.");
+              navigate("/login", { replace: true });
             }
-
-            console.log("카카오 로그인 성공 - JWT 토큰 저장:", tokenizedUserid);
-            console.log("카카오 로그인 성공 - 실제 userid (로그용):", realUserid);
-
-            // URL에서 파라미터 제거하고 홈으로 이동
-            const currentPath = location.pathname;
-            const cleanUrl = currentPath === "/login" ? "/" : currentPath;
-            navigate(cleanUrl, { replace: true });
-          } else {
-            console.error("JWT 토큰 디코딩 실패");
+          })
+          .catch((error) => {
+            
             alert("로그인 처리 중 오류가 발생했습니다.");
             navigate("/login", { replace: true });
-          }
-        }).catch((error) => {
-          console.error("JWT 토큰 디코딩 중 오류:", error);
-          alert("로그인 처리 중 오류가 발생했습니다.");
-          navigate("/login", { replace: true });
-        });
+          });
       }
     }
   }, [location, navigate]);
@@ -127,7 +122,7 @@ function AdminProtectedRoute({ children }) {
         const realUserid = await getCurrentUserId();
         setIsAdmin(realUserid === "master001");
       } catch (error) {
-        console.error("관리자 권한 확인 중 오류:", error);
+        
         setIsAdmin(false);
       } finally {
         setIsChecking(false);
@@ -226,7 +221,7 @@ function ReservationProtectedRoute({ children, requiredStep }) {
       break;
 
     case "checkout":
-      // /checkout은 finalReservationInfo에 finalPrice가 1원 이상이어야 접근 가능
+      // /checkout은 finalReservationInfo에 finalPrice가 0원 이상이어야 접근 가능
       const checkoutReservationInfo = sessionStorage.getItem(
         "finalReservationInfo"
       );
@@ -239,7 +234,7 @@ function ReservationProtectedRoute({ children, requiredStep }) {
           checkoutInfo.finalPrice === undefined ||
           checkoutInfo.finalPrice === null ||
           isNaN(checkoutInfo.finalPrice) ||
-          Number(checkoutInfo.finalPrice) < 1
+          Number(checkoutInfo.finalPrice) < 0
         ) {
           return <Navigate to="/movie" replace />;
         }
@@ -315,7 +310,6 @@ function App() {
         <Route path="/notice/:noticenum" element={<NoticeContents />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/theater/info" element={<TheaterInfoPage />} />
         <Route path="/mypage/myinfo" element={<MyInfo />} />
         <Route
           path="/mypage"
@@ -474,3 +468,4 @@ function App() {
 }
 
 export default App;
+

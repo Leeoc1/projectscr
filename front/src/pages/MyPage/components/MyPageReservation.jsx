@@ -1,5 +1,5 @@
 import React from "react";
-import "../MyPage.css";
+import "../styles/MyPageReservation.css";
 import { useState, useEffect } from "react";
 
 const MyPageReservation = ({
@@ -161,3 +161,4 @@ const MyPageReservation = ({
 };
 
 export default MyPageReservation;
+

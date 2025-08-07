@@ -12,10 +12,10 @@ export const api = axios.create({
 // 공통 API 호출 래퍼 함수
 export const apiRequest = async (url, config = {}) => {
   try {
-    const method = config.method?.toLowerCase() || 'get';
+    const method = config.method?.toLowerCase() || "get";
     const { method: _, body, ...restConfig } = config; // method 제거
     let response;
-    
+
     if (method === "delete" || method === "get") {
       // DELETE와 GET은 config만 전달 (method 속성 제외)
       response = await api[method](url, restConfig);
@@ -36,7 +36,6 @@ export const apiRequestPromise = (method, url, data = null, config = {}) => {
 
 // 공통 에러 처리 함수
 export const handleApiError = (error, defaultReturn = []) => {
-  console.error("API Error:", error);
   return defaultReturn;
 };
 
@@ -61,7 +60,6 @@ export const apiRequestWithErrorHandling = (
   return requestPromise
     .then((response) => response.data)
     .catch((error) => {
-      console.error(errorMessage, error);
       if (defaultReturn !== null) {
         return defaultReturn;
       }

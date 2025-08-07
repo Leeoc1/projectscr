@@ -9,7 +9,7 @@ import {
 import { isAvailableUserId, registerUser } from "../../../api/userApi";
 import SmsAuthForm from "./SmsAuthForm";
 import RegisterBirth from "./RegisterBirth";
-import Toast from "../../../components/Toast";
+import Toast from "../../../utils/Toast";
 import logoImg from "../../../images/logo_2.png";
 import "../styles/Register.css";
 
@@ -45,17 +45,18 @@ const Register = () => {
   );
 
   const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
 
-    if (e.target.name === "username") {
-      setValidationState({
-        ...validationState,
+    if (name === "username") {
+      setValidationState((prev) => ({
+        ...prev,
         usernameChecked: false,
         usernameAvailable: false,
-      });
+      }));
     }
   };
 
@@ -64,10 +65,10 @@ const Register = () => {
       const lengthValid = validateUsernameLength(formData.username);
       const formatValid = validateUsernameFormat(formData.username);
 
-      setValidationState({
-        ...validationState,
+      setValidationState((prev) => ({
+        ...prev,
         usernameError: !lengthValid || !formatValid,
-      });
+      }));
     }
   };
 
@@ -76,10 +77,10 @@ const Register = () => {
       const lengthValid = validatePasswordLength(formData.password);
       const strengthValid = validatePasswordStrength(formData.password);
 
-      setValidationState({
-        ...validationState,
+      setValidationState((prev) => ({
+        ...prev,
         passwordError: !lengthValid || !strengthValid,
-      });
+      }));
     }
   };
 
@@ -96,18 +97,17 @@ const Register = () => {
 
     try {
       const response = await isAvailableUserId(formData.username);
-      setValidationState({
-        ...validationState,
+      setValidationState((prev) => ({
+        ...prev,
         usernameChecked: true,
         usernameAvailable: response.available,
-      });
+      }));
       alert(
         response.available
           ? "사용 가능한 아이디입니다."
           : "이미 사용 중인 아이디입니다."
       );
     } catch (error) {
-      console.error("아이디 중복 체크 오류:", error);
       alert("아이디 중복 체크에 실패했습니다.");
     }
   };
@@ -146,21 +146,17 @@ const Register = () => {
       };
       const response = await registerUser(userData);
       if (response) {
-        // 회원가입 완료 메시지를 세션 스토리지에 저장
-        sessionStorage.setItem(
-          "welcomeMessage",
-          "환영합니다! 회원가입이 완료되었습니다.\n가입 환영 쿠폰이 지급되었습니다."
-        );
+        // 회원가입 완료 표시를 위한 플래그 저장 (로그인 성공 시에만 환영 메시지 표시)
+        sessionStorage.setItem("justRegistered", "true");
 
-        // 즉시 홈페이지로 리다이렉트
-        navigate("/");
+        // 로그인으로 리다이렉트
+        navigate("/login");
       } else {
         setToastMessage("회원가입에 실패했습니다.");
         setToastType("error");
         setShowToast(true);
       }
     } catch (error) {
-      console.error("회원가입 오류:", error);
       setToastMessage("회원가입에 실패했습니다.");
       setToastType("error");
       setShowToast(true);

@@ -15,7 +15,10 @@ const ReservationMoviePage = () => {
     };
   }, []);
   useEffect(() => {
-    sessionStorage.clear();
+    // 예매 과정 시작 시 기존 예매 정보만 정리 (로그인 정보는 유지)
+    sessionStorage.removeItem("finalReservationInfo");
+    sessionStorage.removeItem("selectedSeats");
+    sessionStorage.removeItem("reservationInfo");
   }, []);
 
   const handleTabChange = (tab) => {
@@ -58,3 +61,4 @@ const ReservationMoviePage = () => {
 };
 
 export default ReservationMoviePage;
+

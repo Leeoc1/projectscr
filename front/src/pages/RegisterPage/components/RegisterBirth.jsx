@@ -20,10 +20,11 @@ const RegisterBirth = ({ birthDate, setBirthDate }) => {
   }, [formBirth, setBirthDate]);
 
   const handleInputChange = (e) => {
-    setFormBirth({
-      ...formBirth,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormBirth((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
@@ -48,7 +49,7 @@ const RegisterBirth = ({ birthDate, setBirthDate }) => {
         onChange={handleInputChange}
         required
       >
-        <option value="" disabled selected hidden>
+        <option value="" disabled hidden>
           월
         </option>
         {[...Array(12)].map((_, i) => (
@@ -74,3 +75,4 @@ const RegisterBirth = ({ birthDate, setBirthDate }) => {
 };
 
 export default RegisterBirth;
+

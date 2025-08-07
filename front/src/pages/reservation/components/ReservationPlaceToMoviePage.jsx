@@ -4,7 +4,7 @@ import Header from "../../../shared/Header";
 import "../style/ReservationPlaceToMovie.css";
 import DateSelector from "../ReservationPage/tocinema/components/DateSelector";
 import MovieSelector from "../ReservationPage/tocinema/components/MovieSelector";
-import ScreenSelector from "../ReservationPage/tocinema/components/ScreenSelector";  
+import ScreenSelector from "../ReservationPage/tocinema/components/ScreenSelector";
 import ProgressBar from "./ProgressBar";
 
 const ReservationPlaceToMoviePage = () => {
@@ -67,12 +67,20 @@ const ReservationPlaceToMoviePage = () => {
       const cinemacd = sessionStorage.getItem("cinemacd");
       const cinemanm = sessionStorage.getItem("cinemanm");
       const selectedMovieTime = sessionStorage.getItem("selectedMovieTime");
+      const userToken = sessionStorage.getItem("token");
+      const userRole = sessionStorage.getItem("role");
 
-      sessionStorage.clear();
+      // 예매 관련 정보만 정리하고 필요한 정보들은 다시 설정
+      sessionStorage.removeItem("finalReservationInfo");
+      sessionStorage.removeItem("selectedSeats");
+      sessionStorage.removeItem("reservationInfo");
 
       if (cinemacd) sessionStorage.setItem("cinemacd", cinemacd);
       if (cinemanm) sessionStorage.setItem("cinemanm", cinemanm);
-      if (selectedMovieTime) sessionStorage.setItem("selectedMovieTime", selectedMovieTime);
+      if (selectedMovieTime)
+        sessionStorage.setItem("selectedMovieTime", selectedMovieTime);
+      if (userToken) sessionStorage.setItem("token", userToken);
+      if (userRole) sessionStorage.setItem("role", userRole);
     };
   }, []);
 
@@ -106,10 +114,7 @@ const ReservationPlaceToMoviePage = () => {
 
       {/* 좌석 선택 버튼 */}
       {isReadyToSeat && (
-        <button
-          className="reservation-seat-btn-fixed"
-          onClick={handleGoToSeat}
-        >
+        <button className="reservation-seat-btn-fixed" onClick={handleGoToSeat}>
           좌석 선택
         </button>
       )}
@@ -118,3 +123,4 @@ const ReservationPlaceToMoviePage = () => {
 };
 
 export default ReservationPlaceToMoviePage;
+

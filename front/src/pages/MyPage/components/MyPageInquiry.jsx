@@ -1,4 +1,6 @@
 import React from "react";
+import "../styles/MyPageInquiry.css";
+import "../styles/MyPageMain.css"; // section 스타일
 
 const MyPageInquiry = () => {
   return (
@@ -33,3 +35,4 @@ const MyPageInquiry = () => {
 };
 
 export default MyPageInquiry;
+

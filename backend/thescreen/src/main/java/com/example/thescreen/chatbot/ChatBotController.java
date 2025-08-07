@@ -1,226 +1,158 @@
 package com.example.thescreen.chatbot;
 
-import com.example.thescreen.entity.Cinema;
-import com.example.thescreen.entity.Faq;
-import com.example.thescreen.entity.Notice;
-import com.example.thescreen.entity.MovieView;
-import com.example.thescreen.repository.*;
+import com.example.thescreen.chatbot.service.AiService;
+import com.example.thescreen.chatbot.util.RequestValidator;
+import com.example.thescreen.chatbot.util.ResponseUtil;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+/**
+ * 챗봇 REST API 컨트롤러 - 간소화된 버전
+ * 요청 처리와 응답 생성에만 집중
+ */
 @RestController
 @RequestMapping("/chatbot")
 public class ChatBotController {
 
-    private final FaqRepository faqRepository;
-    private final ReservationViewRepository reservationViewRepository;
-    private final NoticeRepository noticeRepository;
-    private final MovieViewRepository movieViewRepository;
-    private final CinemaRepository  cinemaRepository;
+    private final ChatBotService chatBotService;
+    private final AiService aiService;
+    private final RequestValidator requestValidator;
+    private final ResponseUtil responseUtil;
 
-    public ChatBotController(FaqRepository faqRepository, ReservationViewRepository reservationViewRepository,
-                             NoticeRepository noticeRepository, MovieViewRepository movieViewRepository, CinemaRepository cinemaRepository) {
-        this.faqRepository = faqRepository;
-        this.reservationViewRepository = reservationViewRepository;
-        this.noticeRepository = noticeRepository;
-        this.movieViewRepository = movieViewRepository;
-        this.cinemaRepository = cinemaRepository;
+    public ChatBotController(ChatBotService chatBotService,
+            AiService aiService,
+            RequestValidator requestValidator,
+            ResponseUtil responseUtil) {
+        this.chatBotService = chatBotService;
+        this.aiService = aiService;
+        this.requestValidator = requestValidator;
+        this.responseUtil = responseUtil;
     }
 
+    /**
+     * 챗봇 질문 처리 메인 엔드포인트
+     */
     @GetMapping("/ask")
-    public Map<String, Object> ask(@RequestParam String question) {
+    public ResponseEntity<Map<String, Object>> ask(@RequestParam String question) {
         long startTime = System.currentTimeMillis();
-        Map<String, Object> response = new HashMap<>();
 
-        // 전체 FAQ, Notice, Movie 목록 확인
-        List<Faq> allFaqs = faqRepository.findAll();
-        List<Notice> allNotice = noticeRepository.findAll();
-        List<MovieView> allMovies = movieViewRepository.findAll();
+        try {
+            // 1. 입력 검증 및 정리
+            String cleanQuestion = requestValidator.cleanAndValidate(question);
 
-        String cleanQuestion = question.trim().toLowerCase();
+            // 2. AI 우선 처리 (추천, 줄거리 관련 질문을 가장 먼저 확인)
+            String lowerQuestion = cleanQuestion.toLowerCase();
+            System.out.println("=== AI 키워드 확인 ===");
+            System.out.println("원본 질문: " + question);
+            System.out.println("정리된 질문: " + cleanQuestion);
+            System.out.println("소문자 질문: " + lowerQuestion);
+            System.out.println("추천 포함: " + lowerQuestion.contains("추천"));
+            System.out.println("recommend 포함: " + lowerQuestion.contains("recommend"));
+            System.out.println("줄거리 포함: " + lowerQuestion.contains("줄거리"));
+            System.out.println("스토리 포함: " + lowerQuestion.contains("스토리"));
 
-        // 1. FAQ 제목에서 사용자 질문의 키워드 찾기
-        List<Faq> searchResults = faqRepository.findByFaqsubContainingIgnoreCase(cleanQuestion);
-        if (!searchResults.isEmpty()) {
-            response.put("type", "faq");
-            response.put("data", Map.of("content", searchResults.get(0).getFaqcontents()));
-            logResponse(startTime, response.toString(), "FAQ 기본 검색");
-            return response;
-        }
-
-        // 2. FAQ 제목에 질문 단어 포함 여부
-        for (Faq faq : allFaqs) {
-            String faqTitle = faq.getFaqsub().toLowerCase();
-            String userQuestion = cleanQuestion;
-
-            String[] questionWords = userQuestion.split("\\s+");
-            int matchCount = 0;
-
-            for (String word : questionWords) {
-                if (word.length() > 1 && faqTitle.contains(word)) {
-                    matchCount++;
-                }
+            if (lowerQuestion.contains("추천") || lowerQuestion.contains("recommend") ||
+                    lowerQuestion.contains("줄거리") || lowerQuestion.contains("스토리")) {
+                System.out.println("AI 키워드 매칭됨! AI 서비스로 직접 전달");
+                Map<String, Object> response = aiService.askAI(cleanQuestion);
+                responseUtil.logResponse(startTime, response.toString(), "AI 최우선 응답");
+                return responseUtil.createSuccessResponse(response);
+            } else {
+                System.out.println("AI 키워드 매칭 안됨, 일반 로직으로 진행");
             }
 
-            if (questionWords.length > 0 && (double) matchCount / questionWords.length >= 0.5) {
-                response.put("type", "faq");
-                response.put("data", Map.of("content", faq.getFaqcontents()));
-                logResponse(startTime, response.toString(), "FAQ 단어 매칭");
-                return response;
+            // 3. 요청 타입 판별 및 처리
+            Map<String, Object> response;
+            if (requestValidator.isQuickBookingRequest(cleanQuestion)) {
+                response = chatBotService.processNaturalLanguageBooking(question);
+                responseUtil.logResponse(startTime, response.toString(), "자연어 예매");
+            } else {
+                response = processGeneralQuestion(cleanQuestion, startTime);
             }
+
+            return responseUtil.createSuccessResponse(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return responseUtil.createErrorResponse("서버 내부 오류가 발생했습니다.", 500, startTime);
         }
-
-        // 3. Notice 제목에서 사용자 질문의 키워드 찾기
-        List<Notice> noticeSearchResults = noticeRepository.findByNoticesubContainingIgnoreCase(cleanQuestion);
-        if (!noticeSearchResults.isEmpty()) {
-            response.put("type", "notice");
-            response.put("data", Map.of("content", noticeSearchResults.get(0).getNoticecontents()));
-            logResponse(startTime, response.toString(), "Notice 기본 검색");
-            return response;
-        }
-
-        // 4. Notice 제목에 질문 단어 포함 여부
-        for (Notice notice : allNotice) {
-            String noticeTitle = notice.getNoticesub().toLowerCase();
-            String userQuestion = cleanQuestion;
-
-            String[] questionWords = userQuestion.split("\\s+");
-            int matchCount = 0;
-
-            for (String word : questionWords) {
-                if (word.length() > 1 && noticeTitle.contains(word)) {
-                    matchCount++;
-                }
-            }
-            if (questionWords.length > 0 && (double) matchCount / questionWords.length >= 0.5) {
-                response.put("type", "notice");
-                response.put("data", Map.of("content", notice.getNoticecontents()));
-                logResponse(startTime, response.toString(), "Notice 단어 매칭");
-                return response;
-            }
-        }
-
-        // 5. 탑10 영화 검색
-        if (cleanQuestion.contains("탑10") || cleanQuestion.contains("top10") || cleanQuestion.contains("인기 영화")) {
-            List<MovieView> topMovies = movieViewRepository.findMoviesWithRank();
-            if (!topMovies.isEmpty()) {
-                List<Map<String, Object>> movieList = topMovies.stream().limit(10).map(movie -> {
-                    Map<String, Object> movieData = new HashMap<>();
-                    movieData.put("name", movie.getMovienm());
-                    movieData.put("rank", movie.getMovierank());
-                    movieData.put("moviecd", movie.getMoviecd());
-                    return movieData;
-                }).collect(Collectors.toList());
-                response.put("type", "top10");
-                response.put("data", Map.of("movies", movieList));
-                logResponse(startTime, response.toString(), "탑10 영화 검색");
-                return response;
-            }
-        }
-
-        // 6. 영화 제목 검색
-        List<MovieView> movieSearchResults = movieViewRepository.findByMovienmContainingIgnoreCase(cleanQuestion);
-        if (!movieSearchResults.isEmpty()) {
-            MovieView movie = movieSearchResults.get(0);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String releaseDateStr = movie.getReleasedate() != null ? dateFormat.format(movie.getReleasedate()) : "미공개";
-            response.put("type", "movie");
-            response.put("data", Map.of(
-                    "name", movie.getMovienm(),
-                    "genre", movie.getGenre(),
-                    "movieinfo", movie.getDescription(),
-                    "releasedate", releaseDateStr,
-                    "runningtime", movie.getRunningtime(),
-                    "moviecd", movie.getMoviecd()
-            ));
-            logResponse(startTime, response.toString(), "영화 기본 검색");
-            return response;
-        }
-
-        // 극장명 검색
-        List<Cinema> cinemaSearchResults = cinemaRepository.findByCinemanmContainingIgnoreCase(cleanQuestion);
-        if (!cinemaSearchResults.isEmpty()) {
-            Cinema cinema = cinemaSearchResults.get(0);
-            response.put("type", "cinema");
-            response.put("data", Map.of(
-                    "cinemaname", cinema.getCinemanm(),
-                    "cinemaaddress", cinema.getAddress() != null ? cinema.getAddress() : "주소 정보 없음",
-                    "cinemastatus", cinema.getStatus() != null ? cinema.getStatus() : "상태 정보 없음",
-                    "cinematel", cinema.getTel() != null ? cinema.getTel() : "전화번호 정보 없음",
-                    "cinemacd", String.valueOf(cinema.getCinemacd())
-            ));
-            logResponse(startTime, response.toString(), "극장 기본 검색");
-            return response;
-        }
-
-        // 7. 영화 제목 단어 매칭
-        for (MovieView movie : allMovies) {
-            String movieTitle = movie.getMovienm().toLowerCase();
-            String userQuestion = cleanQuestion;
-
-            String[] questionWords = userQuestion.split("\\s+");
-            int matchCount = 0;
-
-            for (String word : questionWords) {
-                if (word.length() > 1 && movieTitle.contains(word)) {
-                    matchCount++;
-                }
-            }
-            if (questionWords.length > 0 && (double) matchCount / questionWords.length >= 0.5) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String releaseDateStr = movie.getReleasedate() != null ? dateFormat.format(movie.getReleasedate()) : "미공개";
-                response.put("type", "movie");
-                response.put("data", Map.of(
-                        "name", movie.getMovienm(),
-                        "genre", movie.getGenre(),
-                        "movieinfo", movie.getMovieinfo(),
-                        "releasedate", releaseDateStr,
-                        "runningtime", movie.getRunningtime(),
-                        "moviecd", movie.getMoviecd()
-                ));
-                logResponse(startTime, response.toString(), "영화 단어 매칭");
-                return response;
-            }
-        }
-
-        // 8. 검색 결과가 없으면 FAQ, Notice, 영화 제안 보여주기
-        Map<String, Object> suggestionData = new HashMap<>();
-        if (!allFaqs.isEmpty()) {
-            List<String> faqSuggestions = allFaqs.stream()
-                    .limit(3)
-                    .map(Faq::getFaqsub)
-                    .collect(Collectors.toList());
-            suggestionData.put("faqs", faqSuggestions);
-        }
-        if (!allNotice.isEmpty()) {
-            List<String> noticeSuggestions = allNotice.stream()
-                    .limit(3)
-                    .map(Notice::getNoticesub)
-                    .collect(Collectors.toList());
-            suggestionData.put("notices", noticeSuggestions);
-        }
-        if (!allMovies.isEmpty()) {
-            List<Map<String, String>> movieSuggestions = movieViewRepository.findMoviesWithRank().stream()
-                    .limit(3)
-                    .map(movie -> Map.of("name", movie.getMovienm(), "moviecd", movie.getMoviecd()))
-                    .collect(Collectors.toList());
-            suggestionData.put("movies", movieSuggestions);
-        }
-
-        response.put("type", "suggestion");
-        response.put("data", suggestionData);
-        logResponse(startTime, response.toString(), "제안 목록");
-        return response;
     }
 
-    private void logResponse(long startTime, String response, String searchType) {
-        long endTime = System.currentTimeMillis();
-        long processingTime = endTime - startTime;
-        System.out.println("Search Type: " + searchType + ", Processing Time: " + processingTime + "ms, Response: " + response);
+    /**
+     * 직접 예매 확인
+     */
+    @PostMapping("/direct-booking")
+    public ResponseEntity<Map<String, Object>> directBookingConfirm(@RequestBody Map<String, Object> bookingData) {
+        try {
+            Map<String, Object> result = chatBotService.directBookingConfirm(bookingData);
+            return responseUtil.createSuccessResponse(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return responseUtil.createErrorResponse("예매 처리 중 오류가 발생했습니다.", 500, System.currentTimeMillis());
+        }
+    }
+
+    /**
+     * CORS 옵션 처리
+     */
+    @RequestMapping(value = "/ask", method = RequestMethod.OPTIONS)
+    public ResponseEntity<?> handleOptions() {
+        return responseUtil.createOptionsResponse();
+    }
+
+    /**
+     * 일반 질문 처리 (검색 순서대로)
+     */
+    private Map<String, Object> processGeneralQuestion(String cleanQuestion, long startTime) {
+        Map<String, Object> response;
+
+        // 1. FAQ 검색
+        response = chatBotService.searchFAQ(cleanQuestion);
+        if (response != null) {
+            responseUtil.logResponse(startTime, response.toString(), "FAQ 검색");
+            return response;
+        }
+
+        // 2. 공지사항 검색
+        response = chatBotService.searchNotice(cleanQuestion);
+        if (response != null) {
+            responseUtil.logResponse(startTime, response.toString(), "공지사항 검색");
+            return response;
+        }
+
+        // 3. TOP10 영화 검색
+        response = chatBotService.searchTopMovies(cleanQuestion);
+        if (response != null) {
+            responseUtil.logResponse(startTime, response.toString(), "TOP10 영화 검색");
+            return response;
+        }
+
+        // 4. 영화 검색
+        response = chatBotService.searchMovie(cleanQuestion);
+        if (response != null) {
+            responseUtil.logResponse(startTime, response.toString(), "영화 검색");
+            return response;
+        }
+
+        // 5. 극장 검색
+        response = chatBotService.searchCinema(cleanQuestion);
+        if (response != null) {
+            responseUtil.logResponse(startTime, response.toString(), "극장 검색");
+            return response;
+        }
+
+        // 6. 극장별 영화 검색
+        response = chatBotService.searchCinemaMovies(cleanQuestion);
+        if (response != null) {
+            responseUtil.logResponse(startTime, response.toString(), "극장별 영화 검색");
+            return response;
+        }
+
+        // 7. 기본 AI 응답
+        response = chatBotService.askQuestion(cleanQuestion);
+        responseUtil.logResponse(startTime, response.toString(), "기본 응답");
+        return response;
     }
 }

@@ -1,9 +1,8 @@
 import React from "react";
 import "../styles/AdminSideBar.css";
-import {sidebarItems} from "../../../data/SideBarData.js"
+import { sidebarItems } from "../../../utils/data/SideBarData.js";
 
 const AdminSidebar = ({ activeTab, setActiveTab }) => {
-
   return (
     <div className="adsb-sidebar">
       <nav className="adsb-sidebar-nav">
@@ -25,3 +24,4 @@ const AdminSidebar = ({ activeTab, setActiveTab }) => {
 };
 
 export default AdminSidebar;
+

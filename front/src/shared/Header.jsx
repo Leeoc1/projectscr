@@ -4,6 +4,7 @@ import "./Header.css";
 import logoImg from "../images/logo_1.png";
 import { getUserInfo } from "../api/userApi";
 import { secureLogout, getCurrentUserId } from "../utils/tokenUtils";
+import QuickReservation from "./QuickReservation";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,9 +16,15 @@ export default function Header() {
     localStorage.getItem("isLoggedIn") === "true"
   );
   const [userid, setUserid] = useState(localStorage.getItem("userid") || "");
-  const [realUserid, setRealUserid] = useState(""); // 실제 userid (토큰 디코딩된)
-  const [username, setUsername] = useState(""); // DB에서 가져올 username
+  const [realUserid, setRealUserid] = useState(
+    localStorage.getItem("realUserid") || ""
+  ); // localStorage에서 실제 userid 가져오기
+  const [username, setUsername] = useState(
+    localStorage.getItem("username") || ""
+  ); // localStorage에서 username 가져오기
   const [isLoadingUser, setIsLoadingUser] = useState(false); // 사용자 정보 로딩 상태
+
+  const [showQuickReservation, setShowQuickReservation] = useState(false);
 
   // 로그인 상태 변화 감지 및 사용자 정보 로드
   useEffect(() => {
@@ -30,22 +37,38 @@ export default function Header() {
 
       // 로그인 상태이고 토큰화된 userid가 있으면 실제 userid로 DB 조회
       if (storedIsLoggedIn && tokenizedUserid) {
+        // 이미 realUserid와 username이 localStorage에 있으면 로딩 없이 사용
+        const storedRealUserid = localStorage.getItem("realUserid");
+        const storedUsername = localStorage.getItem("username");
+
+        if (storedRealUserid && storedUsername) {
+          setRealUserid(storedRealUserid);
+          setUsername(storedUsername);
+          setIsLoadingUser(false);
+          return; // 더 이상 API 호출하지 않고 리턴
+        }
+
         setIsLoadingUser(true); // 로딩 시작
         try {
-          // 토큰에서 실제 userid 추출
+          // 토큰에서 실제 userid 추출 (캐시되지 않은 경우에만)
           const realUserid = await getCurrentUserId();
 
           if (realUserid) {
             setRealUserid(realUserid); // 실제 userid 저장
-            const userInfo = await getUserInfo(realUserid);
-            setUsername(userInfo.username || realUserid);
+            localStorage.setItem("realUserid", realUserid); // localStorage에 저장
+
+            // username이 없는 경우에만 API 호출
+            if (!storedUsername) {
+              const userInfo = await getUserInfo(realUserid);
+              const newUsername = userInfo.username || realUserid;
+              setUsername(newUsername);
+              localStorage.setItem("username", newUsername); // localStorage에 저장
+            }
           } else {
             // 토큰이 유효하지 않으면 로그아웃
-            console.log("유효하지 않은 토큰으로 인한 자동 로그아웃");
             handleLogout();
           }
         } catch (error) {
-          console.error("토큰 디코딩 또는 사용자 정보 조회 실패:", error);
           // 오류 발생 시 로그아웃 처리
           handleLogout();
         } finally {
@@ -92,6 +115,25 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // 챗봇이 열릴 때 빠른예매 닫기 이벤트 리스너
+  useEffect(() => {
+    const handleCloseQuickReservation = () => {
+      setShowQuickReservation(false);
+    };
+
+    window.addEventListener(
+      "closeQuickReservation",
+      handleCloseQuickReservation
+    );
+
+    return () => {
+      window.removeEventListener(
+        "closeQuickReservation",
+        handleCloseQuickReservation
+      );
+    };
+  }, []);
+
   const goTheater = () => navigate("/theater");
   const goMovie = () => navigate("/movie");
   const goEvent = () => navigate("/event");
@@ -102,11 +144,22 @@ export default function Header() {
   const goNotice = () => navigate("/notice");
   const goHome = () => navigate("/");
   const goMyPage = () => navigate("/mypage");
+  const toggleQuickReservation = () => {
+    // 빠른예매를 열 때 챗봇 닫기 이벤트 발생
+    if (!showQuickReservation) {
+      window.dispatchEvent(new CustomEvent("closeChatBot"));
+    }
+    setShowQuickReservation(!showQuickReservation);
+  };
 
   // 로그아웃 핸들러
   const handleLogout = () => {
     // 보안 로그아웃 실행
     secureLogout();
+
+    // localStorage에서 username과 realUserid도 제거
+    localStorage.removeItem("username");
+    localStorage.removeItem("realUserid");
 
     // 상태 초기화
     setIsLoggedIn(false);
@@ -114,6 +167,7 @@ export default function Header() {
     setRealUserid("");
     setUsername("");
     setIsLoadingUser(false);
+    window.location.reload(); // 페이지 새로고침으로 상태 초기화
 
     // 홈페이지로 리다이렉트
     navigate("/");
@@ -142,7 +196,13 @@ export default function Header() {
             <a className="h-nav-item" onClick={goEvent}>
               이벤트
             </a>
+            <a className="h-nav-item" onClick={toggleQuickReservation}>
+              빠른예매
+            </a>
           </nav>
+          {showQuickReservation && isScrolled && (
+            <QuickReservation onClose={() => setShowQuickReservation(false)} />
+          )}
 
           {/* User Actions */}
           <div className="h-user-actions">
@@ -159,9 +219,7 @@ export default function Header() {
                     alt="User Icon"
                     className="h-user-icon-img"
                   />
-                  <span className="h-username">
-                    {isLoadingUser ? "로딩중..." : username || "사용자"}님
-                  </span>
+                  <span className="h-username">{username || "사용자"}님</span>
                 </div>
                 <button className="h-logout-btn" onClick={goNotice}>
                   고객센터
@@ -211,8 +269,14 @@ export default function Header() {
             <a className="h-nav-item" onClick={goEvent}>
               이벤트
             </a>
+            <a className="h-nav-item" onClick={toggleQuickReservation}>
+              빠른예매
+            </a>
           </nav>
         </div>
+        {showQuickReservation && !isScrolled && (
+          <QuickReservation onClose={() => setShowQuickReservation(false)} />
+        )}
       </div>
 
       {/* Mobile Menu */}

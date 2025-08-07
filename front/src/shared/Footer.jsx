@@ -1,4 +1,8 @@
 import "./Footer.css";
+import youtubeIcon from "../images/youtube-icon.svg";
+import instagramIcon from "../images/instagram-icon.svg";
+import facebookIcon from "../images/facebook-icon.svg";
+import twitterIcon from "../images/twitter-icon.svg";
 
 export default function Footer() {
   return (
@@ -65,7 +69,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="social-link"
               >
-                <img src="/images/youtube-icon.svg" alt="YouTube" />
+                <img src={youtubeIcon} alt="YouTube" />
               </a>
               <a
                 href="https://www.instagram.com"
@@ -73,7 +77,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="social-link"
               >
-                <img src="/images/instagram-icon.svg" alt="Instagram" />
+                <img src={instagramIcon} alt="Instagram" />
               </a>
               <a
                 href="https://www.facebook.com"
@@ -81,7 +85,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="social-link"
               >
-                <img src="/images/facebook-icon.svg" alt="Facebook" />
+                <img src={facebookIcon} alt="Facebook" />
               </a>
               <a
                 href="https://www.twitter.com"
@@ -89,7 +93,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="social-link"
               >
-                <img src="/images/twitter-icon.svg" alt="Twitter" />
+                <img src={twitterIcon} alt="Twitter" />
               </a>
             </div>
           </div>
@@ -98,3 +102,4 @@ export default function Footer() {
     </footer>
   );
 }
+

@@ -42,7 +42,7 @@ const TheaterMovieList = ({ cinemacd, onMovieCountChange, theater }) => {
         onMovieCountChange(theaterMovies.length);
       }
     } catch (error) {
-      console.error("극장 영화 목록 조회 실패:", error);
+      
       setMovies([]);
       if (onMovieCountChange) {
         onMovieCountChange(0);
@@ -98,3 +98,4 @@ const TheaterMovieList = ({ cinemacd, onMovieCountChange, theater }) => {
 };
 
 export default TheaterMovieList;
+

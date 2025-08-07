@@ -217,6 +217,7 @@
 }
 
 .h-nav-bottom {
+  position: relative;
   background-color: #1a1a1a;
   border-top: 1px solid #4b5563;
   transition: all 0.3s ease;

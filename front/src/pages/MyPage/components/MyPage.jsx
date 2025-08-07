@@ -1,4 +1,4 @@
-import "../MyPage.css";
+import "../styles/MyPageMain.css";
 import Header from "../../../shared/Header";
 import Footer from "../../../shared/Footer";
 import { useState, useEffect } from "react";
@@ -41,8 +41,7 @@ const MyPage = () => {
       try {
         // 토큰에서 실제 userid 추출
         const userid = await getCurrentUserId();
-        console.log("MyPage 컴포넌트 - userid:", userid);
-        
+
         if (userid) {
           // 사용자 정보 조회
           const userResponse = await getUserInfo(userid);
@@ -57,7 +56,7 @@ const MyPage = () => {
           setWishlist(wishlistResponse);
         }
       } catch (error) {
-        console.error("사용자 데이터 조회 오류:", error);
+        
       } finally {
         setLoading(false);
       }
@@ -103,17 +102,13 @@ const MyPage = () => {
     try {
       // 토큰에서 실제 userid 추출
       const userid = await getCurrentUserId();
-      console.log("회원탈퇴 처리 시작 - userid:", userid);
 
       if (userid) {
-        console.log("DELETE 요청 전송 중...");
         const response = await deleteUser(userid);
-        console.log("회원탈퇴 응답:", response);
 
         // 자동 로그아웃 처리
         const logoutSuccess = logoutUser();
         if (logoutSuccess) {
-          console.log("자동 로그아웃 처리 완료");
         }
 
         // 회원탈퇴 모달 닫기
@@ -128,14 +123,14 @@ const MyPage = () => {
         // 페이지 새로고침으로 완전한 상태 초기화
         window.location.reload();
       } else {
-        console.error("userid가 없습니다.");
+        
         alert("로그인 정보를 찾을 수 없습니다.");
       }
     } catch (error) {
-      console.error("회원탈퇴 오류:", error);
-      console.error("에러 응답:", error.response);
-      console.error("에러 상태 코드:", error.response?.status);
-      console.error("에러 메시지:", error.response?.data || error.message);
+      
+      
+      
+      
 
       if (error.response?.status === 404) {
         alert(
@@ -150,9 +145,23 @@ const MyPage = () => {
       }
     }
   };
+
   // 히스토리 모달 열기/닫기
   const handleOpenHistoryModal = () => setShowHistoryModal(true);
   const handleCloseHistoryModal = () => setShowHistoryModal(false);
+
+  // 예약 목록 새로고침 함수
+  const refreshReservations = async () => {
+    try {
+      const userid = await getCurrentUserId();
+      if (userid) {
+        const reservationsResponse = await getUserReservations(userid);
+        setUserReservations(reservationsResponse);
+      }
+    } catch (error) {
+      
+    }
+  };
 
   return (
     <div>
@@ -180,6 +189,7 @@ const MyPage = () => {
               selectedReservation={selectedReservation}
               handleCloseModal={handleCloseModal}
               setUserReservations={setUserReservations}
+              refreshReservations={refreshReservations}
             />
             {/* 히스토리 모달 */}
             <MyPageHistory
@@ -298,3 +308,4 @@ const MyPage = () => {
 };
 
 export default MyPage;
+

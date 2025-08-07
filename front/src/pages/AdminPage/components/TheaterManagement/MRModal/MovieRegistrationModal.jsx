@@ -51,7 +51,7 @@ const MovieRegistrationModal = ({ theater, onClose }) => {
         const categorizedMovies = await categorizeMovies();
         setMovies(categorizedMovies);
       } catch (error) {
-        console.error("영화 목록 조회 실패:", error);
+        
       } finally {
         setLoading(false);
       }
@@ -87,7 +87,7 @@ const MovieRegistrationModal = ({ theater, onClose }) => {
         const categorizedMovies = await categorizeMovies();
         setMovies(categorizedMovies);
       } catch (error) {
-        console.error("영화 목록 새로고침 실패:", error);
+        
       } finally {
         setLoading(false);
       }
@@ -142,3 +142,4 @@ const MovieRegistrationModal = ({ theater, onClose }) => {
 };
 
 export default MovieRegistrationModal;
+

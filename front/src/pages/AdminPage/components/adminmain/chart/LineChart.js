@@ -106,3 +106,4 @@ const LineChartComponent = ({
 };
 
 export default LineChartComponent;
+

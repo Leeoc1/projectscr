@@ -53,7 +53,7 @@ export function getHeaderText(selectedDate, today = new Date()) {
   else if (diffDays === 1) label = "(내일)";
   else if (diffDays === 2) label = "(모레)";
   else label = `(${WEEKDAYS[selectedDate.getDay()]})`;
-  
+
   return `${selectedDate.getFullYear()}-${String(
     selectedDate.getMonth() + 1
   ).padStart(2, "0")}-${String(selectedDate.getDate()).padStart(2, "0")}${label}`;
@@ -66,3 +66,4 @@ export function formatDate(date) {
   const d = String(date.getDate()).padStart(2, "0");
   return `${y}-${m}-${d}`;
 } 
+

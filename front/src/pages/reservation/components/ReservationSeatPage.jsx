@@ -89,7 +89,7 @@ const ReservationSeatPage = () => {
   allSeats.forEach((seat) => {
     seatCount[seat] = (seatCount[seat] || 0) + 1;
   });
-  console.log("Reserved Seats:", seatCount);
+
   const totalPrice =
     guestCount.adult * PRICES.adult +
     guestCount.child * PRICES.child +
@@ -318,3 +318,4 @@ const ReservationSeatPage = () => {
 };
 
 export default ReservationSeatPage;
+

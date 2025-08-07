@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../MyPage.css";
+import "../styles/MyAccount.css";
 import MyCoupons from "./MyCoupons";
 
 const MyAccount = ({ loading, userInfo, currentPage }) => {
@@ -75,3 +75,4 @@ const MyAccount = ({ loading, userInfo, currentPage }) => {
 };
 
 export default MyAccount;
+

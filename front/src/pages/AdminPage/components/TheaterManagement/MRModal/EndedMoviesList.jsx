@@ -1,5 +1,5 @@
 import React from "react";
-import { getRating } from "../../../../../data/MovieInfo";
+import { getRating } from "../../../../../utils/data/MovieInfo";
 
 const EndedMoviesList = ({ movieList }) => (
   <div className="mrm-movie-list">
@@ -39,3 +39,4 @@ const EndedMoviesList = ({ movieList }) => (
 );
 
 export default EndedMoviesList;
+

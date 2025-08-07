@@ -1,14 +1,21 @@
 import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BackNavigationModal from "../../../components/BackNavigationModal";
+import BackNavigationModal from "../../../utils/BackNavigationModal";
+import { getCurrentUserIdForPayment } from "../../../utils/tokenUtils";
+import { getUserInfo } from "../../../api/userApi";
+import { saveReservation, savePayment } from "../../../api/reservationApi";
+import { useCoupon as applyCoupon } from "../../../api/couponApi";
+import {
+  cleanupOnReservationCancel,
+  logSessionState,
+} from "../../../utils/sessionCleanup";
 import "./paycss/pay.css";
 
 // TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
 // TODO: 구매자의 고유 아이디를 불러와서 customerKey로 설정하세요. 이메일・전화번호와 같이 유추가 가능한 값은 안전하지 않습니다.
 // @docs https://docs.tosspayments.com/sdk/v2/js#토스페이먼츠-초기화
 const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
-const customerKey = generateRandomString();
 
 export function CheckoutPage() {
   const navigate = useNavigate();
@@ -19,13 +26,24 @@ export function CheckoutPage() {
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState(null);
   const [showBackModal, setShowBackModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+  const [customerKey, setCustomerKey] = useState(null);
+  const [orderId] = useState(generateRandomString());
+  const [isPaymentLoading, setIsPaymentLoading] = useState(false);
+
+  // 결제 페이지 접근 시 로그인 상태 로깅
+  useEffect(() => {
+    // 세션 상태 로깅
+    logSessionState("(결제 페이지 접근)");
+  }, []);
 
   // 뒤로가기 방지 및 세션 보안 처리 (결제 위젯 페이지)
   useEffect(() => {
     // 결제 위젯에서 뒤로가기 방지 (더 엄격하게)
     const handlePopState = (event) => {
       event.preventDefault();
-      
+
       // 모달을 표시하고 히스토리를 다시 푸시
       setShowBackModal(true);
       window.history.pushState(null, "", window.location.href);
@@ -63,47 +81,50 @@ export function CheckoutPage() {
       currency: "KRW",
       value: price || 0,
     });
-    console.log("=== Checkout 페이지의 예약 정보 ===");
-    console.log("전체 예약 정보:", reservationInfo);
-    console.log("영화 제목:", reservationInfo.movienm);
-    console.log("극장명:", reservationInfo.cinemanm);
-    console.log("상영관:", reservationInfo.screenname);
-    console.log("상영 시간:", reservationInfo.starttime);
-    console.log("러닝타임:", reservationInfo.runningtime);
-    console.log("선택된 좌석:", reservationInfo.selectedSeats);
-    console.log("인원 정보:", reservationInfo.guestCount);
-    console.log("총 인원:", reservationInfo.totalGuests);
-    console.log("최종 결제 금액:", price);
-    console.log("================================");
   }, []);
+
+  // 사용자 정보 가져오기
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const userid = await getCurrentUserIdForPayment();
+      if (userid) {
+        setCustomerKey(userid);
+        const userData = await getUserInfo(userid);
+        setUserInfo(userData);
+        
+        // 0원 결제인 경우 위젯 없이도 ready 상태로 설정
+        if (amount.value === 0) {
+          setReady(true);
+        }
+      }
+    };
+
+    fetchUserInfo();
+  }, [amount.value]);
 
   useEffect(() => {
     async function fetchPaymentWidgets() {
-      try {
-        // ------  SDK 초기화 ------
-        // @docs https://docs.tosspayments.com/sdk/v2/js#토스페이먼츠-초기화
-        const tossPayments = await loadTossPayments(clientKey);
+      if (!customerKey) return;
 
-        // 회원 결제
-        // @docs https://docs.tosspayments.com/sdk/v2/js#tosspaymentswidgets
-        const widgets = tossPayments.widgets({
-          customerKey,
-        });
-        // 비회원 결제
-        // const widgets = tossPayments.widgets({ customerKey: ANONYMOUS });
-
-        setWidgets(widgets);
-      } catch (error) {
-        console.error("Error fetching payment widget:", error);
-      }
+      const tossPayments = await loadTossPayments(clientKey);
+      const widgets = tossPayments.widgets({
+        customerKey,
+      });
+      setWidgets(widgets);
     }
 
     fetchPaymentWidgets();
-  }, [clientKey, customerKey]);
+  }, [customerKey]);
 
   useEffect(() => {
     async function renderPaymentWidgets() {
       if (widgets == null) {
+        return;
+      }
+
+      // 0원 결제인 경우 위젯 렌더링 스킵하고 바로 ready 상태로 변경
+      if (amount.value === 0) {
+        setReady(true);
         return;
       }
 
@@ -133,7 +154,7 @@ export function CheckoutPage() {
     }
 
     renderPaymentWidgets();
-  }, [widgets]);
+  }, [widgets, amount.value]);
 
   // 모달 핸들러 함수들
   const handleBackModalClose = () => {
@@ -141,55 +162,141 @@ export function CheckoutPage() {
   };
 
   const handleBackModalConfirm = () => {
-    // 결제 취소 시 완전히 세션 정리
-    sessionStorage.clear();
+    // 체계적인 세션 정리
+    cleanupOnReservationCancel();
+
     navigate("/", { replace: true }); // 홈으로 이동
+  };
+
+  // 확인 모달 핸들러 함수들
+  const handleConfirmModalClose = () => {
+    setShowConfirmModal(false);
+  };
+
+  const handleConfirmModalConfirm = async () => {
+    setShowConfirmModal(false);
+    
+    try {
+      setIsPaymentLoading(true);
+      await processFreePayment(orderId, navigate);
+    } catch (error) {
+      alert("예매 처리 중 오류가 발생했습니다: " + error.message);
+    } finally {
+      setIsPaymentLoading(false);
+    }
+  };
+
+  // 결제 처리 함수
+  const handlePaymentClick = async () => {
+    if (isPaymentLoading || amount.value < 0 || !userInfo) {
+      return;
+    }
+
+    try {
+      setIsPaymentLoading(true);
+
+      // 0원 결제 처리 - 확인 모달 표시
+      if (amount.value === 0) {
+        setIsPaymentLoading(false); // 모달 표시 전에 로딩 해제
+        setShowConfirmModal(true);
+        return;
+      }
+
+      // 유료 결제 처리
+      if (!widgets) {
+        alert("결제 시스템을 준비하는 중입니다. 잠시 후 다시 시도해주세요.");
+        return;
+      }
+
+      const paymentData = {
+        orderId: orderId,
+        orderName: "영화 예매",
+        successUrl: window.location.origin + "/success",
+        failUrl: window.location.origin + "/fail",
+        customerEmail: userInfo?.email || "guest@example.com",
+        customerName: userInfo?.username || "게스트",
+        customerMobilePhone: userInfo?.phone?.replace(/[-\s]/g, "") || "01012341234",
+      };
+
+      sessionStorage.setItem("paymentRequestData", JSON.stringify(paymentData));
+      await widgets.requestPayment(paymentData);
+
+    } catch (error) {
+      let errorMessage = "결제 요청 중 오류가 발생했습니다.";
+
+      if (error.code === "USER_CANCEL") {
+        errorMessage = "결제가 취소되었습니다.";
+      } else if (error.code === "INVALID_CARD") {
+        errorMessage = "유효하지 않은 카드 정보입니다.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      alert(errorMessage);
+    } finally {
+      setIsPaymentLoading(false);
+    }
   };
 
   return (
     <div className="pay-body">
       <div className="wrapper">
         <div className="box_section">
-          {/* 결제 UI */}
-          <div id="payment-method" />
-          {/* 이용약관 UI */}
-          <div id="agreement" />
+          {/* 0원인 경우 쿠폰 사용 안내 */}
+          {amount.value === 0 && (
+            <div className="coupon-payment-notice" style={{
+              padding: "20px",
+              backgroundColor: "#e8f5e8",
+              borderRadius: "8px",
+              textAlign: "center",
+              marginBottom: "20px",
+              border: "1px solid #28a745"
+            }}>
+              <h4 style={{ color: "#28a745", margin: "0 0 8px 0" }}>🎫 쿠폰 적용으로 예매</h4>
+            </div>
+          )}
+
+          {/* 0원이 아닌 경우에만 결제 UI 표시 */}
+          {amount.value > 0 && (
+            <>
+              {/* 결제 UI */}
+              <div id="payment-method" />
+              {/* 이용약관 UI */}
+              <div id="agreement" />
+            </>
+          )}
 
           {/* 최종 결제 금액 표시 */}
           <div
             className="checkout-final-amount"
-            style={{ fontSize: "24px", fontWeight: "bold", marginTop: "30px" }}
+            style={{ 
+              fontSize: "24px", 
+              fontWeight: "bold", 
+              marginTop: "30px",
+              color: amount.value === 0 ? "#28a745" : "#333"
+            }}
           >
             최종 결제 금액: {amount.value.toLocaleString()}원
+            {amount.value === 0 && <span>✨</span>}
           </div>
 
           {/* 결제하기 버튼 */}
           <button
             className="button"
             style={{ marginTop: "30px" }}
-            disabled={!ready}
-            onClick={async () => {
-              try {
-                // 결제 요청 시 amount.value(즉, finalPrice)로 결제
-                await widgets.requestPayment({
-                  orderId: generateRandomString(),
-                  orderName: "영화 예매",
-                  successUrl: window.location.origin + "/success",
-                  failUrl: window.location.origin + "/fail",
-                  customerEmail: "customer123@gmail.com",
-                  customerName: "전요한",
-                  customerMobilePhone: "01012341234",
-                });
-              } catch (error) {
-                console.error(error);
-              }
-            }}
+            disabled={isPaymentLoading || amount.value < 0 || !userInfo || (amount.value > 0 && (!ready || !widgets))}
+            onClick={handlePaymentClick}
           >
-            결제하기
+            {isPaymentLoading 
+              ? "처리 중..." 
+              : amount.value === 0 
+                ? "예매하기" 
+                : "결제하기"
+            }
           </button>
         </div>
       </div>
-      
+
       {/* 뒤로가기 확인 모달 */}
       <BackNavigationModal
         isOpen={showBackModal}
@@ -201,8 +308,69 @@ export function CheckoutPage() {
         confirmText="결제 취소"
         cancelText="계속 진행"
       />
+
+      {/* 0원 결제 확인 모달 */}
+      <BackNavigationModal
+        isOpen={showConfirmModal}
+        onClose={handleConfirmModalClose}
+        onConfirm={handleConfirmModalConfirm}
+        title="🎫 예매 확인"
+        message="정말 예매하시겠습니까?"
+        submessage="쿠폰이 사용되어 예매가 완료됩니다."
+        confirmText="네"
+        cancelText="아니오"
+      />
     </div>
   );
+}
+
+// 0원 결제 처리 함수
+async function processFreePayment(orderId, navigate) {
+  const reservationInfo = JSON.parse(
+    sessionStorage.getItem("finalReservationInfo") || "{}"
+  );
+  const userid = await getCurrentUserIdForPayment();
+
+  // 1. 결제 정보 저장
+  const paymentResult = await savePayment({
+    orderId: orderId,
+    method: "쿠폰",
+    amount: 0,
+  });
+
+  if (!paymentResult?.paymentcd) {
+    throw new Error("결제 정보 저장에 실패했습니다.");
+  }
+
+  // 2. 쿠폰 사용 처리
+  if (reservationInfo.usedCoupon && !reservationInfo.couponAlreadyUsed) {
+    try {
+      await applyCoupon(userid, reservationInfo.usedCoupon.couponnum);
+      reservationInfo.couponAlreadyUsed = true;
+      sessionStorage.setItem("finalReservationInfo", JSON.stringify(reservationInfo));
+    } catch (couponError) {
+      // 쿠폰 사용 실패해도 예약은 계속 진행
+      console.warn("쿠폰 사용 실패:", couponError);
+    }
+  }
+
+  // 3. 예약 정보 저장
+  const reservationResult = await saveReservation({
+    schedulecd: reservationInfo.schedulecd,
+    seatcd: reservationInfo.selectedSeats,
+    paymentcd: paymentResult.paymentcd,
+    userid,
+  });
+
+  if (reservationResult?.success === false) {
+    throw new Error(`예약 저장에 실패했습니다: ${reservationResult.message || '알 수 없는 오류'}`);
+  }
+
+  // 4. 예약 완료 처리
+  reservationInfo.reservationCompleted = true;
+  sessionStorage.setItem("finalReservationInfo", JSON.stringify(reservationInfo));
+  
+  navigate("/reservation/success", { replace: true });
 }
 
 function generateRandomString() {

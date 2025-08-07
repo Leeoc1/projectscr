@@ -1,12 +1,11 @@
 package com.example.thescreen.controller;
 
 import com.example.thescreen.entity.Movie;
-import com.example.thescreen.entity.MovieSchedule;
 import com.example.thescreen.entity.MovieView;
+import com.example.thescreen.entity.MovieWithSchedule;
 import com.example.thescreen.repository.MovieRepository;
-import com.example.thescreen.repository.MovieScheduleRepository;
 import com.example.thescreen.repository.MovieViewRepository;
-//import com.example.thescreen.service.FetchMovieService;
+import com.example.thescreen.repository.MovieWIthScheduleRepository;
 import com.example.thescreen.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,8 +31,8 @@ public class MovieController {
     private final MovieViewRepository movieViewRepository;
     private final MovieService movieService;
     private final JdbcTemplate jdbcTemplate;
-//    private final FetchMovieService fetchMovieService;
-    private final MovieScheduleRepository movieScheduleRepository;
+    // private final FetchMovieService fetchMovieService;
+    private final MovieWIthScheduleRepository movieWIthScheduleRepository;
 
     /**
      * 애플리케이션 시작 시 자동으로 영화 순위 업데이트
@@ -58,23 +56,22 @@ public class MovieController {
     }
 
     /**
-     * ✅ 2) 현재 상영작 조회 (상영 중인 영화만)
+     * ✅ 2) 현재 상영작 조회 (스케줄이 있는 모든 영화 포함)
      */
     @GetMapping("/current")
-    public List<MovieSchedule> getCurrentMovies() {
+    public List<MovieWithSchedule> getCurrentMovies() {
         LocalDate today = LocalDate.now();
-//        return movieRepository.findCurrentScreeningMovies(today);
-        return movieScheduleRepository.findCurrentScreeningMovies(today);
+        return movieWIthScheduleRepository.findCurrentScreeningMovies(today);
     }
 
     /**
      * ✅ 3) 상영 예정작 조회 (상영 중인 영화만)
      */
     @GetMapping("/upcoming")
-    public List<MovieSchedule> getUpcomingMovies() {
+    public List<MovieWithSchedule> getUpcomingMovies() {
         LocalDate today = LocalDate.now();
-//        return movieRepository.findUpcomingScreeningMovies(today);
-        return movieScheduleRepository.findUpcomingScreeningMovies(today);
+        // return movieRepository.findUpcomingScreeningMovies(today);
+        return movieWIthScheduleRepository.findUpcomingScreeningMovies(today);
     }
 
     /**
@@ -144,7 +141,7 @@ public class MovieController {
             }
 
             LocalDate today = LocalDate.now();
-            LocalDate fiftyDaysAgo = today.minusDays(30);
+            LocalDate fiftyDaysAgo = today.minusDays(60);
 
             // 2. 오늘 이후 개봉 영화는 'E'로
             List<Movie> upcomingMovies = movieRepository.findByReleasedateAfter(today);
@@ -289,9 +286,9 @@ public class MovieController {
     public ResponseEntity<Map<String, Object>> getMovieDetail(@RequestBody Map<String, Object> params) {
         String moviecd = (String) params.get("movieno");
         Optional<Movie> movieOpt = movieRepository.findById(moviecd);
-        
+
         Map<String, Object> response = new HashMap<>();
-        
+
         if (movieOpt.isPresent()) {
             Movie movie = movieOpt.get();
             response.put("moviecd", movie.getMoviecd());
@@ -305,7 +302,7 @@ public class MovieController {
             response.put("runningtime", movie.getRunningtime());
             response.put("isadult", movie.getIsadult());
             response.put("movieinfo", movie.getMovieinfo());
-            
+
             // 누적관객수와 영화 순위 정보 추가 (MovieRank 테이블에서 조회)
             try {
                 String sql = "SELECT audiacc, movierank FROM movierank WHERE movierankcd = ?";
@@ -318,14 +315,15 @@ public class MovieController {
                 response.put("movierank", null);
             }
         }
-        
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 박스오피스 TOP 10 (순위 기반)
     @GetMapping("/top/ten")
-    public List<MovieSchedule> getTopTenMovies() {
-//        return movieViewRepository.findMoviesWithRank();
-        return movieScheduleRepository.findMoviesWithRank();
+    public List<MovieWithSchedule> getTopTenMovies() {
+        // return movieViewRepository.findMoviesWithRank();
+        // return movieScheduleRepository.findMoviesWithRank();
+        return movieWIthScheduleRepository.findTop10MoviesWithRank();
     }
 }

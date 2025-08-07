@@ -5,7 +5,7 @@ import {
   getMoviesForAdmin,
   getTopTenMovies,
 } from "../../../api/movieApi";
-import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
+import LoginRequiredModal from "../../LoginPage/components/LoginRequiredModal";
 import "../styles/Movies.css";
 
 const Movies = ({ activeTab: parentActiveTab, showDetailButton = true }) => {
@@ -51,40 +51,40 @@ const Movies = ({ activeTab: parentActiveTab, showDetailButton = true }) => {
     };
     sessionStorage.setItem("selectedMovie", JSON.stringify(movieData));
 
-    console.log(
-      "🎬 영화카드 클릭 - 영화:",
-      movie.movienm,
-      "moviecd:",
-      movie.moviecd
-    );
     navigate(`/reservation/movie/${movie.moviecd}`);
   };
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const currentData = await getCurrentMovies();
-        const adminData = await getMoviesForAdmin();
-        const topTen = await getTopTenMovies(); // 박스오피스 TOP 10 가져오기
+        // 병렬로 API 호출하여 로딩 시간 단축
+        const [currentData, adminData, topTen] = await Promise.all([
+          getCurrentMovies(),
+          getMoviesForAdmin(),
+          getTopTenMovies(),
+        ]);
 
-        // movierank로 정렬된 TOP 10
-        const sortedTopTen = [...topTen].sort(
-          (a, b) => Number(a.movierank) - Number(b.movierank)
+        // 간단한 정렬만 적용
+        setTopTenMovies(
+          topTen.sort((a, b) => Number(a.movierank) - Number(b.movierank))
         );
-        setTopTenMovies(sortedTopTen);
+        setCurrentMovies(
+          currentData.sort(
+            (a, b) => new Date(b.releasedate) - new Date(a.releasedate)
+          )
+        );
 
         const upcomingData = adminData.currentMovies.filter(
           (movie) => movie.movieinfo === "E"
         );
-        const sortedCurrent = currentData
-          .slice()
-          .sort((a, b) => new Date(b.releasedate) - new Date(a.releasedate));
-        const sortedUpcoming = upcomingData
-          .slice()
-          .sort((a, b) => new Date(a.releasedate) - new Date(b.releasedate));
-        setCurrentMovies(sortedCurrent);
-        setUpcomingMoviesData(sortedUpcoming);
-      } catch (error) {}
+        setUpcomingMoviesData(
+          upcomingData.sort(
+            (a, b) => new Date(a.releasedate) - new Date(b.releasedate)
+          )
+        );
+      } catch (error) {
+        
+      }
     };
     fetchMovies();
   }, []);
@@ -129,20 +129,13 @@ const Movies = ({ activeTab: parentActiveTab, showDetailButton = true }) => {
             999;
           return Number(rankA) - Number(rankB);
         });
-        const sortedOthers = otherMovies.sort(
-          (a, b) => new Date(b.releasedate) - new Date(a.releasedate)
-        );
-        return filterByKeyword([...sortedTopTen, ...sortedOthers]).slice(
+        return filterByKeyword([...sortedTopTen, ...otherMovies]).slice(
           0,
           visibleCount
         );
       }
       case "latest":
-        return filterByKeyword(
-          [...currentMovies].sort(
-            (a, b) => new Date(b.releasedate) - new Date(a.releasedate)
-          )
-        ).slice(0, visibleCount);
+        return filterByKeyword(currentMovies).slice(0, visibleCount);
       case "upcoming":
         return filterByKeyword(upcomingMoviesData);
       default:
@@ -163,7 +156,6 @@ const Movies = ({ activeTab: parentActiveTab, showDetailButton = true }) => {
             className="mvs-searchbox-input"
           />
           <span className="mvs-searchbox-icon">
-            {/* SVG 돋보기 아이콘 */}
             <svg
               className="mvs-searchbox-svg"
               viewBox="0 0 20 20"
@@ -265,3 +257,4 @@ const Movies = ({ activeTab: parentActiveTab, showDetailButton = true }) => {
 };
 
 export default Movies;
+

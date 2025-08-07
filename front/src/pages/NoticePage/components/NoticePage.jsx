@@ -35,14 +35,8 @@ const NoticePage = () => {
   }, [location.pathname]);
 
   const getCurrentData = () => {
-    let data, sortKey;
-    if (activeTab === "notice") {
-      data = notices;
-      sortKey = "noticenum";
-    } else {
-      data = faqs;
-      sortKey = "faqnum";
-    }
+    const data = activeTab === "notice" ? notices : faqs;
+    const sortKey = activeTab === "notice" ? "noticenum" : "faqnum";
     return data.sort((a, b) => b[sortKey] - a[sortKey]);
   };
 
@@ -95,12 +89,7 @@ const NoticePage = () => {
           <div className="notice-list">
             {currentData.map((item, index) => {
               const globalIndex = baseIndex + index;
-              let key;
-              if (activeTab === "notice") {
-                key = item.noticenum;
-              } else {
-                key = item.faqnum;
-              }
+              const key = activeTab === "notice" ? item.noticenum : item.faqnum;
               return (
                 <NoticeItem
                   key={key}
@@ -127,3 +116,4 @@ const NoticePage = () => {
 };
 
 export default NoticePage;
+

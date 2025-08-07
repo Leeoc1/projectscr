@@ -5,13 +5,12 @@ import { api, apiRequest, apiRequestWithErrorHandling } from "./apiUtils";
 // JWT 토큰에서 실제 userid 디코딩
 export const decodeUserid = async (token) => {
   try {
-    const response = await apiRequest("/api/auth/decode-token", { 
-      method: "POST", 
-      body: { token } 
+    const response = await apiRequest("/api/auth/decode-token", {
+      method: "POST",
+      body: { token },
     });
     return response.userid;
   } catch (error) {
-    console.error("JWT 토큰 디코딩 실패:", error);
     return null;
   }
 };
@@ -87,22 +86,17 @@ export const updateUserInfo = async (userid, userData) => {
 
 // 회원탈퇴 (users 테이블)
 export const deleteUser = async (userid) => {
-  console.log("회원탈퇴 API 호출 시작 - userid:", userid);
   try {
     const result = await apiRequest(`/users/${userid}`, { method: "DELETE" });
-    console.log("회원탈퇴 API 성공:", result);
+
     return result;
   } catch (error) {
-    console.error("회원탈퇴 API 실패:", error);
-    console.error("요청 URL:", `/users/${userid}`);
-    console.error("에러 상세:", error.response?.data || error.message);
     throw error;
   }
 };
 
 // 로그아웃 처리 (클라이언트 사이드)
 export const logoutUser = () => {
-  console.log("로그아웃 처리 시작");
   try {
     // 기본 로그인 정보 제거
     localStorage.removeItem("isLoggedIn");
@@ -135,10 +129,8 @@ export const logoutUser = () => {
     // 세션 스토리지 전체 정리
     sessionStorage.clear();
 
-    console.log("로그아웃 처리 완료");
     return true;
   } catch (error) {
-    console.error("로그아웃 처리 중 오류:", error);
     return false;
   }
 };
@@ -206,7 +198,6 @@ export const getGoogleClientId = async () => {
     const response = await apiRequest("/google/client-id", { method: "GET" });
     return response.clientId;
   } catch (error) {
-    console.error("Error fetching Google client ID:", error);
     throw error;
   }
 };
@@ -284,7 +275,6 @@ export const naverLogin = async () => {
     const response = await apiRequest("/naver/login", { method: "POST" });
     return response;
   } catch (error) {
-    console.error("네이버 로그인 URL 가져오기 실패:", error);
     throw error;
   }
 };
@@ -298,32 +288,18 @@ export const naverLoginCallback = async (code, state) => {
     );
     return response;
   } catch (error) {
-    console.error("네이버 로그인 콜백 처리 실패:", error);
-    console.error("에러 상세:", error.response?.data);
     throw error;
   }
 };
 
 // 리뷰 작성
 export const createReview = (reviewData) => {
-  console.log("API 호출 - 리뷰 데이터:", reviewData);
   return api
     .post("/api/review/review", reviewData)
     .then((response) => {
-      console.log("API 응답 성공:", response.data);
       return response.data;
     })
     .catch((error) => {
-      console.error("API 호출 실패:", error);
-      if (error.response) {
-        console.error("응답 에러 데이터:", error.response.data);
-        console.error("응답 상태 코드:", error.response.status);
-        console.error("응답 헤더:", error.response.headers);
-      } else if (error.request) {
-        console.error("요청 에러:", error.request);
-      } else {
-        console.error("기타 에러:", error.message);
-      }
       throw error;
     });
 };

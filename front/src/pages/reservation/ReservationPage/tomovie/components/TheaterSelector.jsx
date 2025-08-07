@@ -14,6 +14,7 @@ const TheaterSelector = () => {
   const [selectedRegion, setSelectedRegion] = useState("즐겨찾는 극장"); // 기본값을 즐겨찾기로 설정
   const [availableTheaters, setAvailableTheaters] = useState([]);
   const [selectedTheater, setSelectedTheater] = useState(null);
+  const [isLoadingTheaters, setIsLoadingTheaters] = useState(false);
 
   useEffect(() => {
     fetchAllRegions();
@@ -40,9 +41,7 @@ const TheaterSelector = () => {
         .map((cinema) => cinema.cinemanm);
 
       setAvailableTheaters(favoriteTheaterNames);
-    } catch (error) {
-      console.error("Error loading favorite theaters:", error);
-    }
+    } catch (error) {}
   };
 
   // 세션 스토리지 변경 이벤트 감지
@@ -70,9 +69,9 @@ const TheaterSelector = () => {
   const fetchAllRegions = async () => {
     try {
       const regions = await getRegions();
-      console.log("All regions:", regions); // 디버깅용
-      console.log("First region object:", regions[0]); // 첫 번째 객체의 구조 확인
-      console.log("Region object keys:", Object.keys(regions[0] || {})); // 객체의 키들 확인
+      // 디버깅용
+      // 첫 번째 객체의 구조 확인
+      // 객체의 키들 확인
 
       // regions가 배열인지 확인하고, 적절한 속성 추출
       if (Array.isArray(regions)) {
@@ -81,23 +80,22 @@ const TheaterSelector = () => {
           (region) =>
             region.regionnm || region.regionNm || region.name || region
         );
-        console.log("Region names:", regionNames); // 디버깅용
+        // 디버깅용
 
         // "즐겨찾는 극장"을 맨 위에 추가
         const regionsWithFavorite = ["즐겨찾는 극장", ...regionNames];
         setAvailableRegions(regionsWithFavorite);
       } else {
-        console.error("Regions is not an array:", regions);
         setAvailableRegions(["즐겨찾는 극장"]);
       }
     } catch (error) {
-      console.error("Error fetching regions:", error);
       setAvailableRegions(["즐겨찾는 극장"]);
     }
   };
 
   const handleRegionClick = async (region) => {
     setSelectedRegion(region);
+    setIsLoadingTheaters(true);
 
     // 지역 변경 시 상영관 선택 상태 초기화
     setSelectedTheater(null);
@@ -113,8 +111,8 @@ const TheaterSelector = () => {
     const movienm = sessionStorage.getItem("movienm");
 
     if (!selectedDate || !movienm) {
-      console.error("선택된 날짜나 영화가 없습니다.");
       setAvailableTheaters([]);
+      setIsLoadingTheaters(false);
       return;
     }
 
@@ -125,17 +123,15 @@ const TheaterSelector = () => {
         if (!isLoggedIn) {
           alert("로그인이 필요합니다.");
           setAvailableTheaters([]);
+          setIsLoadingTheaters(false);
           return;
         }
 
         const userid = await getCurrentUserId();
-        console.log("Fetching favorites for userid:", userid);
 
         const favoriteTheaters = await getmycinema(userid);
-        console.log("Favorite theaters data:", favoriteTheaters);
 
         const favoriteCinemaCds = favoriteTheaters.map((item) => item.cinemacd);
-        console.log("Favorite cinema codes:", favoriteCinemaCds);
 
         // 전체 영화관 목록에서 즐겨찾기 영화관만 가져오기
         const allCinemas = await getCinemas();
@@ -143,9 +139,8 @@ const TheaterSelector = () => {
           .filter((cinema) => favoriteCinemaCds.includes(cinema.cinemacd))
           .map((cinema) => cinema.cinemanm);
 
-        console.log("Available favorite theaters:", favoriteTheaterNames);
-
         setAvailableTheaters(favoriteTheaterNames);
+        setIsLoadingTheaters(false);
         return;
       }
 
@@ -164,17 +159,15 @@ const TheaterSelector = () => {
         );
       });
 
-      console.log("Filtered schedules for region:", filteredSchedules);
-
       const theaters = [
         ...new Set(filteredSchedules.map((schedule) => schedule.cinemanm)),
       ];
-      console.log("Available theaters:", theaters);
 
       setAvailableTheaters(theaters);
     } catch (error) {
-      console.error("Error fetching theaters:", error);
       setAvailableTheaters([]);
+    } finally {
+      setIsLoadingTheaters(false);
     }
   };
   const handleTheaterClick = (theater) => {
@@ -217,22 +210,28 @@ const TheaterSelector = () => {
         </div>
       </div>
 
-      {selectedRegion && availableTheaters.length > 0 && (
+      {selectedRegion && (
         <div className="theater-section">
           <h3>상영관</h3>
-          <div className="theater-list">
-            {availableTheaters.map((theater, index) => (
-              <div
-                key={index}
-                className={`theater-item ${
-                  selectedTheater === theater ? "active" : ""
-                }`}
-                onClick={() => handleTheaterClick(theater)}
-              >
-                {theater}
-              </div>
-            ))}
-          </div>
+          {isLoadingTheaters ? (
+            <div className="loading-message">상영관 정보를 불러오는 중...</div>
+          ) : availableTheaters.length > 0 ? (
+            <div className="theater-list">
+              {availableTheaters.map((theater, index) => (
+                <div
+                  key={index}
+                  className={`theater-item ${
+                    selectedTheater === theater ? "active" : ""
+                  }`}
+                  onClick={() => handleTheaterClick(theater)}
+                >
+                  {theater}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div>선택한 조건에 맞는 상영관이 없습니다.</div>
+          )}
         </div>
       )}
 

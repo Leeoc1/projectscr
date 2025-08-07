@@ -7,8 +7,9 @@ import {
   getWishlistStatus,
   toggleWishlist,
 } from "../../../api/movieApi";
+import { getCurrentUserId } from "../../../utils/tokenUtils";
 import { useNavigate } from "react-router-dom";
-import LoginRequiredModal from "../../LoginPage/components2/LoginRequiredModal";
+import LoginRequiredModal from "../../LoginPage/components/LoginRequiredModal";
 
 export default function MovieDetail() {
   const navigate = useNavigate();
@@ -31,12 +32,12 @@ export default function MovieDetail() {
         const userid = localStorage.getItem("userid");
         if (userid && data.moviecd) {
           try {
+            // 토큰에서 실제 userid 추출
+            const userid = await getCurrentUserId();
             const wishlistData = await getWishlistStatus(userid, data.moviecd);
             setWishlistCount(wishlistData.count);
             setIsWished(wishlistData.wished);
-          } catch (error) {
-            console.error("Error fetching wishlist status:", error);
-          }
+          } catch (error) {}
         }
       }
     };
@@ -81,7 +82,9 @@ export default function MovieDetail() {
       setShowLoginModal(true);
       return;
     }
-    const userid = localStorage.getItem("userid");
+    // 토큰에서 실제 userid 추출
+    const userid = await getCurrentUserId();
+
     if (!userid) {
       setShowLoginModal(true);
       return;
@@ -92,13 +95,7 @@ export default function MovieDetail() {
       // 상태 업데이트
       setIsWished(result.wished);
       setWishlistCount(result.count);
-    } catch (error) {
-      console.error("Error toggling wishlist:", error);
-    }
-  };
-
-  const handleSearch = () => {
-    // TODO: Implement search functionality
+    } catch (error) {}
   };
 
   return (
@@ -118,7 +115,6 @@ export default function MovieDetail() {
                 {/* Movie Info */}
                 <div className="mvd-movie-info">
                   <h1 className="mvd-movie-title">{movie.movienm}</h1>
-                  {/* <p className="mvd-movie-subtitle">{movieData.subtitle}</p> */}
 
                   <div className="mvd-movie-meta">
                     <div className="mvd-meta-item">

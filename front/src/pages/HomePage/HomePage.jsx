@@ -7,7 +7,7 @@ import Event from "./components/Event";
 import "./styles/HomePage.css";
 import Notice from "./components/Notice";
 import ChatBot from "./components/ChatBot";
-import Toast from "../../components/Toast";
+import Toast from "../../utils/Toast";
 
 const HomePage = () => {
   const [showWelcomeToast, setShowWelcomeToast] = useState(false);
@@ -51,3 +51,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+

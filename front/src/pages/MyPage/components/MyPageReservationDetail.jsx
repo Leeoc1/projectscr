@@ -1,12 +1,12 @@
 import React from "react";
+import "../styles/MyPageReservationDetail.css";
 import { cancelReservation } from "../../../api/reservationApi";
-import { getUserReservations } from "../../../api/userApi";
 
 const MyPageReservationDetail = ({
   showModal,
   selectedReservation,
   handleCloseModal,
-  setUserReservations,
+  refreshReservations,
 }) => {
   // 상영 종료 시간 계산 함수
   const getMovieEndTime = (starttime, runningtime) => {
@@ -42,15 +42,15 @@ const MyPageReservationDetail = ({
       await cancelReservation(reservationcd, "환불처리");
       alert("예약이 성공적으로 취소되었습니다.");
 
-      // 예약 목록 새로고침
-      const userid = localStorage.getItem("userid");
-      if (userid) {
-        const reservationsResponse = await getUserReservations(userid);
-        setUserReservations(reservationsResponse);
-      }
       handleCloseModal();
+
+      // 예매 내역 새로고침
+      if (refreshReservations) {
+        await refreshReservations();
+      }
+      
     } catch (error) {
-      console.error("예약 취소 오류:", error.response.data);
+      
       alert(
         error.response?.data?.error ||
           "예약 취소 중 오류가 발생했습니다. 다시 시도해주세요."
@@ -129,7 +129,7 @@ const MyPageReservationDetail = ({
 
             {canCancelReservation() && (
               <button
-                className="mp-btn mp-btn-cancel"
+                className="mp-btn-cancel"
                 onClick={() =>
                   handleCancelReservation(selectedReservation.reservationcd)
                 }
@@ -145,3 +145,4 @@ const MyPageReservationDetail = ({
 };
 
 export default MyPageReservationDetail;
+

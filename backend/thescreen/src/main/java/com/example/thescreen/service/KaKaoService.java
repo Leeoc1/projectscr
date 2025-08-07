@@ -28,12 +28,14 @@ public class KaKaoService {
         // 기본 템플릿 객체 생성
         String templateObject = String.format(
                 "{\"object_type\":\"text\"," +
-                        "\"text\":\"🎬 영화 예약이 완료되었습니다!\\n\\n" +
-                        "📽️ 영화: %s\\n" +
-                        "📅 예약일시: %s\\n" +
-                        "🎭 상영관: %s\\n" +
-                        "💰 결제금액: %s원\\n\\n" +
-                        "즐거운 관람 되세요! 😊\"," +
+                        "\"text\":\"[예매 완료]\\n" +
+                        "영화 예약이 완료되었습니다!\\n" +
+                        "즐거운 관람 되세요😊\\n\\n" +
+                        "■ 예매 정보\\n" +
+                        "- 영화 정보: %s\\n" +
+                        "- 예약일시: %s\\n" +
+                        "- 상영관: %s\\n" +
+                        "- 결제금액: %s원\\n\"," +
                         "\"link\":{\"web_url\":\"http://localhost:3000\",\"mobile_web_url\":\"http://localhost:3000\"}}",
                 escapeJsonString(reservationView.getMovienm()),
                 escapeJsonString(reservationView.getReservationtime() != null

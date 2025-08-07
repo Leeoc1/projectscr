@@ -89,13 +89,20 @@ const ReservationPlacePage = () => {
       const moviecd = sessionStorage.getItem("moviecd");
       const movienm = sessionStorage.getItem("movienm");
       const selectedMovieTime = sessionStorage.getItem("selectedMovieTime");
+      const userToken = sessionStorage.getItem("token");
+      const userRole = sessionStorage.getItem("role");
 
-      sessionStorage.clear();
+      // 예매 관련 정보만 정리하고 필요한 정보들은 다시 설정
+      sessionStorage.removeItem("finalReservationInfo");
+      sessionStorage.removeItem("selectedSeats");
+      sessionStorage.removeItem("reservationInfo");
 
       if (moviecd) sessionStorage.setItem("moviecd", moviecd);
       if (movienm) sessionStorage.setItem("movienm", movienm);
       if (selectedMovieTime)
         sessionStorage.setItem("selectedMovieTime", selectedMovieTime);
+      if (userToken) sessionStorage.setItem("token", userToken);
+      if (userRole) sessionStorage.setItem("role", userRole);
     };
   }, []);
 
@@ -166,3 +173,4 @@ const ReservationPlacePage = () => {
 };
 
 export default ReservationPlacePage;
+

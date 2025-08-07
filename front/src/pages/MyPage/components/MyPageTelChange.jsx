@@ -1,6 +1,6 @@
 import React from "react";
 import { sendVerificationCode, verifyCode } from "../../../api/smsApi";
-import "../MyPage.css";
+import "../styles/MyInfo.css";
 import { useState, useEffect } from "react";
 
 const MyPageTelChange = ({ editForm, setEditForm }) => {
@@ -219,3 +219,4 @@ const MyPageTelChange = ({ editForm, setEditForm }) => {
 };
 
 export default MyPageTelChange;
+

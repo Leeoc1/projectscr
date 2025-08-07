@@ -133,7 +133,9 @@ public class ReservationController {
 
             // 예약 상태 업데이트
             reservation.setReservationstatus(reservationstatus);
+            reservation.setSeatcd(null);
             reservationRepository.save(reservation);
+
 
             Map<String, Object> response = new HashMap<>();
             response.put("message", "예약이 성공적으로 취소되었습니다.");

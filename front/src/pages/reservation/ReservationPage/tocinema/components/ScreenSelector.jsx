@@ -23,10 +23,6 @@ const ScreenSelector = () => {
       try {
         const selectedSchedule = await getSchedules();
 
-        console.log("API에서 받은 전체 스케줄:", selectedSchedule);
-        console.log("선택된 영화명:", selectedMovieName);
-        console.log("선택된 날짜:", selectedDate);
-
         const filteredSchedules = selectedSchedule.filter((schedule) => {
           return (
             schedule.movienm === selectedMovieName &&
@@ -36,15 +32,13 @@ const ScreenSelector = () => {
           );
         });
 
-        console.log("필터링 결과:", filteredSchedules);
-
         // 상영 시간순으로 정렬
         filteredSchedules.sort(
           (a, b) => new Date(a.starttime) - new Date(b.starttime)
         );
         setMovieSchedule(filteredSchedules);
       } catch (error) {
-        console.error("상영 정보를 가져오는 중 에러 발생:", error);
+        
         setMovieSchedule([]);
       }
     };
@@ -178,9 +172,9 @@ const ScreenSelector = () => {
                             {schedule.starttime.split(" ")[1]?.substring(0, 5)}
                           </div>
                           <div className="rptm-screen-time-seats">
-                            {schedule.allseat}/
                             {schedule.allseat -
                               (reservedSeatsCount[schedule.schedulecd] || 0)}
+                            /{schedule.allseat}
                           </div>
                           <div className="rptm-screen-time-screen">
                             {schedule.screenname}
@@ -199,3 +193,4 @@ const ScreenSelector = () => {
 };
 
 export default ScreenSelector;
+
